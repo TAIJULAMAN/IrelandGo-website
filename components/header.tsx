@@ -26,7 +26,7 @@ export function Header() {
     >
       {/* Navigation - Centered to viewport */}
       <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex gap-8 text-sm text-white/90 z-10">
-        <a href="#" className="hover:text-white transition">
+        <a href="/transfer" className="hover:text-white transition">
           Transfers
         </a>
         <a href="#" className="hover:text-white transition">
