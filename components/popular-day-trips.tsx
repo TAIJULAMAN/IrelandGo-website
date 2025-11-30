@@ -1,8 +1,13 @@
-"use client"
-
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { Clock, Euro } from "lucide-react"
+import Image from "next/image"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 
 export function PopularDayTrips() {
   const trips = [
@@ -33,68 +38,87 @@ export function PopularDayTrips() {
       groupType: "Private group",
       price: "€125",
     },
+    {
+      id: 4,
+      title: "Dublin to Galway via Cliffs of Moher",
+      description: "Experience Ireland's most stunning coastal drive",
+      image: "/dublin-galway-cliffs-of-moher-coastal-drive.jpg",
+      duration: "6h 30m",
+      groupType: "Private group",
+      price: "€125",
+    },
+    {
+      id: 5,
+      title: "Belfast to Giant's Causeway",
+      description: "Discover Northern Ireland's natural wonder",
+      image: "/belfast-giants-causeway-natural-wonder.jpg",
+      duration: "6h 30m",
+      groupType: "Private group",
+      price: "€125",
+    },
   ]
-
-  const [currentIndex, setCurrentIndex] = useState(0)
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? trips.length - 1 : prev - 1))
-  }
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === trips.length - 1 ? 0 : prev + 1))
-  }
 
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-16">
-          <button
-            onClick={handlePrev}
-            className="flex-shrink-0 w-12 h-12 rounded-full border-2 border-blue-500 flex items-center justify-center text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Previous trips"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-
-          <h2 className="text-4xl font-bold text-center flex-1 text-balance">Popular Day Trips</h2>
-
-          <button
-            onClick={handleNext}
-            className="flex-shrink-0 w-12 h-12 rounded-full border-2 border-blue-500 flex items-center justify-center text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Next trips"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {trips.map((trip, idx) => (
-            <div
-              key={trip.id}
-              className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-white"
-            >
-              <div className="h-64 bg-gray-200 overflow-hidden">
-                <img src={trip.image || "/placeholder.svg"} alt={trip.title} className="w-full h-full object-cover" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{trip.title}</h3>
-                <p className="text-gray-600 text-sm mb-4">{trip.description}</p>
-
-                <div className="space-y-1 mb-4 text-sm text-gray-700">
-                  <p>
-                    <span className="font-semibold">{trip.duration}</span> • {trip.groupType}
-                  </p>
-                  <p className="underline">
-                    From <span className="font-semibold">{trip.price}</span> / per person
-                  </p>
-                </div>
-
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold">Book Now</Button>
-              </div>
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+          }}
+          className="w-full"
+        >
+          <div className="flex items-center justify-between mb-12">
+            <CarouselPrevious className="static bg-white text-blue-600 border-blue-600 h-12 w-12 rounded-full translate-y-0" />
+            <div className="text-center">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Popular Day Trips</h2>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Explore our most popular day trip destinations
+              </p>
             </div>
-          ))}
-        </div>
+            <CarouselNext className="static bg-white text-blue-600 border-blue-600 h-12 w-12 rounded-full translate-y-0" />
+          </div>
+
+          <CarouselContent className="-ml-6">
+            {trips.map((trip) => (
+              <CarouselItem key={trip.id} className="pl-6 md:basis-1/2 lg:basis-1/3">
+                <div className="rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-white h-full flex flex-col hover:shadow-md transition-shadow duration-300">
+                  <div className="relative h-64 w-full">
+                    <Image
+                      src={trip.image}
+                      alt={trip.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-6 flex flex-col flex-grow">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">{trip.title}</h3>
+
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-4 font-medium">
+                      <Clock className="w-4 h-4" />
+                      <span>{trip.duration}</span>
+                      <span>-</span>
+                      <span>{trip.groupType}</span>
+                    </div>
+
+                    <div className="flex items-center gap-1 text-blue-600 font-bold text-lg mb-3">
+                      <Euro className="w-5 h-5" />
+                      <span>From {trip.price} / per person</span>
+                    </div>
+
+                    <p className="text-gray-600 mb-6 line-clamp-3 flex-grow leading-relaxed">
+                      {trip.description}
+                    </p>
+
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-6 rounded-xl mt-auto text-lg shadow-blue-200 shadow-lg">
+                      Book Now
+                    </Button>
+                  </div>
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
       </div>
     </section>
   )
