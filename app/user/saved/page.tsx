@@ -5,7 +5,6 @@ import { Home, Plane, MapPin, Pencil, Trash2, Plus, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent } from "@/components/ui/card"
-import { Footer } from "@/components/layout/footer"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -76,12 +75,6 @@ export default function SavedPage() {
       ...loc,
       isDefault: loc.id === id
     })))
-  }
-
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this location?')) {
-      setLocations(locations.filter(loc => loc.id !== id))
-    }
   }
 
   const form = useForm<LocationFormValues>({
@@ -260,7 +253,7 @@ export default function SavedPage() {
         </div>
       </main>
 
-      <Footer />
+    
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>

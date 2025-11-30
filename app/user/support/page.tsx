@@ -190,7 +190,6 @@ export default function SupportPage() {
                     </div>
                 </div>
             </div>
-            <Footer className="mt-16" />
         </div>
     )
 }
