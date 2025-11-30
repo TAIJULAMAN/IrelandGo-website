@@ -1,18 +1,24 @@
 import { Users, MapPin, Flag, Briefcase } from "lucide-react";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Header } from "@/components/header";
 
 export default function DayTripsDetailsHero() {
   return (
     <section className="relative w-full">
+      <Header />
       {/* Background image */}
       <div className="absolute inset-0">
         <img
           src="/details.png"
           alt="Scenic Ireland coastline"
-          className="w-full h-[520px] md:h-[640px] object-cover"
-        
-
+          className="w-full h-[520px] md:h-[720px] object-cover"
         />
         <div className="absolute inset-0 bg-slate-900/40" />
       </div>
@@ -68,7 +74,9 @@ export default function DayTripsDetailsHero() {
               </SelectTrigger>
               <SelectContent>
                 {[...Array(12)].map((_, i) => (
-                  <SelectItem key={i + 1} value={`${i + 1}`}>{i + 1} Passenger{i + 1 > 1 ? 's' : ''}</SelectItem>
+                  <SelectItem key={i + 1} value={`${i + 1}`}>
+                    {i + 1} Passenger{i + 1 > 1 ? "s" : ""}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -83,7 +91,9 @@ export default function DayTripsDetailsHero() {
               </SelectTrigger>
               <SelectContent>
                 {[...Array(9)].map((_, i) => (
-                  <SelectItem key={i} value={`${i}`}>{i} Luggage{i !== 1 ? 's' : ''}</SelectItem>
+                  <SelectItem key={i} value={`${i}`}>
+                    {i} Luggage{i !== 1 ? "s" : ""}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>

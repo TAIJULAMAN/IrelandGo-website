@@ -1,5 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button"
+import Image from "next/image"
 import { useState, useEffect } from "react"
 
 export function Header() {
@@ -43,9 +44,12 @@ export function Header() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {/* Logo Icon */}
-            <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center">
-              <div className="w-5 h-5 border-4 border-blue-600 rounded-full border-r-transparent rotate-45"></div>
-            </div>
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={40}
+              height={40}
+            />
             <span className="text-xl font-bold text-white">IrelandGO</span>
           </div>
 
