@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
@@ -95,7 +96,12 @@ export function PrivateTransfers() {
                   {transfer.duration} • {transfer.distance}
                 </p>
 
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">Book Now</Button>
+                <Button
+                  asChild
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Link href="/booking-flow/step-2">Book Now</Link>
+                </Button>
               </div>
             </div>
           ))}
