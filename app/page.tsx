@@ -8,12 +8,12 @@ import { SafetyComfort } from "@/components/safety-comfort"
 import { WhyChooseUs } from "@/components/why-choose-us"
 import { Testimonials } from "@/components/testimonials"
 import { BookWithEase } from "@/components/book-with-ease"
-import { Footer } from "@/components/footer"
+import { Footer } from "@/components/layout/footer"
 
 export default function Home() {
   return (
     <main className="w-full">
-      <Header />
+      {/* <Header /> */}
       <Hero />
       <PrivateTransfers />
       <HowItWorks />

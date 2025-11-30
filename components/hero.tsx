@@ -3,20 +3,33 @@ import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { MapPin, Calendar, Users, Luggage, Plus, Clock, Search, BadgeCheck, UserRoundCog, ShieldPlus } from "lucide-react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { Header } from "./header"
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState("transfer")
   const [tripType, setTripType] = useState("one-way")
+  const router = useRouter()
 
   const tabs = [
     { id: "transfer", label: "Transfer" },
-    { id: "hourly", label: "By the hour", icon: Clock },
-    { id: "day-trips", label: "Day trips" },
-    { id: "multi-day", label: "Multi day tours" },
+    { id: "hourly", label: "By the hour", icon: Clock, href: "/by-the-hour" },
+    { id: "day-trips", label: "Day trips", href: "/day-trips" },
+    { id: "multi-day", label: "Multi day tours", href: "/multi-day-tours" },
   ]
 
+  const handleTabClick = (tab: typeof tabs[0]) => {
+    if (tab.href) {
+      router.push(tab.href)
+    } else {
+      setActiveTab(tab.id)
+    }
+  }
+
   return (
-    <section className="relative pt-24 pb-20 overflow-hidden min-h-screen">
+    <section className="relative overflow-hidden min-h-screen">
+
+      <Header />
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
@@ -27,7 +40,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#000000]/10 via-[#000000]/10 to-[#000000]/10 "></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Hero Text */}
         <div className="text-center mb-10 pt-8">
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 text-balance leading-tight">
@@ -42,7 +55,7 @@ export function Hero() {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabClick(tab)}
                 className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
                   ? "bg-white text-gray-900 shadow-md"
                   : "bg-transparent text-white hover:bg-white/10"
