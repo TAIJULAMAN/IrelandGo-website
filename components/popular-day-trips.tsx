@@ -8,7 +8,7 @@ export function PopularDayTrips() {
   const trips = [
     {
       id: 1,
-      title: "Dublin to Galway via Cliffs of Moher",
+      title: "Dublin to Galway via Cliffs",
       description: "Experience Ireland's most stunning coastal drive",
       image: "/dublin-galway-cliffs-of-moher-coastal-drive.jpg",
       duration: "6h 30m",
