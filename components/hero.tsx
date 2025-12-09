@@ -4,8 +4,18 @@ import { useState } from "react"
 import { MapPin, Calendar, Users, Luggage, Plus, Clock, Search, BadgeCheck, UserRoundCog, ShieldPlus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Header } from "./header"
-import { MapRoute } from "./map-route"
+import dynamic from "next/dynamic"
 import { irishSettlements } from "@/lib/irish-settlements"
+
+// Dynamically import MapRoute with SSR disabled to prevent "window is not defined" error
+const MapRoute = dynamic(() => import("./map-route").then(mod => ({ default: mod.MapRoute })), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '340px' }}>
+      <p className="text-gray-500">Loading map...</p>
+    </div>
+  )
+})
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState("transfer")

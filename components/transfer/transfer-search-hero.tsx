@@ -2,13 +2,177 @@
 
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
-import { MapPin, Calendar, Users, Luggage, Plus, Search, Clock } from "lucide-react";
+import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Search, Clock, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { irishSettlements } from "@/lib/irish-settlements";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { format } from "date-fns";
 
 export default function TransferSearchHero() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const locationParam = searchParams.get("location") || "";
+
   const [tripType, setTripType] = useState("one-way");
+  const [pickupLocation, setPickupLocation] = useState(locationParam);
+  const [dropoffLocation, setDropoffLocation] = useState("");
+  const [stops, setStops] = useState<string[]>([]);
+  const [showPickupDropdown, setShowPickupDropdown] = useState(false);
+  const [showDropoffDropdown, setShowDropoffDropdown] = useState(false);
+  const [selectedPickupIndex, setSelectedPickupIndex] = useState(-1);
+  const [selectedDropoffIndex, setSelectedDropoffIndex] = useState(-1);
+
+  // Date and time state
+  const [pickupDate, setPickupDate] = useState<Date>();
+  const [pickupTime, setPickupTime] = useState("09:00");
+  const [returnDate, setReturnDate] = useState<Date>();
+  const [returnTime, setReturnTime] = useState("09:00");
+
+  const pickupInputRef = useRef<HTMLInputElement>(null);
+  const dropoffInputRef = useRef<HTMLInputElement>(null);
+  const pickupDropdownRef = useRef<HTMLDivElement>(null);
+  const dropoffDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Filter settlements for pickup
+  const filteredPickupSettlements = pickupLocation.trim()
+    ? irishSettlements.filter(
+      (settlement) =>
+        settlement.name.toLowerCase().includes(pickupLocation.toLowerCase()) ||
+        settlement.county.toLowerCase().includes(pickupLocation.toLowerCase())
+    ).slice(0, 8)
+    : [];
+
+  // Filter settlements for dropoff
+  const filteredDropoffSettlements = dropoffLocation.trim()
+    ? irishSettlements.filter(
+      (settlement) =>
+        settlement.name.toLowerCase().includes(dropoffLocation.toLowerCase()) ||
+        settlement.county.toLowerCase().includes(dropoffLocation.toLowerCase())
+    ).slice(0, 8)
+    : [];
+
+  // Add stop
+  const addStop = () => {
+    setStops([...stops, ""]);
+  };
+
+  // Remove stop
+  const removeStop = (index: number) => {
+    setStops(stops.filter((_, i) => i !== index));
+  };
+
+  // Update stop value
+  const updateStop = (index: number, value: string) => {
+    const newStops = [...stops];
+    newStops[index] = value;
+    setStops(newStops);
+  };
+
+  // Handle search submission
+  const handleSearch = () => {
+    if (pickupLocation.trim() && dropoffLocation.trim()) {
+      router.push(`/transfer/private-car-transfer?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}`);
+    }
+  };
+
+  // Handle keyboard navigation for pickup
+  const handlePickupKeyDown = (e: React.KeyboardEvent) => {
+    if (!showPickupDropdown || filteredPickupSettlements.length === 0) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedPickupIndex((prev) =>
+          prev < filteredPickupSettlements.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setSelectedPickupIndex((prev) => (prev > 0 ? prev - 1 : -1));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (selectedPickupIndex >= 0) {
+          const selected = filteredPickupSettlements[selectedPickupIndex];
+          setPickupLocation(selected.name);
+          setShowPickupDropdown(false);
+        }
+        break;
+      case "Escape":
+        setShowPickupDropdown(false);
+        setSelectedPickupIndex(-1);
+        break;
+    }
+  };
+
+  // Handle keyboard navigation for dropoff
+  const handleDropoffKeyDown = (e: React.KeyboardEvent) => {
+    if (!showDropoffDropdown || filteredDropoffSettlements.length === 0) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+      }
+      return;
+    }
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setSelectedDropoffIndex((prev) =>
+          prev < filteredDropoffSettlements.length - 1 ? prev + 1 : prev
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setSelectedDropoffIndex((prev) => (prev > 0 ? prev - 1 : -1));
+        break;
+      case "Enter":
+        e.preventDefault();
+        if (selectedDropoffIndex >= 0) {
+          const selected = filteredDropoffSettlements[selectedDropoffIndex];
+          setDropoffLocation(selected.name);
+          setShowDropoffDropdown(false);
+        }
+        break;
+      case "Escape":
+        setShowDropoffDropdown(false);
+        setSelectedDropoffIndex(-1);
+        break;
+    }
+  };
+
+  // Handle click outside to close dropdowns
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        pickupDropdownRef.current &&
+        !pickupDropdownRef.current.contains(event.target as Node) &&
+        pickupInputRef.current &&
+        !pickupInputRef.current.contains(event.target as Node)
+      ) {
+        setShowPickupDropdown(false);
+      }
+      if (
+        dropoffDropdownRef.current &&
+        !dropoffDropdownRef.current.contains(event.target as Node) &&
+        dropoffInputRef.current &&
+        !dropoffInputRef.current.contains(event.target as Node)
+      ) {
+        setShowDropoffDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const tabs = [
     { id: "transfer", label: "Transfer" },
@@ -16,6 +180,10 @@ export default function TransferSearchHero() {
     { id: "day-trips", label: "Day trips", href: "/day-trips" },
     { id: "multi-day", label: "Multi day tours", href: "/multi-day-tours" },
   ];
+
+  // Get display location for hero title
+  const displayLocation = pickupLocation || "Dublin";
+
   return (
     <section className="relative overflow-hidden min-h-[800px] text-white">
       {/* Background */}
@@ -34,12 +202,12 @@ export default function TransferSearchHero() {
         {/* Hero Text */}
         <div className="text-center mb-10 pt-10">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
-            Discover Dublin with
+            Discover {displayLocation} with
             <br className="hidden sm:block" />
             Comfortable Transfers
           </h1>
           <p className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto">
-            Seamless city-to-city and airport transfers across Dublin and
+            Seamless city-to-city and airport transfers across {displayLocation} and
             beyond.
           </p>
         </div>
@@ -51,21 +219,19 @@ export default function TransferSearchHero() {
             <div className="flex gap-2 mb-5">
               <button
                 onClick={() => setTripType("one-way")}
-                className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${
-                  tripType === "one-way"
-                    ? "bg-blue-500 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "one-way"
+                  ? "bg-blue-500 text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
               >
                 One Way
               </button>
               <button
                 onClick={() => setTripType("return")}
-                className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${
-                  tripType === "return"
-                    ? "bg-blue-500 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
+                className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "return"
+                  ? "bg-blue-500 text-white shadow-md"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
               >
                 Return
               </button>
@@ -73,29 +239,140 @@ export default function TransferSearchHero() {
 
             {/* Location Inputs */}
             <div className="grid md:grid-cols-2 gap-4 mb-5">
-              <div>
-                <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                  <MapPin className="w-5 h-5 text-blue-500" />
+              {/* Pickup Location */}
+              <div className="relative">
+                <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
+                  <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
                   <input
+                    ref={pickupInputRef}
                     type="text"
                     placeholder="Pickup Location"
                     className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                    value={pickupLocation}
+                    onChange={(e) => {
+                      setPickupLocation(e.target.value);
+                      setShowPickupDropdown(true);
+                      setSelectedPickupIndex(-1);
+                    }}
+                    onFocus={() => setShowPickupDropdown(true)}
+                    onKeyDown={handlePickupKeyDown}
                   />
                 </div>
+
+                {/* Pickup Autocomplete Dropdown */}
+                {showPickupDropdown && filteredPickupSettlements.length > 0 && (
+                  <div
+                    ref={pickupDropdownRef}
+                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto z-50"
+                  >
+                    {filteredPickupSettlements.map((settlement, index) => (
+                      <button
+                        key={settlement.id}
+                        onClick={() => {
+                          setPickupLocation(settlement.name);
+                          setShowPickupDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0 ${index === selectedPickupIndex ? "bg-blue-50" : ""
+                          }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {settlement.name}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {settlement.county}, {settlement.province}
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
-              <div>
-                <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                  <MapPin className="w-5 h-5 text-green-500" />
+
+              {/* Dropoff Location */}
+              <div className="relative">
+                <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
+                  <MapPin className="w-5 h-5 text-green-500 flex-shrink-0" />
                   <input
+                    ref={dropoffInputRef}
                     type="text"
                     placeholder="Dropoff Location"
                     className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                    value={dropoffLocation}
+                    onChange={(e) => {
+                      setDropoffLocation(e.target.value);
+                      setShowDropoffDropdown(true);
+                      setSelectedDropoffIndex(-1);
+                    }}
+                    onFocus={() => setShowDropoffDropdown(true)}
+                    onKeyDown={handleDropoffKeyDown}
                   />
                 </div>
+
+                {/* Dropoff Autocomplete Dropdown */}
+                {showDropoffDropdown && filteredDropoffSettlements.length > 0 && (
+                  <div
+                    ref={dropoffDropdownRef}
+                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto z-50"
+                  >
+                    {filteredDropoffSettlements.map((settlement, index) => (
+                      <button
+                        key={settlement.id}
+                        onClick={() => {
+                          setDropoffLocation(settlement.name);
+                          setShowDropoffDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0 ${index === selectedDropoffIndex ? "bg-blue-50" : ""
+                          }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-green-500 flex-shrink-0" />
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {settlement.name}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {settlement.county}, {settlement.province}
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
-            <button className="flex items-center gap-1 text-blue-500 hover:text-blue-600 text-sm font-medium mb-5 transition">
+            {/* Additional Stops */}
+            {stops.map((stop, index) => (
+              <div key={index} className="mb-4">
+                <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
+                  <MapPin className="w-5 h-5 text-orange-500 flex-shrink-0" />
+                  <input
+                    type="text"
+                    placeholder={`Stop ${index + 1}`}
+                    className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                    value={stop}
+                    onChange={(e) => updateStop(index, e.target.value)}
+                  />
+                  <button
+                    onClick={() => removeStop(index)}
+                    className="text-red-500 hover:text-red-600 transition"
+                    aria-label="Remove stop"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            <button
+              onClick={addStop}
+              className="flex items-center gap-1 text-blue-500 hover:text-blue-600 text-sm font-medium mb-5 transition"
+            >
               <Plus className="w-4 h-4" />
               Add Stop
             </button>
@@ -103,15 +380,43 @@ export default function TransferSearchHero() {
             {/* Date, Time, Passengers, Luggage */}
             <div className="grid grid-cols-3 gap-2 mb-5">
               <div className="col-span-1">
-                <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                  <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                  <input
-                    type="text"
-                    placeholder="04/07/2025 - 09:00 am"
-                    className="w-full outline-none text-xs text-gray-700"
-                    defaultValue="04/07/2025 - 09:00 am"
-                  />
-                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal p-3 h-auto border-gray-300 hover:border-blue-400 bg-white"
+                    >
+                      <CalendarIcon className="w-4 h-4 text-gray-400 flex-shrink-0 mr-2" />
+                      <span className="text-xs text-gray-700">
+                        {pickupDate ? (
+                          `${format(pickupDate, "MM/dd/yyyy")} - ${pickupTime}`
+                        ) : (
+                          "Select date & time"
+                        )}
+                      </span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 bg-white" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={pickupDate}
+                      onSelect={setPickupDate}
+                      initialFocus
+                      disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
+                    />
+                    <div className="p-3 border-t">
+                      <label className="text-xs font-medium text-gray-700 mb-2 block ">
+                        Time
+                      </label>
+                      <input
+                        type="time"
+                        value={pickupTime}
+                        onChange={(e) => setPickupTime(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                      />
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
               <div className="col-span-1">
                 <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
@@ -121,19 +426,6 @@ export default function TransferSearchHero() {
                     <option>2 Passengers</option>
                     <option>3+ Passengers</option>
                   </select>
-                  <svg
-                    className="w-3 h-3 text-gray-400 flex-shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
                 </div>
               </div>
               <div className="col-span-1">
@@ -144,40 +436,65 @@ export default function TransferSearchHero() {
                     <option>2 Luggage</option>
                     <option>3+ Luggage</option>
                   </select>
-                  <svg
-                    className="w-3 h-3 text-gray-400 flex-shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
                 </div>
               </div>
             </div>
 
             {tripType === "return" && (
               <div className="mb-5">
-                <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                  <input
-                    type="text"
-                    placeholder="Return"
-                    className="w-full outline-none text-sm text-gray-700"
-                  />
-                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start text-left font-normal p-3 h-auto border-gray-300 hover:border-blue-400 bg-white"
+                    >
+                      <CalendarIcon className="w-4 h-4 text-gray-400 flex-shrink-0 mr-2" />
+                      <span className="text-sm text-gray-700">
+                        {returnDate ? (
+                          `${format(returnDate, "MM/dd/yyyy")} - ${returnTime}`
+                        ) : (
+                          "Select return date & time"
+                        )}
+                      </span>
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0 bg-white" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={returnDate}
+                      onSelect={setReturnDate}
+                      initialFocus
+                      disabled={(date) => {
+                        const today = new Date(new Date().setHours(0, 0, 0, 0));
+                        if (pickupDate) {
+                          return date < pickupDate || date < today;
+                        }
+                        return date < today;
+                      }}
+                    />
+                    <div className="p-3 border-t">
+                      <label className="text-xs font-medium text-gray-700 mb-2 block">
+                        Time
+                      </label>
+                      <input
+                        type="time"
+                        value={returnTime}
+                        onChange={(e) => setReturnTime(e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                      />
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             )}
 
-            <Button asChild className="w-full h-10 py-3" variant="outline">
-              <Link href="/transfer/private-car-transfer">
-                <Search className="w-5 h-5" />
-                Find a Ride
-              </Link>
+            <Button
+              onClick={handleSearch}
+              className="w-full h-10 py-3"
+              variant="outline"
+            >
+              <Search className="w-5 h-5 mr-2" />
+              Find a Ride
             </Button>
           </div>
           <div className="rounded-xl overflow-hidden shadow-lg h-full">
