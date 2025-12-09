@@ -48,9 +48,11 @@ export function Header2() {
             <option value="EN" className="bg-sky-500 text-white">ENG</option>
             <option value="FR" className="bg-sky-500 text-white">FRA</option>
           </select>
-          <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md mt-2">
-            Login
-          </Button>
+          <Link href="/auth/login">
+            <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md mt-2">
+              Login
+            </Button>
+          </Link>
         </nav>
       )}
 
@@ -79,7 +81,9 @@ export function Header2() {
               <option value="EN" className="bg-sky-500 text-white">ENG</option>
               <option value="FR" className="bg-sky-500 text-white">FRA</option>
             </select>
-            <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md">Login</Button>
+            <Link href="/auth/login">
+              <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md">Login</Button>
+            </Link>
           </div>
         </div>
       </div>
