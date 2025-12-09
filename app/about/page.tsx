@@ -1,11 +1,11 @@
-import { Header } from "@/components/header";
+import { Header2 } from "@/components/Header2";
 import { Footer } from "@/components/layout/footer";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 export default function About() {
     return (
         <div className="min-h-screen bg-gray-50">
-            <Header />
+            <Header2 />
 
             <main className="py-16">
                 {/* Hero Section */}

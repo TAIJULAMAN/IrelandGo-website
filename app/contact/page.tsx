@@ -1,12 +1,12 @@
-import { Header } from "@/components/header";
 import { Footer } from "@/components/layout/footer";
 import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Header2 } from "@/components/Header2";
 
 export default function Contact() {
     return (
         <div className="min-h-screen bg-gray-50">
-            <Header />
+            <Header2 />
 
             <main className="py-16">
                 {/* Hero Section */}
