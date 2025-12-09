@@ -2,15 +2,18 @@
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
 import { MapPin, Calendar, Users, Luggage, Plus, Clock, Search, BadgeCheck, UserRoundCog, ShieldPlus } from "lucide-react"
-import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { Header } from "./header"
+import { MapRoute } from "./map-route"
+import { irishSettlements } from "@/lib/irish-settlements"
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState("transfer")
-  const [tripType, setTripType] = useState("one-way")
+  const [tripType, setTripType] = useState("return")
   const [oneWayStops, setOneWayStops] = useState<string[]>([])
   const [returnStops, setReturnStops] = useState<string[]>([])
+  const [pickupLocation, setPickupLocation] = useState("")
+  const [dropoffLocation, setDropoffLocation] = useState("")
   const router = useRouter()
 
   const tabs = [
@@ -60,7 +63,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#000000]/10 via-[#000000]/10 to-[#000000]/10 "></div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container mx-auto px-5 md:px-0 py-10 md:py-16 relative z-10">
         {/* Hero Text */}
         <div className="text-center mb-6 md:mb-10 pt-8">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
@@ -123,6 +126,8 @@ export function Hero() {
                       type="text"
                       placeholder="Pickup Location"
                       className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                      value={pickupLocation}
+                      onChange={(e) => setPickupLocation(e.target.value)}
                     />
                   </div>
                 </div>
@@ -133,6 +138,8 @@ export function Hero() {
                       type="text"
                       placeholder="Dropoff Location"
                       className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                      value={dropoffLocation}
+                      onChange={(e) => setDropoffLocation(e.target.value)}
                     />
                   </div>
                 </div>
@@ -239,13 +246,18 @@ export function Hero() {
                 Find a Ride
               </Button>
             </div>
-            <div className="rounded-xl overflow-hidden shadow-lg h-full hidden lg:block">
-              <Image
-                src="/map.png"
-                alt="Ireland route map"
-                className="w-full lg:w-[500px] h-[200px] lg:h-[300px] object-cover"
-                width={500}
-                height={300}
+            <div className="rounded-lg overflow-hidden shadow-lg w-[450px] h-[340px] hidden lg:block">
+              <MapRoute
+                pickup={irishSettlements.find(s => s.name === pickupLocation) ? {
+                  lat: irishSettlements.find(s => s.name === pickupLocation)!.lat,
+                  lng: irishSettlements.find(s => s.name === pickupLocation)!.lng,
+                  name: pickupLocation
+                } : undefined}
+                dropoff={irishSettlements.find(s => s.name === dropoffLocation) ? {
+                  lat: irishSettlements.find(s => s.name === dropoffLocation)!.lat,
+                  lng: irishSettlements.find(s => s.name === dropoffLocation)!.lng,
+                  name: dropoffLocation
+                } : undefined}
               />
             </div>
           </div>
