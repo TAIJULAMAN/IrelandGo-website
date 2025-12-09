@@ -3,14 +3,23 @@
 import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Search, Clock, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { irishSettlements } from "@/lib/irish-settlements";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
+import dynamic from "next/dynamic";
+
+// Dynamically import MapRoute with SSR disabled to prevent "window is not defined" error
+const MapRoute = dynamic(() => import("../map-route").then(mod => ({ default: mod.MapRoute })), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '340px' }}>
+      <p className="text-gray-500">Loading map...</p>
+    </div>
+  )
+});
 
 export default function TransferSearchHero() {
   const router = useRouter();
@@ -75,7 +84,23 @@ export default function TransferSearchHero() {
   // Handle search submission
   const handleSearch = () => {
     if (pickupLocation.trim() && dropoffLocation.trim()) {
-      router.push(`/transfer/private-car-transfer?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}`);
+      const params = new URLSearchParams({
+        pickup: pickupLocation,
+        dropoff: dropoffLocation,
+        tripType: tripType,
+      });
+
+      if (pickupDate) {
+        params.append('pickupDate', pickupDate.toISOString());
+        params.append('pickupTime', pickupTime);
+      }
+
+      if (tripType === 'return' && returnDate) {
+        params.append('returnDate', returnDate.toISOString());
+        params.append('returnTime', returnTime);
+      }
+
+      router.push(`/transfer/private-car-transfer?${params.toString()}`);
     }
   };
 
@@ -198,10 +223,10 @@ export default function TransferSearchHero() {
 
       <Header />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="container mx-auto px-5 md:px-0 py-10 md:py-16 relative z-10">
         {/* Hero Text */}
         <div className="text-center mb-10 pt-10">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-5 leading-tight">
             Discover {displayLocation} with
             <br className="hidden sm:block" />
             Comfortable Transfers
@@ -384,7 +409,7 @@ export default function TransferSearchHero() {
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full justify-start text-left font-normal p-3 h-auto border-gray-300 hover:border-blue-400 bg-white"
+                      className="w-full justify-start text-left font-normal p-3 h-auto border-gray-300 bg-white"
                     >
                       <CalendarIcon className="w-4 h-4 text-gray-400 flex-shrink-0 mr-2" />
                       <span className="text-xs text-gray-700">
@@ -497,13 +522,18 @@ export default function TransferSearchHero() {
               Find a Ride
             </Button>
           </div>
-          <div className="rounded-xl overflow-hidden shadow-lg h-full">
-            <Image
-              src="/map.png"
-              alt="Ireland route map"
-              className="w-[500px] h-[300px] object-cover"
-              width={500}
-              height={300}
+          <div className="rounded-xl overflow-hidden shadow-lg w-full lg:w-[450px] h-[340px] hidden lg:block">
+            <MapRoute
+              pickup={irishSettlements.find(s => s.name === pickupLocation) ? {
+                lat: irishSettlements.find(s => s.name === pickupLocation)!.lat,
+                lng: irishSettlements.find(s => s.name === pickupLocation)!.lng,
+                name: pickupLocation
+              } : undefined}
+              dropoff={irishSettlements.find(s => s.name === dropoffLocation) ? {
+                lat: irishSettlements.find(s => s.name === dropoffLocation)!.lat,
+                lng: irishSettlements.find(s => s.name === dropoffLocation)!.lng,
+                name: dropoffLocation
+              } : undefined}
             />
           </div>
         </div>

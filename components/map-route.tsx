@@ -42,11 +42,17 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     const [route, setRoute] = useState<[number, number][]>([])
     const [distance, setDistance] = useState<number | null>(null)
     const [isClient, setIsClient] = useState(false)
+    const [isMounted, setIsMounted] = useState(false)
 
     // Ensure component only renders on client side
     useEffect(() => {
         console.log('MapRoute component mounted')
         setIsClient(true)
+        // Add a small delay to ensure DOM is ready
+        const timer = setTimeout(() => {
+            setIsMounted(true)
+        }, 100)
+        return () => clearTimeout(timer)
     }, [])
 
     // Fetch route from OSRM when both locations are available
@@ -82,7 +88,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     const defaultCenter: [number, number] = [53.4129, -8.2439]
     const defaultZoom = 7
 
-    if (!isClient) {
+    if (!isClient || !isMounted) {
         return (
             <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '400px' }}>
                 <p className="text-gray-500">Loading map...</p>
@@ -97,6 +103,10 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                 zoom={defaultZoom}
                 scrollWheelZoom={true}
                 style={{ height: '100%', width: '100%' }}
+                key={`map-${pickup?.name || 'none'}-${dropoff?.name || 'none'}`}
+                whenReady={() => {
+                    console.log('Map is ready');
+                }}
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

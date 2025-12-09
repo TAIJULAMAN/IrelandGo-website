@@ -72,7 +72,7 @@ export function Footer({ className = "" }: FooterProps) {
               </li>
               <li>
                 <Link
-                  href="/privacy"
+                  href="/settings/privacy-policy"
                   className="text-sm text-white hover:text-blue-400 transition-colors"
                 >
                   Privacy Policy
@@ -80,7 +80,7 @@ export function Footer({ className = "" }: FooterProps) {
               </li>
               <li>
                 <Link
-                  href="/terms"
+                  href="/settings/terms-of-service"
                   className="text-sm text-white hover:text-blue-400 transition-colors"
                 >
                   Terms of Service

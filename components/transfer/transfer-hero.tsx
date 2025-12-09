@@ -95,11 +95,11 @@ export default function TransfersHero() {
   }, []);
 
   const popularRoutes = [
-    "Shannon Airport",
-    "Dublin Airport",
-    "Cork Airport",
-    "Knock Airport",
-    "Kerry Airport"
+    "Dublin",
+    "Cork",
+    "Galway",
+    "Limerick",
+    "Belfast"
   ];
 
   return (

@@ -3,7 +3,7 @@
 export default function TravelTips() {
 	return (
 		<section className="bg-gray-50 py-10 sm:py-14">
-			<div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-0 text-gray-900">
+			<div className="container mx-auto px-4 sm:px-6 lg:px-0 text-gray-900">
 				<h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3">
 					From Dublin to Galway : Travel Tips
 				</h2>

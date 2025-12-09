@@ -1,127 +1,163 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
 import {
-  Calendar,
   Clock,
   MapPin,
-  Users,
-  Luggage,
   Euro,
   Route,
-  Search,
+  ArrowRight,
+  Navigation,
 } from "lucide-react";
+import { irishSettlements } from "@/lib/irish-settlements";
+import { useEffect, useState } from "react";
 
 export default function TransferJourneyDetails() {
+  const searchParams = useSearchParams();
+  const pickupParam = searchParams.get("pickup") || "";
+  const dropoffParam = searchParams.get("dropoff") || "";
+
+  const [distance, setDistance] = useState<number | null>(null);
+  const [duration, setDuration] = useState<number | null>(null);
+
+  // Find settlement data
+  const pickupSettlement = irishSettlements.find(s => s.name === pickupParam);
+  const dropoffSettlement = irishSettlements.find(s => s.name === dropoffParam);
+
+  // Fetch route data from OSRM
+  useEffect(() => {
+    if (pickupSettlement && dropoffSettlement) {
+      const fetchRoute = async () => {
+        try {
+          const url = `https://router.project-osrm.org/route/v1/driving/${pickupSettlement.lng},${pickupSettlement.lat};${dropoffSettlement.lng},${dropoffSettlement.lat}?overview=false`;
+          const response = await fetch(url);
+          const data = await response.json();
+
+          if (data.routes && data.routes[0]) {
+            setDistance(Math.round(data.routes[0].distance / 1000)); // Convert to km
+            setDuration(Math.round(data.routes[0].duration / 60)); // Convert to minutes
+          }
+        } catch (error) {
+          console.error('Error fetching route:', error);
+        }
+      };
+
+      fetchRoute();
+    }
+  }, [pickupSettlement, dropoffSettlement]);
+
+  // Calculate estimated price (€0.40 per km base rate)
+  const estimatedPrice = distance ? Math.round(distance * 0.40) : null;
+
+  // Format duration
+  const formatDuration = (minutes: number | null) => {
+    if (!minutes) return "N/A";
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours > 0) {
+      return `${hours}h ${mins}m`;
+    }
+    return `${mins}m`;
+  };
+
   return (
-    <section className="bg-white py-10 sm:py-14">
+    <section className="bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0">
-        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 mb-6 sm:mb-8">
-          Your Journey Details
-        </h2>
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+            Your Journey Details
+          </h2>
+          <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+            Review your transfer route and estimated travel information
+          </p>
+        </div>
 
-        <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
-          {/* Left: Route information card */}
-          <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 md:p-7 space-y-5">
-            <h3 className="text-xl font-semibold text-gray-900 mb-5">
-              Route Information
-            </h3>
+        <div className="max-w-3xl mx-auto">
+          {/* Route information card */}
+          <div className="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sm:p-8 space-y-6 hover:shadow-2xl transition-shadow duration-300">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <Navigation className="w-6 h-6 text-blue-600" />
+                Route Information
+              </h3>
+            </div>
 
-            <div className="space-y-5">
+            <div className="space-y-6">
               {/* Origin */}
-              <div className="flex items-start gap-3">
-                <div className="mt-2 mb-10 flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 text-white text-sm font-semibold">
+              <div className="flex items-start gap-4 p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-blue-100/50 border border-blue-200">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white text-base font-bold shadow-lg">
                   A
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    Dublin Airport
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-blue-600 mb-1">Pickup Location</p>
+                  <p className="text-base sm:text-lg font-bold text-gray-900">
+                    {pickupParam || "Select Pickup Location"}
                   </p>
-                  <p className="text-xs text-gray-500">Terminal 1, Dublin</p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {pickupSettlement ? `${pickupSettlement.county}, ${pickupSettlement.province}` : ""}
+                  </p>
                 </div>
               </div>
 
-              {/* Destination input */}
-              <div className="flex items-center gap-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-white text-sm font-semibold">
+              {/* Arrow indicator */}
+              <div className="flex justify-center">
+                <div className="flex items-center gap-2 text-gray-400">
+                  <div className="h-px w-12 bg-gradient-to-r from-transparent via-gray-300 to-gray-300"></div>
+                  <ArrowRight className="w-5 h-5" />
+                  <div className="h-px w-12 bg-gradient-to-r from-gray-300 via-gray-300 to-transparent"></div>
+                </div>
+              </div>
+
+              {/* Destination */}
+              <div className="flex items-start gap-4 p-4 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-100/50 border border-green-200">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white text-base font-bold shadow-lg">
                   B
                 </div>
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-800">
-                    <MapPin className="h-4 w-4 text-gray-400" />
-                    <input
-                      type="text"
-                      placeholder="Pickup Location"
-                      className="w-full bg-transparent outline-none placeholder:text-gray-500"
-                    />
+                  <p className="text-sm font-medium text-emerald-600 mb-1">Dropoff Location</p>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-5 w-5 text-emerald-600" />
+                    <p className="text-base sm:text-lg font-bold text-gray-900">
+                      {dropoffParam || "Select Dropoff Location"}
+                    </p>
                   </div>
+                  {dropoffSettlement && (
+                    <p className="text-sm text-gray-600 mt-1">
+                      {dropoffSettlement.county}, {dropoffSettlement.province}
+                    </p>
+                  )}
                 </div>
               </div>
-
-              {/* Date and time - choose from calendar */}
-              {/* <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs sm:text-sm text-gray-800">
-                <Calendar className="h-4 w-4 text-gray-400" />
-                <input
-                  type="date"
-                  defaultValue="2025-07-04"
-                  className="w-full bg-transparent outline-none"
-                />
-              </div> */}
-
-              {/* Passengers and luggage */}
-              {/* <div className="grid grid-cols-2 gap-3">
-                <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs sm:text-sm text-gray-800">
-                  <Users className="h-4 w-4 text-gray-400" />
-                  <select className="w-full bg-white outline-none text-xs sm:text-sm text-gray-800">
-                    <option>1 Passenger</option>
-                    <option>2 Passengers</option>
-                    <option>3+ Passengers</option>
-                  </select>
-                </div>
-                <div className="flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs sm:text-sm text-gray-800">
-                  <Luggage className="h-4 w-4 text-gray-400" />
-                  <select className="w-full bg-white outline-none text-xs sm:text-sm text-gray-800">
-                    <option>1 Luggage</option>
-                    <option>2 Luggage</option>
-                    <option>3+ Luggage</option>
-                  </select>
-                </div>
-              </div> */}
             </div>
 
             {/* Metrics row */}
-            <div className="mt-6 grid grid-cols-3 gap-4 text-center text-xs sm:text-sm text-gray-700 border-t border-gray-100 pt-4">
-              <div className="flex flex-col items-center gap-1">
-                <Clock className="h-4 w-4 text-blue-500" />
-                <p className="font-medium">Duration</p>
-                <p className="text-gray-600">2h 30m</p>
+            <div className="mt-8 grid grid-cols-3 gap-4 pt-6 border-t-2 border-gray-100">
+              <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/30 hover:shadow-md transition-shadow">
+                <div className="p-2 rounded-full bg-blue-600">
+                  <Clock className="h-5 w-5 text-white" />
+                </div>
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Duration</p>
+                <p className="text-lg sm:text-xl font-bold text-gray-900">{formatDuration(duration) || "N/A"}</p>
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <Route className="h-4 w-4 text-blue-500" />
-                <p className="font-medium">Distance</p>
-                <p className="text-gray-600">220 km</p>
+              <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/30 hover:shadow-md transition-shadow">
+                <div className="p-2 rounded-full bg-purple-600">
+                  <Route className="h-5 w-5 text-white" />
+                </div>
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Distance</p>
+                <p className="text-lg sm:text-xl font-bold text-gray-900">
+                  {distance ? `${distance} km` : "N/A"}
+                </p>
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <Euro className="h-4 w-4 text-blue-500" />
-                <p className="font-medium">From</p>
-                <p className="text-gray-600">€85</p>
+              <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-100/30 hover:shadow-md transition-shadow">
+                <div className="p-2 rounded-full bg-emerald-600">
+                  <Euro className="h-5 w-5 text-white" />
+                </div>
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">From</p>
+                <p className="text-lg sm:text-xl font-bold text-gray-900">
+                  {estimatedPrice ? `€${estimatedPrice}` : "N/A"}
+                </p>
               </div>
             </div>
-            {/* <div className="mt-6 sm:mt-8">
-              <Button className="w-full h-11 sm:h-12 bg-blue-600 text-white flex items-center justify-center gap-2 rounded-full sm:rounded-xl">
-                <Search className="h-4 w-4" />
-                <span>Find a Ride</span>
-              </Button>
-            </div> */}
-          </div>
-
-          {/* Right: Map image */}
-          <div className="md:w-[600px] lg:w-[600px] rounded-lg overflow-hidden self-stretch">
-            <img
-              src="/map5.png"
-              alt="Route map across Ireland"
-              className="h-full w-full object-cover"
-            />
           </div>
         </div>
       </div>
