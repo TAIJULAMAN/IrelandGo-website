@@ -13,7 +13,6 @@ import { Footer } from "@/components/layout/footer"
 export default function Home() {
   return (
     <main className="w-full">
-      {/* <Header /> */}
       <Hero />
       <PrivateTransfers />
       <HowItWorks />

@@ -25,8 +25,8 @@ export function HowItWorks() {
   ]
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="px-5 md:px-0 py-10 md:py-16 bg-gray-50">
+      <div className="container mx-auto">
         <h2 className="text-4xl font-bold text-center mb-16 text-balance">How it Works</h2>
 
         <div className="grid md:grid-cols-4 gap-8">

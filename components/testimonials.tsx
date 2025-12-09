@@ -1,14 +1,12 @@
-import { Star } from "lucide-react"
+"use client"
+
+import { useState } from "react"
+import { Star, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
 
 export function Testimonials() {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
   const testimonials = [
     {
       name: "Sarah Johnson",
@@ -40,54 +38,94 @@ export function Testimonials() {
     },
   ]
 
+  const goToPrevious = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1))
+  }
+
+  const goToNext = () => {
+    setCurrentIndex((prevIndex) => (prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1))
+  }
+
+  const visibleTestimonials = [
+    testimonials[currentIndex],
+    testimonials[(currentIndex + 1) % testimonials.length],
+    testimonials[(currentIndex + 2) % testimonials.length],
+  ]
+
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-        >
-          <div className="flex items-center justify-between mb-12">
-            <CarouselPrevious className="static bg-white text-blue-600 border-blue-600 h-12 w-12 rounded-full translate-y-0" />
-            <div className="text-center">
-              <h2 className="text-4xl font-bold text-gray-900 mb-2">What Our Customers Say</h2>
-              <p className="text-gray-600">Trusted by 1,000,000+ happy travelers</p>
-            </div>
-            <CarouselNext className="static bg-white text-blue-600 border-blue-600 h-12 w-12 rounded-full translate-y-0" />
+    <section className="px-5 md:px-0 py-10 md:py-20 bg-gray-50">
+      <div className="container mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4">
+          <button
+            onClick={goToPrevious}
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+            aria-label="Previous testimonials"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+
+          <div className="text-center">
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 md:mb-2">What Our Customers Say</h2>
+            <p className="text-sm md:text-base text-gray-600">Trusted by 1,000,000+ happy travelers</p>
           </div>
 
-          <CarouselContent className="-ml-6">
-            {testimonials.map((testimonial, idx) => (
-              <CarouselItem key={idx} className="pl-6 md:basis-1/2 lg:basis-1/3">
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 h-full flex flex-col">
-                  <div className="flex gap-1 mb-6">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-blue-600 text-blue-600" />
-                    ))}
-                  </div>
-                  <p className="text-gray-600 mb-8 leading-relaxed flex-grow">"{testimonial.text}"</p>
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gray-200">
-                      <Image
-                        src={testimonial.image}
-                        alt={testimonial.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p className="font-bold text-gray-900">{testimonial.name}</p>
-                      <p className="text-sm text-gray-500">{testimonial.source}</p>
-                    </div>
-                  </div>
+          <button
+            onClick={goToNext}
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+            aria-label="Next testimonials"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {visibleTestimonials.map((testimonial, idx) => (
+            <div
+              key={idx}
+              className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 h-full flex flex-col ${idx > 0 ? "hidden md:flex" : ""
+                }`}
+            >
+              <div className="flex gap-1 mb-4 md:mb-6">
+                {[...Array(testimonial.rating)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 md:w-5 md:h-5 fill-blue-600 text-blue-600" />
+                ))}
+              </div>
+              <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8 leading-relaxed flex-grow">"{testimonial.text}"</p>
+              <div className="flex items-center gap-3 md:gap-4">
+                <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-gray-200">
+                  <Image
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+                <div>
+                  <p className="font-bold text-gray-900 text-sm md:text-base">{testimonial.name}</p>
+                  <p className="text-xs md:text-sm text-gray-500">{testimonial.source}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Mobile Navigation Buttons */}
+        <div className="flex md:hidden items-center justify-center gap-4 mt-8">
+          <button
+            onClick={goToPrevious}
+            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+            aria-label="Previous testimonials"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            onClick={goToNext}
+            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+            aria-label="Next testimonials"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        </div>
       </div>
     </section>
   )
