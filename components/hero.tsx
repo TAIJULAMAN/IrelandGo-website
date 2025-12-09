@@ -9,6 +9,8 @@ import { Header } from "./header"
 export function Hero() {
   const [activeTab, setActiveTab] = useState("transfer")
   const [tripType, setTripType] = useState("one-way")
+  const [oneWayStops, setOneWayStops] = useState<string[]>([])
+  const [returnStops, setReturnStops] = useState<string[]>([])
   const router = useRouter()
 
   const tabs = [
@@ -26,6 +28,24 @@ export function Hero() {
     }
   }
 
+  const addStop = () => {
+    if (tripType === "one-way") {
+      setOneWayStops([...oneWayStops, ""])
+    } else {
+      setReturnStops([...returnStops, ""])
+    }
+  }
+
+  const removeStop = (index: number) => {
+    if (tripType === "one-way") {
+      setOneWayStops(oneWayStops.filter((_, i) => i !== index))
+    } else {
+      setReturnStops(returnStops.filter((_, i) => i !== index))
+    }
+  }
+
+  const currentStops = tripType === "one-way" ? oneWayStops : returnStops
+
   return (
     <section className="relative overflow-hidden min-h-screen">
 
@@ -42,26 +62,26 @@ export function Hero() {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Hero Text */}
-        <div className="text-center mb-10 pt-8">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 text-balance leading-tight">
+        <div className="text-center mb-6 md:mb-10 pt-8">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
             Comfortable car transfers in Ireland
           </h1>
-          <p className="text-lg text-white/90 mb-8">Book private transfers and day tours with professional drivers.</p>
+          <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 px-4">Book private transfers and day tours with professional drivers.</p>
         </div>
 
         {/* Tabs */}
-        <div className="flex justify-start mb-10">
-          <div className="inline-flex gap-0 bg-white/10 backdrop-blur-sm rounded-full p-1 border-2 border-blue-400/50">
+        <div className="flex justify-start mb-6 md:mb-10 overflow-x-auto scrollbar-hide scroll-smooth">
+          <div className="inline-flex gap-0 bg-white/10 backdrop-blur-sm rounded-full p-1 border-2 border-blue-400/50 min-w-max">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => handleTabClick(tab)}
-                className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
+                className={`px-5 md:px-6 py-2 md:py-2.5 rounded-full font-medium text-xs md:text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
                   ? "bg-white text-gray-900 shadow-md"
-                  : "bg-transparent text-white hover:bg-white/10"
+                  : "bg-transparent text-white"
                   }`}
               >
-                {tab.icon && <tab.icon className="w-4 h-4" />}
+                {/* {tab.icon && <tab.icon className="w-3 h-3 md:w-4 md:h-4" />} */}
                 {tab.label}
               </button>
             ))}
@@ -70,7 +90,7 @@ export function Hero() {
 
         <div>
           {/* Booking Form Container */}
-          <div className="flex gap-5 container mx-auto bg-white rounded-xl shadow-xl p-5">
+          <div className="flex flex-col lg:flex-row gap-5 container mx-auto bg-white rounded-xl shadow-xl p-4 md:p-5">
             <div className="w-full ">
               {/* Tabs */}
               <div className="flex gap-2 mb-5">
@@ -118,13 +138,51 @@ export function Hero() {
                 </div>
               </div>
 
-              <button className="flex items-center gap-1 text-blue-500 hover:text-blue-600 text-sm font-medium mb-5 transition">
+              {/* Additional Stops */}
+              {currentStops.map((stop, index) => (
+                <div key={index} className="mb-4">
+                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
+                    <MapPin className="w-5 h-5 text-orange-500" />
+                    <input
+                      type="text"
+                      placeholder={`Stop ${index + 1}`}
+                      className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                      value={stop}
+                      onChange={(e) => {
+                        if (tripType === "one-way") {
+                          const newStops = [...oneWayStops]
+                          newStops[index] = e.target.value
+                          setOneWayStops(newStops)
+                        } else {
+                          const newStops = [...returnStops]
+                          newStops[index] = e.target.value
+                          setReturnStops(newStops)
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={() => removeStop(index)}
+                      className="text-red-500 hover:text-red-600 transition"
+                      aria-label="Remove stop"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              <button
+                onClick={addStop}
+                className="flex items-center gap-1 text-blue-500 hover:text-blue-600 text-sm font-medium mb-5 transition"
+              >
                 <Plus className="w-4 h-4" />
                 Add Stop
               </button>
 
               {/* Date, Time, Passengers, Luggage */}
-              <div className="grid grid-cols-3 gap-2 mb-5">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-5">
                 <div className="col-span-1">
                   <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
                     <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
@@ -181,11 +239,11 @@ export function Hero() {
                 Find a Ride
               </Button>
             </div>
-            <div className="rounded-xl overflow-hidden shadow-lg h-full">
+            <div className="rounded-xl overflow-hidden shadow-lg h-full hidden lg:block">
               <Image
                 src="/map.png"
                 alt="Ireland route map"
-                className="w-[500px] h-[300px] object-cover"
+                className="w-full lg:w-[500px] h-[200px] lg:h-[300px] object-cover"
                 width={500}
                 height={300}
               />
@@ -193,7 +251,7 @@ export function Hero() {
           </div>
 
           {/* Features Row */}
-          <div className="flex flex-wrap gap-10 justify-center text-lg font-medium mt-10">
+          <div className="flex flex-wrap gap-4 md:gap-10 justify-center text-sm md:text-lg font-medium mt-6 md:mt-10 px-4">
             <div className="flex items-center gap-3 text-white">
               <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
                 <BadgeCheck className="w-5 h-5 text-green-500" />

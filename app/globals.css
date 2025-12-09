@@ -119,26 +119,36 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 
-  /* Custom scrollbar styling */
+  /* Custom scrollbar styling - Hidden */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 0px;
+    height: 0px;
   }
 
   ::-webkit-scrollbar-track {
-    background: oklch(0.95 0 0);
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: oklch(0.6 0 0);
-    border-radius: 4px;
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: oklch(0.5 0 0);
+    background: transparent;
+  }
+
+  /* Hide scrollbar for Firefox */
+  * {
+    scrollbar-width: none;
+  }
+
+  /* Hide scrollbar for IE and Edge */
+  * {
+    -ms-overflow-style: none;
   }
 }
