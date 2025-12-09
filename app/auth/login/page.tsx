@@ -6,9 +6,25 @@ import { Button } from "@/components/ui/button";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
+    const { login } = useAuth();
+    const [error, setError] = useState("");
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+
+        const email = formData.get("email") as string;
+        const password = formData.get("password") as string;
+
+        const success = login(email, password);
+        if (!success) {
+            setError("Invalid email or password");
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -27,7 +43,12 @@ export default function Login() {
                                 </p>
                             </div>
 
-                            <form className="space-y-5">
+                            <form className="space-y-5" onSubmit={handleSubmit}>
+                                {error && (
+                                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                                        {error}
+                                    </div>
+                                )}
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                                         Email Address

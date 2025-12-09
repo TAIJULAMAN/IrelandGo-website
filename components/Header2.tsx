@@ -3,11 +3,14 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
+import { UserAvatar } from "@/components/UserAvatar"
+import { useAuth } from "@/contexts/AuthContext"
 
 export function Header2() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [language, setLanguage] = useState('EN')
+  const { isAuthenticated } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,11 +51,13 @@ export function Header2() {
             <option value="EN" className="bg-sky-500 text-white">ENG</option>
             <option value="FR" className="bg-sky-500 text-white">FRA</option>
           </select>
-          <Link href="/auth/login">
-            <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md mt-2">
-              Login
-            </Button>
-          </Link>
+          {!isAuthenticated && (
+            <Link href="/auth/login">
+              <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md mt-2">
+                Login
+              </Button>
+            </Link>
+          )}
         </nav>
       )}
 
@@ -81,9 +86,13 @@ export function Header2() {
               <option value="EN" className="bg-sky-500 text-white">ENG</option>
               <option value="FR" className="bg-sky-500 text-white">FRA</option>
             </select>
-            <Link href="/auth/login">
-              <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md">Login</Button>
-            </Link>
+            {isAuthenticated ? (
+              <UserAvatar />
+            ) : (
+              <Link href="/auth/login">
+                <Button className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-md">Login</Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>

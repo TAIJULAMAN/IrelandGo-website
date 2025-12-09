@@ -6,11 +6,28 @@ import { Button } from "@/components/ui/button";
 import { Mail, Lock, User, Phone, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [role, setRole] = useState("user");
+    const { signup } = useAuth();
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+
+        const userData = {
+            name: formData.get("name") as string,
+            email: formData.get("email") as string,
+            phone: formData.get("phone") as string,
+            password: formData.get("password") as string,
+            role: role as "user" | "agent",
+        };
+
+        signup(userData);
+    };
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -29,7 +46,7 @@ export default function Signup() {
                                 </p>
                             </div>
 
-                            <form className="space-y-5">
+                            <form className="space-y-5" onSubmit={handleSubmit}>
                                 <div>
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                                         Full Name
@@ -90,8 +107,8 @@ export default function Signup() {
                                             type="button"
                                             onClick={() => setRole("user")}
                                             className={`px-4 py-3 border-2 rounded-lg font-medium transition ${role === "user"
-                                                    ? "border-blue-500 bg-blue-50 text-blue-700"
-                                                    : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+                                                ? "border-blue-500 bg-blue-50 text-blue-700"
+                                                : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
                                                 }`}
                                         >
                                             👤 User
@@ -100,8 +117,8 @@ export default function Signup() {
                                             type="button"
                                             onClick={() => setRole("agent")}
                                             className={`px-4 py-3 border-2 rounded-lg font-medium transition ${role === "agent"
-                                                    ? "border-blue-500 bg-blue-50 text-blue-700"
-                                                    : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
+                                                ? "border-blue-500 bg-blue-50 text-blue-700"
+                                                : "border-gray-300 bg-white text-gray-700 hover:border-gray-400"
                                                 }`}
                                         >
                                             💼 Agent
