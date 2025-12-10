@@ -1,10 +1,10 @@
-import { Header } from "@/components/header";
+import { Header2 } from "@/components/Header2";
 import { Footer } from "@/components/layout/footer";
 
 export default function PrivacyPolicy() {
     return (
         <div className="min-h-screen bg-gray-50">
-            <Header />
+            <Header2 />
 
             <main className="container mx-auto px-5 md:px-0 py-16 max-w-4xl">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">

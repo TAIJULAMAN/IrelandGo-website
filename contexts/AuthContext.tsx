@@ -46,9 +46,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // Redirect to appropriate dashboard
         if (userData.role === "agent") {
-            router.push("/dashboard/agent");
+            router.push("/agent");
         } else {
-            router.push("/dashboard/user");
+            router.push("/user");
         }
     };
 
@@ -71,9 +71,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
             // Redirect to appropriate dashboard
             if (foundUser.role === "agent") {
-                router.push("/dashboard/agent");
+                router.push("/agent");
             } else {
-                router.push("/dashboard/user");
+                router.push("/user");
             }
 
             return true;

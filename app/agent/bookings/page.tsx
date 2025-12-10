@@ -12,7 +12,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -84,7 +83,9 @@ export default function AgentBookingsPage() {
       {/* Header */}
       <header className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Booking Management</h1>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Booking Management
+          </h1>
           <p className="text-sm text-gray-500">
             Manage and track all client bookings
           </p>
@@ -109,7 +110,9 @@ export default function AgentBookingsPage() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)] gap-3">
             <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-500">Status</label>
+              <label className="text-xs font-medium text-gray-500">
+                Status
+              </label>
               <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                 <option>All Status</option>
                 <option>Confirmed</option>
@@ -118,7 +121,9 @@ export default function AgentBookingsPage() {
               </select>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-500">Date From</label>
+              <label className="text-xs font-medium text-gray-500">
+                Date From
+              </label>
               <div className="relative">
                 <Input type="date" className="pr-9" />
                 <span className="absolute inset-y-0 right-3 flex items-center text-gray-400">
@@ -127,7 +132,9 @@ export default function AgentBookingsPage() {
               </div>
             </div>
             <div className="space-y-1">
-              <label className="text-xs font-medium text-gray-500">Date To</label>
+              <label className="text-xs font-medium text-gray-500">
+                Date To
+              </label>
               <div className="relative">
                 <Input type="date" className="pr-9" />
                 <span className="absolute inset-y-0 right-3 flex items-center text-gray-400">
@@ -138,10 +145,7 @@ export default function AgentBookingsPage() {
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-1">
             <div className="relative w-full sm:w-64">
-              <Input
-                placeholder="Search bookings"
-                className="pl-9"
-              />
+              <Input placeholder="Search bookings" className="pl-9" />
               <span className="absolute inset-y-0 left-3 flex items-center text-gray-400">
                 <Search className="h-4 w-4" />
               </span>
@@ -195,7 +199,10 @@ export default function AgentBookingsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <Label htmlFor="pickup-location" className="text-sm font-medium">
+                <Label
+                  htmlFor="pickup-location"
+                  className="text-sm font-medium"
+                >
                   Pickup Location <span className="text-red-500">*</span>
                 </Label>
                 <div className="relative">
@@ -211,7 +218,10 @@ export default function AgentBookingsPage() {
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="destination-location" className="text-sm font-medium">
+                <Label
+                  htmlFor="destination-location"
+                  className="text-sm font-medium"
+                >
                   Destination Location <span className="text-red-500">*</span>
                 </Label>
                 <div className="relative">
@@ -233,11 +243,7 @@ export default function AgentBookingsPage() {
                   Pickup Date <span className="text-red-500">*</span>
                 </Label>
                 <div className="relative">
-                  <Input
-                    id="pickup-date"
-                    type="date"
-                    className="pr-9"
-                  />
+                  <Input id="pickup-date" type="date" className="pr-9" />
                   <span className="absolute inset-y-0 right-3 flex items-center text-gray-400">
                     <CalendarDays className="h-4 w-4" />
                   </span>
@@ -249,11 +255,7 @@ export default function AgentBookingsPage() {
                   Pickup Time <span className="text-red-500">*</span>
                 </Label>
                 <div className="relative">
-                  <Input
-                    id="pickup-time"
-                    type="time"
-                    className="pr-9"
-                  />
+                  <Input id="pickup-time" type="time" className="pr-9" />
                   <span className="absolute inset-y-0 right-3 flex items-center text-gray-400">
                     <Clock className="h-4 w-4" />
                   </span>
@@ -370,9 +372,18 @@ export default function AgentBookingsPage() {
             <p className="text-xs text-gray-500">247 total bookings</p>
           </div>
           <div className="flex items-center gap-2 text-gray-400">
-            <button className="rounded-md p-1.5 hover:bg-gray-100" aria-label="Export" />
-            <button className="rounded-md p-1.5 hover:bg-gray-100" aria-label="Download" />
-            <button className="rounded-md p-1.5 hover:bg-gray-100" aria-label="Settings" />
+            <button
+              className="rounded-md p-1.5 hover:bg-gray-100"
+              aria-label="Export"
+            />
+            <button
+              className="rounded-md p-1.5 hover:bg-gray-100"
+              aria-label="Download"
+            />
+            <button
+              className="rounded-md p-1.5 hover:bg-gray-100"
+              aria-label="Settings"
+            />
           </div>
         </CardHeader>
         <CardContent className="pt-0">
@@ -380,13 +391,27 @@ export default function AgentBookingsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-12 text-xs font-semibold text-gray-500">SL</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-500">Client Name</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-500">Trip</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-500">Date</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-500">Status</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-500">Payment</TableHead>
-                  <TableHead className="text-xs font-semibold text-gray-500 text-right">Actions</TableHead>
+                  <TableHead className="w-12 text-xs font-semibold text-gray-500">
+                    SL
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-500">
+                    Client Name
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-500">
+                    Trip
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-500">
+                    Date
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-500">
+                    Status
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-500">
+                    Payment
+                  </TableHead>
+                  <TableHead className="text-xs font-semibold text-gray-500 text-right">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -416,7 +441,9 @@ export default function AgentBookingsPage() {
                         <div className="text-sm font-medium text-gray-900">
                           {booking.trip}
                         </div>
-                        <div className="text-xs text-gray-500">{booking.tripMeta}</div>
+                        <div className="text-xs text-gray-500">
+                          {booking.tripMeta}
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell className="text-sm text-gray-700">
@@ -432,13 +459,22 @@ export default function AgentBookingsPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="inline-flex items-center gap-2 text-blue-500 text-sm">
-                        <button className="hover:text-blue-700" aria-label="View" >
+                        <button
+                          className="hover:text-blue-700"
+                          aria-label="View"
+                        >
                           👁
                         </button>
-                        <button className="hover:text-blue-700" aria-label="Edit" >
+                        <button
+                          className="hover:text-blue-700"
+                          aria-label="Edit"
+                        >
                           ✏️
                         </button>
-                        <button className="hover:text-blue-700" aria-label="Delete" >
+                        <button
+                          className="hover:text-blue-700"
+                          aria-label="Delete"
+                        >
                           🗑
                         </button>
                       </div>
@@ -451,9 +487,7 @@ export default function AgentBookingsPage() {
 
           {/* Pagination summary */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 mt-4 text-xs text-gray-500">
-            <p>
-              results 247 of 10 to 1 Showing
-            </p>
+            <p>results 247 of 10 to 1 Showing</p>
             <div className="flex items-center gap-1">
               <button className="h-8 w-8 rounded-md border border-gray-200 text-gray-500 text-sm flex items-center justify-center hover:bg-gray-50">
                 1

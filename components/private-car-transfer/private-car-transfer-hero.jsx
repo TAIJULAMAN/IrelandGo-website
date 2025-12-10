@@ -10,6 +10,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 // Dynamically import MapRoute with SSR disabled to prevent "window is not defined" error
 const MapRoute = dynamic(() => import("../map-route").then(mod => ({ default: mod.MapRoute })), {
@@ -497,14 +498,16 @@ export default function PrivateCarTransferHero() {
                             </div>
                         )}
 
-                        <Button
-                            onClick={handleSearch}
-                            className="w-full h-10 py-3"
-                            variant="outline"
-                        >
-                            <Search className="w-5 h-5 mr-2" />
-                            Find a Ride
-                        </Button>
+                        <Link href="/booking-flow/step-2">
+                            <Button
+                                // onClick={handleSearch}
+                                className="w-full h-10 py-3"
+                                variant="outline"
+                            >
+                                <Search className="w-5 h-5 mr-2" />
+                                Find a Ride
+                            </Button>
+                        </Link>
                     </div>
                     <div className="rounded-xl overflow-hidden shadow-lg w-full lg:w-[450px] h-[340px] hidden lg:block">
                         <MapRoute
