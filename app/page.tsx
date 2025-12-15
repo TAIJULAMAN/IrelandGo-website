@@ -7,8 +7,8 @@ import { PopularMultiDayTours } from "@/components/popular-multi-day-tours"
 import { SafetyComfort } from "@/components/safety-comfort"
 import { WhyChooseUs } from "@/components/why-choose-us"
 import { Testimonials } from "@/components/testimonials"
-import { BookWithEase } from "@/components/book-with-ease"
 import { Footer } from "@/components/layout/footer"
+import { NewsLetter } from "@/components/news-letter"
 
 export default function Home() {
   return (
@@ -21,7 +21,7 @@ export default function Home() {
       <SafetyComfort />
       <WhyChooseUs />
       <Testimonials />
-      <BookWithEase />
+      <NewsLetter />
       <Footer />
     </main>
   )

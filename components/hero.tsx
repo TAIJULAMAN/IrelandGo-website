@@ -7,7 +7,6 @@ import { Header } from "./header"
 import dynamic from "next/dynamic"
 import { irishSettlements } from "@/lib/irish-settlements"
 
-// Dynamically import MapRoute with SSR disabled to prevent "window is not defined" error
 const MapRoute = dynamic(() => import("./map-route").then(mod => ({ default: mod.MapRoute })), {
   ssr: false,
   loading: () => (
@@ -30,7 +29,6 @@ export function Hero() {
     { id: "transfer", label: "Transfer" },
     { id: "hourly", label: "By the hour", icon: Clock, href: "/by-the-hour" },
     { id: "day-trips", label: "Day trips", href: "/day-trips" },
-    { id: "multi-day", label: "Multi day tours", href: "/multi-day-tours" },
   ]
 
   const handleTabClick = (tab: typeof tabs[0]) => {
@@ -63,7 +61,7 @@ export function Hero() {
     <section className="relative overflow-hidden min-h-screen">
 
       <Header />
-      {/* Background Image with Overlay */}
+      {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
           src="/ireland-hero-bg.jpg"

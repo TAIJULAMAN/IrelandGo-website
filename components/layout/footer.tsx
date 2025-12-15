@@ -86,6 +86,22 @@ export function Footer({ className = "" }: FooterProps) {
                   Terms of Service
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-sm text-white hover:text-blue-400 transition-colors"
+                >
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="text-sm text-white hover:text-blue-400 transition-colors"
+                >
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

@@ -67,7 +67,7 @@ export function PopularMultiDayTours() {
   ]
 
   return (
-    <section className="px-5 md:px-0 py-10 md:py-16 bg-white">
+    <section className="px-5 md:px-0 py-10 md:py-16 bg-gray-50">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4">
           <button

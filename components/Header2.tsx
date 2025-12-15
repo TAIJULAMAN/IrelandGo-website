@@ -31,18 +31,14 @@ export function Header2() {
       {/* Desktop navigation */}
       <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex gap-8 text-sm text-gray-900 z-10">
         <a href="/transfer" className="hover:text-gray-700 transition">Transfers</a>
-        <a href="#" className="hover:text-gray-700 transition">Tours</a>
-        <a href="/about" className="hover:text-gray-700 transition">About</a>
-        <a href="/contact" className="hover:text-gray-700 transition">Contact</a>
+        <Link href="/multi-day-tours" className="hover:text-gray-700 transition">Multi day tours</Link>
       </nav>
 
       {/* Mobile navigation */}
       {isMenuOpen && (
         <nav className="flex flex-col items-center bg-gradient-to-b from-sky-500 to-indigo-500 absolute top-0 left-0 h-screen w-[70%] py-4 md:hidden z-40 transition-transform duration-300 ease-out">
           <a href="/transfer" className="text-white py-2 hover:text-gray-300">Transfers</a>
-          <a href="#" className="text-white py-2 hover:text-gray-300">Tours</a>
-          <a href="/about" className="text-white py-2 hover:text-gray-300">About</a>
-          <a href="/contact" className="text-white py-2 hover:text-gray-300">Contact</a>
+          <Link href="/multi-day-tours" className="text-white py-2 hover:text-gray-300">Multi day tours</Link>
           <select
             value={language}
             onChange={(e) => setLanguage(e.target.value)}

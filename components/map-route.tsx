@@ -43,6 +43,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     const [distance, setDistance] = useState<number | null>(null)
     const [isClient, setIsClient] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
+    const [mapKey, setMapKey] = useState(0)
 
     // Ensure component only renders on client side
     useEffect(() => {
@@ -52,8 +53,18 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
         const timer = setTimeout(() => {
             setIsMounted(true)
         }, 100)
-        return () => clearTimeout(timer)
+        return () => {
+            clearTimeout(timer)
+            console.log('MapRoute component unmounted')
+        }
     }, [])
+
+    // Force map recreation when pickup or dropoff changes
+    useEffect(() => {
+        if (pickup || dropoff) {
+            setMapKey(prev => prev + 1)
+        }
+    }, [pickup?.name, dropoff?.name])
 
     // Fetch route from OSRM when both locations are available
     useEffect(() => {
@@ -103,7 +114,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                 zoom={defaultZoom}
                 scrollWheelZoom={true}
                 style={{ height: '100%', width: '100%' }}
-                key={`map-${pickup?.name || 'none'}-${dropoff?.name || 'none'}`}
+                key={`map-${mapKey}`}
                 whenReady={() => {
                     console.log('Map is ready');
                 }}

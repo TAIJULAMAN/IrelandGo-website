@@ -26,8 +26,8 @@ export function SafetyComfort() {
   ]
 
   return (
-    <section className="container mx-auto px-5 md:px-0 py-10 md:py-16 bg-gray-50">
-      <div className="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
+    <section className=" px-5 md:px-0 py-10 md:py-16 bg-gray-50">
+      <div className="container mx-auto grid md:grid-cols-2 gap-5 md:gap-10 items-center">
         <div className="space-y-4 md:space-y-8">
           <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6 md:mb-12">Safety & Comfort</h2>
           {features.map((feature, idx) => {
