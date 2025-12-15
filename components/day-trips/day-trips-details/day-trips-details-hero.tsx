@@ -7,7 +7,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Header } from "@/components/header";
+import { Header } from "@/components/common/header";
 
 export default function DayTripsDetailsHero() {
   return (

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { CheckCircle2, Download, Phone, Printer, Star } from "lucide-react";
-import { Header2 } from "@/components/Header2";
+import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 
@@ -85,7 +85,7 @@ export default function BookingConfirmationPage() {
               </div>
             </div>
 
-        
+
             {/* Driver Information */}
             <div className="border border-gray-100 rounded-xl p-4 sm:p-5 flex flex-col gap-4">
               <h2 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">

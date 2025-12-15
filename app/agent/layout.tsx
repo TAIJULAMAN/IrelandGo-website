@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Users, User as UserIcon, MapPin, LayoutDashboard, Grip, Menu } from "lucide-react";
 import { Footer } from "@/components/layout/footer";
-import { Header2 } from "@/components/Header2";
+import { Header2 } from "@/components/common/Header2";
 import {
   Sheet,
   SheetContent,

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
-import { UserAvatar } from "@/components/UserAvatar"
+import { UserAvatar } from "@/components/common/UserAvatar"
 import { useAuth } from "@/contexts/AuthContext"
 
 export function Header2() {

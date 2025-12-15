@@ -7,7 +7,7 @@ import ByTheHourPrivateRides from "@/components/by-the-hour/by-the-hour-private-
 import ByTheHourService from "@/components/by-the-hour/by-the-hour-service";
 import FAQ from "@/components/day-trips/faq";
 import { Footer } from "@/components/layout/footer";
-import { Testimonials } from "@/components/testimonials";
+import { Testimonials } from "@/components/common/testimonials";
 
 export default function ByTheHour() {
   return (

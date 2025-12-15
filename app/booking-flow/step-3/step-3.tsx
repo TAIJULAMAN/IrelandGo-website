@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Clock, MapPin, Info, CheckCircle2 } from "lucide-react";
-import { Header2 } from "@/components/Header2";
+import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 

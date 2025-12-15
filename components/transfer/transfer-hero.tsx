@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Header } from "../header";
+import { Header } from "../common/header";
 import { Search, MapPin } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";

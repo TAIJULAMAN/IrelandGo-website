@@ -1,7 +1,7 @@
 "use client"
 
 import { Search, Check, Clock, Shield, ChevronDown } from 'lucide-react';
-import { Header } from '../header';
+import { Header } from '../common/header';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 

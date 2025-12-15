@@ -1,6 +1,6 @@
 "use client";
 
-import { Header } from "@/components/header";
+import { Header } from "@/components/common/header";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Users, Luggage, Plus, Search } from "lucide-react";
 import Image from "next/image";

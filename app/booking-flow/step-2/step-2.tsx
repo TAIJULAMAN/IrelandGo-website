@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Users, Luggage, ChevronLeft, ChevronRight } from "lucide-react";
-import { Header2 } from "@/components/Header2";
+import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 
 const vehicles = [

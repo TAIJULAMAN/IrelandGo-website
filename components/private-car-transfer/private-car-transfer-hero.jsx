@@ -1,6 +1,6 @@
 "use client";
 
-import { Header } from "@/components/header";
+import { Header } from "@/components/common/header";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Search, Clock, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
@@ -13,7 +13,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 
 // Dynamically import MapRoute with SSR disabled to prevent "window is not defined" error
-const MapRoute = dynamic(() => import("../map-route").then(mod => ({ default: mod.MapRoute })), {
+const MapRoute = dynamic(() => import("../home/map-route").then(mod => ({ default: mod.MapRoute })), {
     ssr: false,
     loading: () => (
         <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '340px' }}>

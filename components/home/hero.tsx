@@ -1,11 +1,12 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { MapPin, Calendar, Users, Luggage, Plus, Clock, Search, BadgeCheck, UserRoundCog, ShieldPlus } from "lucide-react"
+import { MapPin, Calendar, Users, Luggage, Plus, Clock, Search, BadgeCheck, UserRoundCog, ShieldPlus, ChevronDown } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { Header } from "./header"
+import { Header } from "../common/header"
 import dynamic from "next/dynamic"
 import { irishSettlements } from "@/lib/irish-settlements"
+import Link from "next/link"
 
 const MapRoute = dynamic(() => import("./map-route").then(mod => ({ default: mod.MapRoute })), {
   ssr: false,
@@ -23,6 +24,7 @@ export function Hero() {
   const [returnStops, setReturnStops] = useState<string[]>([])
   const [pickupLocation, setPickupLocation] = useState("")
   const [dropoffLocation, setDropoffLocation] = useState("")
+  const [isAddStopDropdownOpen, setIsAddStopDropdownOpen] = useState(false)
   const router = useRouter()
 
   const tabs = [
@@ -188,13 +190,51 @@ export function Hero() {
                 </div>
               ))}
 
-              <button
-                onClick={addStop}
-                className="flex items-center gap-1 text-blue-500 hover:text-blue-600 text-sm font-medium mb-5 transition"
-              >
-                <Plus className="w-4 h-4" />
-                Add Stop
-              </button>
+              <div className="relative mb-5">
+                <button
+                  onClick={() => setIsAddStopDropdownOpen(!isAddStopDropdownOpen)}
+                  className="flex items-center gap-1 text-blue-500 hover:text-blue-600 text-sm font-medium transition"
+                >
+                  <Plus className="w-4 h-4" />
+                  Add Stop
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+
+                {isAddStopDropdownOpen && (
+                  <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-lg py-2 min-w-[150px] border border-gray-200 z-10">
+                    <button
+                      onClick={() => {
+                        addStop()
+                        setIsAddStopDropdownOpen(false)
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
+                    >
+                      Add 1 Stop
+                    </button>
+                    <button
+                      onClick={() => {
+                        addStop()
+                        addStop()
+                        setIsAddStopDropdownOpen(false)
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
+                    >
+                      Add 2 Stops
+                    </button>
+                    <button
+                      onClick={() => {
+                        addStop()
+                        addStop()
+                        addStop()
+                        setIsAddStopDropdownOpen(false)
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
+                    >
+                      Add 3 Stops
+                    </button>
+                  </div>
+                )}
+              </div>
 
               {/* Date, Time, Passengers, Luggage */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-5">
@@ -244,11 +284,12 @@ export function Hero() {
                   </div>
                 </div>
               )}
-
-              <Button className="w-full h-10 py-3" variant="outline">
-                <Search className="w-5 h-5" />
-                Find a Ride
-              </Button>
+              <Link href="/booking-flow/step-2">
+                <Button className="w-full h-10 py-3" variant="outline">
+                  <Search className="w-5 h-5" />
+                  Find a Ride
+                </Button>
+              </Link>
             </div>
             <div className="rounded-lg overflow-hidden shadow-lg w-[450px] h-[340px] hidden lg:block">
               <MapRoute

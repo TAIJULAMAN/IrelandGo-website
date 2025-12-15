@@ -1,6 +1,6 @@
 "use client";
 
-import { Header } from "../header";
+import { Header } from "../common/header";
 
 import { Search, MapPin, Compass } from "lucide-react";
 

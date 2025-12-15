@@ -1,6 +1,6 @@
 "use client";
 
-import { Header2 } from "@/components/Header2";
+import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Lock, Eye, EyeOff, CheckCircle } from "lucide-react";
@@ -84,14 +84,14 @@ export default function ResetPassword() {
                                                     <div
                                                         key={level}
                                                         className={`h-1 flex-1 rounded ${level <= passwordStrength.strength
-                                                                ? passwordStrength.strength === 1
-                                                                    ? "bg-red-500"
-                                                                    : passwordStrength.strength === 2
-                                                                        ? "bg-orange-500"
-                                                                        : passwordStrength.strength === 3
-                                                                            ? "bg-yellow-500"
-                                                                            : "bg-green-500"
-                                                                : "bg-gray-200"
+                                                            ? passwordStrength.strength === 1
+                                                                ? "bg-red-500"
+                                                                : passwordStrength.strength === 2
+                                                                    ? "bg-orange-500"
+                                                                    : passwordStrength.strength === 3
+                                                                        ? "bg-yellow-500"
+                                                                        : "bg-green-500"
+                                                            : "bg-gray-200"
                                                             }`}
                                                     />
                                                 ))}

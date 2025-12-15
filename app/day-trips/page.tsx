@@ -4,7 +4,7 @@ import FAQ from "@/components/day-trips/faq";
 import Memories from "@/components/day-trips/memories";
 import TripCards from "@/components/day-trips/trip-cards";
 import { Footer } from "@/components/layout/footer";
-import { Testimonials } from "@/components/testimonials";
+import { Testimonials } from "@/components/common/testimonials";
 
 export default function DayTrips() {
 
