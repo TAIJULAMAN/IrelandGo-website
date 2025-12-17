@@ -25,7 +25,7 @@ export default function ByTheHourService() {
   ];
 
   return (
-    <section className="relative w-full py-14 md:py-16 bg-blue-50">
+    <section className="relative w-full py-14 md:py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {features.map(({ icon: Icon, title, desc }) => (
           <div key={title} className="bg-white rounded-2xl p-6 shadow-md ring-1 ring-black/5">
