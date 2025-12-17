@@ -44,15 +44,16 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     const [isClient, setIsClient] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
     const [mapKey, setMapKey] = useState(0)
+    const [hasError, setHasError] = useState(false)
 
     // Ensure component only renders on client side
     useEffect(() => {
         console.log('MapRoute component mounted')
         setIsClient(true)
-        // Add a small delay to ensure DOM is ready
+        // Increase delay to ensure DOM is fully ready
         const timer = setTimeout(() => {
             setIsMounted(true)
-        }, 100)
+        }, 200)
         return () => {
             clearTimeout(timer)
             console.log('MapRoute component unmounted')
@@ -61,8 +62,12 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
 
     // Force map recreation when pickup or dropoff changes
     useEffect(() => {
-        if (pickup || dropoff) {
-            setMapKey(prev => prev + 1)
+        if (pickup?.name || dropoff?.name) {
+            // Add a small delay before recreating the map
+            const timer = setTimeout(() => {
+                setMapKey(prev => prev + 1)
+            }, 100)
+            return () => clearTimeout(timer)
         }
     }, [pickup?.name, dropoff?.name])
 
@@ -107,53 +112,71 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
         )
     }
 
-    return (
-        <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-200" style={{ minHeight: '400px' }}>
-            <MapContainer
-                center={defaultCenter}
-                zoom={defaultZoom}
-                scrollWheelZoom={true}
-                style={{ height: '100%', width: '100%' }}
-                key={`map-${mapKey}`}
-                whenReady={() => {
-                    console.log('Map is ready');
-                }}
-            >
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
+    if (hasError) {
+        return (
+            <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '400px' }}>
+                <p className="text-gray-500">Map temporarily unavailable</p>
+            </div>
+        )
+    }
 
-                <MapUpdater pickup={pickup} dropoff={dropoff} />
+    try {
+        return (
+            <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-200" style={{ minHeight: '400px' }}>
+                <MapContainer
+                    center={defaultCenter}
+                    zoom={defaultZoom}
+                    scrollWheelZoom={true}
+                    style={{ height: '100%', width: '100%', minHeight: '400px' }}
+                    key={`map-${mapKey}`}
+                    whenReady={() => {
+                        console.log('Map is ready');
+                    }}
+                >
+                    <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
 
-                {pickup && (
-                    <Marker position={[pickup.lat, pickup.lng]}>
-                        <Popup>
-                            <strong>Pickup:</strong> {pickup.name}
-                        </Popup>
-                    </Marker>
+                    <MapUpdater pickup={pickup} dropoff={dropoff} />
+
+                    {pickup && (
+                        <Marker position={[pickup.lat, pickup.lng]}>
+                            <Popup>
+                                <strong>Pickup:</strong> {pickup.name}
+                            </Popup>
+                        </Marker>
+                    )}
+
+                    {dropoff && (
+                        <Marker position={[dropoff.lat, dropoff.lng]}>
+                            <Popup>
+                                <strong>Dropoff:</strong> {dropoff.name}
+                            </Popup>
+                        </Marker>
+                    )}
+
+                    {route.length > 0 && (
+                        <Polyline positions={route} color="blue" weight={4} opacity={0.7} />
+                    )}
+                </MapContainer>
+
+                {distance && (
+                    <div className="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-lg shadow-md z-[1000]">
+                        <p className="text-sm font-medium text-gray-700">
+                            Distance: <span className="text-blue-600">{distance.toFixed(1)} km</span>
+                        </p>
+                    </div>
                 )}
-
-                {dropoff && (
-                    <Marker position={[dropoff.lat, dropoff.lng]}>
-                        <Popup>
-                            <strong>Dropoff:</strong> {dropoff.name}
-                        </Popup>
-                    </Marker>
-                )}
-
-                {route.length > 0 && (
-                    <Polyline positions={route} color="blue" weight={4} opacity={0.7} />
-                )}
-            </MapContainer>
-
-            {distance && (
-                <div className="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-lg shadow-md z-[1000]">
-                    <p className="text-sm font-medium text-gray-700">
-                        Distance: <span className="text-blue-600">{distance.toFixed(1)} km</span>
-                    </p>
-                </div>
-            )}
-        </div>
-    )
+            </div>
+        )
+    } catch (error) {
+        console.error('Error rendering map:', error);
+        setHasError(true);
+        return (
+            <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '400px' }}>
+                <p className="text-gray-500">Map temporarily unavailable</p>
+            </div>
+        )
+    }
 }

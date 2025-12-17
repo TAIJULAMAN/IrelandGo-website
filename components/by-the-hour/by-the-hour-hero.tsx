@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Clock, Shield, Calendar, MapPin, Users, Luggage } from "lucide-react";
+import { Check, Clock, Shield, Calendar, MapPin, Users, Luggage, BadgeCheck, UserRoundCog, ShieldPlus } from "lucide-react";
 import { Header } from "../common/header";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -159,24 +159,24 @@ export default function ByTheHourHero() {
           </div>
 
           {/* Features */}
-          <div className="flex justify-center items-center gap-6 flex-wrap">
-            <div className="flex items-center gap-2 bg-white/15 px-5 py-2.5 rounded-full backdrop-blur-sm border border-white/20">
-              <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                <Check className="w-3 h-3 text-white" />
+          <div className="flex flex-wrap gap-6 md:gap-8 justify-center text-sm md:text-base font-medium mt-8 md:mt-12 px-4">
+            <div className="flex items-center gap-3 bg-white/15 px-6 py-3 rounded-full backdrop-blur-sm border border-white/20 hover:bg-white/25 transition-all duration-300 cursor-pointer group">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <BadgeCheck className="w-5 h-5 text-white" />
               </div>
-              <span className="text-sm font-medium">Flexible Cancellation</span>
+              <span className="font-semibold text-white">Flexible Cancellation</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/15 px-5 py-2.5 rounded-full backdrop-blur-sm border border-white/20">
-              <div className="w-5 h-5 bg-yellow-500 rounded-full flex items-center justify-center">
-                <Clock className="w-3 h-3 text-white" />
+            <div className="flex items-center gap-3 bg-white/15 px-6 py-3 rounded-full backdrop-blur-sm border border-white/20 hover:bg-white/25 transition-all duration-300 cursor-pointer group">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <UserRoundCog className="w-5 h-5 text-white" />
               </div>
-              <span className="text-sm font-medium">24/7 Customer Support</span>
+              <span className="font-semibold text-white">24/7 Customer Support</span>
             </div>
-            <div className="flex items-center gap-2 bg-white/15 px-5 py-2.5 rounded-full backdrop-blur-sm border border-white/20">
-              <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center">
-                <Shield className="w-3 h-3 text-white" />
+            <div className="flex items-center gap-3 bg-white/15 px-6 py-3 rounded-full backdrop-blur-sm border border-white/20 hover:bg-white/25 transition-all duration-300 cursor-pointer group">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <ShieldPlus className="w-5 h-5 text-white" />
               </div>
-              <span className="text-sm font-medium">Secure Payment</span>
+              <span className="font-semibold text-white">Secure Payment</span>
             </div>
           </div>
         </div>

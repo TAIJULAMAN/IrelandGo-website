@@ -308,24 +308,24 @@ export function Hero() {
           </div>
 
           {/* Features Row */}
-          <div className="flex flex-wrap gap-4 md:gap-10 justify-center text-sm md:text-lg font-medium mt-6 md:mt-10 px-4">
-            <div className="flex items-center gap-3 text-white">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                <BadgeCheck className="w-5 h-5 text-green-500" />
+          <div className="flex flex-wrap gap-6 md:gap-8 justify-center text-sm md:text-base font-medium mt-8 md:mt-12 px-4">
+            <div className="flex items-center gap-3 bg-white/15 px-6 py-3 rounded-full backdrop-blur-sm border border-white/20 hover:bg-white/25 transition-all duration-300 cursor-pointer group">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <BadgeCheck className="w-5 h-5 text-white" />
               </div>
-              <span className="font-medium">Flexible Cancellation</span>
+              <span className="font-semibold text-white">Flexible Cancellation</span>
             </div>
-            <div className="flex items-center gap-3 text-white">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                <UserRoundCog className="w-5 h-5 text-green-500" />
+            <div className="flex items-center gap-3 bg-white/15 px-6 py-3 rounded-full backdrop-blur-sm border border-white/20 hover:bg-white/25 transition-all duration-300 cursor-pointer group">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <UserRoundCog className="w-5 h-5 text-white" />
               </div>
-              <span className="font-medium">24/7 Customer Support</span>
+              <span className="font-semibold text-white">24/7 Customer Support</span>
             </div>
-            <div className="flex items-center gap-3 text-white">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">
-                <ShieldPlus className="w-5 h-5 text-green-500" />
+            <div className="flex items-center gap-3 bg-white/15 px-6 py-3 rounded-full backdrop-blur-sm border border-white/20 hover:bg-white/25 transition-all duration-300 cursor-pointer group">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <ShieldPlus className="w-5 h-5 text-white" />
               </div>
-              <span className="font-medium">Secure Payment</span>
+              <span className="font-semibold text-white">Secure Payment</span>
             </div>
           </div>
         </div>
