@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Users, Luggage, ChevronLeft, ChevronRight } from "lucide-react";
+import { Users, Luggage, ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 
@@ -15,6 +15,7 @@ const vehicles = [
     seats: "4 seats",
     bags: "2 bags",
     image: "/c1.png",
+    features: ["Air Conditioning", "Comfortable", "Fuel Efficient"],
   },
   {
     id: 2,
@@ -23,6 +24,7 @@ const vehicles = [
     seats: "5 seats",
     bags: "3 bags",
     image: "/c2.png",
+    features: ["Spacious", "Family Friendly", "Extra Storage"],
   },
   {
     id: 3,
@@ -31,6 +33,7 @@ const vehicles = [
     seats: "8 seats",
     bags: "6 bags",
     image: "/c3.png",
+    features: ["Large Groups", "Ample Space", "Comfortable Ride"],
   },
   {
     id: 4,
@@ -39,6 +42,7 @@ const vehicles = [
     seats: "4 seats",
     bags: "2 bags",
     image: "/c4.png",
+    features: ["Premium Comfort", "Luxury Interior", "VIP Service"],
   },
   {
     id: 5,
@@ -47,6 +51,7 @@ const vehicles = [
     seats: "4 seats",
     bags: "2 bags",
     image: "/c1.png",
+    features: ["Air Conditioning", "Comfortable", "Fuel Efficient"],
   },
   {
     id: 6,
@@ -55,6 +60,7 @@ const vehicles = [
     seats: "5 seats",
     bags: "3 bags",
     image: "/c2.png",
+    features: ["Spacious", "Family Friendly", "Extra Storage"],
   },
   {
     id: 7,
@@ -63,6 +69,7 @@ const vehicles = [
     seats: "8 seats",
     bags: "6 bags",
     image: "/c3.png",
+    features: ["Large Groups", "Ample Space", "Comfortable Ride"],
   },
   {
     id: 8,
@@ -71,6 +78,7 @@ const vehicles = [
     seats: "4 seats",
     bags: "2 bags",
     image: "/c4.png",
+    features: ["Premium Comfort", "Luxury Interior", "VIP Service"],
   },
   {
     id: 9,
@@ -79,11 +87,13 @@ const vehicles = [
     seats: "4 seats",
     bags: "2 bags",
     image: "/c1.png",
+    features: ["Air Conditioning", "Comfortable", "Fuel Efficient"],
   },
 ];
 
 export default function Step2() {
   const sliderRef = useRef<HTMLDivElement | null>(null);
+  const [selectedVehicle, setSelectedVehicle] = useState<number | null>(null);
 
   const handleScroll = (direction: "left" | "right") => {
     if (!sliderRef.current) return;
@@ -93,42 +103,42 @@ export default function Step2() {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen flex flex-col">
+    <section className="bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 min-h-screen flex flex-col">
       <Header2 />
-      <div className="flex-1 py-10 sm:py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto flex-1 py-10 md:py-16 px-5 md:px-0">
         {/* Step progress */}
         <div className="mb-8 sm:mb-10">
           <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-600">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
-                1
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-white text-sm font-bold shadow-md">
+                <Check className="h-5 w-5" />
               </div>
-              <span>Trip Details</span>
+              <span className="font-semibold text-blue-700">Trip Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
+            <div className="flex-1 h-1 bg-gradient-to-r from-blue-600 to-blue-500 mx-2 rounded-full" />
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-sm font-bold shadow-md">
                 2
               </div>
-              <span>Choose Vehicle</span>
+              <span className="font-semibold text-blue-700">Choose Vehicle</span>
             </div>
-            <div className="flex-1 h-0.5 bg-gray-200 mx-2" />
+            <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
             <div className="flex items-center gap-2 text-gray-400">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
                 3
               </div>
               <span>Trip Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-gray-200 mx-2" />
+            <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
             <div className="flex items-center gap-2 text-gray-400">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
                 4
               </div>
               <span>Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-gray-200 mx-2" />
+            <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
             <div className="flex items-center gap-2 text-gray-400">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
                 5
               </div>
               <span>Payment</span>
@@ -137,74 +147,125 @@ export default function Step2() {
         </div>
 
         {/* Heading */}
-        <div className="mb-6 sm:mb-8 mt-4 sm:mt-6">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-700 mb-2">
-            Step 2: Choose Vehicle
+        <div className="mb-8 sm:mb-10 mt-6 sm:mt-8 text-center">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent mb-3">
+            Choose Your Perfect Vehicle
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 max-w-xl">
-            Select your preferred vehicle for your journey.
+          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+            Select the vehicle that best suits your journey. All vehicles are well-maintained and come with professional drivers.
           </p>
         </div>
 
         {/* Vehicle slider */}
-        <div className="mb-10 sm:mb-12">
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <p className="text-xs sm:text-sm text-gray-500">
-              Browse and select the vehicle that best fits your trip.
-            </p>
+        <div className="mb-10">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="h-1 w-12 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full"></div>
+              <p className="text-sm font-semibold text-gray-700">
+                Available Vehicles ({vehicles.length})
+              </p>
+            </div>
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 onClick={() => handleScroll("left")}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-transparent text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 type="button"
                 onClick={() => handleScroll("right")}
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-transparent text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-5 w-5" />
               </button>
             </div>
           </div>
 
           <div
             ref={sliderRef}
-            className="vehicle-scroll flex gap-4 sm:gap-5 overflow-x-auto pb-2 scroll-smooth snap-x snap-mandatory"
+            className="vehicle-scroll flex gap-5 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory"
           >
             {vehicles.map((vehicle) => (
               <div
                 key={vehicle.id}
-                className="snap-start shrink-0 w-[220px] sm:w-[240px] lg:w-[260px]"
+                className="snap-start shrink-0 w-[260px] sm:w-[280px] lg:w-[300px]"
+                onClick={() => setSelectedVehicle(vehicle.id)}
               >
-                <div className="bg-white rounded-2xl shadow-md p-4 flex flex-col hover:shadow-lg transition-shadow cursor-pointer h-full">
-                  <div className="mb-4 h-28 sm:h-32 flex items-center justify-center">
+                <div
+                  className={`bg-white rounded-2xl shadow-lg p-5 flex flex-col hover:shadow-2xl transition-all duration-300 cursor-pointer h-full border-2 ${selectedVehicle === vehicle.id
+                    ? "border-blue-600 ring-4 ring-blue-100"
+                    : "border-transparent hover:border-blue-300"
+                    }`}
+                >
+                  {/* Selected Badge */}
+                  {selectedVehicle === vehicle.id && (
+                    <div className="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                      <Check className="h-3 w-3" />
+                      Selected
+                    </div>
+                  )}
+
+                  {/* Vehicle Image */}
+                  <div className="mb-5 h-32 sm:h-36 flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-3">
                     <img
                       src={vehicle.image}
                       alt={vehicle.name}
-                      className="max-h-full w-auto object-contain"
+                      className="max-h-full w-auto object-contain drop-shadow-lg"
                     />
                   </div>
-                  <div className="flex items-center justify-between mb-3">
-                    <p className="text-sm sm:text-base font-semibold text-gray-900">
-                      {vehicle.name}
-                    </p>
-                    <p className="text-sm sm:text-base font-semibold text-blue-600">
-                      {vehicle.price}
-                    </p>
+
+                  {/* Vehicle Info */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <p className="text-base sm:text-lg font-bold text-gray-900">
+                        {vehicle.name}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">Per trip</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
+                        {vehicle.price}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] sm:text-xs text-gray-500">
-                    <span className="flex items-center gap-1">
-                      <Users className="h-3 w-3" />
-                      {vehicle.seats}
+
+                  {/* Capacity Info */}
+                  <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+                    <span className="flex items-center gap-2 text-sm text-gray-600">
+                      <div className="p-2 bg-blue-50 rounded-lg">
+                        <Users className="h-4 w-4 text-blue-600" />
+                      </div>
+                      <span className="font-medium">{vehicle.seats}</span>
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Luggage className="h-3 w-3" />
-                      {vehicle.bags}
+                    <span className="flex items-center gap-2 text-sm text-gray-600">
+                      <div className="p-2 bg-blue-50 rounded-lg">
+                        <Luggage className="h-4 w-4 text-blue-600" />
+                      </div>
+                      <span className="font-medium">{vehicle.bags}</span>
                     </span>
                   </div>
+
+                  {/* <p className="text-sm font-semibold text-gray-700 mt-4">Features</p>
+                  <div className="space-y-2">
+                    {vehicle.features.map((feature, index) => (
+                      <div key={index} className="flex items-center gap-2 text-xs text-gray-600">
+                        <Check className="h-3 w-3 text-green-600" />
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div> */}
+
+                  {/* Select Button */}
+                  <button
+                    className={`mt-4 w-full py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${selectedVehicle === vehicle.id
+                      ? "bg-blue-600 text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                      }`}
+                  >
+                    {selectedVehicle === vehicle.id ? "Selected" : "Select Vehicle"}
+                  </button>
                 </div>
               </div>
             ))}
@@ -212,10 +273,21 @@ export default function Step2() {
         </div>
 
         {/* Next button */}
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-4">
           <Button
             asChild
-            className="px-10 sm:px-12 py-2.5 sm:py-3 bg-blue-600 text-white text-sm sm:text-base font-medium rounded-lg"
+            variant="outline"
+            className="px-8 sm:px-10 py-2.5 sm:py-3 border-2 border-gray-300 text-gray-700 text-sm sm:text-base font-semibold rounded-lg hover:bg-gray-50"
+          >
+            <Link href="/booking-flow/step-1">Back</Link>
+          </Button>
+          <Button
+            asChild
+            disabled={!selectedVehicle}
+            className={`px-10 sm:px-12 py-2.5 sm:py-3 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ${selectedVehicle
+              ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+              : "bg-gray-300 cursor-not-allowed"
+              }`}
           >
             <Link href="/booking-flow/step-3">Next: Add Stops</Link>
           </Button>

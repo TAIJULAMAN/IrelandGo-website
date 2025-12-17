@@ -3,8 +3,9 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { LogOut, User as UserIcon, MapPin, Bell, Activity, Grip, Menu } from "lucide-react"
+import { LogOut, User as UserIcon, MapPin, Bell, Activity, Grip, Menu, CreditCard, Headphones, X, Bookmark, Headset } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { PaymentOnboardingSidebar } from '@/components/common/PaymentOnboardingSidebar'
 import {
   Dialog,
   DialogContent,
@@ -52,14 +53,19 @@ export default function UserLayout({
       label: "My Bookings"
     },
     {
-      href: "/user/saved",
-      icon: <MapPin className="h-5 w-5" />,
-      label: "Saved Locations"
-    },
-    {
       href: "/user/support",
       icon: <Bell className="h-5 w-5" />,
       label: "Support"
+    },
+    {
+      href: "/user/payment-methods",
+      icon: <CreditCard className="h-5 w-5" />,
+      label: "Payment Methods",
+    },
+    {
+      href: "/user/notifications",
+      icon: <Bell className="h-5 w-5" />,
+      label: "Notifications",
     },
   ]
 
@@ -88,10 +94,10 @@ export default function UserLayout({
             </Link>
           )
         })}
-      </nav>
+      </nav >
 
       {/* Logout Button */}
-      <div className="mt-4 pt-4 border-t border-gray-100">
+      < div className="mt-4 pt-4 border-t border-gray-100" >
         <button
           className="w-full flex items-center space-x-2 px-3 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 font-medium text-sm border border-red-100"
           onClick={() => setIsLogoutDialogOpen(true)}
@@ -99,8 +105,8 @@ export default function UserLayout({
           <LogOut className="h-5 w-5" />
           <span>Logout</span>
         </button>
-      </div>
-    </div>
+      </div >
+    </div >
   )
 
   return (
