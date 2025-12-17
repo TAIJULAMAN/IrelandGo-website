@@ -1,193 +1,301 @@
-import { Mail, Phone, MessageCircle, Clock, MapPin, HelpCircle, CreditCard, User, Calendar, Car, Shield } from "lucide-react"
+"use client"
+
+import { Mail, Phone, MessageCircle, Clock, MapPin, HelpCircle, Send, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Footer } from "@/components/layout/footer"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { useState } from "react"
 
 export default function SupportPage() {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        subject: "",
+        message: ""
+    })
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setIsSubmitting(true)
+        setSubmitStatus("idle")
+
+        // Simulate API call
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1500))
+
+            // Here you would normally send the data to your backend
+            console.log("Form submitted:", formData)
+
+            setSubmitStatus("success")
+            setFormData({
+                name: "",
+                email: "",
+                subject: "",
+                message: ""
+            })
+        } catch (error) {
+            setSubmitStatus("error")
+        } finally {
+            setIsSubmitting(false)
+        }
+    }
+
     const faqs = [
         {
             question: "How do I book a ride?",
-            answer: "To book a ride, log in to your account, enter your pickup and drop-off locations, select your preferred vehicle type, and confirm your booking."
+            answer: "To book a ride, log in to your account, enter your pickup and drop-off locations, select your preferred vehicle type, and confirm your booking. You can also schedule rides in advance for future dates."
         },
         {
             question: "What payment methods do you accept?",
-            answer: "We accept all major credit/debit cards, PayPal, and in some regions, cash payments."
+            answer: "We accept all major credit/debit cards (Visa, Mastercard, American Express), PayPal, and in some regions, cash payments. You can save multiple payment methods in your account for quick checkout."
         },
         {
             question: "How can I cancel my ride?",
-            answer: "You can cancel your ride through the 'My Rides' section in the app or website. Please note that cancellation fees may apply if you cancel after a certain time."
+            answer: "You can cancel your ride through the 'My Rides' section in the app or website. Please note that cancellation fees may apply if you cancel after a certain time. Free cancellation is available within 5 minutes of booking."
         },
         {
             question: "How do I become a driver?",
-            answer: "Visit our 'Become a Driver' page and fill out the application form. Our team will review your application and get back to you within 3-5 business days."
+            answer: "Visit our 'Become a Driver' page and fill out the application form. Our team will review your application and get back to you within 3-5 business days. You'll need a valid driver's license, vehicle registration, and insurance."
         },
         {
-            question: "Is there a mobile app available?",
-            answer: "Yes, you can download our mobile app from the App Store or Google Play Store for a better booking experience."
+            question: "Can I track my ride in real-time?",
+            answer: "Yes! Once your ride is confirmed, you can track your driver's location in real-time on the map. You'll also receive notifications when your driver is nearby and when they arrive at your pickup location."
         },
         {
-            question: "How do I update my account information?",
-            answer: "You can update your account information in the 'Profile' section of your account."
+            question: "How do I rate my driver?",
+            answer: "After your ride is completed, you'll receive a prompt to rate your driver on a scale of 1-5 stars. You can also leave additional feedback and tips. Your ratings help us maintain high service quality."
+        },
+        {
+            question: "Is my account information secure?",
+            answer: "Absolutely. We use industry-standard encryption to protect your personal and payment information. We never share your data with third parties without your consent, and all transactions are processed securely."
+        },
+        {
+            question: "What are your customer support hours?",
+            answer: "Our customer support team is available Monday to Friday from 9:00 AM to 6:00 PM, and Saturday from 10:00 AM to 4:00 PM (IST). For urgent matters outside these hours, you can submit a support ticket and we'll respond as soon as possible."
         },
     ]
 
     const contactMethods = [
         {
-            icon: <Mail className="h-6 w-6 text-blue-600" />,
+            icon: <Mail className="h-6 w-6" />,
             title: "Email Us",
             description: "support@irelandgo.com",
-            action: "Send us an email"
+            detail: "We'll respond within 24 hours",
+            gradient: "from-blue-500 to-blue-600"
         },
         {
-            icon: <Phone className="h-6 w-6 text-green-600" />,
+            icon: <Phone className="h-6 w-6" />,
             title: "Call Us",
             description: "+353 1 234 5678",
-            action: "Call support"
-        },
-        {
-            icon: <MessageCircle className="h-6 w-6 text-purple-600" />,
-            title: "Live Chat",
-            description: "Available 24/7",
-            action: "Start chat"
-        },
-    ]
-
-    const helpCategories = [
-        {
-            icon: <CreditCard className="h-5 w-5" />,
-            title: "Payments & Pricing",
-            description: "Billing, refunds, and payment methods"
-        },
-        {
-            icon: <User className="h-5 w-5" />,
-            title: "Account & Profile",
-            description: "Login, registration, and account settings"
-        },
-        {
-            icon: <Car className="h-5 w-5" />,
-            title: "Rides & Bookings",
-            description: "Booking, cancellations, and ride issues"
-        },
-        {
-            icon: <Shield className="h-5 w-5" />,
-            title: "Safety & Guidelines",
-            description: "Safety features and community guidelines"
-        },
+            detail: "Mon-Fri, 9AM-6PM IST",
+            gradient: "from-green-500 to-emerald-600"
+        }
     ]
 
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="container mx-auto px-4 py-12">
+        <div className="min-h-screen relative overflow-hidden">
+
+
+            <div className="container mx-auto py-16 relative z-10">
                 {/* Hero Section */}
                 <div className="text-center mb-16">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">How can we help you today?</h1>
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                        Find answers to common questions or get in touch with our support team.
-                    </p>
-                    
-                    {/* Search Bar */}
-                    <div className="mt-8 max-w-2xl mx-auto relative">
-                        <div className="relative">
-                            <HelpCircle className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                            <input
-                                type="text"
-                                placeholder="Search help articles..."
-                                className="w-full pl-12 pr-6 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            />
-                            <Button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700">
-                                Search
-                            </Button>
-                        </div>
+                    <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                        <Sparkles className="h-4 w-4" />
+                        <span>24/7 Support Available</span>
                     </div>
+                    <h1 className="text-5xl md:text-6xl font-bold text-blue-900 mb-6">
+                        How Can We Help?
+                    </h1>
+                    <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        Have a question or need assistance? Our dedicated support team is here to help you every step of the way.
+                    </p>
                 </div>
 
-                {/* Help Categories */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-                    {helpCategories.map((category, index) => (
-                        <Card key={index} className="hover:shadow-lg transition-shadow cursor-pointer">
-                            <CardContent className="p-6">
-                                <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center mb-4">
-                                    {category.icon}
-                                </div>
-                                <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
-                                <p className="text-gray-600 text-sm">{category.description}</p>
+                {/* Main Content Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
+                    {/* Contact Form - Takes 2 columns */}
+                    <div className="lg:col-span-2">
+                        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm hover:shadow-3xl transition-all duration-300">
+                            <CardHeader className="pb-8">
+                                <CardTitle className="text-3xl font-bold text-blue-700">
+                                    Send us a Message
+                                </CardTitle>
+                                <CardDescription className="text-base text-gray-600">
+                                    Fill out the form below and our support team will respond within 24 hours.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="name" className="text-gray-700 font-semibold">Full Name *</Label>
+                                            <Input
+                                                id="name"
+                                                name="name"
+                                                type="text"
+                                                placeholder="John Doe"
+                                                value={formData.name}
+                                                onChange={handleInputChange}
+                                                required
+                                                className="w-full h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="email" className="text-gray-700 font-semibold">Email Address *</Label>
+                                            <Input
+                                                id="email"
+                                                name="email"
+                                                type="email"
+                                                placeholder="john@example.com"
+                                                value={formData.email}
+                                                onChange={handleInputChange}
+                                                required
+                                                className="w-full h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="subject" className="text-gray-700 font-semibold">Subject *</Label>
+                                        <Input
+                                            id="subject"
+                                            name="subject"
+                                            type="text"
+                                            placeholder="How can we help you?"
+                                            value={formData.subject}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label htmlFor="message" className="text-gray-700 font-semibold">Message *</Label>
+                                        <Textarea
+                                            id="message"
+                                            name="message"
+                                            placeholder="Please describe your issue or question in detail..."
+                                            value={formData.message}
+                                            onChange={handleInputChange}
+                                            required
+                                            className="w-full min-h-[180px] resize-y border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                                        />
+                                    </div>
+
+                                    {submitStatus === "success" && (
+                                        <div className="bg-green-50 border-2 border-green-300 text-green-800 px-6 py-4 rounded-xl shadow-md">
+                                            <p className="font-bold text-lg flex items-center gap-2">
+                                                <span className="text-2xl">✓</span> Message sent successfully!
+                                            </p>
+                                            <p className="text-sm mt-1">We'll get back to you within 24 hours.</p>
+                                        </div>
+                                    )}
+
+                                    {submitStatus === "error" && (
+                                        <div className="bg-red-50 border-2 border-red-300 text-red-800 px-6 py-4 rounded-xl shadow-md">
+                                            <p className="font-bold text-lg">Failed to send message.</p>
+                                            <p className="text-sm mt-1">Please try again or contact us directly.</p>
+                                        </div>
+                                    )}
+
+                                    <Button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-7 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <span className="animate-spin mr-2">⏳</span>
+                                                Sending...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Send className="mr-2 h-5 w-5" />
+                                                Send Message
+                                            </>
+                                        )}
+                                    </Button>
+                                </form>
                             </CardContent>
                         </Card>
-                    ))}
+                    </div>
+
+                    {/* Contact Methods Sidebar */}
+                    <div className="space-y-6">
+                        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm">
+                            <CardHeader>
+                                <CardTitle className="text-xl font-bold text-gray-900">Quick Contact</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-4">
+                                {contactMethods.map((method, index) => (
+                                    <div
+                                        key={index}
+                                        className="group relative overflow-hidden rounded-xl p-5 bg-gradient-to-br hover:shadow-lg transition-all duration-300 cursor-pointer border border-gray-200 hover:border-transparent"
+                                    >
+                                        <div className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                                        <div className="relative flex items-start space-x-4">
+                                            <div className="flex-shrink-0 p-3 rounded-lg bg-blue-600 text-white shadow-md">
+                                                {method.icon}
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <h3 className="font-bold text-gray-900 mb-1 text-lg">{method.title}</h3>
+                                                <p className="text-sm text-gray-700 font-medium mb-1">{method.description}</p>
+                                                <p className="text-xs text-gray-500">{method.detail}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </CardContent>
+                        </Card>
+                    </div>
                 </div>
 
                 {/* FAQ Section */}
                 <div className="mb-16">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-8">Frequently Asked Questions</h2>
-                    <div className="space-y-4">
-                        {faqs.map((faq, index) => (
-                            <div key={index} className="border-b border-gray-200 pb-4">
-                                <h3 className="text-lg font-medium text-gray-900 mb-2">{faq.question}</h3>
-                                <p className="text-gray-600">{faq.answer}</p>
-                            </div>
-                        ))}
+                    <div className="text-center mb-12">
+                        <h2 className="text-4xl md:text-5xl font-bold text-blue-900 mb-4">
+                            Frequently Asked Questions
+                        </h2>
+                        <p className="text-lg text-gray-600">Find quick answers to common questions</p>
                     </div>
-                </div>
-
-                {/* Contact Section */}
-                <div className="bg-white rounded-xl shadow-md p-8">
-                    <div className="text-center mb-10">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Still need help?</h2>
-                        <p className="text-gray-600">Our support team is here to help you</p>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {contactMethods.map((method, index) => (
-                            <div key={index} className="text-center p-6 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-                                <div className="flex justify-center mb-4">
-                                    {method.icon}
-                                </div>
-                                <h3 className="text-lg font-semibold mb-2">{method.title}</h3>
-                                <p className="text-gray-600 mb-4">{method.description}</p>
-                                <Button variant="outline" className="w-full">
-                                    {method.action}
-                                </Button>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Office Information */}
-                <div className="mt-16 bg-white rounded-xl shadow-md p-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Our Office</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <div className="flex items-start space-x-4 mb-6">
-                                <MapPin className="h-6 w-6 text-blue-600 mt-1" />
-                                <div>
-                                    <h3 className="font-semibold">Headquarters</h3>
-                                    <p className="text-gray-600">123 Transport Street, Dublin 2, Ireland</p>
-                                </div>
-                            </div>
-                            <div className="flex items-start space-x-4">
-                                <Clock className="h-6 w-6 text-blue-600 mt-1" />
-                                <div>
-                                    <h3 className="font-semibold">Working Hours</h3>
-                                    <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                                    <p className="text-gray-600">Saturday: 10:00 AM - 4:00 PM</p>
-                                    <p className="text-gray-600">Sunday: Closed</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="rounded-lg overflow-hidden h-64">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19071.7156398!2d-6.2670346!3d53.341738!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48670e80ea27ac2f%3A0xa00c7a9973171a0!2sDublin%2C%20Ireland!5e0!3m2!1sen!2sbd!4v1630000000000!5m2!1sen!2sbd"
-                                width="100%"
-                                height="100%"
-                                style={{ border: 0 }}
-                                allowFullScreen
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                                title="IrelandGo Office Location"
-                                className="rounded-lg"
-                            />
-                        </div>
-                    </div>
+                    <Card className="shadow-2xl container mx-auto border-0 bg-white/80 backdrop-blur-sm">
+                        <CardContent className="p-5">
+                            <Accordion type="single" collapsible className="w-full space-y-2 space-x-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+                                {faqs.map((faq, index) => (
+                                    <AccordionItem
+                                        key={index}
+                                        value={`item-${index}`}
+                                        className="border border-gray-200 rounded-lg px-6 data-[state=open]:bg-blue-50/50 transition-colors"
+                                    >
+                                        <AccordionTrigger className="text-left hover:no-underline py-5">
+                                            <div className="flex items-center gap-4">
+                                                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center">
+                                                    <HelpCircle className="h-4 w-4 text-white" />
+                                                </div>
+                                                <span className="font-semibold text-gray-900 text-base">{faq.question}</span>
+                                            </div>
+                                        </AccordionTrigger>
+                                        <AccordionContent className="pt-2 pb-4">
+                                            <p className="text-gray-600 leading-relaxed pl-12">{faq.answer}</p>
+                                        </AccordionContent>
+                                    </AccordionItem>
+                                ))}
+                            </Accordion>
+                        </CardContent>
+                    </Card>
                 </div>
             </div>
         </div>
