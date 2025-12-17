@@ -1,851 +1,402 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { PageHeader } from "@/components/common/PageHeader";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
-  Search,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import {
+  CalendarDays,
   Filter,
+  MapPin,
   Clock,
+  Users,
+  Eye,
   CheckCircle,
   XCircle,
-  MapPin,
-  Users,
-  Clock as ClockIcon,
-  Calendar,
-  ArrowRight,
-  MoreHorizontal,
-  X,
-  AlertCircle,
-  Check,
-  CreditCard,
-  User,
-  Navigation,
-  CalendarDays,
-  Clock9,
-  MapPin as MapPinIcon,
+  DollarSign,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/layout/footer";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogOverlay,
-} from "@/components/ui/alert-dialog";
-import { useToast } from "@/components/ui/use-toast";
 
-interface BookingCardProps {
-  id: string;
-  status: "upcoming" | "completed" | "cancelled";
-  pickupLocation: string;
-  pickupDetail: string;
-  destination: string;
-  destinationDetail: string;
-  date: string;
-  time: string;
-  passengers: number;
-  duration: string;
-  price: string;
-  refundStatus?: string;
-  onModify?: (id: string) => void;
-  onViewDetails?: (id: string) => void;
-  onCancel?: (id: string) => void;
-  onRateTrip?: (id: string) => void;
-  onRebook?: (id: string) => void;
-  onMoreActions?: (id: string) => void;
-}
+const bookings = [
+  {
+    id: 1,
+    pickup: "Dublin Airport",
+    destination: "Galway City",
+    date: "2024-12-20",
+    time: "10:00 AM",
+    passengers: 2,
+    vehicleType: "Sedan",
+    status: "Confirmed" as const,
+    payment: "€145",
+  },
+  {
+    id: 2,
+    pickup: "Cork City",
+    destination: "Killarney",
+    date: "2024-12-22",
+    time: "2:30 PM",
+    passengers: 4,
+    vehicleType: "SUV",
+    status: "Pending" as const,
+    payment: "€180",
+  },
+  {
+    id: 3,
+    pickup: "Limerick",
+    destination: "Cliffs of Moher",
+    date: "2024-12-25",
+    time: "9:00 AM",
+    passengers: 6,
+    vehicleType: "Van",
+    status: "Confirmed" as const,
+    payment: "€220",
+  },
+  {
+    id: 4,
+    pickup: "Waterford",
+    destination: "Dublin City",
+    date: "2024-12-18",
+    time: "11:30 AM",
+    passengers: 1,
+    vehicleType: "Sedan",
+    status: "Cancelled" as const,
+    payment: "€120",
+  },
+  {
+    id: 5,
+    pickup: "Dublin City",
+    destination: "Belfast",
+    date: "2024-12-30",
+    time: "8:00 AM",
+    passengers: 3,
+    vehicleType: "SUV",
+    status: "Confirmed" as const,
+    payment: "€195",
+  },
+];
 
-const BookingCard = ({
-  id,
-  status,
-  pickupLocation,
-  pickupDetail,
-  destination,
-  destinationDetail,
-  date,
-  time,
-  passengers,
-  duration,
-  price,
-  refundStatus,
-  onModify,
-  onViewDetails,
-  onCancel,
-  onRateTrip,
-  onRebook,
-}: BookingCardProps) => {
-  const statusConfig = {
-    upcoming: {
-      icon: <Clock className="h-4 w-4" />,
-      text: "Upcoming",
-      bgColor: "bg-blue-100",
-      textColor: "text-blue-800",
-    },
-    completed: {
-      icon: <CheckCircle className="h-4 w-4" />,
-      text: "Completed",
-      bgColor: "bg-green-100",
-      textColor: "text-green-800",
-    },
-    cancelled: {
-      icon: <XCircle className="h-4 w-4" />,
-      text: "Cancelled",
-      bgColor: "bg-red-100",
-      textColor: "text-red-800",
-    },
-  };
+export default function UserBookingsPage() {
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedBooking, setSelectedBooking] = useState<typeof bookings[0] | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
-  const statusInfo = statusConfig[status];
-
-  return (
-    <div className="border rounded-lg p-6 mb-6 shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex justify-between items-start mb-4">
-        <div>
-          <h3 className="font-semibold text-gray-500 text-sm">
-            Booking ID: {id}
-          </h3>
-          <div className="flex items-center mt-1">
-            <div
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusInfo.bgColor} ${statusInfo.textColor}`}
-            >
-              {statusInfo.icon}
-              <span className="ml-1">{statusInfo.text}</span>
-            </div>
-          </div>
-        </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => onViewDetails?.(id)}>
-              View Details
-            </DropdownMenuItem>
-            {status === "upcoming" && (
-              <>
-                <DropdownMenuItem onClick={() => onModify?.(id)}>
-                  Modify Booking
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="text-red-600"
-                  onClick={() => onCancel?.(id)}
-                >
-                  Cancel Booking
-                </DropdownMenuItem>
-              </>
-            )}
-            {status === "completed" && (
-              <DropdownMenuItem onClick={() => onRateTrip?.(id)}>
-                Rate Trip
-              </DropdownMenuItem>
-            )}
-            {status === "cancelled" && (
-              <DropdownMenuItem onClick={() => onRebook?.(id)}>
-                Rebook
-              </DropdownMenuItem>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-
-      <div className="space-y-4">
-        <div className="flex items-start">
-          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
-            <MapPin className="h-5 w-5 text-blue-600" />
-          </div>
-          <div className="ml-3">
-            <p className="text-sm font-medium">{pickupLocation}</p>
-            <p className="text-sm text-gray-500">{pickupDetail}</p>
-          </div>
-        </div>
-
-        <div className="flex justify-center">
-          <div className="h-5 w-0.5 bg-gray-300"></div>
-        </div>
-
-        <div className="flex items-start">
-          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-green-100 flex items-center justify-center">
-            <MapPin className="h-5 w-5 text-green-600" />
-          </div>
-          <div className="ml-3">
-            <p className="text-sm font-medium">{destination}</p>
-            <p className="text-sm text-gray-500">{destinationDetail}</p>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-6 pt-6 border-t border-gray-200">
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div className="flex items-center">
-            <Calendar className="h-4 w-4 text-gray-500 mr-2" />
-            <span>
-              {date}, {time}
-            </span>
-          </div>
-          <div className="flex items-center">
-            <Users className="h-4 w-4 text-gray-500 mr-2" />
-            <span>
-              {passengers} {passengers > 1 ? "Passengers" : "Passenger"}
-            </span>
-          </div>
-          <div className="flex items-center">
-            <ClockIcon className="h-4 w-4 text-gray-500 mr-2" />
-            <span>{duration}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="font-semibold">{price}</span>
-          </div>
-        </div>
-      </div>
-
-      {status === "upcoming" && (
-        <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end space-x-2">
-          <Button variant="outline" size="sm" onClick={() => onModify?.(id)}>
-            Modify
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onViewDetails?.(id)}
-          >
-            View Details
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => onCancel?.(id)}
-          >
-            Cancel
-          </Button>
-        </div>
-      )}
-
-      {status === "completed" && (
-        <div className="mt-4 pt-4 border-t border-gray-200 flex justify-end space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onViewDetails?.(id)}
-          >
-            View Details
-          </Button>
-          <Button size="sm" onClick={() => onRateTrip?.(id)}>
-            Rate Trip
-          </Button>
-        </div>
-      )}
-
-      {status === "cancelled" && (
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-500">{refundStatus}</span>
-            <div className="space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onViewDetails?.(id)}
-              >
-                View Details
-              </Button>
-              <Button size="sm" onClick={() => onRebook?.(id)}>
-                Rebook
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default function BookingsPage() {
-  const router = useRouter();
-  const { toast } = useToast();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string | null>(null);
-  const [showCancelDialog, setShowCancelDialog] = useState(false);
-  const [selectedBookingId, setSelectedBookingId] = useState<string | null>(
-    null
-  );
-  const [selectedBooking, setSelectedBooking] =
-    useState<BookingCardProps | null>(null);
-  const [showBookingDetails, setShowBookingDetails] = useState(false);
-  const [showModifyModal, setShowModifyModal] = useState(false);
-  const [bookings, setBookings] = useState<BookingCardProps[]>([
-    {
-      id: "#12345",
-      status: "upcoming",
-      pickupLocation: "Dublin Airport",
-      pickupDetail: "Terminal 2, Arrivals",
-      destination: "Galway City",
-      destinationDetail: "City Center",
-      date: "12th Nov 2025",
-      time: "10:00 AM",
-      passengers: 2,
-      duration: "2h 30m",
-      price: "€120.00",
-    },
-    {
-      id: "#12346",
-      status: "completed",
-      pickupLocation: "Cork City",
-      pickupDetail: "City Center",
-      destination: "Killarney",
-      destinationDetail: "City Center",
-      date: "5th Nov 2025",
-      time: "2:00 PM",
-      passengers: 1,
-      duration: "1h 45m",
-      price: "€85.50",
-    },
-    {
-      id: "#12347",
-      status: "cancelled",
-      pickupLocation: "Limerick",
-      pickupDetail: "City Center",
-      destination: "Shannon Airport",
-      destinationDetail: "Terminal 1",
-      date: "1st Nov 2025",
-      time: "9:30 AM",
-      passengers: 3,
-      duration: "45m",
-      price: "€65.00",
-      refundStatus: "Refund Processed",
-    },
-  ]);
-
-  // Filter bookings based on search query and status filter
+  // Filter bookings based on status
   const filteredBookings = bookings.filter((booking) => {
-    const matchesSearch =
-      booking.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      booking.pickupLocation
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase()) ||
-      booking.destination.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesStatus = statusFilter ? booking.status === statusFilter : true;
-
-    return matchesSearch && matchesStatus;
+    const matchesStatus =
+      statusFilter === "all" ||
+      booking.status.toLowerCase() === statusFilter.toLowerCase();
+    return matchesStatus;
   });
 
-  // Handle booking actions
-  const handleModify = useCallback(
-    (id: string) => {
-      const booking = bookings.find((b) => b.id === id);
-      if (booking) {
-        setSelectedBooking(booking);
-        setShowModifyModal(true);
-      }
+  // Calculate statistics
+  const totalBookings = bookings.length;
+  const confirmedBookings = bookings.filter((b) => b.status === "Confirmed").length;
+  const pendingBookings = bookings.filter((b) => b.status === "Pending").length;
+  const totalSpent = bookings
+    .filter((b) => b.status === "Confirmed")
+    .reduce((sum, booking) => {
+      const amount = parseFloat(booking.payment.replace(/[€,]/g, ""));
+      return sum + amount;
+    }, 0);
+
+  const stats = [
+    {
+      id: 1,
+      label: "Total Bookings",
+      icon: <CalendarDays className="h-5 w-5 text-blue-600" />,
+      value: totalBookings,
+      bgColor: "bg-blue-50",
     },
-    [bookings]
-  );
-
-  const handleViewDetails = useCallback(
-    (id: string) => {
-      const booking = bookings.find((b) => b.id === id);
-      if (booking) {
-        setSelectedBooking(booking);
-        setShowBookingDetails(true);
-      }
+    {
+      id: 2,
+      label: "Confirmed",
+      icon: <CheckCircle className="h-5 w-5 text-green-600" />,
+      value: confirmedBookings,
+      bgColor: "bg-green-50",
     },
-    [bookings]
-  );
-
-  const handleCancel = useCallback((id: string) => {
-    setSelectedBookingId(id);
-    setShowCancelDialog(true);
-  }, []);
-
-  const confirmCancel = useCallback(() => {
-    if (selectedBookingId) {
-      setBookings((prev) =>
-        prev.map((booking) =>
-          booking.id === selectedBookingId
-            ? {
-                ...booking,
-                status: "cancelled",
-                refundStatus: "Refund Processed",
-              }
-            : booking
-        )
-      );
-
-      toast({
-        title: "Booking Cancelled",
-        description: `Booking ${selectedBookingId} has been cancelled.`,
-      });
-
-      setShowCancelDialog(false);
-      setSelectedBookingId(null);
-    }
-  }, [selectedBookingId, toast]);
-
-  const handleRateTrip = useCallback(
-    (id: string) => {
-      toast({
-        title: "Rate Trip",
-        description: `Rate your trip for booking ${id}`,
-      });
-      // router.push(`/bookings/rate/${id}`);
+    {
+      id: 3,
+      label: "Pending",
+      icon: <Clock className="h-5 w-5 text-orange-600" />,
+      value: pendingBookings,
+      bgColor: "bg-orange-50",
     },
-    [toast]
-  );
-
-  const handleRebook = useCallback(
-    (id: string) => {
-      toast({
-        title: "Rebook",
-        description: `Rebooking trip from booking ${id}`,
-      });
-      // router.push(`/book?rebook=${id}`);
+    {
+      id: 4,
+      label: "Total Spent",
+      icon: <DollarSign className="h-5 w-5 text-purple-600" />,
+      value: `€${totalSpent.toFixed(0)}`,
+      bgColor: "bg-purple-50",
     },
-    [toast]
-  );
+  ];
 
-  const handleMoreActions = useCallback((id: string) => {
-    // This is handled by the dropdown menu items directly
-  }, []);
+  const handleViewBooking = (booking: typeof bookings[0]) => {
+    setSelectedBooking(booking);
+    setIsViewModalOpen(true);
+  };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-4rem)]">
-      <div className="flex-1 overflow-y-auto">
-        <div className="container mx-auto px-4 py-6 max-w-4xl">
-          <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
-            <h1 className="text-2xl font-bold">My Bookings</h1>
-            <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
-                <Input
-                  className="pl-10 w-full md:w-64"
-                  placeholder="Search bookings..."
-                  type="search"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+    <div className="flex flex-col gap-6 pb-4">
+      {/* Header */}
+      <PageHeader
+        title="My Bookings"
+        description="View and manage all your travel bookings"
+      />
+
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((stat) => (
+          <Card
+            key={stat.id}
+            className={`${stat.bgColor} border-none shadow-sm hover:shadow-md transition-shadow`}
+          >
+            <CardContent className="p-5">
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <p className="text-xs font-medium text-gray-600">
+                    {stat.label}
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stat.value}
+                  </p>
+                </div>
+                <div className="p-3 bg-white rounded-lg">{stat.icon}</div>
               </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="flex items-center w-full md:w-auto"
-                  >
-                    <Filter className="h-4 w-4 mr-2" />
-                    {statusFilter
-                      ? `${
-                          statusFilter.charAt(0).toUpperCase() +
-                          statusFilter.slice(1)
-                        }`
-                      : "Filter"}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setStatusFilter(null)}>
-                    All Bookings
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setStatusFilter("upcoming")}>
-                    Upcoming
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => setStatusFilter("completed")}
-                  >
-                    Completed
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => setStatusFilter("cancelled")}
-                  >
-                    Cancelled
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Bookings Table */}
+      <Card className="shadow-sm border border-gray-100 bg-white/90">
+        <CardHeader className="pb-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <CardTitle className="text-xl font-bold">Bookings List</CardTitle>
+              <p className="text-sm text-gray-500 mt-1">
+                View all your travel bookings
+              </p>
+            </div>
+            <div className="flex items-center gap-3 w-full sm:w-auto">
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="flex h-10 w-full sm:w-[180px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <option value="all">All Status</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="pending">Pending</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
             </div>
           </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-blue-600 hover:bg-blue-600">
+                  <TableHead className="font-semibold text-white rounded-tl-lg">Route</TableHead>
+                  <TableHead className="font-semibold text-white">Date & Time</TableHead>
+                  <TableHead className="font-semibold text-white">Passengers</TableHead>
+                  <TableHead className="font-semibold text-white">Vehicle</TableHead>
+                  <TableHead className="font-semibold text-white">Status</TableHead>
+                  <TableHead className="font-semibold text-white">Payment</TableHead>
+                  <TableHead className="font-semibold text-white text-right rounded-tr-lg">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredBookings.map((booking) => (
+                  <TableRow key={booking.id} className="hover:bg-gray-50">
+                    <TableCell>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-blue-600" />
+                          <span className="font-medium text-sm">{booking.pickup}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-green-600" />
+                          <span className="font-medium text-sm">{booking.destination}</span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <CalendarDays className="h-4 w-4 text-gray-400" />
+                        <div className="text-sm">
+                          <div className="font-medium">
+                            {new Date(booking.date).toLocaleDateString()}
+                          </div>
+                          <div className="text-gray-500">{booking.time}</div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-gray-400" />
+                        <span className="text-sm">{booking.passengers}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-sm">{booking.vehicleType}</TableCell>
+                    <TableCell>
+                      <span
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${booking.status === "Confirmed"
+                          ? "bg-green-100 text-green-700"
+                          : booking.status === "Pending"
+                            ? "bg-orange-100 text-orange-700"
+                            : "bg-red-100 text-red-700"
+                          }`}
+                      >
+                        {booking.status === "Confirmed" && (
+                          <CheckCircle className="h-3 w-3" />
+                        )}
+                        {booking.status === "Pending" && (
+                          <Clock className="h-3 w-3" />
+                        )}
+                        {booking.status === "Cancelled" && (
+                          <XCircle className="h-3 w-3" />
+                        )}
+                        {booking.status}
+                      </span>
+                    </TableCell>
+                    <TableCell className="font-semibold text-sm">
+                      {booking.payment}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleViewBooking(booking)}
+                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      >
+                        <Eye className="h-4 w-4 mr-1" />
+                        View
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
 
-          {filteredBookings.length > 0 ? (
-            <div className="space-y-4">
-              {filteredBookings.map((booking) => (
-                <BookingCard
-                  key={booking.id}
-                  {...booking}
-                  onModify={handleModify}
-                  onViewDetails={handleViewDetails}
-                  onCancel={handleCancel}
-                  onRateTrip={handleRateTrip}
-                  onRebook={handleRebook}
-                  onMoreActions={handleMoreActions}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <h3 className="text-lg font-medium">No bookings found</h3>
-              <p className="text-gray-500 mt-1">
-                {searchQuery || statusFilter
-                  ? "Try adjusting your search or filter criteria."
-                  : "You have no bookings yet."}
-              </p>
-              {!searchQuery && !statusFilter && (
-                <Button className="mt-4" onClick={() => router.push("/")}>
-                  Book a Ride
-                </Button>
-              )}
-            </div>
-          )}
+      {/* View Booking Modal */}
+      <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Booking Details</DialogTitle>
+            <DialogDescription>
+              View complete information about your booking
+            </DialogDescription>
+          </DialogHeader>
 
-          {/* Cancel Booking Confirmation Dialog */}
-          <AlertDialog
-            open={showCancelDialog}
-            onOpenChange={setShowCancelDialog}
-          >
-            <AlertDialogOverlay className="bg-black/50" />
-            <AlertDialogContent className="bg-white rounded-lg p-6 w-full max-w-md mx-4 sm:mx-0">
-              <AlertDialogHeader className="mb-4">
-                <AlertDialogTitle className="text-xl font-semibold text-gray-900">
-                  Are you sure you want to cancel this booking?
-                </AlertDialogTitle>
-                <AlertDialogDescription className="mt-2 text-gray-600">
-                  This action cannot be undone. You may be eligible for a refund
-                  as per our cancellation policy.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter className="flex flex-col sm:flex-row justify-end gap-3 mt-6">
-                <AlertDialogCancel className="w-full sm:w-auto">
-                  Go Back
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white"
-                  onClick={confirmCancel}
+          {selectedBooking && (
+            <div className="space-y-6 py-4">
+              {/* Status Badge */}
+              <div className="flex items-center gap-2">
+                <span
+                  className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium ${selectedBooking.status === "Confirmed"
+                    ? "bg-green-100 text-green-700"
+                    : selectedBooking.status === "Pending"
+                      ? "bg-orange-100 text-orange-700"
+                      : "bg-red-100 text-red-700"
+                    }`}
                 >
-                  Cancel
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+                  {selectedBooking.status === "Confirmed" && (
+                    <CheckCircle className="h-4 w-4" />
+                  )}
+                  {selectedBooking.status === "Pending" && (
+                    <Clock className="h-4 w-4" />
+                  )}
+                  {selectedBooking.status === "Cancelled" && (
+                    <XCircle className="h-4 w-4" />
+                  )}
+                  {selectedBooking.status}
+                </span>
+              </div>
 
-          {/* Modify Booking Modal */}
-          <AlertDialog open={showModifyModal} onOpenChange={setShowModifyModal}>
-            <AlertDialogContent className="max-w-2xl">
-              <AlertDialogHeader>
-                <AlertDialogTitle className="text-2xl">
-                  Modify Booking
-                </AlertDialogTitle>
-                <AlertDialogDescription className="text-base">
-                  Update your booking details below
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-
-              {selectedBooking && (
-                <div className="space-y-6 py-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <h4 className="font-medium">Pickup Location</h4>
-                      <div className="flex items-center p-3 border rounded-lg">
-                        <MapPin className="h-5 w-5 mr-2 text-blue-600" />
-                        <div>
-                          <p className="font-medium">
-                            {selectedBooking.pickupLocation}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {selectedBooking.pickupDetail}
-                          </p>
-                        </div>
-                      </div>
+              {/* Trip Details */}
+              <div className="bg-gray-50 p-4 rounded-lg space-y-4">
+                <h3 className="font-semibold text-lg">Trip Details</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <MapPin className="h-5 w-5 text-blue-600" />
                     </div>
-
-                    <div className="space-y-2">
-                      <h4 className="font-medium">Destination</h4>
-                      <div className="flex items-center p-3 border rounded-lg">
-                        <MapPin className="h-5 w-5 mr-2 text-green-600" />
-                        <div>
-                          <p className="font-medium">
-                            {selectedBooking.destination}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {selectedBooking.destinationDetail}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <h4 className="font-medium">Date & Time</h4>
-                      <div className="flex items-center p-3 border rounded-lg">
-                        <CalendarDays className="h-5 w-5 mr-2 text-purple-600" />
-                        <div>
-                          <p className="font-medium">
-                            {selectedBooking.date} at {selectedBooking.time}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            Duration: {selectedBooking.duration}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <h4 className="font-medium">Passengers</h4>
-                      <div className="flex items-center p-3 border rounded-lg">
-                        <Users className="h-5 w-5 mr-2 text-amber-600" />
-                        <div>
-                          <p className="font-medium">
-                            {selectedBooking.passengers}{" "}
-                            {selectedBooking.passengers === 1
-                              ? "Passenger"
-                              : "Passengers"}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            Total: {selectedBooking.price}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 pt-4">
-                    <h4 className="font-medium">Modify Options</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <Button variant="outline" className="w-full">
-                        <CalendarDays className="h-4 w-4 mr-2" />
-                        Change Date/Time
-                      </Button>
-                      <Button variant="outline" className="w-full">
-                        <MapPin className="h-4 w-4 mr-2" />
-                        Change Pickup/Drop-off
-                      </Button>
-                      <Button variant="outline" className="w-full">
-                        <Users className="h-4 w-4 mr-2" />
-                        Change Passengers
-                      </Button>
-                      <Button variant="outline" className="w-full">
-                        <Navigation className="h-4 w-4 mr-2" />
-                        Change Route
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <AlertDialogFooter className="mt-6">
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <Button
-                  onClick={() => {
-                    toast({
-                      title: "Booking Updated",
-                      description:
-                        "Your booking has been successfully updated.",
-                    });
-                    setShowModifyModal(false);
-                  }}
-                >
-                  Save Changes
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          {/* Booking Details Modal */}
-          {showBookingDetails && selectedBooking && (
-            <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-              <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-6">
                     <div>
-                      <h2 className="text-2xl font-bold">Booking Details</h2>
-                      <p className="text-gray-500 text-sm">
-                        ID: {selectedBooking.id}
+                      <p className="text-sm text-gray-500">Pickup Location</p>
+                      <p className="font-medium">{selectedBooking.pickup}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-green-100 rounded-lg">
+                      <MapPin className="h-5 w-5 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Destination</p>
+                      <p className="font-medium">{selectedBooking.destination}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-purple-100 rounded-lg">
+                      <CalendarDays className="h-5 w-5 text-purple-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-500">Date & Time</p>
+                      <p className="font-medium">
+                        {new Date(selectedBooking.date).toLocaleDateString()} at{" "}
+                        {selectedBooking.time}
                       </p>
                     </div>
-                    <button
-                      onClick={() => setShowBookingDetails(false)}
-                      className="text-gray-400 hover:text-gray-600"
-                    >
-                      <X className="h-6 w-6" />
-                    </button>
                   </div>
-
-                  <div className="space-y-6">
-                    {/* Status Badge */}
-                    <div className="flex items-center space-x-2">
-                      {selectedBooking.status === "upcoming" && (
-                        <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
-                          <Clock className="h-4 w-4 mr-1" />
-                          Upcoming
-                        </div>
-                      )}
-                      {selectedBooking.status === "completed" && (
-                        <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
-                          <Check className="h-4 w-4 mr-1" />
-                          Completed
-                        </div>
-                      )}
-                      {selectedBooking.status === "cancelled" && (
-                        <div className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium flex items-center">
-                          <XCircle className="h-4 w-4 mr-1" />
-                          Cancelled
-                        </div>
-                      )}
+                  <div className="flex items-start gap-3">
+                    <div className="p-2 bg-amber-100 rounded-lg">
+                      <Users className="h-5 w-5 text-amber-600" />
                     </div>
-
-                    {/* Trip Details */}
-                    <div className="bg-gray-50 p-4 rounded-lg">
-                      <h3 className="font-medium mb-3">Trip Details</h3>
-                      <div className="space-y-4">
-                        <div className="flex items-start">
-                          <div className="bg-blue-100 p-2 rounded-full mr-3">
-                            <MapPinIcon className="h-5 w-5 text-blue-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium">Pickup Location</p>
-                            <p className="text-gray-600">
-                              {selectedBooking.pickupLocation}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {selectedBooking.pickupDetail}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-start">
-                          <div className="bg-green-100 p-2 rounded-full mr-3">
-                            <MapPinIcon className="h-5 w-5 text-green-600" />
-                          </div>
-                          <div>
-                            <p className="font-medium">Destination</p>
-                            <p className="text-gray-600">
-                              {selectedBooking.destination}
-                            </p>
-                            <p className="text-sm text-gray-500">
-                              {selectedBooking.destinationDetail}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Booking Information */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="flex items-center">
-                        <div className="bg-gray-100 p-2 rounded-full mr-3">
-                          <CalendarDays className="h-5 w-5 text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Date & Time</p>
-                          <p className="font-medium">
-                            {selectedBooking.date}, {selectedBooking.time}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="bg-gray-100 p-2 rounded-full mr-3">
-                          <User className="h-5 w-5 text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Passengers</p>
-                          <p className="font-medium">
-                            {selectedBooking.passengers}{" "}
-                            {selectedBooking.passengers > 1
-                              ? "People"
-                              : "Person"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="bg-gray-100 p-2 rounded-full mr-3">
-                          <Clock9 className="h-5 w-5 text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Duration</p>
-                          <p className="font-medium">
-                            {selectedBooking.duration}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center">
-                        <div className="bg-gray-100 p-2 rounded-full mr-3">
-                          <CreditCard className="h-5 w-5 text-gray-600" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Total Amount</p>
-                          <p className="font-medium">{selectedBooking.price}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="pt-4 border-t border-gray-200 flex flex-wrap gap-3">
-                      {selectedBooking.status === "upcoming" && (
-                        <>
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              setShowBookingDetails(false);
-                              handleModify(selectedBooking.id);
-                            }}
-                          >
-                            Modify Booking
-                          </Button>
-                          <Button
-                            variant="outline"
-                            onClick={() => {
-                              setShowBookingDetails(false);
-                              handleCancel(selectedBooking.id);
-                            }}
-                            className="text-red-600 border-red-200 hover:bg-red-50"
-                          >
-                            Cancel Booking
-                          </Button>
-                        </>
-                      )}
-                      {selectedBooking.status === "completed" && (
-                        <Button
-                          onClick={() => {
-                            setShowBookingDetails(false);
-                            handleRateTrip(selectedBooking.id);
-                          }}
-                          className="bg-blue-600 hover:bg-blue-700"
-                        >
-                          Rate This Trip
-                        </Button>
-                      )}
-                      {selectedBooking.status === "cancelled" && (
-                        <Button
-                          onClick={() => {
-                            setShowBookingDetails(false);
-                            handleRebook(selectedBooking.id);
-                          }}
-                          className="bg-green-600 hover:bg-green-700"
-                        >
-                          Rebook This Trip
-                        </Button>
-                      )}
-                      <Button
-                        variant="outline"
-                        onClick={() => setShowBookingDetails(false)}
-                        className="ml-auto"
-                      >
-                        Close
-                      </Button>
+                    <div>
+                      <p className="text-sm text-gray-500">Passengers</p>
+                      <p className="font-medium">
+                        {selectedBooking.passengers}{" "}
+                        {selectedBooking.passengers === 1 ? "Person" : "People"}
+                      </p>
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* Payment Info */}
+              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                <span className="font-semibold text-gray-900">Total Amount</span>
+                <span className="text-2xl font-bold text-blue-600">
+                  {selectedBooking.payment}
+                </span>
+              </div>
             </div>
           )}
-        </div>
-      </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsViewModalOpen(false)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

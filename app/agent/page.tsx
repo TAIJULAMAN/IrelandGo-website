@@ -15,10 +15,20 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Activity, Euro, Percent, Plus, Users, CalendarDays, Clock, MapPin, CreditCard } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { PaymentOnboardingSidebar } from "@/components/common/PaymentOnboardingSidebar";
+import { Activity, Euro, Percent, Plus, Users, CalendarDays, Clock, MapPin, CreditCard, User } from "lucide-react";
 
 export default function AgentDashboardPage() {
   const [isCreateBookingOpen, setIsCreateBookingOpen] = useState(false);
+  const [isPaymentSidebarOpen, setIsPaymentSidebarOpen] = useState(false);
   const metrics = [
     {
       id: 1,
@@ -70,6 +80,54 @@ export default function AgentDashboardPage() {
     },
   ];
 
+  const recentClients = [
+    {
+      id: 1,
+      name: "John Smith",
+      email: "john.smith@email.com",
+      phone: "+353 87 123 4567",
+      location: "Dublin",
+      joinDate: "2024-12-15",
+      totalBookings: 5,
+    },
+    {
+      id: 2,
+      name: "Emma Wilson",
+      email: "emma.wilson@email.com",
+      phone: "+353 86 234 5678",
+      location: "Cork",
+      joinDate: "2024-12-14",
+      totalBookings: 3,
+    },
+    {
+      id: 3,
+      name: "Michael O'Brien",
+      email: "michael.obrien@email.com",
+      phone: "+353 85 345 6789",
+      location: "Galway",
+      joinDate: "2024-12-13",
+      totalBookings: 7,
+    },
+    {
+      id: 4,
+      name: "Sarah Murphy",
+      email: "sarah.murphy@email.com",
+      phone: "+353 84 456 7890",
+      location: "Limerick",
+      joinDate: "2024-12-12",
+      totalBookings: 2,
+    },
+    {
+      id: 5,
+      name: "David Kelly",
+      email: "david.kelly@email.com",
+      phone: "+353 83 567 8901",
+      location: "Waterford",
+      joinDate: "2024-12-11",
+      totalBookings: 4,
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-6 pb-4">
       <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -79,9 +137,6 @@ export default function AgentDashboardPage() {
             Here's your travel booking dashboard overview
           </p>
         </div>
-        <Button className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-6">
-          Logout
-        </Button>
       </header>
 
       {/* Metrics */}
@@ -109,28 +164,59 @@ export default function AgentDashboardPage() {
         ))}
       </div>
 
-      {/* Quick Actions */}
-      <section className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold">Quick Actions</h2>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <Button
-            className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 px-5"
-            onClick={() => setIsCreateBookingOpen(true)}
-          >
-            <Plus className="h-4 w-4" />
-            Create Booking
-          </Button>
-          <Button
-            variant="outline"
-            className="flex items-center gap-2 border-gray-300 text-gray-800 bg-white"
-          >
-            <Users className="h-4 w-4" />
-            Manage Clients
-          </Button>
-        </div>
-      </section>
+      {/* Recent Clients Table */}
+      <Card className="shadow-sm border border-gray-100 bg-white/90">
+        <CardHeader className="border-b border-gray-100">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg font-semibold">Recent Clients</CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-blue-600 hover:bg-blue-600">
+                <TableHead className="font-semibold text-white rounded-tl-lg">Client</TableHead>
+                <TableHead className="font-semibold text-white">Contact</TableHead>
+                <TableHead className="font-semibold text-white">Location</TableHead>
+                <TableHead className="font-semibold text-white">Join Date</TableHead>
+                <TableHead className="font-semibold text-white text-center rounded-tr-lg">Bookings</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {recentClients.map((client) => (
+                <TableRow key={client.id} className="hover:bg-gray-50">
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <User className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">{client.name}</p>
+                        <p className="text-sm text-gray-500">{client.email}</p>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-sm text-gray-600">
+                    {client.phone}
+                  </TableCell>
+                  <TableCell className="text-sm text-gray-600">
+                    {client.location}
+                  </TableCell>
+                  <TableCell className="text-sm text-gray-600">
+                    {new Date(client.joinDate).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                      {client.totalBookings}
+                    </span>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
 
       {/* Create New Booking Modal */}
       <Dialog open={isCreateBookingOpen} onOpenChange={setIsCreateBookingOpen}>
@@ -340,9 +426,8 @@ export default function AgentDashboardPage() {
             {activities.map((activity, index) => (
               <div
                 key={activity.id}
-                className={`flex items-start gap-3 px-4 py-4 ${
-                  index === 0 ? "rounded-t-lg" : ""
-                }`}
+                className={`flex items-start gap-3 px-4 py-4 ${index === 0 ? "rounded-t-lg" : ""
+                  }`}
               >
                 <div className="flex-shrink-0 mt-1">
                   <div className="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center">
@@ -377,6 +462,12 @@ export default function AgentDashboardPage() {
           </CardContent>
         </Card>
       </section>
+
+      {/* Payment Onboarding Sidebar */}
+      <PaymentOnboardingSidebar
+        isOpen={isPaymentSidebarOpen}
+        onClose={() => setIsPaymentSidebarOpen(false)}
+      />
     </div>
   );
 }
