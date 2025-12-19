@@ -2,11 +2,14 @@ import PopularTransferRoutes from "@/components/airport-transfers/transfer-route
 import FAQ from "@/components/day-trips/faq";
 import { Footer } from "@/components/layout/footer";
 import TransferSearchHero from "@/components/transfer/transfer-search-hero";
+import { Suspense } from "react";
 
 export default function TransferSearch() {
     return (
         <div>
-            <TransferSearchHero />
+            <Suspense fallback={<div className="min-h-screen bg-gray-100" />}>
+                <TransferSearchHero />
+            </Suspense>
             <PopularTransferRoutes />
             <FAQ />
             <Footer />
