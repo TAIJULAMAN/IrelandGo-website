@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/common/header";
+import Link from "next/link";
 
 export default function DayTripsDetailsHero() {
   return (
@@ -101,9 +102,11 @@ export default function DayTripsDetailsHero() {
 
           {/* CTA */}
           <div className="mt-5 flex justify-center">
-            <button className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm w-full sm:w-auto">
-              Book Your Tour
-            </button>
+            <Link href={`/booking-flow/step-2`}>
+              <button className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm w-full sm:w-auto">
+                Book Your Tour
+              </button>
+            </Link>
           </div>
         </div>
       </div>

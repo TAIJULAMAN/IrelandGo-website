@@ -4,6 +4,7 @@ import { Check, Clock, Shield, Calendar, MapPin, Users, Luggage, BadgeCheck, Use
 import { Header } from "../common/header";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function ByTheHourHero() {
   const [activeTab, setActiveTab] = useState("by-the-hour");
@@ -151,9 +152,11 @@ export default function ByTheHourHero() {
                   </div>
                 </div>
               </div>
-              <button className="w-full bg-blue-500 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
-                Search Available Rides →
-              </button>
+              <Link href="/booking-flow/step-2">
+                <button className="w-full bg-blue-500 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
+                  Search Available Rides →
+                </button>
+              </Link>
 
             </div>
           </div>
