@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ChevronDown, MapPin, Building2, Users, Navigation } from "lucide-react"
 import { Card } from "@/components/ui/card"
+import Link from "next/link"
 
 export default function DayTripItinerary() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null)
@@ -82,9 +83,8 @@ export default function DayTripItinerary() {
                         <p className="text-gray-600 text-sm mt-1">{item.description}</p>
                       </div>
                       <ChevronDown
-                        className={`w-6 h-6 text-gray-400 flex-shrink-0 transition-transform ${
-                          isExpanded ? "rotate-180" : ""
-                        }`}
+                        className={`w-6 h-6 text-gray-400 flex-shrink-0 transition-transform ${isExpanded ? "rotate-180" : ""
+                          }`}
                       />
                     </div>
 
@@ -137,6 +137,14 @@ export default function DayTripItinerary() {
             ))}
           </div>
         </Card>
+        {/* CTA */}
+        <div className="mt-5 flex justify-center">
+          <Link href={`/booking-flow/step-2`}>
+            <button className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm w-full sm:w-auto">
+              Book Your Tour
+            </button>
+          </Link>
+        </div>
       </div>
     </main>
   )

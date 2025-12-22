@@ -43,52 +43,7 @@ const vehicles = [
     bags: "2 bags",
     image: "/c4.png",
     features: ["Premium Comfort", "Luxury Interior", "VIP Service"],
-  },
-  {
-    id: 5,
-    name: "Sedan",
-    price: "$45",
-    seats: "4 seats",
-    bags: "2 bags",
-    image: "/c1.png",
-    features: ["Air Conditioning", "Comfortable", "Fuel Efficient"],
-  },
-  {
-    id: 6,
-    name: "Compact MPV",
-    price: "$55",
-    seats: "5 seats",
-    bags: "3 bags",
-    image: "/c2.png",
-    features: ["Spacious", "Family Friendly", "Extra Storage"],
-  },
-  {
-    id: 7,
-    name: "Van",
-    price: "$65",
-    seats: "8 seats",
-    bags: "6 bags",
-    image: "/c3.png",
-    features: ["Large Groups", "Ample Space", "Comfortable Ride"],
-  },
-  {
-    id: 8,
-    name: "Luxury Sedan",
-    price: "$85",
-    seats: "4 seats",
-    bags: "2 bags",
-    image: "/c4.png",
-    features: ["Premium Comfort", "Luxury Interior", "VIP Service"],
-  },
-  {
-    id: 9,
-    name: "Sedan",
-    price: "$45",
-    seats: "4 seats",
-    bags: "2 bags",
-    image: "/c1.png",
-    features: ["Air Conditioning", "Comfortable", "Fuel Efficient"],
-  },
+  }
 ];
 
 export default function Step2() {
@@ -165,22 +120,7 @@ export default function Step2() {
                 Available Vehicles ({vehicles.length})
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => handleScroll("left")}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleScroll("right")}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </div>
+
           </div>
 
           <div
