@@ -30,9 +30,7 @@ export default function ByTheHourEnglishSpeakingDriver() {
     <section className="relative w-full py-16 md:py-20 bg-white">
       <div className="max-w-7xl mx-auto px-5 md:px-0">
         {/* Heading */}
-        <h2 className="text-center text-3xl md:text-4xl font-extrabold text-slate-900">
-          Plan your own private car transfer with English-speaking driver
-        </h2>
+
         <p className="text-center text-slate-500 mt-2">
           Available in 100+ destinations across Ireland
         </p>

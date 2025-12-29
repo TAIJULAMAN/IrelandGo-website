@@ -1,12 +1,17 @@
 "use client"
+
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { MapPin, Calendar, Users, Luggage, Plus, Clock, Search, BadgeCheck, UserRoundCog, ShieldPlus, ChevronDown } from "lucide-react"
+import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Clock, Search, BadgeCheck, UserRoundCog, ShieldPlus, ChevronDown, Minus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Header } from "../common/header"
 import dynamic from "next/dynamic"
 import { irishSettlements } from "@/lib/irish-settlements"
 import Link from "next/link"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
 
 const MapRoute = dynamic(() => import("./map-route").then(mod => ({ default: mod.MapRoute })), {
   ssr: false,
@@ -25,6 +30,15 @@ export function Hero() {
   const [pickupLocation, setPickupLocation] = useState("")
   const [dropoffLocation, setDropoffLocation] = useState("")
   const [isAddStopDropdownOpen, setIsAddStopDropdownOpen] = useState(false)
+
+  // Date and Time state
+  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [time, setTime] = useState("09:00")
+
+  // Passengers and Luggage state
+  const [passengers, setPassengers] = useState(1)
+  const [luggage, setLuggage] = useState(1)
+
   const router = useRouter()
 
   const tabs = [
@@ -60,9 +74,10 @@ export function Hero() {
   const currentStops = tripType === "one-way" ? oneWayStops : returnStops
 
   return (
-    <section className="relative overflow-hidden min-h-screen">
+    <section className="relative overflow-hidden min-h-[800px]">
 
       <Header />
+      {/* Background Image */}
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
@@ -70,13 +85,13 @@ export function Hero() {
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000000]/10 via-[#000000]/10 to-[#000000]/10 "></div>
+        {/* Removed dark overlay as per request "Make the image in background more brighter" */}
       </div>
 
-      <div className="container mx-auto px-5 md:px-0 py-10 md:py-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-5 md:px-0 py-10 md:py-16 relative z-10">
         {/* Hero Text */}
         <div className="text-center mb-6 md:mb-10 pt-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
             Comfortable car transfers in Ireland
           </h1>
           <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 px-4">Book private transfers and day tours with professional drivers.</p>
@@ -143,7 +158,7 @@ export function Hero() {
                 </div>
                 <div>
                   <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <MapPin className="w-5 h-5 text-green-500" />
+                    <MapPin className="w-5 h-5 text-blue-500" />
                     <input
                       type="text"
                       placeholder="Dropoff Location"
@@ -159,7 +174,7 @@ export function Hero() {
               {currentStops.map((stop, index) => (
                 <div key={index} className="mb-4">
                   <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <MapPin className="w-5 h-5 text-orange-500" />
+                    <MapPin className="w-5 h-5 text-blue-500" />
                     <input
                       type="text"
                       placeholder={`Stop ${index + 1}`}
@@ -240,35 +255,109 @@ export function Hero() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-5">
                 <div className="col-span-1">
                   <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <Calendar className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    <input
-                      type="text"
-                      placeholder="04/07/2025 - 09:00 am"
-                      className="w-full outline-none text-xs text-gray-700"
-                      defaultValue="04/07/2025 - 09:00 am"
-                    />
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"ghost"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent",
+                            !date && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-500" />
+                          {date ? format(date, "PPP") : <span>Pick a date</span>}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0">
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={setDate}
+                          initialFocus
+                        />
+                        <div className="p-3 border-t">
+                          <input
+                            type="time"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
+                            className="w-full p-2 border rounded text-sm"
+                          />
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
                 <div className="col-span-1">
                   <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <Users className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    <select className="w-full outline-none text-xs bg-white text-gray-700">
-                      <option>1 Passenger</option>
-                      <option>2 Passengers</option>
-                      <option>3+ Passengers</option>
-                    </select>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="ghost" className="w-full justify-start h-auto p-0 hover:bg-transparent font-normal">
+                          <Users className="w-4 h-4 text-blue-500 mr-2" />
+                          <span className="text-sm text-gray-700">{passengers} Passenger{passengers !== 1 ? 's' : ''}</span>
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-60">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium">Passengers</span>
+                          <div className="flex items-center gap-3">
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => setPassengers(Math.max(1, passengers - 1))}
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <span className="w-4 text-center">{passengers}</span>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => setPassengers(passengers + 1)}
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
 
                   </div>
                 </div>
                 <div className="col-span-1">
                   <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <Luggage className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    <select className="w-full outline-none text-sm bg-white text-gray-700">
-                      <option>1 Luggage</option>
-                      <option>2 Luggage</option>
-                      <option>3+ Luggage</option>
-                    </select>
-
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant="ghost" className="w-full justify-start h-auto p-0 hover:bg-transparent font-normal">
+                          <Luggage className="w-4 h-4 text-blue-500 mr-2" />
+                          <span className="text-sm text-gray-700">{luggage} Luggage</span>
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-60">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium">Luggage</span>
+                          <div className="flex items-center gap-3">
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => setLuggage(Math.max(0, luggage - 1))}
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <span className="w-4 text-center">{luggage}</span>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              className="h-8 w-8"
+                              onClick={() => setLuggage(luggage + 1)}
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
               </div>
@@ -308,7 +397,7 @@ export function Hero() {
           </div>
 
           {/* Features Row */}
-          <div className="flex flex-wrap gap-6 md:gap-8 justify-center text-sm md:text-base font-medium mt-8 md:mt-12 px-4">
+          <div className="flex flex-wrap gap-8 md:gap-16 justify-center text-sm md:text-base font-medium mt-8 md:mt-12 px-4">
             <div className="flex items-center gap-3 bg-white/15 px-6 py-3 rounded-full backdrop-blur-sm border border-white/20 hover:bg-white/25 transition-all duration-300 cursor-pointer group">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-300">
                 <BadgeCheck className="w-5 h-5 text-white" />

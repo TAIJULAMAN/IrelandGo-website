@@ -106,7 +106,7 @@ export function PrivateTransfers() {
                   asChild
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base"
                 >
-                  <Link href="/booking-flow/step-2">Book Now</Link>
+                  <Link href="/airport-transfers/journey-details">Book Now</Link>
                 </Button>
               </div>
             </div>

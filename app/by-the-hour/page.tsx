@@ -19,7 +19,7 @@ export default function ByTheHour() {
       <ByTheHourBestDestinations />
       <Testimonials />
       <ByTheHourFlexibleBooking />
-      <ByTheHourEnglishSpeakingDriver />
+      {/* <ByTheHourEnglishSpeakingDriver /> */}
       <FAQ />
       <Footer />
     </main>

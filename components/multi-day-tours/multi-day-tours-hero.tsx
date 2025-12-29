@@ -14,7 +14,7 @@ export default function MultiDayToursHero() {
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/10 to-black/10" />
+
       </div>
 
       <Header />

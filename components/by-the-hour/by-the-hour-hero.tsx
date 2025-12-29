@@ -33,7 +33,7 @@ export default function ByTheHourHero() {
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#000000]/40 via-[#000000]/40 to-[#000000]/40"></div>
+
       </div>
 
       <div className="relative z-10">
