@@ -133,7 +133,7 @@ export function PopularMultiDayTours() {
                 </p>
 
                 <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 md:py-6 rounded-xl mt-auto text-sm md:text-lg shadow-blue-200 shadow-lg">
-                  <Link href="/booking-flow/step-2">Book Now</Link>
+                  <Link href="/multi-day-tours">Book Now</Link>
                 </Button>
               </div>
             </div>
