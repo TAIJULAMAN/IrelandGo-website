@@ -9,12 +9,20 @@ export default function About() {
 
             <main className="py-16">
                 {/* Hero Section */}
-                <section className="container mx-auto px-5 md:px-0 mb-16">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center mb-16 overflow-hidden">
+                    <div className="absolute z-0">
+                        <img
+                            src="/about.jpg"
+                            alt="Ireland Landscape"
+                            className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/50"></div>
+                    </div>
+                    <div className="relative z-10 container mx-auto px-5 text-center text-white">
+                        <h1 className="text-5xl md:text-6xl font-bold mb-6">
                             About IrelandGo
                         </h1>
-                        <p className="text-xl text-gray-600 leading-relaxed">
+                        <p className="text-xl md:text-2xl text-gray-200 max-w-2xl mx-auto leading-relaxed">
                             Your trusted partner for seamless travel experiences across the Emerald Isle
                         </p>
                     </div>
@@ -77,7 +85,7 @@ export default function About() {
                 </section>
 
                 {/* Stats Section */}
-                <section className="bg-gradient-to-br from-blue-600 to-blue-700 py-16">
+                <section className="bg-blue-600 py-16">
                     <div className="container mx-auto px-5 md:px-0">
                         <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
                             <div>
@@ -85,7 +93,7 @@ export default function About() {
                                 <div className="text-blue-100">Years Experience</div>
                             </div>
                             <div>
-                                <div className="text-4xl md:text-5xl font-bold mb-2">50K+</div>
+                                <div className="text-4xl md:text-5xl font-bold mb-2">500+</div>
                                 <div className="text-blue-100">Happy Customers</div>
                             </div>
                             <div>

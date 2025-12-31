@@ -82,7 +82,7 @@ export default function TripCards() {
   return (
     <div className="px-5 md:px-0 py-16 bg-gray-50">
       <h2 className="text-4xl font-bold text-center text-gray-900 mb-10">
-        Explore the world with our 1500+ day trips!
+        Explore the world with our 500+ day trips!
       </h2>
 
       <div className="flex justify-center gap-3 mb-12 flex-wrap">
@@ -90,11 +90,10 @@ export default function TripCards() {
           <button
             key={city}
             onClick={() => setSelectedCity(city)}
-            className={`px-6 py-2.5 rounded-full font-medium transition ${
-              selectedCity === city
+            className={`px-6 py-2.5 rounded-full font-medium transition ${selectedCity === city
                 ? "bg-blue-600 text-white hover:bg-blue-700 shadow-md"
                 : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
-            }`}
+              }`}
           >
             {city}
           </button>

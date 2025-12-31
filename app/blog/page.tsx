@@ -17,7 +17,7 @@ export default function BlogListingPage() {
                     <img
                         src="/ireland-hero-bg.jpg"
                         alt="Ireland Landscape"
-                        className="w-full h-full object-cover opacity-30"
+                        className="w-full h-full  object-cover opacity-30"
                     />
                 </div>
                 <div className="relative container mx-auto px-5 text-center z-10">
