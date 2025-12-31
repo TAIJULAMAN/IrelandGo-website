@@ -38,7 +38,7 @@ export default function AirportTransfersWhyChoose() {
 					{benefits.map((benefit) => (
 						<div
 							key={benefit.title}
-							className="bg-white rounded-2xl shadow-sm px-6 py-6 flex flex-col gap-3"
+							className="bg-white rounded-2xl shadow-sm px-6 py-6 flex flex-col gap-3 items-center text-center"
 						>
 							<div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center mb-1">
 								<benefit.icon className="w-5 h-5 text-white" />

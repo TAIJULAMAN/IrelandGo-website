@@ -210,7 +210,7 @@ export default function TransferSearchHero() {
   const displayLocation = pickupLocation || "Dublin";
 
   return (
-    <section className="relative overflow-hidden min-h-[800px] text-white">
+    <section className="relative overflow-hidden min-h-screen text-white">
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img

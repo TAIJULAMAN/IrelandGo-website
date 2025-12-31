@@ -194,7 +194,7 @@ export default function PrivateCarTransferHero() {
     const displayLocation = pickupLocation || "Dublin";
 
     return (
-        <section className="relative overflow-hidden min-h-[800px] text-white">
+        <section className="relative overflow-hidden min-h-screen text-white">
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 <img
@@ -505,7 +505,7 @@ export default function PrivateCarTransferHero() {
                                 variant="outline"
                             >
                                 <Search className="w-5 h-5 mr-2" />
-                                Find a Ride
+                                Book Now
                             </Button>
                         </Link>
                     </div>

@@ -21,7 +21,7 @@ export default function DreamTour() {
 					asChild
 					className="inline-flex items-center gap-2 rounded-lg px-5 md:px-10 py-2.5 md:py-3 bg-white text-blue-500 text-sm font-medium shadow-md"
 				>
-					<Link href="/airport-transfers">
+					<Link href="/contact">
 						<CalendarDays className="h-4 w-4" />
 						<span>Book Your Transfer Now</span>
 					</Link>
