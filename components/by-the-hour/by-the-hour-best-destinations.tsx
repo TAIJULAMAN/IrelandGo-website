@@ -11,7 +11,7 @@ export default function ByTheHourBestDestinations() {
           <div>
             <div className="rounded-2xl overflow-hidden shadow-sm ring-1 ring-black/5">
               <img
-                src="https://images.pexels.com/photos/17574921/pexels-photo-17574921.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                src="/explore -Ireland-1.jpg"
                 alt="Cliffs of Moher"
                 className="w-full h-64 md:h-96 object-cover"
               />
@@ -50,7 +50,7 @@ export default function ByTheHourBestDestinations() {
           <div className="order-1 md:order-2">
             <div className="rounded-2xl overflow-hidden shadow-sm ring-1 ring-black/5">
               <img
-                src="https://images.pexels.com/photos/13147984/pexels-photo-13147984.jpeg?auto=compress&cs=tinysrgb&w=1200"
+                src="/explore -Ireland-2.png"
                 alt="Wicklow Mountains"
                 className="w-full h-64 md:h-96 object-cover"
               />
