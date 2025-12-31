@@ -74,14 +74,6 @@ export function Header2() {
             </svg>
           </button>
           <div className="hidden md:flex items-center gap-3">
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="bg-transparent text-gray-900 border border-gray-300 px-3 py-1.5 rounded-md focus:outline-none"
-            >
-              <option value="EN" className="bg-sky-500 text-white">ENG</option>
-              <option value="FR" className="bg-sky-500 text-white">FRA</option>
-            </select>
             {isAuthenticated ? (
               <UserAvatar />
             ) : (

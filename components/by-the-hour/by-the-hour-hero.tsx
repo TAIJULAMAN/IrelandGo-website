@@ -29,7 +29,7 @@ export default function ByTheHourHero() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/ireland-hero-bg.jpg"
+          src="/by-the-hour.jpg"
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
@@ -68,7 +68,7 @@ export default function ByTheHourHero() {
           {/* Search Bar */}
           <div className="max-w-6xl mx-auto px-5 mb-10 relative z-10">
             <div className="bg-white rounded-2xl shadow-2xl p-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div className="grid grid-cols-1 gap-6 mb-6">
                 <div>
                   <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
                     Pickup Location
@@ -78,19 +78,6 @@ export default function ByTheHourHero() {
                     <input
                       type="text"
                       placeholder="Enter pickup location"
-                      className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
-                    Dropoff Location
-                  </label>
-                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                    <input
-                      type="text"
-                      placeholder="Enter dropoff location"
                       className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
                     />
                   </div>

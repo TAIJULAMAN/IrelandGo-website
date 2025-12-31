@@ -99,15 +99,18 @@ export default function TransfersHero() {
     "Cork",
     "Galway",
     "Limerick",
-    "Belfast"
+    "Belfast",
+    "Killarney",
+    "Shannon Airport",
+    "Dublin Airport"
   ];
 
   return (
-    <section className="relative min-h-[600px] md:min-h-[800px] text-white overflow-hidden">
+    <section className="relative min-h-screen text-white overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="/airport.png"
+          src="/transfer.png"
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
@@ -124,7 +127,7 @@ export default function TransfersHero() {
             <span className="text-white"> Ireland</span>
           </h1>
           <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-white/85 px-4">
-            Book seamless transfers to and from Ireland's major airports.
+            Book airport, city-to-city, and private transfers across Ireland with ease.
           </p>
         </div>
 
@@ -195,13 +198,13 @@ export default function TransfersHero() {
           </div>
 
           {/* Bottom row: popular routes */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-600 mt-1">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs md:text-lg text-gray-600 mt-2">
             <span className="font-medium text-gray-700">Popular routes:</span>
             {popularRoutes.map((route, index) => (
               <button
                 key={index}
                 onClick={() => handlePopularRoute(route)}
-                className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                className="text-blue-600"
               >
                 {route}
               </button>
@@ -213,9 +216,9 @@ export default function TransfersHero() {
         <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-12 mt-2 sm:mt-4 text-sm sm:text-base px-4">
           <div className="flex flex-col items-center">
             <span className="text-2xl sm:text-3xl font-bold text-white">
-              50+
+              No.1 Choice
             </span>
-            <span className="text-xs sm:text-sm md:text-base text-white/80">Multi-day Tours</span>
+            <span className="text-xs sm:text-sm md:text-base text-white/80">For Transfers</span>
           </div>
           <div className="hidden sm:block w-1 h-12 bg-white rounded-full" />
           <div className="flex flex-col items-center">

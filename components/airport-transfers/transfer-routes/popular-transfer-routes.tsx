@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const routes = [
 	{
 		image: "/p1.png",
@@ -81,9 +83,11 @@ export default function PopularTransferRoutes() {
 								<p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
 									{route.description}
 								</p>
-								<button className="mt-3 w-full rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2">
-									Book Now
-								</button>
+								<Link href={`/transfer/private-car-transfer`}>
+									<button className="mt-3 w-full rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2">
+										Book Now
+									</button>
+								</Link>
 							</div>
 						</div>
 					))}
