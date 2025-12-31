@@ -203,7 +203,6 @@ export default function TransferSearchHero() {
     { id: "transfer", label: "Transfer" },
     { id: "hourly", label: "By the hour", icon: Clock, href: "/by-the-hour" },
     { id: "day-trips", label: "Day trips", href: "/day-trips" },
-    { id: "multi-day", label: "Multi day tours", href: "/multi-day-tours" },
   ];
 
   // Get display location for hero title
@@ -214,7 +213,7 @@ export default function TransferSearchHero() {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/plane.png"
+          src="/transfer-search.jpg"
           alt="Runway at sunset"
           className="w-full h-full object-cover"
         />
