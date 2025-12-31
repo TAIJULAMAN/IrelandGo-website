@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function ByTheHourBestDestinations() {
   return (
     <section className="relative w-full py-16 md:py-20 bg-white">
@@ -26,9 +28,11 @@ export default function ByTheHourBestDestinations() {
               the Atlantic Ocean. Marvel at the dramatic coastline and spot
               seabirds in their natural habitat.
             </p>
-            <button className="mt-5 inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50">
-              Explore Route
-            </button>
+            <Link href="/blog/cliffs-of-moher">
+              <button className="mt-5 inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors">
+                Explore Route
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -43,9 +47,11 @@ export default function ByTheHourBestDestinations() {
               lakes, and ancient monastic sites. Perfect for nature lovers and
               photography enthusiasts.
             </p>
-            <button className="mt-5 inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50">
-              Explore Route
-            </button>
+            <Link href="/blog/wicklow-mountains">
+              <button className="mt-5 inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors">
+                Explore Route
+              </button>
+            </Link>
           </div>
           <div className="order-1 md:order-2">
             <div className="rounded-2xl overflow-hidden shadow-sm ring-1 ring-black/5">
