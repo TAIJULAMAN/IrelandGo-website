@@ -36,8 +36,13 @@ export function Hero() {
   const [time, setTime] = useState("09:00")
 
   // Passengers and Luggage state
-  const [passengers, setPassengers] = useState(1)
-  const [luggage, setLuggage] = useState(1)
+  const [adults, setAdults] = useState(2)
+  const [children, setChildren] = useState(0)
+  const [extraBags, setExtraBags] = useState(0)
+
+  // Computed totals for display
+  const totalPassengers = adults + children
+  const totalBags = extraBags // This is just extra bags, base allowance is per passenger
 
   const router = useRouter()
 
@@ -74,24 +79,19 @@ export function Hero() {
   const currentStops = tripType === "one-way" ? oneWayStops : returnStops
 
   return (
-    <section className="relative overflow-hidden min-h-[800px]">
-
+    <section className="relative overflow-hidden min-h-screen">
       <Header />
-      {/* Background Image */}
-      {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img
           src="/ireland-hero-bg.jpg"
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
-        {/* Removed dark overlay as per request "Make the image in background more brighter" */}
       </div>
-
-      <div className="max-w-7xl mx-auto px-5 md:px-0 py-10 md:py-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-5 sm:px-5 md:px-0 lg:px-0 py-5 relative z-10">
         {/* Hero Text */}
         <div className="text-center mb-6 md:mb-10 pt-8">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
+          <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
             Comfortable car transfers in Ireland
           </h1>
           <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 px-4">Book private transfers and day tours with professional drivers.</p>
@@ -109,7 +109,6 @@ export function Hero() {
                   : "bg-transparent text-white"
                   }`}
               >
-                {/* {tab.icon && <tab.icon className="w-3 h-3 md:w-4 md:h-4" />} */}
                 {tab.label}
               </button>
             ))}
@@ -288,72 +287,146 @@ export function Hero() {
                   </div>
                 </div>
                 <div className="col-span-1">
-                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
+                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white group h-full">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-start h-auto p-0 hover:bg-transparent font-normal">
-                          <Users className="w-4 h-4 text-blue-500 mr-2" />
-                          <span className="text-sm text-gray-700">{passengers} Passenger{passengers !== 1 ? 's' : ''}</span>
+                        <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal">
+                          <div className="flex items-center gap-2">
+                            <Users className="w-4 h-4 text-blue-500" />
+                            <span className="text-sm text-gray-700">
+                              {totalPassengers} Passenger{totalPassengers !== 1 ? 's' : ''}
+                            </span>
+                          </div>
+                          <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-60">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium">Passengers</span>
-                          <div className="flex items-center gap-3">
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-8 w-8"
-                              onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="w-4 text-center">{passengers}</span>
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-8 w-8"
-                              onClick={() => setPassengers(passengers + 1)}
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
+                      <PopoverContent className="w-[300px] p-4" align="start">
+                        <div className="space-y-6">
+                          {/* Adults */}
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h4 className="font-semibold text-base">Adults</h4>
+                              <p className="text-xs text-muted-foreground">Age 12+</p>
+                            </div>
+                            <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                onClick={() => setAdults(Math.max(1, adults - 1))}
+                                disabled={adults <= 1}
+                              >
+                                <Minus className="h-3 w-3" />
+                              </Button>
+                              <span className="w-4 text-center font-medium">{adults}</span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                onClick={() => setAdults(adults + 1)}
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </div>
+
+                          {/* Children */}
+                          <div className="flex justify-between items-center">
+                            <div>
+                              <h4 className="font-semibold text-base">Children</h4>
+                              <p className="text-xs text-muted-foreground">Age 0-12</p>
+                            </div>
+                            <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                onClick={() => setChildren(Math.max(0, children - 1))}
+                                disabled={children <= 0}
+                              >
+                                <Minus className="h-3 w-3" />
+                              </Button>
+                              <span className="w-4 text-center font-medium">{children}</span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                onClick={() => setChildren(children + 1)}
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </div>
+
+                          <div className="pt-4 border-t">
+                            <h4 className="font-medium mb-3 text-sm">Each passenger is allowed</h4>
+                            <div className="space-y-3">
+                              <div className="flex items-center gap-3 text-sm text-gray-600">
+                                <Luggage className="w-4 h-4" />
+                                <span className="flex-1">One checked bag</span>
+                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">29 x 21 x 11 inch</span>
+                              </div>
+                              <div className="flex items-center gap-3 text-sm text-gray-600">
+                                <Luggage className="w-4 h-4" />
+                                <span className="flex-1">One carry-on bag</span>
+                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">22 x 14 x 9 inch</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </PopoverContent>
                     </Popover>
-
                   </div>
                 </div>
+
                 <div className="col-span-1">
-                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
+                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white group h-full">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-start h-auto p-0 hover:bg-transparent font-normal">
-                          <Luggage className="w-4 h-4 text-blue-500 mr-2" />
-                          <span className="text-sm text-gray-700">{luggage} Luggage</span>
+                        <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal">
+                          <div className="flex items-center gap-2">
+                            <Luggage className="w-4 h-4 text-blue-500" />
+                            <span className="text-sm text-gray-700">
+                              {/* TODO: Check if we want to show 0 extra bags or something else */}
+                              {totalBags} Extra Bag{totalBags !== 1 ? 's' : ''}
+                            </span>
+                          </div>
+                          <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-60">
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium">Luggage</span>
-                          <div className="flex items-center gap-3">
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-8 w-8"
-                              onClick={() => setLuggage(Math.max(0, luggage - 1))}
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="w-4 text-center">{luggage}</span>
-                            <Button
-                              variant="outline"
-                              size="icon"
-                              className="h-8 w-8"
-                              onClick={() => setLuggage(luggage + 1)}
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
+                      <PopoverContent className="w-[300px] p-4" align="start">
+                        <div className="space-y-4">
+                          <div>
+                            <h4 className="font-semibold text-lg mb-1">Need more space?</h4>
+                            <p className="text-sm text-gray-500 leading-relaxed">
+                              You can add extra sets of bags at no extra cost, but you might need a bigger vehicle.
+                            </p>
+                          </div>
+
+                          <div className="pt-4">
+                            <h4 className="font-semibold text-base mb-1">Extra sets of bags</h4>
+                            <p className="text-xs text-muted-foreground mb-4">One checked bag + one carry on</p>
+
+                            <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1 w-fit">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                onClick={() => setExtraBags(Math.max(0, extraBags - 1))}
+                                disabled={extraBags <= 0}
+                              >
+                                <Minus className="h-3 w-3" />
+                              </Button>
+                              <span className="w-4 text-center font-medium">{extraBags}</span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                onClick={() => setExtraBags(extraBags + 1)}
+                              >
+                                <Plus className="h-3 w-3" />
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </PopoverContent>
