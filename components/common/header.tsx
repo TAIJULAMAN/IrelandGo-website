@@ -26,10 +26,10 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 relative ${isScrolled ? "shadow-md py-3" : "py-5"}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 relative ${isScrolled ? "shadow-md py-4" : "py-8"}`}
     >
       {/* Desktop navigation */}
-      <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex gap-8 text-sm text-white/90 z-10">
+      <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex gap-12 text-sm text-white/90 z-10">
         <a href="/transfer" className="hover:text-white transition font-bold">Transfers</a>
         <Link href="/multi-day-tours" className="hover:text-white transition font-bold">Tours</Link>
         <Link href="/contact" className="hover:text-white transition font-bold">Contact</Link>
@@ -70,7 +70,7 @@ export function Header() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-6">
             <Link href="/b2b" className="text-white/90 hover:text-white text-sm font-semibold">B2B & Travel Agent</Link>
 
             {isAuthenticated ? (

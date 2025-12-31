@@ -2,7 +2,7 @@
 
 import { Header } from "@/components/common/header";
 import { Button } from "@/components/ui/button";
-import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Search, Clock, X } from "lucide-react";
+import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Search, Clock, X, Zap, PiggyBank, Sparkles } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { irishSettlements } from "@/lib/irish-settlements";
@@ -12,7 +12,6 @@ import { format } from "date-fns";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 
-// Dynamically import MapRoute with SSR disabled to prevent "window is not defined" error
 const MapRoute = dynamic(() => import("../home/map-route").then(mod => ({ default: mod.MapRoute })), {
     ssr: false,
     loading: () => (
@@ -194,7 +193,7 @@ export default function PrivateCarTransferHero() {
     const displayLocation = pickupLocation || "Dublin";
 
     return (
-        <section className="relative overflow-hidden min-h-[800px] text-white">
+        <section className="relative overflow-hidden min-h-screen text-white">
             {/* Background */}
             <div className="absolute inset-0 z-0">
                 <img
@@ -207,9 +206,9 @@ export default function PrivateCarTransferHero() {
 
             <Header />
 
-            <div className="container mx-auto px-5 md:px-0 py-10 md:py-16 relative z-10">
+            <div className="container mx-auto px-5 md:px-0 py-5 relative z-10">
                 {/* Hero Text */}
-                <div className="text-center mb-10 pt-10">
+                <div className="text-center mb-10 pt-5">
                     <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-5 leading-tight">
                         Private car transfer from {""}
                         {displayLocation}
@@ -505,7 +504,7 @@ export default function PrivateCarTransferHero() {
                                 variant="outline"
                             >
                                 <Search className="w-5 h-5 mr-2" />
-                                Find a Ride
+                                Book Now
                             </Button>
                         </Link>
                     </div>
@@ -524,6 +523,24 @@ export default function PrivateCarTransferHero() {
                         />
                     </div>
                 </div>
+
+                {/* Selling Points Bar */}
+                <div className="mt-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-around gap-2 text-white shadow-lg">
+                    <div className="flex items-center gap-2">
+                        <Zap className="w-5 h-5 text-white fill-white" />
+                        <span className="font-medium text-sm sm:text-base">Door-to-door in 20 min</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <PiggyBank className="w-5 h-5 text-white fill-white" />
+                        <span className="font-medium text-sm sm:text-base">From €7 per seat</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-white fill-white" />
+                        <span className="font-medium text-sm sm:text-base">Comfortable car</span>
+                    </div>
+                </div>
+
+
             </div>
         </section>
     );

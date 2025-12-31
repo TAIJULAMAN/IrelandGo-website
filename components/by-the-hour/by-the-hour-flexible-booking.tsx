@@ -1,6 +1,11 @@
+"use client";
+
 import { Headphones, BadgeCheck, Zap } from "lucide-react";
 
 export default function ByTheHourFlexibleBooking() {
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   return (
     <section className="relative w-full py-16 md:py-20 bg-blue-50">
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
@@ -42,7 +47,9 @@ export default function ByTheHourFlexibleBooking() {
             </li>
           </ul>
 
-          <button className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm">
+          <button
+            onClick={scrollToTop}
+            className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm">
             Plan Your Trip
           </button>
         </div>

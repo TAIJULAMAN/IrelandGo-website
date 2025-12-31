@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { irishSettlements } from "@/lib/irish-settlements";
+import Link from "next/link";
 
 export default function SightsAlongTheWay() {
   const searchParams = useSearchParams();
@@ -32,6 +33,13 @@ export default function SightsAlongTheWay() {
               Select your pickup and dropoff locations to see popular attractions along your route.
             </p>
           </div>
+        </div>
+        <div className="flex justify-center">
+          <Link href="/booking-flow/step-2">
+            <Button className="px-8 sm:px-10 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-medium rounded-lg transition-colors">
+              Book This Journey Now
+            </Button>
+          </Link>
         </div>
       </section>
     );
