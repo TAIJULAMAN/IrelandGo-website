@@ -9,6 +9,10 @@ export default function SightsAlongTheWay() {
   const searchParams = useSearchParams();
   const pickupParam = searchParams.get("pickup") || "";
   const dropoffParam = searchParams.get("dropoff") || "";
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
 
   // Find settlement data
   const pickupSettlement = irishSettlements.find(s => s.name === pickupParam);
@@ -83,7 +87,10 @@ export default function SightsAlongTheWay() {
           </div>
 
           <div className="flex justify-center">
-            <Button className="px-8 sm:px-10 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-medium rounded-lg transition-colors">
+
+            <Button
+              onClick={scrollToTop}
+              className="px-8 sm:px-10 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-medium rounded-lg transition-colors">
               Book This Journey Now
             </Button>
           </div>

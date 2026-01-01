@@ -74,7 +74,7 @@ const trips = [
   },
 ];
 
-const cities = ["Popular", "Dublin", "Belfast", "Cork", "Limerick", "Galway"];
+const cities = ["Killarney", "Dublin", "Belfast", "Cork", "Limerick", "Galway"];
 
 export default function TripCards() {
   const [selectedCity, setSelectedCity] = useState("Popular");
@@ -91,8 +91,8 @@ export default function TripCards() {
             key={city}
             onClick={() => setSelectedCity(city)}
             className={`px-6 py-2.5 rounded-full font-medium transition ${selectedCity === city
-                ? "bg-blue-600 text-white hover:bg-blue-700 shadow-md"
-                : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
+              ? "bg-blue-600 text-white hover:bg-blue-700 shadow-md"
+              : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-200"
               }`}
           >
             {city}

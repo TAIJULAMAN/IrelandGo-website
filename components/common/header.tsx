@@ -152,7 +152,7 @@ export function Header() {
             <Menu className="w-6 h-6" />
           </button>
           <div className="hidden md:flex items-center gap-6">
-            <Link href="/b2b" className="text-white/90 hover:text-white text-sm font-semibold">B2B & Travel Agent</Link>
+            {/* <Link href="/b2b" className="text-white/90 hover:text-white text-sm font-semibold">B2B & Travel Agent</Link> */}
 
             {isAuthenticated ? (
               <UserAvatar />

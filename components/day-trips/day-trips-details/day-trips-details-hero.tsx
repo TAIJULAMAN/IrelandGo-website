@@ -19,13 +19,13 @@ export default function DayTripsDetailsHero() {
         <img
           src="/details.png"
           alt="Scenic Ireland coastline"
-          className="w-full h-[520px] md:h-[720px] object-cover"
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-slate-900/40" />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 flex items-center justify-center h-[520px] md:h-[640px]">
+      <div className="relative z-10 container mx-auto px-6 flex items-center justify-center min-h-screen">
         <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-6 md:p-8">
           {/* Title & Subtitle */}
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-3">
