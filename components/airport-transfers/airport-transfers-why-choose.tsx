@@ -23,30 +23,30 @@ const benefits = [
 
 export default function AirportTransfersWhyChoose() {
 	return (
-		<section className="bg-[#f3f6fb] py-10 md:py-16">
-			<div className="max-w-7xl mx-auto px-5 md:px-0">
-				<div className="text-center mb-10">
-					<h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
+		<section className="bg-gray-50 py-16 md:py-24">
+			<div className="max-w-7xl mx-auto px-5">
+				<div className="text-center mb-12">
+					<h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
 						Why Choose Airport Transfers for IrelandGO?
 					</h2>
-					<p className="text-sm sm:text-base text-gray-500 max-w-2xl mx-auto">
+					<p className="text-lg text-gray-600 max-w-2xl mx-auto">
 						Experience the difference with our premium airport transfer services across Ireland.
 					</p>
 				</div>
 
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 					{benefits.map((benefit) => (
 						<div
 							key={benefit.title}
-							className="bg-white rounded-2xl shadow-sm px-6 py-6 flex flex-col gap-3 items-center text-center"
+							className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-black/5"
 						>
-							<div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center mb-1">
-								<benefit.icon className="w-5 h-5 text-white" />
+							<div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-600 transition-colors duration-300">
+								<benefit.icon className="w-8 h-8 text-blue-600 group-hover:text-white transition-colors duration-300" />
 							</div>
-							<h3 className="text-base sm:text-lg font-semibold text-gray-900">
+							<h3 className="text-xl font-bold text-gray-900 text-center mb-3">
 								{benefit.title}
 							</h3>
-							<p className="text-sm text-gray-500 leading-relaxed">
+							<p className="text-gray-600 text-center leading-relaxed">
 								{benefit.description}
 							</p>
 						</div>

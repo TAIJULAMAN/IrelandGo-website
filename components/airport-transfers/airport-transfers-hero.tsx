@@ -106,7 +106,7 @@ export default function AirportTransfersHero() {
   ];
 
   return (
-    <section className="relative min-h-[600px] md:min-h-[800px] text-white overflow-hidden">
+    <section className="relative min-h-screen text-white overflow-hidden">
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img

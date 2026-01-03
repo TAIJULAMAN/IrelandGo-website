@@ -2,7 +2,7 @@
 
 import { Header } from "@/components/common/header";
 import { Button } from "@/components/ui/button";
-import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Search, Clock, X } from "lucide-react";
+import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Search, Clock, X, ChevronDown, Minus } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { irishSettlements } from "@/lib/irish-settlements";
@@ -10,6 +10,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import dynamic from "next/dynamic";
+import { cn } from "@/lib/utils"
 
 // Dynamically import MapRoute with SSR disabled to prevent "window is not defined" error
 const MapRoute = dynamic(() => import("../home/map-route").then(mod => ({ default: mod.MapRoute })), {
@@ -45,6 +46,9 @@ export default function TransferSearchHero() {
   const dropoffInputRef = useRef<HTMLInputElement>(null);
   const pickupDropdownRef = useRef<HTMLDivElement>(null);
   const dropoffDropdownRef = useRef<HTMLDivElement>(null);
+
+  const [date, setDate] = useState<Date | undefined>(new Date())
+  const [time, setTime] = useState("09:00")
 
   // Filter settlements for pickup
   const filteredPickupSettlements = pickupLocation.trim()
@@ -208,6 +212,16 @@ export default function TransferSearchHero() {
   // Get display location for hero title
   const displayLocation = pickupLocation || "Dublin";
 
+
+  // Passengers and Luggage state
+  const [adults, setAdults] = useState(2)
+  const [children, setChildren] = useState(0)
+  const [extraBags, setExtraBags] = useState(0)
+
+  // Computed totals for display
+  const totalPassengers = adults + children
+  const totalBags = extraBags
+
   return (
     <section className="relative overflow-hidden min-h-screen text-white">
       {/* Background */}
@@ -319,7 +333,7 @@ export default function TransferSearchHero() {
               {/* Dropoff Location */}
               <div className="relative">
                 <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
-                  <MapPin className="w-5 h-5 text-green-500 flex-shrink-0" />
+                  <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
                   <input
                     ref={dropoffInputRef}
                     type="text"
@@ -395,74 +409,227 @@ export default function TransferSearchHero() {
 
             <button
               onClick={addStop}
-              className="flex items-center gap-1 text-blue-500 hover:text-blue-600 text-sm font-medium mb-5 transition"
+              className="flex items-center gap-1 text-blue-500 hover:text-blue-500 text-sm font-medium mb-5 transition"
             >
               <Plus className="w-4 h-4" />
               Add Stop
             </button>
 
-            {/* Date, Time, Passengers, Luggage */}
-            <div className="grid grid-cols-3 gap-2 mb-5">
-              <div className="col-span-1">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start text-left font-normal p-3 h-auto border-gray-300 bg-white"
-                    >
-                      <CalendarIcon className="w-4 h-4 text-gray-400 flex-shrink-0 mr-2" />
-                      <span className="text-xs text-gray-700">
-                        {pickupDate ? (
-                          `${format(pickupDate, "MM/dd/yyyy")} - ${pickupTime}`
-                        ) : (
-                          "Select date & time"
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+              {/* Date & Time */}
+              <div>
+                <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                  Date & Time
+                </label>
+                <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"ghost"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-gray-700",
+                          !date && "text-muted-foreground"
                         )}
-                      </span>
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 bg-white" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={pickupDate}
-                      onSelect={setPickupDate}
-                      initialFocus
-                      disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                    />
-                    <div className="p-3 border-t">
-                      <label className="text-xs font-medium text-gray-700 mb-2 block ">
-                        Time
-                      </label>
-                      <input
-                        type="time"
-                        value={pickupTime}
-                        onChange={(e) => setPickupTime(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                      />
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              </div>
-              <div className="col-span-1">
-                <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                  <Users className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                  <select className="w-full outline-none text-xs bg-white text-gray-700">
-                    <option>1 Passenger</option>
-                    <option>2 Passengers</option>
-                    <option>3+ Passengers</option>
-                  </select>
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                        {date ? (
+                          <span>
+                            {format(date, "PPP")} <span className="text-gray-400 mx-1">|</span> {time}
+                          </span>
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <div className="flex">
+                        <div className="border-r">
+                          <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={setDate}
+                            initialFocus
+                          />
+                        </div>
+                        <div className="h-[300px] w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
+                          <div className="flex flex-col gap-1">
+                            {Array.from({ length: 48 }).map((_, i) => {
+                              const hour = Math.floor(i / 2);
+                              const minute = (i % 2) * 30;
+                              const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                              return (
+                                <Button
+                                  key={timeString}
+                                  variant={time === timeString ? "default" : "ghost"}
+                                  className={cn(
+                                    "justify-center h-8 text-sm",
+                                    time === timeString ? "bg-blue-600 hover:bg-blue-700" : "hover:bg-blue-50"
+                                  )}
+                                  onClick={() => setTime(timeString)}
+                                >
+                                  {timeString}
+                                </Button>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
-              <div className="col-span-1">
-                <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                  <Luggage className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                  <select className="w-full outline-none text-sm bg-white text-gray-700">
-                    <option>1 Luggage</option>
-                    <option>2 Luggage</option>
-                    <option>3+ Luggage</option>
-                  </select>
+              {/* Passengers */}
+              <div>
+                <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                  Passengers
+                </label>
+                <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700">
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                          <span className="text-sm">
+                            {totalPassengers} Passenger{totalPassengers !== 1 ? 's' : ''}
+                          </span>
+                        </div>
+                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] p-4" align="start">
+                      <div className="space-y-6">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <h4 className="font-semibold text-base">Adults</h4>
+                            <p className="text-xs text-muted-foreground">Age 12+</p>
+                          </div>
+                          <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                              onClick={() => setAdults(Math.max(1, adults - 1))}
+                              disabled={adults <= 1}
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <span className="w-4 text-center font-medium">{adults}</span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                              onClick={() => setAdults(adults + 1)}
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <h4 className="font-semibold text-base">Children</h4>
+                            <p className="text-xs text-muted-foreground">Age 0-12</p>
+                          </div>
+                          <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                              onClick={() => setChildren(Math.max(0, children - 1))}
+                              disabled={children <= 0}
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <span className="w-4 text-center font-medium">{children}</span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                              onClick={() => setChildren(children + 1)}
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+
+                        <div className="pt-4 border-t">
+                          <h4 className="font-medium mb-3 text-sm">Each passenger is allowed</h4>
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-3 text-sm text-gray-600">
+                              <Luggage className="w-4 h-4" />
+                              <span className="flex-1">One checked bag</span>
+                              <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">29 x 21 x 11 inch</span>
+                            </div>
+                            <div className="flex items-center gap-3 text-sm text-gray-600">
+                              <Luggage className="w-4 h-4" />
+                              <span className="flex-1">One carry-on bag</span>
+                              <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">22 x 14 x 9 inch</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+
+              {/* Luggage */}
+              <div>
+                <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                  Luggage
+                </label>
+                <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700">
+                        <div className="flex items-center gap-2">
+                          <Luggage className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                          <span className="text-sm">
+                            {extraBags} Extra Bag{extraBags !== 1 ? 's' : ''}
+                          </span>
+                        </div>
+                        <ChevronDown className="w-4 h-4 text-gray-400" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] p-4" align="start">
+                      <div className="space-y-4">
+                        <div>
+                          <h4 className="font-semibold text-lg mb-1">Need more space?</h4>
+                          <p className="text-sm text-gray-500 leading-relaxed">
+                            You can add extra sets of bags at no extra cost, but you might need a bigger vehicle.
+                          </p>
+                        </div>
+                        <div className="pt-4">
+                          <h4 className="font-semibold text-base mb-1">Extra sets of bags</h4>
+                          <p className="text-xs text-muted-foreground mb-4">One checked bag + one carry on</p>
+                          <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1 w-fit">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                              onClick={() => setExtraBags(Math.max(0, extraBags - 1))}
+                              disabled={extraBags <= 0}
+                            >
+                              <Minus className="h-3 w-3" />
+                            </Button>
+                            <span className="w-4 text-center font-medium">{extraBags}</span>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                              onClick={() => setExtraBags(extraBags + 1)}
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             </div>
+
 
             {tripType === "return" && (
               <div className="mb-5">
@@ -477,7 +644,7 @@ export default function TransferSearchHero() {
                         {returnDate ? (
                           `${format(returnDate, "MM/dd/yyyy")} - ${returnTime}`
                         ) : (
-                          "Select return date & time"
+                          "Return"
                         )}
                       </span>
                     </Button>

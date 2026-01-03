@@ -23,7 +23,7 @@ const vehicles = [
     price: "$55",
     seats: "5 seats",
     bags: "3 bags",
-    image: "/c2.png",
+    image: "/c4.png",
     features: ["Spacious", "Family Friendly", "Extra Storage"],
   },
   {
@@ -41,7 +41,7 @@ const vehicles = [
     price: "$85",
     seats: "4 seats",
     bags: "2 bags",
-    image: "/c4.png",
+    image: "/c2.png",
     features: ["Premium Comfort", "Luxury Interior", "VIP Service"],
   }
 ];
