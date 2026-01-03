@@ -35,6 +35,7 @@ export function Hero() {
   // Date and Time state
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [time, setTime] = useState("09:00")
+  const [duration, setDuration] = useState("5-8 Hours")
 
   // Passengers and Luggage state
   const [adults, setAdults] = useState(2)
@@ -43,7 +44,7 @@ export function Hero() {
 
   // Computed totals for display
   const totalPassengers = adults + children
-  const totalBags = extraBags // This is just extra bags, base allowance is per passenger
+  const totalBags = extraBags
 
   const router = useRouter()
 
@@ -252,58 +253,93 @@ export function Hero() {
               </div>
 
               {/* Date, Time, Passengers, Luggage */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-5">
-                <div className="col-span-1">
-                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+
+                {/* Date & Time */}
+                <div>
+                  <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    Date & Time
+                  </label>
+                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
                           variant={"ghost"}
                           className={cn(
-                            "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent",
+                            "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-gray-700",
                             !date && "text-muted-foreground"
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-500" />
-                          {date ? format(date, "PPP") : <span>Pick a date</span>}
+                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                          {date ? (
+                            <span>
+                              {format(date, "PPP")} <span className="text-gray-400 mx-1">|</span> {time}
+                            </span>
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          initialFocus
-                        />
-                        <div className="p-3 border-t">
-                          <input
-                            type="time"
-                            value={time}
-                            onChange={(e) => setTime(e.target.value)}
-                            className="w-full p-2 border rounded text-sm"
-                          />
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <div className="flex">
+                          <div className="border-r">
+                            <Calendar
+                              mode="single"
+                              selected={date}
+                              onSelect={setDate}
+                              initialFocus
+                            />
+                          </div>
+                          <div className="h-[300px] w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
+                            <div className="flex flex-col gap-1">
+                              {Array.from({ length: 48 }).map((_, i) => {
+                                const hour = Math.floor(i / 2);
+                                const minute = (i % 2) * 30;
+                                const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                                return (
+                                  <Button
+                                    key={timeString}
+                                    variant={time === timeString ? "default" : "ghost"}
+                                    className={cn(
+                                      "justify-center h-8 text-sm",
+                                      time === timeString ? "bg-blue-600 hover:bg-blue-700" : "hover:bg-blue-50"
+                                    )}
+                                    onClick={() => setTime(timeString)}
+                                  >
+                                    {timeString}
+                                  </Button>
+                                )
+                              })}
+                            </div>
+                          </div>
                         </div>
                       </PopoverContent>
                     </Popover>
                   </div>
                 </div>
-                <div className="col-span-1">
-                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white group h-full">
+
+
+
+                {/* Passengers */}
+                <div>
+                  <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    Passengers
+                  </label>
+                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal">
+                        <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700">
                           <div className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-blue-500" />
-                            <span className="text-sm text-gray-700">
+                            <Users className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <span className="text-sm">
                               {totalPassengers} Passenger{totalPassengers !== 1 ? 's' : ''}
                             </span>
                           </div>
-                          <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition" />
+                          <ChevronDown className="w-4 h-4 text-gray-400" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-[300px] p-4" align="start">
                         <div className="space-y-6">
-                          {/* Adults */}
                           <div className="flex justify-between items-center">
                             <div>
                               <h4 className="font-semibold text-base">Adults</h4>
@@ -330,8 +366,6 @@ export function Hero() {
                               </Button>
                             </div>
                           </div>
-
-                          {/* Children */}
                           <div className="flex justify-between items-center">
                             <div>
                               <h4 className="font-semibold text-base">Children</h4>
@@ -380,19 +414,22 @@ export function Hero() {
                   </div>
                 </div>
 
-                <div className="col-span-1">
-                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white group h-full">
+                {/* Luggage */}
+                <div>
+                  <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    Luggage
+                  </label>
+                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal">
+                        <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700">
                           <div className="flex items-center gap-2">
-                            <Luggage className="w-4 h-4 text-blue-500" />
-                            <span className="text-sm text-gray-700">
-                              {/* TODO: Check if we want to show 0 extra bags or something else */}
-                              {totalBags} Extra Bag{totalBags !== 1 ? 's' : ''}
+                            <Luggage className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <span className="text-sm">
+                              {extraBags} Extra Bag{extraBags !== 1 ? 's' : ''}
                             </span>
                           </div>
-                          <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition" />
+                          <ChevronDown className="w-4 h-4 text-gray-400" />
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-[300px] p-4" align="start">
@@ -403,11 +440,9 @@ export function Hero() {
                               You can add extra sets of bags at no extra cost, but you might need a bigger vehicle.
                             </p>
                           </div>
-
                           <div className="pt-4">
                             <h4 className="font-semibold text-base mb-1">Extra sets of bags</h4>
                             <p className="text-xs text-muted-foreground mb-4">One checked bag + one carry on</p>
-
                             <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1 w-fit">
                               <Button
                                 variant="ghost"
@@ -434,6 +469,7 @@ export function Hero() {
                     </Popover>
                   </div>
                 </div>
+
               </div>
 
               {tripType === "return" && (

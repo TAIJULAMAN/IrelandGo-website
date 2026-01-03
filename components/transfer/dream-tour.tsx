@@ -19,7 +19,7 @@ export default function DreamTour() {
 				</p>
 				<Button
 					asChild
-					className="inline-flex items-center gap-2 rounded-lg px-5 md:px-10 py-2.5 md:py-3 bg-white text-blue-500 text-sm font-medium shadow-md"
+					className="inline-flex items-center gap-2 rounded-lg px-5 md:px-10 py-2.5 md:py-3 bg-white hover:bg-gray-100 text-blue-500 text-sm font-medium shadow-md"
 				>
 					<Link href="/contact">
 						<CalendarDays className="h-4 w-4" />
