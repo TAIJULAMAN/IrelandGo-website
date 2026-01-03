@@ -1,6 +1,6 @@
 import Hero from "@/components/day-trips/day-trips-hero";
 import Expectations from "@/components/day-trips/expectations";
-import FAQ from "@/components/day-trips/faq";
+import FAQ from "@/components/common/faq";
 import Memories from "@/components/day-trips/memories";
 import TripCards from "@/components/day-trips/trip-cards";
 import { Footer } from "@/components/layout/footer";

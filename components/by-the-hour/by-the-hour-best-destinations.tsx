@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function ByTheHourBestDestinations() {
   return (
-    <section className="relative w-full py-16 md:py-20 bg-white">
+    <section className="relative w-full py-16 md:py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-center text-3xl md:text-4xl font-extrabold text-slate-900 mb-10">
           Explore Ireland's Best Destinations

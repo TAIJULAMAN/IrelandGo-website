@@ -8,7 +8,7 @@ export function RecentBlogs() {
     const recentPosts = blogPosts.slice(0, 3);
 
     return (
-        <section className="py-16 md:py-24 bg-slate-50">
+        <section className="py-16 md:py-24 bg-gray-50">
             <div className="container mx-auto px-5">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div>

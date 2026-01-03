@@ -1,4 +1,3 @@
-import { Header } from "@/components/common/header"
 import { Hero } from "@/components/home/hero"
 import { PrivateTransfers } from "@/components/home/private-transfers"
 import { HowItWorks } from "@/components/home/how-it-works"
