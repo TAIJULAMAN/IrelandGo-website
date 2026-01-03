@@ -38,7 +38,7 @@ export default function SightsAlongTheWay() {
             </p>
           </div>
         </div>
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-5">
           <Link href="/booking-flow/step-2">
             <Button className="px-8 sm:px-10 py-2.5 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-medium rounded-lg transition-colors">
               Book This Journey Now

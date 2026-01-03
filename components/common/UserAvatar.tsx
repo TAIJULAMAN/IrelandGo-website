@@ -9,7 +9,6 @@ export function UserAvatar() {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -36,7 +35,7 @@ export function UserAvatar() {
                     alt={user.name}
                     className="w-10 h-10 rounded-full shadow-md"
                 />
-                <div className="hidden md:flex flex-col items-end">
+                <div className="hidden md:flex flex-col items-start">
                     <p className="text-sm font-semibold text-gray-900">{user.name}</p>
                     <p className="inline-block mt-1 px-2 py-0.5 text-xs font-medium rounded-full bg-blue-100 text-blue-700">
                         {user.role === "agent" ? "Agent" : "User"}
