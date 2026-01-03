@@ -8,7 +8,7 @@ export function RecentBlogs() {
     const recentPosts = blogPosts.slice(0, 3);
 
     return (
-        <section className="py-16 md:py-24 bg-slate-50">
+        <section className="py-16 md:py-24 bg-gray-50">
             <div className="container mx-auto px-5">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
                     <div>
@@ -21,7 +21,7 @@ export function RecentBlogs() {
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {recentPosts.map((post) => (
                         <Link key={post.id} href={`/blog/${post.slug}`} className="group">
                             <article className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">

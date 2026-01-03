@@ -7,7 +7,7 @@ interface FooterProps {
 export function Footer({ className = "" }: FooterProps) {
   return (
     <footer className={`bg-[#0b1930] border-t text-white w-full ${className}`}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-5 md:px-0 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
@@ -55,6 +55,14 @@ export function Footer({ className = "" }: FooterProps) {
                   className="text-sm text-white hover:text-blue-400 transition-colors"
                 >
                   Airport Transfers
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/blog"
+                  className="text-sm text-white hover:text-blue-400 transition-colors"
+                >
+                  Blog
                 </Link>
               </li>
             </ul>

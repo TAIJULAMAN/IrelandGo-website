@@ -1,4 +1,4 @@
-import FAQ from "@/components/day-trips/faq";
+import FAQ from "@/components/common/faq";
 import { Footer } from "@/components/layout/footer";
 import { Testimonials } from "@/components/common/testimonials";
 import SightsAlongTheWay from "@/components/transfer/sights-along-the-way";

@@ -22,7 +22,7 @@ export function NewsLetter() {
   }
 
   return (
-    <section className="bg-gradient-to-br from-blue-50 via-gray-50 to-green-50">
+    <section className="bg-gray-50">
       <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center container mx-auto px-5 md:px-0 py-10 md:py-16">
         <div>
           <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 text-gray-900">

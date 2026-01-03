@@ -104,7 +104,7 @@ export function PrivateTransfers() {
 
                 <Button
                   asChild
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm md:text-base"
+                  className="w-full bg-blue-600 hover:bg-blue-600 text-white font-semibold py-4 md:py-6 rounded-xl mt-auto text-sm md:text-lg shadow-blue-200 shadow-lg"
                 >
 
                   <Link href="/airport-transfers/journey-details">Book Now</Link>

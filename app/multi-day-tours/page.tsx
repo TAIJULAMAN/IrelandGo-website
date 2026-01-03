@@ -1,4 +1,4 @@
-import FAQ from "@/components/day-trips/faq";
+import FAQ from "@/components/common/faq";
 import { Footer } from "@/components/layout/footer";
 import MultiDayToursHero from "@/components/multi-day-tours/multi-day-tours-hero";
 import MultiDayToursJourneyBegins from "@/components/multi-day-tours/multi-day-tours-journey-begins";

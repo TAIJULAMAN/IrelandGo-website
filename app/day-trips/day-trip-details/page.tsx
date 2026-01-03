@@ -1,6 +1,6 @@
 import DayTripsDetailsHero from "@/components/day-trips/day-trips-details/day-trips-details-hero";
 import TripItinerary from "@/components/day-trips/day-trips-details/trip-Itinerary";
-import FAQ from "@/components/day-trips/faq";
+import FAQ from "@/components/common/faq";
 import { Testimonials } from "@/components/common/testimonials";
 
 export default function DayTripDetails() {

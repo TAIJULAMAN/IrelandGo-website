@@ -29,10 +29,11 @@ export function Header() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 relative ${isScrolled ? "shadow-md py-4" : "py-8"}`}
     >
       {/* Desktop navigation */}
-      <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex gap-12 text-sm text-white/90 z-10">
-        <a href="/transfer" className="hover:text-white transition font-bold">Transfers</a>
-        <Link href="/multi-day-tours" className="hover:text-white transition font-bold">Tours</Link>
-        <Link href="/contact" className="hover:text-white transition font-bold">Contact</Link>
+      <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex gap-10 text-md z-10">
+        <Link href="/transfer" className="text-white transition font-bold hover:text-blue-400">Transfers</Link>
+        <Link href="/multi-day-tours" className="text-white transition font-bold hover:text-blue-400">Tours</Link>
+        <Link href="/contact" className="text-white transition font-bold hover:text-blue-400">Contact</Link>
+        <Link href="/blog" className="text-white transition font-bold hover:text-blue-400">Blog</Link>
       </nav>
 
       {/* Mobile navigation */}
@@ -86,6 +87,14 @@ export function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <span>Contact</span>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
+              </Link>
+              <Link
+                href="/blog"
+                className="flex items-center justify-between p-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <span>Blog</span>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </Link>
             </div>

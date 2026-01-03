@@ -1,7 +1,7 @@
 import AirportTransfersHero from "@/components/airport-transfers/airport-transfers-hero";
 import AirportTransfersWhyChoose from "@/components/airport-transfers/airport-transfers-why-choose";
 import PopularRoutes from "@/components/airport-transfers/popular-routes";
-import FAQ from "@/components/day-trips/faq";
+import FAQ from "@/components/common/faq";
 import { Footer } from "@/components/layout/footer";
 
 export default function AirportTransfers() {

@@ -133,7 +133,7 @@ export function PopularDayTrips() {
                   {trip.description}
                 </p>
 
-                <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 md:py-6 rounded-xl mt-auto text-sm md:text-lg shadow-blue-200 shadow-lg">
+                <Button asChild className="w-full bg-blue-600 hover:bg-blue-600 text-white font-semibold py-4 md:py-6 rounded-xl mt-auto text-sm md:text-lg shadow-blue-200 shadow-lg">
                   <Link href="/day-trips/day-trip-details">Book Now</Link>
                 </Button>
               </div>

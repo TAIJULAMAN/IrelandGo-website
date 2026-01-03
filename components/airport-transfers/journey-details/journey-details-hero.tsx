@@ -2,6 +2,7 @@
 
 import { Header2 } from "@/components/common/Header2";
 import { Clock, PlaneTakeoff, Star } from "lucide-react";
+import Image from "next/image";
 
 export default function JourneyDetailsHero() {
   return (
@@ -13,9 +14,10 @@ export default function JourneyDetailsHero() {
           <div className="flex-1 flex flex-col justify-between">
             <div className="space-y-3 sm:space-y-4">
               <p className="text-xs sm:text-sm font-medium text-blue-600 flex items-center gap-1.5">
-                <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-50 text-blue-600 text-xs">
+                {/* <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-blue-50 text-blue-600 text-xs">
                   ✈
-                </span>
+                </span> */}
+                <Image src="/i.png" alt="" width={20} height={24} />
                 Airport Transfer
               </p>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900">
