@@ -4,13 +4,28 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { UserAvatar } from "@/components/common/UserAvatar"
-import { useAuth } from "@/contexts/AuthContext"
-import { Menu, X, ChevronRight } from "lucide-react"
+import { Menu, X, ChevronRight, LayoutDashboard, LogOut } from "lucide-react"
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks"
+import { useGetProfileQuery } from "@/Redux/features/settings/profileApi"
+import { logout as reduxLogout } from "@/Redux/Slice/authSlice"
+import { useRouter } from "next/navigation"
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { isAuthenticated, user, logout } = useAuth()
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+
+  const token = useAppSelector((state) => state.auth.token)
+  console.log("token", token)
+  const isAuthenticated = !!token
+  console.log("isAuthenticated", isAuthenticated)
+
+  const { data: profileData } = useGetProfileQuery(undefined, {
+    skip: !isAuthenticated,
+  })
+
+  const user = profileData?.data
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,6 +38,12 @@ export function Header() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleLogout = () => {
+    dispatch(reduxLogout())
+    setIsMenuOpen(false)
+    router.push("/")
+  }
 
   return (
     <header
@@ -102,45 +123,63 @@ export function Header() {
             {/* Drawer Footer (Auth) */}
             <div className="mt-auto pt-6 border-t border-gray-100">
               {isAuthenticated && user ? (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                    {/* Fallback avatar if user doesn't have one, or just use name */}
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
-                      {user.name?.[0]?.toUpperCase() || 'U'}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-sm text-gray-900">{user.name}</p>
-                      <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                    {user?.profileImage ? (
+                      <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                        <Image
+                          src={user?.profileImage}
+                          alt={user?.fullName}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                        <Image
+                          src="/avatar.png"
+                          alt="user avatar"
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-sm text-gray-900 truncate">{user?.fullName}</p>
+                      <p className="text-[10px] text-blue-600 font-semibold uppercase tracking-wider">{user?.role}</p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-2">
                     <Link
-                      href={user.role === 'agent' ? '/agent' : '/user'}
+                      href={user.role?.toLowerCase() === 'agent' ? '/agent' : '/user'}
+                      className="w-full"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <Button variant="outline" className="w-full justify-center text-sm">Dashboard</Button>
+                      <Button variant="outline" className="w-full justify-start gap-3 h-11 text-sm font-medium border-gray-200">
+                        <LayoutDashboard className="w-4 h-4 text-white" />
+                        Dashboard
+                      </Button>
                     </Link>
                     <Button
-                      variant="outline"
-                      onClick={() => {
-                        logout();
-                        setIsMenuOpen(false);
-                      }}
-                      className="w-full justify-center text-sm text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                      variant="ghost"
+                      onClick={handleLogout}
+                      className="w-full justify-start gap-3 h-11 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50"
                     >
+                      <LogOut className="w-4 h-4" />
                       Logout
                     </Button>
                   </div>
                 </div>
               ) : (
-                <Link href="/auth/login" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-200">
+                <Link href="/auth/login" className="block w-full" onClick={() => setIsMenuOpen(false)}>
+                  <Button className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-200 rounded-xl transition-all active:scale-[0.98]">
                     Login / Sign Up
                   </Button>
                 </Link>
               )}
             </div>
+
           </nav>
         </div>
       )}

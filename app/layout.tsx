@@ -1,9 +1,10 @@
 import type React from "react"
-// <CHANGE> Updated metadata for car transfer service and updated body classes
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/contexts/AuthContext"
+import ReduxProvider from "@/Redux/ReduxProvider"
+import { Toaster } from "sonner"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -49,12 +50,16 @@ export default function RootLayout({
         />
       </head>
       <body className={`font-sans antialiased`}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
+        <ReduxProvider>
+          <AuthProvider>
+            {children}
+          </AuthProvider>
+          <Toaster position="top-center" richColors />
+        </ReduxProvider>
         <Analytics />
       </body>
     </html>
   )
 }
+
 
