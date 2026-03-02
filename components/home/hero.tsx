@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Clock, Search, BadgeCheck, UserRoundCog, ShieldPlus, ChevronDown, Minus } from "lucide-react"
+import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Clock, Search, ChevronDown, Minus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Header } from "../common/header"
 import dynamic from "next/dynamic"
@@ -30,12 +30,10 @@ export function Hero() {
   const [returnStops, setReturnStops] = useState<string[]>([])
   const [pickupLocation, setPickupLocation] = useState("")
   const [dropoffLocation, setDropoffLocation] = useState("")
-  const [isAddStopDropdownOpen, setIsAddStopDropdownOpen] = useState(false)
 
   // Date and Time state
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [time, setTime] = useState("09:00")
-  const [duration, setDuration] = useState("5-8 Hours")
 
   // Passengers and Luggage state
   const [adults, setAdults] = useState(2)
@@ -61,15 +59,6 @@ export function Hero() {
       setActiveTab(tab.id)
     }
   }
-
-  const addStop = () => {
-    if (tripType === "one-way") {
-      setOneWayStops([...oneWayStops, ""])
-    } else {
-      setReturnStops([...returnStops, ""])
-    }
-  }
-
   const removeStop = (index: number) => {
     if (tripType === "one-way") {
       setOneWayStops(oneWayStops.filter((_, i) => i !== index))
@@ -205,52 +194,6 @@ export function Hero() {
                   </div>
                 </div>
               ))}
-
-              <div className="relative mb-5">
-                <button
-                  onClick={() => setIsAddStopDropdownOpen(!isAddStopDropdownOpen)}
-                  className="flex items-center gap-1 text-blue-500 hover:text-blue-600 text-sm font-medium transition"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Stop
-                  <ChevronDown className="w-3 h-3" />
-                </button>
-
-                {isAddStopDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-lg py-2 min-w-[150px] border border-gray-200 z-10">
-                    <button
-                      onClick={() => {
-                        addStop()
-                        setIsAddStopDropdownOpen(false)
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
-                    >
-                      Add 1 Stop
-                    </button>
-                    <button
-                      onClick={() => {
-                        addStop()
-                        addStop()
-                        setIsAddStopDropdownOpen(false)
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
-                    >
-                      Add 2 Stops
-                    </button>
-                    <button
-                      onClick={() => {
-                        addStop()
-                        addStop()
-                        addStop()
-                        setIsAddStopDropdownOpen(false)
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
-                    >
-                      Add 3 Stops
-                    </button>
-                  </div>
-                )}
-              </div>
 
               {/* Date, Time, Passengers, Luggage */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
