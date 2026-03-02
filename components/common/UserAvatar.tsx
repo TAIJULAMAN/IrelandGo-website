@@ -52,23 +52,23 @@ export function UserAvatar() {
                 className="flex items-center gap-3 p-1.5 pr-3 rounded-full hover:bg-white/10 transition-all duration-200 border border-transparent hover:border-white/20 group"
             >
                 <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-white/50 shadow-md transition-transform duration-200 group-hover:scale-105">
-                    {user?.profileImage ? (
+                    {/* {user?.profileImage ? (
                         <Image
                             src={user?.profileImage}
                             alt={user?.fullName}
                             fill
                             className="object-cover"
                         />
-                    ) : (
-                        <div className="w-full h-full bg-blue-600 flex items-center justify-center text-white text-lg font-bold">
-                            <Image
-                                src="/avatar.png"
-                                alt="user avatar"
-                                fill
-                                className="object-cover"
-                            />
-                        </div>
-                    )}
+                    ) : ( */}
+                    <div className="w-full h-full flex items-center justify-center text-white text-lg font-bold">
+                        <Image
+                            src="/avatar.png"
+                            alt="user avatar"
+                            fill
+                            className="object-cover"
+                        />
+                    </div>
+                    {/* )} */}
                 </div>
                 <div className="hidden lg:flex flex-col items-start mr-1">
                     <p className="text-sm font-bold text-white">

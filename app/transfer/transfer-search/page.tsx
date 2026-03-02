@@ -1,5 +1,5 @@
 import PopularTransferRoutes from "@/components/airport-transfers/transfer-routes/popular-transfer-routes";
-import FAQ from "@/components/common/faq";
+import FAQ from "@/app/settings/faq/faq";
 import { Footer } from "@/components/layout/footer";
 import TransferSearchHero from "@/components/transfer/transfer-search-hero";
 import { Suspense } from "react";

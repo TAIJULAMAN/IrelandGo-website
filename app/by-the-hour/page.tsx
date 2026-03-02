@@ -5,7 +5,7 @@ import ByTheHourFlexibleBooking from "@/components/by-the-hour/by-the-hour-flexi
 import ByTheHourHero from "@/components/by-the-hour/by-the-hour-hero";
 import ByTheHourPrivateRides from "@/components/by-the-hour/by-the-hour-private-rides";
 import ByTheHourService from "@/components/by-the-hour/by-the-hour-service";
-import FAQ from "@/components/common/faq";
+import FAQ from "@/app/settings/faq/faq";
 import { Footer } from "@/components/layout/footer";
 import { Testimonials } from "@/components/common/testimonials";
 
