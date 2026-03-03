@@ -84,16 +84,6 @@ export default function UserDashboardPage() {
 
   return (
     <div className="flex flex-col gap-6 pb-4">
-      <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Welcome back, John!</h1>
-          <p className="text-gray-500 text-sm">
-            Here's your travel dashboard overview
-          </p>
-        </div>
-      </header>
-
-      {/* Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {metrics.map((metric) => (
           <Card
