@@ -3,49 +3,50 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
 import Image from "next/image"
+import { useGetPrivateTransfersQuery } from "@/Redux/features/contents/contentsApi"
 
 export function PrivateTransfers() {
   const [currentIndex, setCurrentIndex] = useState(0)
-
-  const transfers = [
-    {
-      from: "Dublin",
-      to: "Galway",
-      duration: "2h 30min",
-      distance: "215km",
-      image: "/dublin-waterfront-city-skyline.jpg",
-    },
-    {
-      from: "Cork",
-      to: "Limerick",
-      duration: "1h 15min",
-      distance: "95km",
-      image: "/cork-colorful-buildings-architecture.jpg",
-    },
-    {
-      from: "Dublin",
-      to: "Cliffs of Moher",
-      duration: "2h 30min",
-      distance: "215km",
-      image: "/cliffs-of-moher-ireland-scenic-landscape.jpg",
-    },
-  ]
+  const { data: response, isLoading, isError } = useGetPrivateTransfersQuery({})
+  console.log(response, "response")
+  const transfers = response?.data || []
+  console.log(transfers, "transfers")
 
   const goToPrevious = () => {
+    if (transfers.length === 0) return
     setCurrentIndex((prevIndex) => (prevIndex === 0 ? transfers.length - 1 : prevIndex - 1))
   }
-
   const goToNext = () => {
+    if (transfers.length === 0) return
     setCurrentIndex((prevIndex) => (prevIndex === transfers.length - 1 ? 0 : prevIndex + 1))
   }
 
-  const visibleTransfers = [
-    transfers[currentIndex],
+
+  const formatDuration = (minutes: number) => {
+    const hours = Math.floor(minutes / 60)
+    const mins = minutes % 60
+    return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`
+  }
+
+  const visibleTransfers = transfers.length > 0 ? [
+    transfers[currentIndex % transfers.length],
     transfers[(currentIndex + 1) % transfers.length],
     transfers[(currentIndex + 2) % transfers.length],
-  ]
+  ].filter(Boolean) : []
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+      </div>
+    )
+  }
+
+  if (isError || transfers.length === 0) {
+    return <p>Something went wrong</p>
+  }
 
   return (
     <section className="px-5 md:px-0 py-10 md:py-18 bg-gray-50">
@@ -78,13 +79,13 @@ export function PrivateTransfers() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {visibleTransfers.map((transfer, idx) => (
             <div
-              key={idx}
+              key={transfer.id || idx}
               className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow ${idx > 0 ? 'hidden md:block' : ''
                 }`}
             >
               <div className="relative h-48 md:h-56 overflow-hidden bg-gray-200">
                 <img
-                  src={transfer.image || "/placeholder.svg"}
+                  src={transfer.images?.[0] || "/placeholder.svg"}
                   alt={`${transfer.from} to ${transfer.to}`}
                   className="w-full h-full object-cover"
                 />
@@ -99,15 +100,14 @@ export function PrivateTransfers() {
                 </div>
 
                 <p className="text-xs md:text-sm text-gray-600 mb-4">
-                  {transfer.duration} • {transfer.distance}
+                  {formatDuration(transfer.travelTimeMinutes)} • {transfer.distanceKm}km
                 </p>
 
                 <Button
                   asChild
                   className="w-full bg-blue-600 hover:bg-blue-600 text-white font-semibold py-4 md:py-6 rounded-xl mt-auto text-sm md:text-lg shadow-blue-200 shadow-lg"
                 >
-
-                  <Link href="/airport-transfers/journey-details">Book Now</Link>
+                  <Link href={`/airport-transfers/journey-details?id=${transfer.id}`}>Book Now</Link>
                 </Button>
               </div>
             </div>
