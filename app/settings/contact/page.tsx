@@ -1,9 +1,50 @@
+"use client"
+
 import { Footer } from "@/components/layout/footer";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, Loader2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header2 } from "@/components/common/Header2";
+import { useState } from "react";
+import { useCreateContactMutation } from "@/Redux/features/settings/contactApi";
+import { toast } from "sonner";
+import {
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogDescription,
+} from "@/components/ui/dialog";
 
 export default function Contact() {
+    const [createContact, { isLoading }] = useCreateContactMutation();
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [formData, setFormData] = useState({
+        fullName: "",
+        email: "",
+        contactNumber: "",
+        subject: "",
+        description: "",
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        try {
+            const res = await createContact(formData).unwrap();
+            if (res?.success) {
+                setFormData({ fullName: "", email: "", contactNumber: "", subject: "", description: "" });
+                setShowSuccessModal(true);
+            } else {
+                toast.error(res?.message || "Failed to send message");
+            }
+        } catch (err: any) {
+            toast.error(err?.data?.message || "Something went wrong");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
             <Header2 />
@@ -16,7 +57,7 @@ export default function Contact() {
                             Get in Touch
                         </h1>
                         <p className="text-xl text-gray-600 leading-relaxed">
-                            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+                            Have questions? We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
                         </p>
                     </div>
                 </section>
@@ -27,17 +68,20 @@ export default function Contact() {
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
 
-                            <form className="space-y-5">
+                            <form className="space-y-5" onSubmit={handleSubmit}>
                                 <div>
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
                                         Full Name *
                                     </label>
                                     <input
                                         type="text"
-                                        id="name"
-                                        name="name"
+                                        id="fullName"
+                                        name="fullName"
+                                        value={formData.fullName}
+                                        onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                        disabled={isLoading}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition disabled:bg-gray-50 disabled:cursor-not-allowed"
                                         placeholder="John Doe"
                                     />
                                 </div>
@@ -50,21 +94,27 @@ export default function Contact() {
                                         type="email"
                                         id="email"
                                         name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                        disabled={isLoading}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition disabled:bg-gray-50 disabled:cursor-not-allowed"
                                         placeholder="john@example.com"
                                     />
                                 </div>
 
                                 <div>
-                                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label htmlFor="contactNumber" className="block text-sm font-medium text-gray-700 mb-2">
                                         Phone Number
                                     </label>
                                     <input
                                         type="tel"
-                                        id="phone"
-                                        name="phone"
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                        id="contactNumber"
+                                        name="contactNumber"
+                                        value={formData.contactNumber}
+                                        onChange={handleChange}
+                                        disabled={isLoading}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition disabled:bg-gray-50 disabled:cursor-not-allowed"
                                         placeholder="+353 1 234 5678"
                                     />
                                 </div>
@@ -77,29 +127,48 @@ export default function Contact() {
                                         type="text"
                                         id="subject"
                                         name="subject"
+                                        value={formData.subject}
+                                        onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                        disabled={isLoading}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition disabled:bg-gray-50 disabled:cursor-not-allowed"
                                         placeholder="How can we help?"
                                     />
                                 </div>
 
                                 <div>
-                                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
                                         Message *
                                     </label>
                                     <textarea
-                                        id="message"
-                                        name="message"
+                                        id="description"
+                                        name="description"
+                                        value={formData.description}
+                                        onChange={handleChange}
                                         required
+                                        disabled={isLoading}
                                         rows={5}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none disabled:bg-gray-50 disabled:cursor-not-allowed"
                                         placeholder="Tell us more about your inquiry..."
                                     />
                                 </div>
 
-                                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-base font-semibold">
-                                    <Send className="w-5 h-5 mr-2" />
-                                    Send Message
+                                <Button
+                                    type="submit"
+                                    disabled={isLoading}
+                                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-base font-semibold disabled:opacity-70"
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                                            Sending...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Send className="w-5 h-5 mr-2" />
+                                            Send Message
+                                        </>
+                                    )}
                                 </Button>
                             </form>
                         </div>
@@ -117,7 +186,7 @@ export default function Contact() {
                                         <div>
                                             <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
                                             <p className="text-gray-600">
-                                                123 O'Connell Street<br />
+                                                123 O&apos;Connell Street<br />
                                                 Dublin 1, D01 XY45<br />
                                                 Ireland
                                             </p>
@@ -183,6 +252,29 @@ export default function Contact() {
             </main>
 
             <Footer />
+
+            {/* Success Modal */}
+            <Dialog open={showSuccessModal} onOpenChange={setShowSuccessModal}>
+                <DialogContent className="sm:max-w-md">
+                    <div className="flex flex-col items-center text-center py-6">
+                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-5">
+                            <CheckCircle className="w-8 h-8 text-green-600" />
+                        </div>
+                        <DialogTitle className="text-xl font-bold text-gray-900 mb-2">
+                            Message Sent Successfully!
+                        </DialogTitle>
+                        <DialogDescription className="text-gray-500 text-sm leading-relaxed mb-6 max-w-xs">
+                            Thank you for reaching out. Our team will review your message and get back to you as soon as possible.
+                        </DialogDescription>
+                        <Button
+                            onClick={() => setShowSuccessModal(false)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-5 font-semibold rounded-xl"
+                        >
+                            Got it, thanks!
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

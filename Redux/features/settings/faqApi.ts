@@ -4,7 +4,7 @@ const faqApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         getFaq: builder.query({
             query: () => ({
-                url: "faq/get-all-faqs",
+                url: "faqs",
                 method: "GET",
             }),
             providesTags: ["faq"],
@@ -12,5 +12,4 @@ const faqApi = baseApi.injectEndpoints({
     }),
 });
 
-export const { useGetFaqQuery } =
-    faqApi;
+export const { useGetFaqQuery } = faqApi;

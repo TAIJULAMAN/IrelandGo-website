@@ -70,9 +70,17 @@ export function Footer({ className = "" }: FooterProps) {
           <div>
             <h4 className="font-medium mb-4">Support</h4>
             <ul className="space-y-2">
+              {/* <li>
+                <Link
+                  href="/settings/faq"
+                  className="text-sm text-white hover:text-blue-400 transition-colors"
+                >
+                  FAQ
+                </Link>
+              </li> */}
               <li>
                 <Link
-                  href="/faq"
+                  href="/settings/faq"
                   className="text-sm text-white hover:text-blue-400 transition-colors"
                 >
                   FAQ
