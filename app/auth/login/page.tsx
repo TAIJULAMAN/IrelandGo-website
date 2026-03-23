@@ -67,14 +67,7 @@ export default function Login() {
 
                     toast.success("Logged in successfully");
 
-                    const role = decodedUser?.role?.toLowerCase();
-                    if (role === "USER") {
-                        router.push("/dashboard/user");
-                    } else if (role === "AGENT") {
-                        router.push("/dashboard/agent");
-                    } else {
-                        router.push("/");
-                    }
+                    router.push("/dashboard");
                 }
             } else {
                 setError(response?.message || "Login failed");

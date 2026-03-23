@@ -116,7 +116,7 @@ export function Header2() {
 
                   <div className="grid grid-cols-2 gap-3">
                     <Link
-                      href={user.role === 'agent' ? '/agent' : '/user'}
+                      href="/dashboard"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <Button variant="outline" className="w-full justify-center text-sm">Dashboard</Button>

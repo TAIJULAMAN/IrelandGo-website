@@ -43,7 +43,7 @@ export function UserAvatar() {
 
     if (!isAuthenticated || !user) return null;
 
-    const dashboardLink = user.role?.toLowerCase() === "agent" ? "/agent" : "/user";
+    const dashboardLink = "/dashboard";
 
     return (
         <div className="relative" ref={dropdownRef}>

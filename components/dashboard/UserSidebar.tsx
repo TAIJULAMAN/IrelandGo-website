@@ -10,9 +10,10 @@ import {
     Bell,
     LayoutDashboard,
     ChevronRight,
-    ShieldCheck,
     LifeBuoy,
-    CreditCard
+    CreditCard,
+    Users,
+    Grip
 } from "lucide-react"
 import { ProfileData } from "@/Redux/features/settings/profileApi"
 
@@ -22,41 +23,61 @@ interface UserSidebarProps {
     setIsLogoutDialogOpen: (open: boolean) => void
 }
 
+const basePath = "/dashboard"
+
+// Nav links for regular users
+const userNavLinks = [
+    {
+        href: basePath,
+        icon: <LayoutDashboard className="h-4 w-4" />,
+        label: "Dashboard"
+    },
+    {
+        href: `${basePath}/bookings`,
+        icon: <MapPin className="h-4 w-4" />,
+        label: "My Bookings"
+    },
+    {
+        href: `${basePath}/profile`,
+        icon: <UserIcon className="h-4 w-4" />,
+        label: "Profile"
+    },
+    {
+        href: `${basePath}/payment-methods`,
+        icon: <CreditCard className="h-4 w-4" />,
+        label: "Payments",
+    },
+    {
+        href: `${basePath}/notifications`,
+        icon: <Bell className="h-4 w-4" />,
+        label: "Notifications",
+    },
+    {
+        href: `${basePath}/support`,
+        icon: <LifeBuoy className="h-4 w-4" />,
+        label: "Help & Support"
+    },
+]
+
+// Nav links for agents — only Clients
+const agentNavLinks = [
+    {
+        href: basePath,
+        icon: <LayoutDashboard className="h-4 w-4" />,
+        label: "Dashboard"
+    },
+    {
+        href: `${basePath}/clients`,
+        icon: <Users className="h-4 w-4" />,
+        label: "Clients"
+    },
+]
+
 export function UserSidebar({ user, setIsMobileMenuOpen, setIsLogoutDialogOpen }: UserSidebarProps) {
     const pathname = usePathname()
 
-    const navLinks = [
-        {
-            href: "/user",
-            icon: <LayoutDashboard className="h-4 w-4" />,
-            label: "Dashboard"
-        },
-        {
-            href: "/user/bookings",
-            icon: <MapPin className="h-4 w-4" />,
-            label: "My Bookings"
-        },
-        {
-            href: "/user/profile",
-            icon: <UserIcon className="h-4 w-4" />,
-            label: "Profile"
-        },
-        {
-            href: "/user/payment-methods",
-            icon: <CreditCard className="h-4 w-4" />,
-            label: "Payments",
-        },
-        {
-            href: "/user/notifications",
-            icon: <Bell className="h-4 w-4" />,
-            label: "Notifications",
-        },
-        {
-            href: "/user/support",
-            icon: <LifeBuoy className="h-4 w-4" />,
-            label: "Help & Support"
-        },
-    ]
+    const role = user?.role?.toLowerCase()
+    const navLinks = role === "agent" ? agentNavLinks : userNavLinks
 
     return (
         <div className="h-full flex flex-col bg-white border-r border-gray-100 shadow-[20px_0_40px_-20px_rgba(0,0,0,0.02)]">
@@ -73,9 +94,9 @@ export function UserSidebar({ user, setIsMobileMenuOpen, setIsLogoutDialogOpen }
             {/* Navigation */}
             <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto custom-scrollbar pt-2">
                 {navLinks.map((link) => {
-                    const isRoot = link.href === '/user'
+                    const isRoot = link.href === basePath
                     const isActive = isRoot
-                        ? pathname === '/user'
+                        ? pathname === basePath || pathname === `${basePath}/user` || pathname === `${basePath}/agent`
                         : pathname === link.href || pathname.startsWith(`${link.href}/`)
 
                     return (

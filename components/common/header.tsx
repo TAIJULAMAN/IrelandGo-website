@@ -152,7 +152,7 @@ export function Header() {
 
                   <div className="grid grid-cols-1 gap-2">
                     <Link
-                      href={user.role?.toLowerCase() === 'agent' ? '/agent' : '/user'}
+                      href="/dashboard"
                       className="w-full"
                       onClick={() => setIsMenuOpen(false)}
                     >

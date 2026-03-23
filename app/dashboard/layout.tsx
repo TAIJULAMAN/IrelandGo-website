@@ -21,7 +21,7 @@ import {
   SheetContent,
 } from "@/components/ui/sheet"
 
-export default function UserLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
@@ -113,5 +113,3 @@ export default function UserLayout({
     </div>
   )
 }
-
-
