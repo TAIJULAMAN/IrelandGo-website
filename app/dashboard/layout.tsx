@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/Redux/hooks"
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi"
 import { logout as reduxLogout } from "@/Redux/Slice/authSlice"
 import { toast } from "sonner"
-import { Sidebar } from "@/components/dashboard/UserSidebar"
+import { Sidebar } from "@/components/dashboard/Sidebar"
 import {
   Dialog,
   DialogContent,
@@ -19,7 +19,8 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet"
-import { MainHeader } from "@/components/dashboard/DashboardHeader"
+import { MainHeader } from "@/components/dashboard/MainHeader"
+import { PageHeader } from "@/components/common/PageHeader"
 
 export default function DashboardLayout({
   children,
@@ -49,7 +50,6 @@ export default function DashboardLayout({
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#FBFBFB]">
-      {/* Desktop Sidebar */}
       <aside className="hidden md:block w-[280px] h-full flex-shrink-0">
         <Sidebar
           user={user}
@@ -75,7 +75,7 @@ export default function DashboardLayout({
 
         {/* Scrollable Content Area */}
         <main className="flex-1 overflow-y-auto custom-scrollbar bg-gray-50/30">
-          <div className="container mx-auto px-5 py-5 md:px-0 md:py-10">
+          <div className="px-5 py-5 md:px-10">
             {children}
           </div>
         </main>

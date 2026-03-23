@@ -3,6 +3,7 @@
 import { Users, MapPin, DollarSign, TrendingUp, Calendar, Clock } from "lucide-react";
 import { useAppSelector } from "@/Redux/hooks";
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi";
+import { PageHeader } from "@/components/common/PageHeader";
 
 export default function Dashboard() {
     const token = useAppSelector((state) => state.auth.token);
@@ -34,24 +35,15 @@ export default function Dashboard() {
     const metrics = isAgent ? agentMetrics : userMetrics;
 
     return (
-        <div className="flex flex-col gap-6 pb-4">
-            {/* Header */}
-            <div className="mb-2">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                    {isAgent
-                        ? `Agent Dashboard${user?.fullName ? ` - ${user.fullName}` : ""}`
-                        : `Welcome back${user?.fullName ? `, ${user.fullName}` : ""}!`
-                    }
-                </h1>
-                <p className="text-gray-600 mt-1">
-                    {isAgent ? "Manage your tours and bookings" : "Manage your bookings and preferences"}
-                </p>
-            </div>
-
+        <div className="flex flex-col gap-5 pb-5">
+            <PageHeader
+                title="Dashboard"
+                description="View and manage all your client information"
+            />
             {/* Metrics */}
-            <div className={`grid grid-cols-1 sm:grid-cols-2 ${isAgent ? "lg:grid-cols-4" : "md:grid-cols-3"} gap-6`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 ${isAgent ? "lg:grid-cols-4" : "md:grid-cols-3"} gap-5`}>
                 {metrics.map((metric) => (
-                    <div key={metric.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <div key={metric.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                         <div className="flex items-center gap-4">
                             <div className={`w-12 h-12 ${metric.bg} rounded-full flex items-center justify-center`}>
                                 {metric.icon}
@@ -67,8 +59,8 @@ export default function Dashboard() {
 
             {/* Content based on role */}
             {isAgent ? (
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                <div className="flex flex-col gap-5">
+                    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                         <h2 className="text-2xl font-bold text-gray-900 mb-6">Upcoming Tours</h2>
                         <div className="text-center py-12">
                             <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
@@ -85,7 +77,7 @@ export default function Dashboard() {
                     </div>
                 </div>
             ) : (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Bookings</h2>
                     <div className="text-center py-12">
                         <Calendar className="w-16 h-16 text-gray-300 mx-auto mb-4" />

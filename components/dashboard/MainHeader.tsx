@@ -1,8 +1,7 @@
 "use client"
 
-import { Menu, Bell, Search, ShieldCheck } from "lucide-react"
+import { Menu, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { usePathname } from "next/navigation"
 import Image from "next/image"
 import { ProfileData } from "@/Redux/features/settings/profileApi"
 
@@ -12,16 +11,9 @@ interface DashboardHeaderProps {
 }
 
 export function MainHeader({ setIsMobileMenuOpen, user }: DashboardHeaderProps) {
-    const pathname = usePathname()
-
-    // Get page title from pathname
-    const getPageTitle = (path: string) => {
-        const segment = path.split("/").pop() || "Dashboard"
-        return segment.charAt(0).toUpperCase() + segment.slice(1).replace("-", " ")
-    }
 
     return (
-        <header className="h-24 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-4 md:px-10 sticky top-0 z-10 transition-all">
+        <header className="h-24 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-5 md:px-10 sticky top-0 z-10 transition-all">
             <div className="flex items-center gap-4">
                 <Button
                     variant="ghost"
@@ -31,15 +23,10 @@ export function MainHeader({ setIsMobileMenuOpen, user }: DashboardHeaderProps) 
                 >
                     <Menu className="h-8 w-8 font-bold text-blue-600" />
                 </Button>
-                <div>
+                <p className="text-[20px] md:text-xs text-gray-400 font-medium hidden md:block uppercase tracking-widest">
+                    Welcome back!
+                </p>
 
-                    <p className="text-[10px] md:text-xs text-gray-400 font-medium hidden md:block uppercase tracking-widest">
-                        Welcome back to your workspace
-                    </p>
-                    <h1 className="text-xl md:text-2xl font-black text-blue-900 tracking-tight">
-                        {getPageTitle(pathname)}
-                    </h1>
-                </div>
             </div>
 
             {/* Actions & User Profile */}

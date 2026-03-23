@@ -24,8 +24,6 @@ interface UserSidebarProps {
 }
 
 const basePath = "/dashboard"
-
-// Nav links for regular users
 const userNavLinks = [
     {
         href: basePath,
@@ -58,8 +56,6 @@ const userNavLinks = [
         label: "Help & Support"
     },
 ]
-
-// Nav links for agents — only Clients
 const agentNavLinks = [
     {
         href: basePath,
@@ -70,6 +66,31 @@ const agentNavLinks = [
         href: `${basePath}/clients`,
         icon: <Users className="h-4 w-4" />,
         label: "Clients"
+    },
+    {
+        href: `${basePath}/bookings`,
+        icon: <MapPin className="h-4 w-4" />,
+        label: "My Bookings"
+    },
+    {
+        href: `${basePath}/profile`,
+        icon: <UserIcon className="h-4 w-4" />,
+        label: "Profile"
+    },
+    {
+        href: `${basePath}/payment-methods`,
+        icon: <CreditCard className="h-4 w-4" />,
+        label: "Payments",
+    },
+    {
+        href: `${basePath}/notifications`,
+        icon: <Bell className="h-4 w-4" />,
+        label: "Notifications",
+    },
+    {
+        href: `${basePath}/support`,
+        icon: <LifeBuoy className="h-4 w-4" />,
+        label: "Help & Support"
     },
 ]
 
