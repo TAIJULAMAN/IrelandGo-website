@@ -1,56 +1,99 @@
 "use client"
 
 import { useState } from "react"
-import { Star, ChevronLeft, ChevronRight } from "lucide-react"
-import Image from "next/image"
+import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react"
+import { useGetAllReviewQuery } from "@/Redux/features/review/reviewApi"
+
+interface Review {
+  id: string
+  userId: string
+  tripServiceId: string
+  rating: number
+  comment: string
+  createdAt: string
+  updatedAt: string
+}
 
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const { data, isLoading } = useGetAllReviewQuery(undefined)
 
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      text: "Amazing experience! Our driver was knowledgeable and showed us hidden gems we never would have found on our own.",
-      rating: 5,
-      source: "Tripadvisor",
-      image: "/placeholder-user.jpg",
-    },
-    {
-      name: "Michael Chen",
-      text: "Professional service from start to finish. The vehicle was spotless and our driver made the journey so enjoyable.",
-      rating: 5,
-      source: "Trustpilot",
-      image: "/placeholder-user.jpg",
-    },
-    {
-      name: "Emma Wilson",
-      text: "Exceeded our expectations! Flexible timing and the driver's local knowledge made our trip unforgettable.",
-      rating: 5,
-      source: "Google",
-      image: "/placeholder-user.jpg",
-    },
-    {
-      name: "David Thompson",
-      text: "The best way to see Ireland. Comfortable car, safe driving, and excellent recommendations for lunch stops.",
-      rating: 5,
-      source: "Tripadvisor",
-      image: "/placeholder-user.jpg",
-    },
-  ]
+  const reviews: Review[] = data?.data || []
 
   const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1))
+    if (reviews.length === 0) return
+    setCurrentIndex((prev) => (prev === 0 ? reviews.length - 1 : prev - 1))
   }
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === testimonials.length - 1 ? 0 : prevIndex + 1))
+    if (reviews.length === 0) return
+    setCurrentIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1))
   }
 
-  const visibleTestimonials = [
-    testimonials[currentIndex],
-    testimonials[(currentIndex + 1) % testimonials.length],
-    testimonials[(currentIndex + 2) % testimonials.length],
-  ]
+  // Get up to 3 visible testimonials based on current index
+  const getVisibleReviews = () => {
+    if (reviews.length === 0) return []
+    if (reviews.length <= 3) return reviews
+    return [
+      reviews[currentIndex % reviews.length],
+      reviews[(currentIndex + 1) % reviews.length],
+      reviews[(currentIndex + 2) % reviews.length],
+    ]
+  }
+
+  const visibleReviews = getVisibleReviews()
+
+  // Generate initials from userId as fallback
+  const getInitials = (userId: string) => {
+    return userId.slice(0, 2).toUpperCase()
+  }
+
+  // Format date
+  const formatDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    })
+  }
+
+  // Loading skeleton
+  if (isLoading) {
+    return (
+      <section className="px-5 md:px-0 py-10 md:py-20 bg-gray-50">
+        <div className="container mx-auto">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 md:mb-2">What Our Customers Say</h2>
+            <p className="text-sm md:text-base text-gray-600">Trusted by happy travelers</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 animate-pulse ${i > 1 ? "hidden md:block" : ""} ${i > 2 ? "hidden lg:block" : ""}`}>
+                <div className="flex gap-1 mb-6">
+                  {[...Array(5)].map((_, j) => (
+                    <div key={j} className="w-4 h-4 md:w-5 md:h-5 bg-gray-200 rounded" />
+                  ))}
+                </div>
+                <div className="space-y-2 mb-8">
+                  <div className="h-4 bg-gray-200 rounded w-full" />
+                  <div className="h-4 bg-gray-200 rounded w-5/6" />
+                  <div className="h-4 bg-gray-200 rounded w-4/6" />
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-gray-200 rounded-full" />
+                  <div className="space-y-1.5">
+                    <div className="h-4 bg-gray-200 rounded w-24" />
+                    <div className="h-3 bg-gray-200 rounded w-16" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (reviews.length === 0) return null
 
   return (
     <section className="px-5 md:px-0 py-10 md:py-20 bg-gray-50">
@@ -66,7 +109,7 @@ export function Testimonials() {
 
           <div className="text-center">
             <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 md:mb-2">What Our Customers Say</h2>
-            <p className="text-sm md:text-base text-gray-600">Trusted by 1,000,000+ happy travelers</p>
+            <p className="text-sm md:text-base text-gray-600">Trusted by happy travelers</p>
           </div>
 
           <button
@@ -79,30 +122,32 @@ export function Testimonials() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {visibleTestimonials.map((testimonial, idx) => (
+          {visibleReviews.map((review, idx) => (
             <div
-              key={idx}
-              className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 h-full flex flex-col ${idx > 0 ? "hidden md:flex" : ""
-                }`}
+              key={review.id}
+              className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 h-full flex flex-col ${idx === 1 ? "hidden md:flex" : ""} ${idx === 2 ? "hidden lg:flex" : ""}`}
             >
-              <div className="flex gap-1 mb-4 md:mb-6">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 md:w-5 md:h-5 fill-blue-600 text-blue-600" />
-                ))}
+              <div className="flex items-center justify-between mb-4 md:mb-6">
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 md:w-5 md:h-5 ${i < review.rating ? "fill-blue-600 text-blue-600" : "fill-gray-200 text-gray-200"}`}
+                    />
+                  ))}
+                </div>
+                <Quote className="w-6 h-6 text-blue-100" />
               </div>
-              <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8 leading-relaxed flex-grow">"{testimonial.text}"</p>
+              <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8 leading-relaxed flex-grow">
+                &ldquo;{review.comment}&rdquo;
+              </p>
               <div className="flex items-center gap-3 md:gap-4">
-                <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-gray-200">
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    fill
-                    className="object-cover"
-                  />
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-xs md:text-sm">
+                  {getInitials(review.userId)}
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900 text-sm md:text-base">{testimonial.name}</p>
-                  <p className="text-xs md:text-sm text-gray-500">{testimonial.source}</p>
+                  <p className="font-bold text-gray-900 text-sm md:text-base">Traveler</p>
+                  <p className="text-xs md:text-sm text-gray-500">{formatDate(review.createdAt)}</p>
                 </div>
               </div>
             </div>
