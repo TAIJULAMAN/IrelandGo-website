@@ -73,7 +73,7 @@ const agentNavLinks = [
     },
 ]
 
-export function UserSidebar({ user, setIsMobileMenuOpen, setIsLogoutDialogOpen }: UserSidebarProps) {
+export function Sidebar({ user, setIsMobileMenuOpen, setIsLogoutDialogOpen }: UserSidebarProps) {
     const pathname = usePathname()
 
     const role = user?.role?.toLowerCase()

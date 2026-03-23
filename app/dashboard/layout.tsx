@@ -8,8 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/Redux/hooks"
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi"
 import { logout as reduxLogout } from "@/Redux/Slice/authSlice"
 import { toast } from "sonner"
-import { UserSidebar } from "@/components/dashboard/UserSidebar"
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader"
+import { Sidebar } from "@/components/dashboard/UserSidebar"
 import {
   Dialog,
   DialogContent,
@@ -20,6 +19,7 @@ import {
   Sheet,
   SheetContent,
 } from "@/components/ui/sheet"
+import { MainHeader } from "@/components/dashboard/DashboardHeader"
 
 export default function DashboardLayout({
   children,
@@ -51,7 +51,7 @@ export default function DashboardLayout({
     <div className="flex h-screen overflow-hidden bg-[#FBFBFB]">
       {/* Desktop Sidebar */}
       <aside className="hidden md:block w-[280px] h-full flex-shrink-0">
-        <UserSidebar
+        <Sidebar
           user={user}
           setIsLogoutDialogOpen={setIsLogoutDialogOpen}
         />
@@ -60,7 +60,7 @@ export default function DashboardLayout({
       {/* Mobile Sidebar (Sheet) */}
       <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
         <SheetContent side="left" className="w-[85%] max-w-[320px] p-0 border-none">
-          <UserSidebar
+          <Sidebar
             user={user}
             setIsMobileMenuOpen={setIsMobileMenuOpen}
             setIsLogoutDialogOpen={setIsLogoutDialogOpen}
@@ -71,7 +71,7 @@ export default function DashboardLayout({
       {/* Main Container */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Main Header */}
-        <DashboardHeader setIsMobileMenuOpen={setIsMobileMenuOpen} user={user} />
+        <MainHeader setIsMobileMenuOpen={setIsMobileMenuOpen} user={user} />
 
         {/* Scrollable Content Area */}
         <main className="flex-1 overflow-y-auto custom-scrollbar bg-gray-50/30">

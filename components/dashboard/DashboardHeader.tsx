@@ -11,7 +11,7 @@ interface DashboardHeaderProps {
     user: ProfileData | undefined
 }
 
-export function DashboardHeader({ setIsMobileMenuOpen, user }: DashboardHeaderProps) {
+export function MainHeader({ setIsMobileMenuOpen, user }: DashboardHeaderProps) {
     const pathname = usePathname()
 
     // Get page title from pathname
