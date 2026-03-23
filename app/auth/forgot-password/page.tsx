@@ -3,7 +3,7 @@
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
-import { Mail, ArrowLeft } from "lucide-react";
+import { Mail, ArrowLeft, ArrowRight, Info } from "lucide-react";
 import Link from "next/link";
 
 export default function ForgotPassword() {
@@ -11,57 +11,63 @@ export default function ForgotPassword() {
         <div className="min-h-screen bg-gray-50">
             <Header2 />
 
-            <main className="pt-32 pb-16">
-                <div className="container mx-auto px-5 md:px-0">
-                    <div className="max-w-md mx-auto">
-                        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
-                            <div className="text-center mb-8">
-                                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <Mail className="w-8 h-8 text-blue-600" />
+            <main className="pt-24 pb-16 md:pt-28 md:pb-20">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="bg-white p-6 sm:p-8 lg:p-10 xl:p-12">
+                            <div className="text-center lg:text-left mb-7">
+                                <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto lg:mx-0 mb-4">
+                                    <Mail className="w-7 h-7 text-blue-600" />
                                 </div>
-                                <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1.5">
                                     Forgot Password?
                                 </h1>
-                                <p className="text-gray-600">
-                                    No worries! Enter your email and we'll send you a verification code to reset your password.
+                                <p className="text-gray-500 text-sm sm:text-base max-w-sm mx-auto lg:mx-0">
+                                    No worries! Enter your email and we&apos;ll send you a verification code to reset your password.
                                 </p>
                             </div>
 
-                            <form className="space-y-5">
+                            <form className="space-y-4">
+                                {/* Email */}
                                 <div>
-                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
                                         Email Address
                                     </label>
                                     <div className="relative">
-                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
                                         <input
                                             type="email"
                                             id="email"
                                             name="email"
                                             required
-                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm"
                                             placeholder="you@example.com"
                                         />
                                     </div>
                                 </div>
 
+                                {/* Submit */}
                                 <Link href="/auth/verify-code">
-                                    <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-base font-semibold">
+                                    <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] group mt-2">
                                         Send Verification Code
+                                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
                                     </Button>
                                 </Link>
                             </form>
 
-                            <div className="mt-6 text-center">
-                                <Link href="/auth/login" className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900">
-                                    <ArrowLeft className="w-4 h-4 mr-2" />
+                            {/* Back link */}
+                            <div className="mt-6 text-center lg:text-left">
+                                <Link href="/auth/login" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors group">
+                                    <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-0.5 transition-transform" />
                                     Back to login
                                 </Link>
                             </div>
 
-                            <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                                <p className="text-sm text-blue-800">
-                                    <strong>Note:</strong> The verification code will be sent to your registered email address and will expire in 10 minutes.
+                            {/* Info note */}
+                            <div className="mt-6 p-4 bg-blue-50/70 rounded-xl border border-blue-100/80 flex items-start gap-3">
+                                <Info className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+                                <p className="text-xs sm:text-sm text-blue-700/80 leading-relaxed">
+                                    The verification code will be sent to your registered email address and will expire in 10 minutes.
                                 </p>
                             </div>
                         </div>
