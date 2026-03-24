@@ -83,7 +83,7 @@ export default function BlogDetailPage() {
                 <article>
                     {/* Breadcrumb */}
                     <div className="container mx-auto px-5">
-                        <div className="max-w-4xl mx-auto mb-6">
+                        <div className="mb-5">
                             <nav className="flex items-center gap-2 text-sm text-gray-500">
                                 <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
                                 <span>/</span>
@@ -96,7 +96,7 @@ export default function BlogDetailPage() {
 
                     {/* Title */}
                     <div className="container mx-auto px-5">
-                        <div className="max-w-4xl mx-auto mb-8">
+                        <div className="mb-5">
                             <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
                                 {blog.title}
                             </h1>

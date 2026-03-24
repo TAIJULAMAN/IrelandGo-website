@@ -1,6 +1,6 @@
 "use client"
 
-import { Mail, Phone, MessageCircle, Clock, MapPin, HelpCircle, Send, Sparkles } from "lucide-react"
+import { Mail, Phone, HelpCircle, Send, Sparkles, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -8,48 +8,37 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { useState } from "react"
+import { useSupportByMailMutation } from "@/Redux/features/support/supportApi"
+import { toast } from "sonner"
 
 export default function SupportPage() {
+    const [supportByMail, { isLoading }] = useSupportByMailMutation()
     const [formData, setFormData] = useState({
-        name: "",
+        fullName: "",
         email: "",
+        contactNumber: "",
         subject: "",
-        message: ""
+        description: "",
     })
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle")
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }))
+        setFormData(prev => ({ ...prev, [name]: value }))
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        setIsSubmitting(true)
-        setSubmitStatus("idle")
 
-        // Simulate API call
         try {
-            await new Promise(resolve => setTimeout(resolve, 1500))
-
-            // Here you would normally send the data to your backend
-            console.log("Form submitted:", formData)
-
-            setSubmitStatus("success")
-            setFormData({
-                name: "",
-                email: "",
-                subject: "",
-                message: ""
-            })
-        } catch (error) {
-            setSubmitStatus("error")
-        } finally {
-            setIsSubmitting(false)
+            const res = await supportByMail(formData).unwrap()
+            if (res?.success) {
+                toast.success(res?.message || "Support request sent successfully!")
+                setFormData({ fullName: "", email: "", contactNumber: "", subject: "", description: "" })
+            } else {
+                toast.error(res?.message || "Failed to send support request")
+            }
+        } catch (err: any) {
+            toast.error(err?.data?.message || "Something went wrong")
         }
     }
 
@@ -94,21 +83,17 @@ export default function SupportPage() {
             title: "Email Us",
             description: "support@irelandgo.com",
             detail: "We'll respond within 24 hours",
-            gradient: "from-blue-500 to-blue-600"
         },
         {
             icon: <Phone className="h-6 w-6" />,
             title: "Call Us",
             description: "+353 1 234 5678",
             detail: "Mon-Fri, 9AM-6PM IST",
-            gradient: "from-green-500 to-emerald-600"
         }
     ]
 
     return (
         <div className="min-h-screen relative overflow-hidden">
-
-
             <div className="container mx-auto py-16 relative z-10">
                 {/* Hero Section */}
                 <div className="text-center mb-16">
@@ -141,15 +126,16 @@ export default function SupportPage() {
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-2">
-                                            <Label htmlFor="name" className="text-gray-700 font-semibold">Full Name *</Label>
+                                            <Label htmlFor="fullName" className="text-gray-700 font-semibold">Full Name *</Label>
                                             <Input
-                                                id="name"
-                                                name="name"
+                                                id="fullName"
+                                                name="fullName"
                                                 type="text"
                                                 placeholder="John Doe"
-                                                value={formData.name}
+                                                value={formData.fullName}
                                                 onChange={handleInputChange}
                                                 required
+                                                disabled={isLoading}
                                                 className="w-full h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
                                             />
                                         </div>
@@ -163,62 +149,64 @@ export default function SupportPage() {
                                                 value={formData.email}
                                                 onChange={handleInputChange}
                                                 required
+                                                disabled={isLoading}
+                                                className="w-full h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="contactNumber" className="text-gray-700 font-semibold">Phone Number</Label>
+                                            <Input
+                                                id="contactNumber"
+                                                name="contactNumber"
+                                                type="tel"
+                                                placeholder="+353 1 234 5678"
+                                                value={formData.contactNumber}
+                                                onChange={handleInputChange}
+                                                disabled={isLoading}
+                                                className="w-full h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="subject" className="text-gray-700 font-semibold">Subject *</Label>
+                                            <Input
+                                                id="subject"
+                                                name="subject"
+                                                type="text"
+                                                placeholder="How can we help you?"
+                                                value={formData.subject}
+                                                onChange={handleInputChange}
+                                                required
+                                                disabled={isLoading}
                                                 className="w-full h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
                                             />
                                         </div>
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="subject" className="text-gray-700 font-semibold">Subject *</Label>
-                                        <Input
-                                            id="subject"
-                                            name="subject"
-                                            type="text"
-                                            placeholder="How can we help you?"
-                                            value={formData.subject}
-                                            onChange={handleInputChange}
-                                            required
-                                            className="w-full h-12 border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
-                                        />
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <Label htmlFor="message" className="text-gray-700 font-semibold">Message *</Label>
+                                        <Label htmlFor="description" className="text-gray-700 font-semibold">Message *</Label>
                                         <Textarea
-                                            id="message"
-                                            name="message"
+                                            id="description"
+                                            name="description"
                                             placeholder="Please describe your issue or question in detail..."
-                                            value={formData.message}
+                                            value={formData.description}
                                             onChange={handleInputChange}
                                             required
+                                            disabled={isLoading}
                                             className="w-full min-h-[180px] resize-y border-gray-300 focus:border-blue-500 focus:ring-blue-500/20"
                                         />
                                     </div>
 
-                                    {submitStatus === "success" && (
-                                        <div className="bg-green-50 border-2 border-green-300 text-green-800 px-6 py-4 rounded-xl shadow-md">
-                                            <p className="font-bold text-lg flex items-center gap-2">
-                                                <span className="text-2xl">✓</span> Message sent successfully!
-                                            </p>
-                                            <p className="text-sm mt-1">We'll get back to you within 24 hours.</p>
-                                        </div>
-                                    )}
-
-                                    {submitStatus === "error" && (
-                                        <div className="bg-red-50 border-2 border-red-300 text-red-800 px-6 py-4 rounded-xl shadow-md">
-                                            <p className="font-bold text-lg">Failed to send message.</p>
-                                            <p className="text-sm mt-1">Please try again or contact us directly.</p>
-                                        </div>
-                                    )}
-
                                     <Button
                                         type="submit"
-                                        disabled={isSubmitting}
-                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-7 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
+                                        disabled={isLoading}
+                                        className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-7 text-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100"
                                     >
-                                        {isSubmitting ? (
+                                        {isLoading ? (
                                             <>
-                                                <span className="animate-spin mr-2">⏳</span>
+                                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                                                 Sending...
                                             </>
                                         ) : (
