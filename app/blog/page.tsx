@@ -1,12 +1,34 @@
 "use client";
 
 import { Footer } from "@/components/layout/footer";
-import { blogPosts } from "@/lib/blog-data";
 import Link from "next/link";
-import { Calendar, Clock, User } from "lucide-react";
+import Image from "next/image";
+import { Calendar } from "lucide-react";
 import { Header2 } from "@/components/common/Header2";
+import { useGetAllBlogsQuery } from "@/Redux/features/blogs/blogsApi";
+
+interface Blog {
+    id: string
+    title: string
+    content: string
+    category: string
+    image: string[]
+    createdAt: string
+    updatedAt: string
+}
 
 export default function BlogListingPage() {
+    const { data, isLoading } = useGetAllBlogsQuery(undefined);
+    const blogs: Blog[] = data?.data?.data || [];
+
+    const formatDate = (dateStr: string) => {
+        return new Date(dateStr).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+        });
+    };
+
     return (
         <div className="min-h-screen flex flex-col">
             <Header2 />
@@ -17,7 +39,7 @@ export default function BlogListingPage() {
                     <img
                         src="/ireland-hero-bg.jpg"
                         alt="Ireland Landscape"
-                        className="w-full h-full  object-cover opacity-30"
+                        className="w-full h-full object-cover opacity-30"
                     />
                 </div>
                 <div className="relative container mx-auto px-5 text-center z-10">
@@ -29,52 +51,68 @@ export default function BlogListingPage() {
             </div>
 
             <main className="flex-grow container mx-auto px-5 py-12 md:py-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {blogPosts.map((post) => (
-                        <Link key={post.id} href={`/blog/${post.slug}`} className="group">
-                            <article className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
-                                <div className="relative overflow-hidden h-60">
-                                    <img
-                                        src={post.image}
-                                        alt={post.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                    <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-blue-600">
-                                        {post.category}
-                                    </div>
+                {isLoading ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                            <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
+                                <div className="h-60 bg-gray-200" />
+                                <div className="p-6 space-y-3">
+                                    <div className="h-3 bg-gray-200 rounded w-24" />
+                                    <div className="h-5 bg-gray-200 rounded w-full" />
+                                    <div className="h-5 bg-gray-200 rounded w-3/4" />
+                                    <div className="h-4 bg-gray-200 rounded w-full" />
+                                    <div className="h-4 bg-gray-200 rounded w-5/6" />
                                 </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : blogs.length === 0 ? (
+                    <div className="text-center py-20">
+                        <p className="text-gray-500 text-lg">No blog posts yet. Check back soon!</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {blogs.map((blog) => (
+                            <Link key={blog.id} href={`/blog/${blog.id}`} className="group">
+                                <article className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
+                                    <div className="relative overflow-hidden h-60">
+                                        <Image
+                                            src={blog.image?.[0] || "/placeholder.jpg"}
+                                            alt={blog.title}
+                                            fill
+                                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                        />
+                                        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-blue-600">
+                                            {blog.category}
+                                        </div>
+                                    </div>
 
-                                <div className="p-6 flex flex-col flex-grow">
-                                    <div className="flex items-center gap-4 text-xs text-slate-500 mb-3">
-                                        <div className="flex items-center gap-1">
+                                    <div className="p-6 flex flex-col flex-grow">
+                                        <div className="flex items-center gap-1 text-xs text-slate-500 mb-3">
                                             <Calendar className="w-3 h-3" />
-                                            <span>{post.date}</span>
+                                            <span>{formatDate(blog.createdAt)}</span>
                                         </div>
-                                        <div className="flex items-center gap-1">
-                                            <Clock className="w-3 h-3" />
-                                            <span>{post.readTime}</span>
+
+                                        <h2 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                                            {blog.title}
+                                        </h2>
+
+                                        <p className="text-slate-600 text-sm leading-relaxed mb-4 line-clamp-3">
+                                            {blog.content}
+                                        </p>
+
+                                        <div className="mt-auto flex items-center gap-2 text-sm font-medium text-blue-600 pt-4 border-t border-gray-100">
+                                            <span>Read Article</span>
+                                            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                            </svg>
                                         </div>
                                     </div>
-
-                                    <h2 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-                                        {post.title}
-                                    </h2>
-
-                                    <p className="text-slate-600 text-sm leading-relaxed mb-4 line-clamp-3">
-                                        {post.excerpt}
-                                    </p>
-
-                                    <div className="mt-auto flex items-center gap-2 text-sm font-medium text-blue-600 pt-4 border-t border-gray-100">
-                                        <span>Read Article</span>
-                                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                                        </svg>
-                                    </div>
-                                </div>
-                            </article>
-                        </Link>
-                    ))}
-                </div>
+                                </article>
+                            </Link>
+                        ))}
+                    </div>
+                )}
             </main>
 
             <Footer />
