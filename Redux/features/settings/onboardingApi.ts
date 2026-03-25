@@ -7,7 +7,7 @@ export const onboardingApi = baseApi.injectEndpoints({
                 url: "payment/stripe-account-onboarding",
                 method: "POST",
             }),
-            invalidatesTags: ["onboarding"],
+            invalidatesTags: ["payment-methods"],
         }),
     }),
 });

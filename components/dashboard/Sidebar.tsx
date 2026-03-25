@@ -39,11 +39,11 @@ const userNavLinks = [
         icon: <UserIcon className="h-4 w-4" />,
         label: "Profile"
     },
-    {
-        href: `${basePath}/payment-methods`,
-        icon: <CreditCard className="h-4 w-4" />,
-        label: "Payments",
-    },
+    // {
+    //     href: `${basePath}/payment-methods`,
+    //     icon: <CreditCard className="h-4 w-4" />,
+    //     label: "Payment Methods",
+    // },
     {
         href: `${basePath}/notifications`,
         icon: <Bell className="h-4 w-4" />,
@@ -79,7 +79,7 @@ const agentNavLinks = [
     {
         href: `${basePath}/payment-methods`,
         icon: <CreditCard className="h-4 w-4" />,
-        label: "Payments",
+        label: "Payment Methods",
     },
     {
         href: `${basePath}/notifications`,

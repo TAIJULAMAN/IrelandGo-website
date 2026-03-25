@@ -1,30 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { PageHeader } from "@/components/common/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Camera } from "lucide-react";
+import {
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+} from "@/Redux/features/settings/profileApi";
+import { useChangePasswordMutation } from "@/Redux/features/auth/authApi";
+import { toast } from "sonner";
 
 export default function UserProfilePage() {
   const [activeTab, setActiveTab] = useState<"profile" | "password">("profile");
 
-  // Mock user data
-  const userData = {
-    name: "John Doe",
-    role: "User",
-    email: "john.doe@example.com",
-    phone: "+353 86 234 5678",
-    avatar: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg",
-  };
+  const { data: profileRes, isLoading, isError } = useGetProfileQuery();
+  const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
+  const [changePassword, { isLoading: isChangingPassword }] = useChangePasswordMutation();
+
+  const profileData = profileRes?.data;
 
   const [formData, setFormData] = useState({
-    name: userData.name,
-    email: userData.email,
-    phone: userData.phone,
+    name: "",
+    email: "",
+    phone: "",
+    country: "",
   });
+
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync form data when profile data loads
+  const [initialized, setInitialized] = useState(false);
+  if (profileData && !initialized) {
+    setFormData({
+      name: profileData.fullName || "",
+      email: profileData.email || "",
+      phone: profileData.contactNumber || "",
+      country: profileData.country || "",
+    });
+    setInitialized(true);
+  }
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -32,22 +52,79 @@ export default function UserProfilePage() {
     confirmPassword: "",
   });
 
-  const handleSaveProfile = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Add API call to update profile
-    console.log("Updating profile:", formData);
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
   };
 
-  const handleChangePassword = (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Add API call to change password
-    console.log("Changing password");
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
+
+    const formDataToSend = new FormData();
+
+    const bodyData = JSON.stringify({
+      fullName: formData.name,
+      country: formData.country,
+      contactNumber: formData.phone,
     });
+
+    formDataToSend.append("data", bodyData);
+
+    if (selectedImage) {
+      formDataToSend.append("profileImage", selectedImage);
+    }
+
+    try {
+      await updateProfile(formDataToSend).unwrap();
+      toast.success("Profile updated successfully!");
+      setSelectedImage(null);
+    } catch {
+      toast.error("Failed to update profile. Please try again.");
+    }
   };
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast.error("New password and confirm password do not match.");
+      return;
+    }
+
+    try {
+      await changePassword({
+        oldPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      }).unwrap();
+      toast.success("Password changed successfully!");
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch {
+      toast.error("Failed to change password. Please try again.");
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <p className="text-red-500">Failed to load profile. Please try again later.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6 pb-4">
@@ -63,18 +140,29 @@ export default function UserProfilePage() {
           <div className="relative group">
             <div className="h-28 w-28 rounded-full overflow-hidden border-4 border-white shadow-lg">
               <img
-                src={userData.avatar}
+                src={imagePreview || profileData?.profileImage || "/placeholder-avatar.png"}
                 alt="Profile"
                 className="h-full w-full object-cover"
               />
             </div>
-            <button className="absolute bottom-0 right-0 bg-white hover:bg-gray-100 text-blue-600 p-2 rounded-full shadow-lg transition-colors">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              accept="image/*"
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute bottom-0 right-0 bg-white hover:bg-gray-100 text-blue-600 p-2 rounded-full shadow-lg transition-colors"
+            >
               <Camera className="h-4 w-4" />
             </button>
           </div>
           <div className="text-white">
-            <h1 className="text-3xl font-bold mb-1">{userData.name}</h1>
-            <p className="text-blue-100">{userData.role}</p>
+            <h1 className="text-3xl font-bold mb-1">{profileData?.fullName}</h1>
+            <p className="text-blue-100">{profileData?.role}</p>
           </div>
         </div>
 
@@ -83,10 +171,11 @@ export default function UserProfilePage() {
           <div className="flex gap-8 px-8">
             <button
               onClick={() => setActiveTab("profile")}
-              className={`py-4 px-2 font-medium transition-colors relative ${activeTab === "profile"
-                ? "text-blue-600"
-                : "text-gray-500 hover:text-gray-700"
-                }`}
+              className={`py-4 px-2 font-medium transition-colors relative ${
+                activeTab === "profile"
+                  ? "text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
             >
               Edit Profile
               {activeTab === "profile" && (
@@ -95,10 +184,11 @@ export default function UserProfilePage() {
             </button>
             <button
               onClick={() => setActiveTab("password")}
-              className={`py-4 px-2 font-medium transition-colors relative ${activeTab === "password"
-                ? "text-blue-600"
-                : "text-gray-500 hover:text-gray-700"
-                }`}
+              className={`py-4 px-2 font-medium transition-colors relative ${
+                activeTab === "password"
+                  ? "text-blue-600"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
             >
               Change Password
               {activeTab === "password" && (
@@ -140,11 +230,9 @@ export default function UserProfilePage() {
                       id="email"
                       type="email"
                       value={formData.email}
-                      onChange={(e) =>
-                        setFormData({ ...formData, email: e.target.value })
-                      }
+                      disabled
                       placeholder="Enter email"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 cursor-not-allowed"
                     />
                   </div>
 
@@ -163,11 +251,27 @@ export default function UserProfilePage() {
                     />
                   </div>
 
+                  <div className="space-y-2">
+                    <Label htmlFor="country" className="text-sm font-medium text-blue-600">
+                      Country
+                    </Label>
+                    <Input
+                      id="country"
+                      value={formData.country}
+                      onChange={(e) =>
+                        setFormData({ ...formData, country: e.target.value })
+                      }
+                      placeholder="Enter country"
+                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    />
+                  </div>
+
                   <Button
                     type="submit"
+                    disabled={isUpdating}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-base font-medium"
                   >
-                    Save & Change
+                    {isUpdating ? "Saving..." : "Save & Change"}
                   </Button>
                 </form>
               </div>
@@ -245,9 +349,10 @@ export default function UserProfilePage() {
 
                   <Button
                     type="submit"
+                    disabled={isChangingPassword}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-base font-medium"
                   >
-                    Save & Change
+                    {isChangingPassword ? "Saving..." : "Save & Change"}
                   </Button>
                 </form>
               </div>
