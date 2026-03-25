@@ -1,4 +1,5 @@
 import { UserCheck, ShieldCheck, Clock, Map, Sparkles, HeartHandshake } from "lucide-react";
+import { SectionHeader } from "../ui/section-header";
 
 export function WhyChooseUs() {
   const features = [
@@ -37,14 +38,12 @@ export function WhyChooseUs() {
   return (
     <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-5">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Why Travelers Choose Us
-          </h2>
-          <p className="text-gray-600 text-lg">
-            We don't just drive you from A to B. We deliver a seamless, premium travel experience that makes your journey as memorable as the destination.
-          </p>
-        </div>
+        <SectionHeader
+          title="Why Travelers Choose Us"
+          subtitle="Our Advantages"
+          description="We don't just drive you from A to B. We deliver a seamless, premium travel experience that makes your journey as memorable as the destination."
+          alignment="center"
+        />
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, idx) => {

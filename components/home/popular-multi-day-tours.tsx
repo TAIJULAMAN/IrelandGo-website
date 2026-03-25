@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Clock, Euro, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { SectionHeader } from "@/components/ui/section-header"
 
 export function PopularMultiDayTours() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -78,12 +79,13 @@ export function PopularMultiDayTours() {
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          <div className="text-center">
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2 md:mb-4">Popular Multi-Day Tours</h2>
-            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
-              Discover Ireland's most breathtaking destinations with our carefully curated multi-day experiences.
-            </p>
-          </div>
+          <SectionHeader
+            title="Popular Multi-Day Tours"
+            subtitle="Curated Experiences"
+            description="Discover Ireland's most breathtaking destinations with our carefully curated multi-day experiences."
+            alignment="center"
+            className="mb-0"
+          />
 
           <button
             onClick={goToNext}

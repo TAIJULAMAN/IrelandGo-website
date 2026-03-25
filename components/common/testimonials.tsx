@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react"
 import { useGetAllReviewQuery } from "@/Redux/features/review/reviewApi"
+import { SectionHeader } from "../ui/section-header"
 
 interface Review {
   id: string
@@ -61,10 +62,12 @@ export function Testimonials() {
     return (
       <section className="px-5 md:px-0 py-10 md:py-20 bg-gray-50">
         <div className="container mx-auto">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 md:mb-2">What Our Customers Say</h2>
-            <p className="text-sm md:text-base text-gray-600">Trusted by happy travelers</p>
-          </div>
+          <SectionHeader
+            title="What Our Customers Say"
+            subtitle="Testimonials"
+            description="Trusted by happy travelers worldwide for our premium service and local expertise."
+            alignment="center"
+          />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
               <div key={i} className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 animate-pulse ${i > 1 ? "hidden md:block" : ""} ${i > 2 ? "hidden lg:block" : ""}`}>
@@ -107,10 +110,13 @@ export function Testimonials() {
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          <div className="text-center">
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 md:mb-2">What Our Customers Say</h2>
-            <p className="text-sm md:text-base text-gray-600">Trusted by happy travelers</p>
-          </div>
+          <SectionHeader
+            title="What Our Customers Say"
+            subtitle="Testimonials"
+            description="Trusted by happy travelers worldwide for our premium service and local expertise."
+            alignment="center"
+            className="mb-0"
+          />
 
           <button
             onClick={goToNext}

@@ -1,4 +1,5 @@
 import { MapPin, CalendarRange, CreditCard, UserCheck, ArrowRight } from "lucide-react";
+import { SectionHeader } from "../ui/section-header";
 
 export function HowItWorks() {
   const steps = [
@@ -27,14 +28,12 @@ export function HowItWorks() {
   return (
     <section className="py-16 md:py-24 bg-white">
       <div className="container mx-auto px-5">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Simple 4 Steps to Start Your Journey
-          </h2>
-          <p className="text-gray-600 text-lg">
-            Booking your premium transport in Ireland has never been easier.
-          </p>
-        </div>
+        <SectionHeader
+          title="Simple 4 Steps to Start Your Journey"
+          subtitle="How It Works"
+          description="Booking your premium transport in Ireland has never been easier."
+          alignment="center"
+        />
 
         <div className="grid md:grid-cols-4 gap-8 relative">
           {/* Connecting line for desktop */}

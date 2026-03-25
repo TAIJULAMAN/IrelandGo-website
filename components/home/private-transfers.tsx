@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
 import Image from "next/image"
 import { useGetPrivateTransfersQuery } from "@/Redux/features/contents/contentsApi"
+import { SectionHeader } from "../ui/section-header"
 
 export function PrivateTransfers() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -60,12 +61,13 @@ export function PrivateTransfers() {
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          <div className="text-center">
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2 md:mb-4">Private Transfers</h2>
-            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
-              Explore our most popular private transfers.
-            </p>
-          </div>
+          <SectionHeader
+            title="Private Transfers"
+            subtitle="Reliable Chauffeur"
+            description="Explore our most popular private transfers."
+            alignment="center"
+            className="mb-0"
+          />
 
           <button
             onClick={goToNext}

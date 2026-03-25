@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Calendar, ArrowRight } from "lucide-react";
 import { useGetAllBlogsQuery } from "@/Redux/features/blogs/blogsApi";
+import { SectionHeader } from "@/components/ui/section-header";
 
 interface Blog {
     id: string
@@ -34,10 +35,11 @@ export function RecentBlogs() {
             <section className="py-16 md:py-24 bg-gray-50">
                 <div className="container mx-auto px-5">
                     <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-                        <div>
-                            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wide">Travel Inspiration</span>
-                            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2">Latest from our Blog</h2>
-                        </div>
+                        <SectionHeader
+                            title="Latest from our Blog"
+                            subtitle="Travel Inspiration"
+                            className="mb-0"
+                        />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         {[1, 2, 3].map((i) => (
@@ -64,11 +66,12 @@ export function RecentBlogs() {
         <section className="py-16 md:py-24 bg-gray-50">
             <div className="container mx-auto px-5">
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-                    <div>
-                        <span className="text-blue-600 font-semibold text-sm uppercase tracking-wide">Travel Inspiration</span>
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2">Latest from our Blog</h2>
-                    </div>
-                    <Link href="/blog" className="hidden md:inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors group">
+                    <SectionHeader
+                        title="Latest from our Blog"
+                        subtitle="Travel Inspiration"
+                        className="mb-0"
+                    />
+                    <Link href="/blog" className="hidden md:inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors group pb-1">
                         View All Articles
                         <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                     </Link>

@@ -2,6 +2,7 @@ import DayTripsDetailsHero from "@/components/day-trips/day-trips-details/day-tr
 import TripItinerary from "@/components/day-trips/day-trips-details/trip-Itinerary";
 import FAQ from "@/app/settings/faq/faq";
 import { Testimonials } from "@/components/common/testimonials";
+import { Footer } from "@/components/layout/footer";
 
 export default function DayTripDetails() {
   return (
@@ -10,6 +11,7 @@ export default function DayTripDetails() {
       <TripItinerary />
       <Testimonials />
       <FAQ />
+      <Footer />
     </main>
   );
 }

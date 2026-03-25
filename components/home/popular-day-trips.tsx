@@ -6,6 +6,7 @@ import { Clock, Euro, ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useGetPopularTripsQuery } from "@/Redux/features/contents/contentsApi"
+import { SectionHeader } from "@/components/ui/section-header"
 
 export function PopularDayTrips() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -59,12 +60,13 @@ export function PopularDayTrips() {
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          <div className="text-center">
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-2 md:mb-4">Popular Day Trips</h2>
-            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
-              Explore our most popular day trip destinations.
-            </p>
-          </div>
+          <SectionHeader
+            title="Popular Day Trips"
+            subtitle="Explore Ireland"
+            description="Explore our most popular day trip destinations."
+            alignment="center"
+            className="mb-0"
+          />
 
           <button
             onClick={goToNext}
