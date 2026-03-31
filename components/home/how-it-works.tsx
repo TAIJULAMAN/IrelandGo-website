@@ -6,7 +6,7 @@ export function HowItWorks() {
     {
       icon: MapPin,
       title: "Choose Your Service",
-      description: "Select from Private Transfers, hourly chauffeur service, or custom Day Trips across Ireland.",
+      description: "Select from Private Transfers, By The Hour, or custom Day Trips across Ireland.",
     },
     {
       icon: CalendarRange,

@@ -21,7 +21,7 @@ export function WhyChooseUs() {
     {
       icon: Sparkles,
       title: "Luxury Fleet",
-      description: "Experience superior comfort in our modern fleet of Mercedes-Benz sedans and vans, equipped with Wi-Fi and water.",
+      description: "Take-out Mercedes-Bnez from above.",
     },
     {
       icon: Map,

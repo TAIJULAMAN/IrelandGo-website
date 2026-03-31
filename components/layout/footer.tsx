@@ -123,24 +123,24 @@ export function Footer({ className = "" }: FooterProps) {
           <div>
             <h4 className="font-medium mb-4">Contact Us</h4>
             <address className="not-italic text-sm text-gray-300 space-y-2">
-              <p>123 Dublin Street</p>
-              <p>Dublin, Ireland</p>
+              <p>225 Cratloe Village,</p>
+              <p> Limerick, Ireland.</p>
               <p>
                 Email:{" "}
                 <a
-                  href="mailto:info@irelandgo.com"
+                  href="mailto:info@tourenzo.com"
                   className="hover:text-blue-400 transition-colors"
                 >
-                  info@irelandgo.com
+                  info@tourenzo.com
                 </a>
               </p>
               <p>
                 Phone:{" "}
                 <a
-                  href="tel:+35312345678"
+                  href="tel:+353858090960"
                   className="hover:text-blue-400 transition-colors"
                 >
-                  +353 1 234 5678
+                  +353 85 809 0960
                 </a>
               </p>
             </address>

@@ -94,8 +94,7 @@ export default function MultiDayToursOurMultiDayTours() {
               Our Multi-day tours
             </h2>
             <p className="text-slate-600 mt-1">
-              Discover Ireland's most breathtaking destinations with our
-              carefully curated multi-day experiences
+              Discover Ireland's most breathtaking destinations with our carefully curated day trips.
             </p>
           </div>
           <button
@@ -112,11 +111,10 @@ export default function MultiDayToursOurMultiDayTours() {
             <button
               key={f}
               onClick={() => onFilter(f)}
-              className={`px-4 py-2 rounded-full text-sm font-medium border ${
-                activeFilter === f
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
-              }`}
+              className={`px-4 py-2 rounded-full text-sm font-medium border ${activeFilter === f
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                }`}
             >
               {f}
             </button>

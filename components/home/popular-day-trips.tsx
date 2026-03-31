@@ -11,8 +11,10 @@ import { SectionHeader } from "@/components/ui/section-header"
 export function PopularDayTrips() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const { data: response, isLoading, isError } = useGetPopularTripsQuery({})
+  console.log("response", response)
 
-  const trips = response?.data?.data || []
+  const trips = response?.data || []
+  console.log("trips", trips)
 
   const goToPrevious = () => {
     if (trips.length === 0) return
