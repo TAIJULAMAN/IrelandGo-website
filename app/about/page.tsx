@@ -6,61 +6,59 @@ export default function About() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <main className="flex-1">
-        {/* Hero Section */}
         <section
-          className="relative min-h-[80vh] md:min-h-screen text-white flex flex-col pb-20 bg-cover bg-center bg-no-repeat"
+          className="relative text-white flex flex-col min-h-[70vh] bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage:
-              'linear-gradient(rgba(15, 23, 42, 0.5), rgba(15, 23, 42, 0.5)), url("/about.jpg")',
+            backgroundImage: 'url("/about.avif")',
           }}
         >
           <Header />
 
-          <div className="flex-1 container mx-auto px-5 md:px-0 pt-20 flex flex-col items-center justify-center text-center gap-8 md:gap-12">
-            <div className="space-y-4 max-w-4xl mx-auto">
-              <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight text-white drop-shadow-lg">
+          <div className="container mx-auto px-5 md:px-0 flex flex-col items-center justify-center text-center gap-6 md:gap-8">
+            <div className="space-y-2 max-w-4xl mx-auto">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-white drop-shadow-lg">
                 About Tourenzo
               </h1>
-              <p className="max-w-2xl mx-auto text-lg sm:text-xl md:text-2xl text-white/95 drop-shadow-md">
+              <p className="max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-white/95 drop-shadow-md">
                 Your trusted partner for seamless travel experiences across the
-                Emerald Isle
+                Emerald Isle.
               </p>
             </div>
 
             {/* Stats */}
-            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-12 mt-4 sm:mt-8">
+            <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-12 mt-4 sm:mt-6">
               <div className="flex flex-col items-center">
-                <span className="text-3xl md:text-5xl font-bold text-white drop-shadow-md">
+                <span className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">
                   15+
                 </span>
-                <span className="text-sm md:text-base text-white/90 font-medium mt-1">
+                <span className="text-sm text-white/90 font-medium mt-1">
                   Years Experience
                 </span>
               </div>
-              <div className="hidden sm:block w-1 h-12 bg-white rounded-full opacity-60" />
+              <div className="hidden sm:block w-1 h-10 bg-white rounded-full opacity-60" />
               <div className="flex flex-col items-center">
-                <span className="text-3xl md:text-5xl font-bold text-white drop-shadow-md">
+                <span className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">
                   1000+
                 </span>
-                <span className="text-sm md:text-base text-white/90 font-medium mt-1">
+                <span className="text-sm text-white/90 font-medium mt-1">
                   Happy Customers
                 </span>
               </div>
-              <div className="hidden sm:block w-1 h-12 bg-white rounded-full opacity-60" />
+              <div className="hidden sm:block w-1 h-10 bg-white rounded-full opacity-60" />
               <div className="flex flex-col items-center">
-                <span className="text-3xl md:text-5xl font-bold text-white drop-shadow-md">
+                <span className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">
                   100+
                 </span>
-                <span className="text-sm md:text-base text-white/90 font-medium mt-1">
+                <span className="text-sm text-white/90 font-medium mt-1">
                   Destinations
                 </span>
               </div>
-              <div className="hidden md:block w-1 h-12 bg-white rounded-full opacity-60" />
+              <div className="hidden md:block w-1 h-10 bg-white rounded-full opacity-60" />
               <div className="flex flex-col items-center">
-                <span className="text-3xl md:text-5xl font-bold text-white drop-shadow-md">
+                <span className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">
                   24/7
                 </span>
-                <span className="text-sm md:text-base text-white/90 font-medium mt-1">
+                <span className="text-sm text-white/90 font-medium mt-1">
                   Support
                 </span>
               </div>
@@ -68,9 +66,8 @@ export default function About() {
           </div>
         </section>
 
-        {/* Story Section */}
         <section className="container mx-auto px-5 md:px-0 -mt-16 md:-mt-24 relative z-10 mb-16">
-          <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12">
+          <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
@@ -97,7 +94,6 @@ export default function About() {
           </div>
         </section>
 
-        {/* Values Section */}
         <section className="container mx-auto px-5 md:px-0 py-8 mb-16">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">
@@ -153,7 +149,6 @@ export default function About() {
           </div>
         </section>
 
-        {/* Team / Why Choose Us Section */}
         <section className="bg-white py-20 border-t border-gray-100">
           <div className="container mx-auto px-5 md:px-0">
             <div className="max-w-5xl mx-auto">
@@ -220,7 +215,6 @@ export default function About() {
           </div>
         </section>
       </main>
-
       <Footer />
     </div>
   );
