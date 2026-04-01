@@ -11,7 +11,7 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "IrelandGo",
+  title: "Tourenzo",
   description:
     "Book private car transfers, day trips, and multi-day tours across Ireland. Professional drivers, comfortable vehicles, and 24/7 support.",
   generator: "md shah aman patwary",

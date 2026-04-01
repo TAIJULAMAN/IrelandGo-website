@@ -14,7 +14,7 @@ export default function DreamTour() {
 				</h2>
 				<p className="text-sm sm:text-base text-white/80 leading-relaxed mb-6 sm:mb-8">
 					Tell us where you want to go, and we&apos;ll build a personalized itinerary just for you.
-					Whether it&apos;s castles, coastlines, or countryside, IrelandGO crafts multi-day
+					Whether it&apos;s castles, coastlines, or countryside, Tourenzo crafts multi-day
 					journeys that match your pace, interests, and travel style.
 				</p>
 				<Button

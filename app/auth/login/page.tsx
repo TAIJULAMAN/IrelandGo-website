@@ -94,7 +94,7 @@ export default function Login() {
                                     Welcome Back
                                 </h1>
                                 <p className="text-gray-500 text-sm sm:text-base">
-                                    Sign in to your IrelandGo account
+                                    Sign in to your Tourenzo account
                                 </p>
                             </div>
 

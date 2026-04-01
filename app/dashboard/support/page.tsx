@@ -81,14 +81,14 @@ export default function SupportPage() {
         {
             icon: <Mail className="h-6 w-6" />,
             title: "Email Us",
-            description: "support@irelandgo.com",
+            description: "info@tourenzo.com",
             detail: "We'll respond within 24 hours",
         },
         {
             icon: <Phone className="h-6 w-6" />,
             title: "Call Us",
-            description: "+353 1 234 5678",
-            detail: "Mon-Fri, 9AM-6PM IST",
+            description: "+353 85 809 0960",
+            // detail: "Mon-Fri, 9AM-6PM IST",
         }
     ]
 

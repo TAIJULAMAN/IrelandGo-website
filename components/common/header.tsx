@@ -73,7 +73,7 @@ export function Header() {
               <Link href="/" onClick={() => setIsMenuOpen(false)}>
                 <div className="flex items-center gap-2">
                   <Image src="/logo.png" alt="Logo" width={32} height={32} />
-                  <span className="text-lg font-bold text-gray-900">IrelandGO</span>
+                  <span className="text-lg font-bold text-gray-900">Tourenzo</span>
                 </div>
               </Link>
               <button
@@ -189,7 +189,7 @@ export function Header() {
           <Link href="/">
             <div className="flex items-center gap-2">
               <Image src="/logo.png" alt="Logo" width={40} height={40} />
-              <span className="text-xl font-bold text-white">IrelandGO</span>
+              <span className="text-xl font-bold text-white">Tourenzo</span>
             </div>
           </Link>
           <button

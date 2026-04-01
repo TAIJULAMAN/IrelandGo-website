@@ -82,7 +82,7 @@ export default function TripCards() {
   return (
     <div className="px-5 md:px-0 py-16 bg-gray-50">
       <h2 className="text-4xl font-bold text-center text-gray-900 mb-10">
-        Explore the world with our 500+ day trips!
+        Explore the world with our 1000+ day trips!
       </h2>
 
       <div className="flex justify-center gap-3 mb-12 flex-wrap">

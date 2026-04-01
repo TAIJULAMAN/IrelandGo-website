@@ -11,7 +11,7 @@ export default function MultiDayToursJourneyBegins() {
             <span className="text-blue-600">Confidence</span>
           </h2>
           <p className="mt-4 text-slate-600">
-            Arriving in Ireland should feel effortless. With IrelandGO's airport
+            Arriving in Ireland should feel effortless. With Tourenzo's airport
             transfer service, you're welcomed by a professional driver dedicated
             to making your journey smooth and stress-free. Our transfers combine
             punctuality, comfort, and hospitality, ensuring you travel in style
@@ -62,7 +62,7 @@ export default function MultiDayToursJourneyBegins() {
       <div className="mt-10 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           <div>
-            <div className="text-2xl font-extrabold text-slate-900">500+</div>
+            <div className="text-2xl font-extrabold text-slate-900">1000+</div>
             <div className="text-slate-500 text-sm">Happy Customers</div>
           </div>
           <div>

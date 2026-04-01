@@ -1,5 +1,5 @@
 import { Footer } from "@/components/layout/footer";
-import { MapPin, Phone, Mail, Clock, Send } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Header2 } from "@/components/common/Header2";
 
@@ -117,9 +117,8 @@ export default function Contact() {
                                         <div>
                                             <h3 className="font-semibold text-gray-900 mb-1">Address</h3>
                                             <p className="text-gray-600">
-                                                123 O'Connell Street<br />
-                                                Dublin 1, D01 XY45<br />
-                                                Ireland
+                                                225 Cratloe Village,<br />
+                                                Limerick, Ireland.
                                             </p>
                                         </div>
                                     </div>
@@ -131,8 +130,7 @@ export default function Contact() {
                                         <div>
                                             <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
                                             <p className="text-gray-600">
-                                                +353 1 234 5678<br />
-                                                +353 87 123 4567 (Mobile)
+                                                +353 85 809 0960
                                             </p>
                                         </div>
                                     </div>
@@ -144,22 +142,26 @@ export default function Contact() {
                                         <div>
                                             <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
                                             <p className="text-gray-600">
-                                                info@irelandgo.ie<br />
-                                                support@irelandgo.ie
+                                                info@tourenzo.com
                                             </p>
                                         </div>
                                     </div>
 
                                     <div className="flex items-start gap-4">
-                                        <div className="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                            <Clock className="w-6 h-6 text-orange-600" />
+                                        <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                            <MessageCircle className="w-6 h-6 text-emerald-600" />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-gray-900 mb-1">Business Hours</h3>
+                                            <h3 className="font-semibold text-gray-900 mb-1">WhatsApp</h3>
                                             <p className="text-gray-600">
-                                                Monday - Friday: 8:00 AM - 8:00 PM<br />
-                                                Saturday - Sunday: 9:00 AM - 6:00 PM<br />
-                                                <span className="text-blue-600 font-medium">24/7 Emergency Support</span>
+                                                <a
+                                                    href="https://wa.me/3538580909060"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-emerald-600 hover:text-emerald-700 hover:underline transition"
+                                                >
+                                                    +353 85 809 0960
+                                                </a>
                                             </p>
                                         </div>
                                     </div>
@@ -174,7 +176,7 @@ export default function Contact() {
                                 </p>
                                 <Button className="w-full bg-white text-blue-600 hover:bg-blue-50 font-semibold">
                                     <Phone className="w-5 h-5 mr-2" />
-                                    Call Now: +353 1 234 5678
+                                    Call Now: +353 85 809 0960
                                 </Button>
                             </div>
                         </div>

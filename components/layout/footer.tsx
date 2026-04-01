@@ -16,7 +16,7 @@ export function Footer({ className = "" }: FooterProps) {
                 alt=""
                 className="w-12 h-12 object-contain"
               />
-              <h3 className="text-lg font-semibold">IrelandGo</h3>
+              <h3 className="text-lg font-semibold">Tourenzo</h3>
             </div>
             <p className="text-sm text-gray-300">
               Your trusted travel companion for exploring the beauty of Ireland.
@@ -147,7 +147,7 @@ export function Footer({ className = "" }: FooterProps) {
           </div>
         </div>
         <div className="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
-          <p>© {new Date().getFullYear()} IrelandGo. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Tourenzo. All rights reserved.</p>
         </div>
       </div>
     </footer>

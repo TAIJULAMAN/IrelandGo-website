@@ -39,11 +39,6 @@ const userNavLinks = [
         icon: <UserIcon className="h-4 w-4" />,
         label: "Profile"
     },
-    // {
-    //     href: `${basePath}/payment-methods`,
-    //     icon: <CreditCard className="h-4 w-4" />,
-    //     label: "Payment Methods",
-    // },
     {
         href: `${basePath}/notifications`,
         icon: <Bell className="h-4 w-4" />,
@@ -105,9 +100,9 @@ export function Sidebar({ user, setIsMobileMenuOpen, setIsLogoutDialogOpen }: Us
             <div className="p-6">
                 <Link href="/" className="flex items-center gap-3 group">
                     <div className="relative w-10 h-10 transition-transform group-hover:scale-105 duration-300">
-                        <Image src="/logo.png" alt="IrelandGo" fill className="object-contain" />
+                        <Image src="/logo.png" alt="Tourenzo" fill className="object-contain" />
                     </div>
-                    <span className="text-xl font-extrabold text-blue-900 tracking-tight">IrelandGo</span>
+                    <span className="text-xl font-extrabold text-blue-900 tracking-tight">Tourenzo</span>
                 </Link>
             </div>
 

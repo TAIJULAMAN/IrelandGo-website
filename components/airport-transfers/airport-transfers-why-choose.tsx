@@ -27,7 +27,7 @@ export default function AirportTransfersWhyChoose() {
 			<div className="max-w-7xl mx-auto px-5">
 				<div className="text-center mb-12">
 					<h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-						Why Choose Airport Transfers for IrelandGO?
+						Why Choose Airport Transfers for Tourenzo?
 					</h2>
 					<p className="text-lg text-gray-600 max-w-2xl mx-auto">
 						Experience the difference with our premium airport transfer services across Ireland.
