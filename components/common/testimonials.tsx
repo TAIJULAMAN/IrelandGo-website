@@ -1,61 +1,62 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react"
-import { useGetAllReviewQuery } from "@/Redux/features/review/reviewApi"
-import { SectionHeader } from "../ui/section-header"
+import { useState } from "react";
+import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { useGetAllReviewQuery } from "@/Redux/features/review/reviewApi";
+import { SectionHeader } from "../ui/section-header";
 
 interface Review {
-  id: string
-  userId: string
-  tripServiceId: string
-  rating: number
-  comment: string
-  createdAt: string
-  updatedAt: string
+  id: string;
+  userId: string;
+  tripServiceId: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export function Testimonials() {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const { data, isLoading } = useGetAllReviewQuery(undefined)
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const { data, isLoading } = useGetAllReviewQuery(undefined);
+  console.log("review data", data);
 
-  const reviews: Review[] = data?.data || []
+  const reviews: Review[] = data?.data || [];
 
   const goToPrevious = () => {
-    if (reviews.length === 0) return
-    setCurrentIndex((prev) => (prev === 0 ? reviews.length - 1 : prev - 1))
-  }
+    if (reviews.length === 0) return;
+    setCurrentIndex((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
+  };
 
   const goToNext = () => {
-    if (reviews.length === 0) return
-    setCurrentIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1))
-  }
+    if (reviews.length === 0) return;
+    setCurrentIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
+  };
 
   // Get up to 3 visible testimonials based on current index
   const getVisibleReviews = () => {
-    if (reviews.length === 0) return []
-    if (reviews.length <= 3) return reviews
+    if (reviews.length === 0) return [];
+    if (reviews.length <= 3) return reviews;
     return [
       reviews[currentIndex % reviews.length],
       reviews[(currentIndex + 1) % reviews.length],
       reviews[(currentIndex + 2) % reviews.length],
-    ]
-  }
+    ];
+  };
 
-  const visibleReviews = getVisibleReviews()
+  const visibleReviews = getVisibleReviews();
 
   // Generate initials from userId as fallback
   const getInitials = (userId: string) => {
-    return userId.slice(0, 2).toUpperCase()
-  }
+    return userId.slice(0, 2).toUpperCase();
+  };
 
   // Format date
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
       month: "short",
       year: "numeric",
-    })
-  }
+    });
+  };
 
   // Loading skeleton
   if (isLoading) {
@@ -70,10 +71,16 @@ export function Testimonials() {
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 animate-pulse ${i > 1 ? "hidden md:block" : ""} ${i > 2 ? "hidden lg:block" : ""}`}>
+              <div
+                key={i}
+                className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 animate-pulse ${i > 1 ? "hidden md:block" : ""} ${i > 2 ? "hidden lg:block" : ""}`}
+              >
                 <div className="flex gap-1 mb-6">
                   {[...Array(5)].map((_, j) => (
-                    <div key={j} className="w-4 h-4 md:w-5 md:h-5 bg-gray-200 rounded" />
+                    <div
+                      key={j}
+                      className="w-4 h-4 md:w-5 md:h-5 bg-gray-200 rounded"
+                    />
                   ))}
                 </div>
                 <div className="space-y-2 mb-8">
@@ -93,10 +100,10 @@ export function Testimonials() {
           </div>
         </div>
       </section>
-    )
+    );
   }
 
-  if (reviews.length === 0) return null
+  if (reviews.length === 0) return null;
 
   return (
     <section className="px-5 md:px-0 py-10 md:py-20 bg-gray-50">
@@ -152,8 +159,12 @@ export function Testimonials() {
                   {getInitials(review.userId)}
                 </div>
                 <div>
-                  <p className="font-bold text-gray-900 text-sm md:text-base">Traveler</p>
-                  <p className="text-xs md:text-sm text-gray-500">{formatDate(review.createdAt)}</p>
+                  <p className="font-bold text-gray-900 text-sm md:text-base">
+                    Traveler
+                  </p>
+                  <p className="text-xs md:text-sm text-gray-500">
+                    {formatDate(review.createdAt)}
+                  </p>
                 </div>
               </div>
             </div>
@@ -179,5 +190,5 @@ export function Testimonials() {
         </div>
       </div>
     </section>
-  )
+  );
 }
