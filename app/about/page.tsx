@@ -20,8 +20,10 @@ export default function About() {
                 About Tourenzo
               </h1>
               <p className="max-w-3xl mx-auto text-base sm:text-lg md:text-xl text-white/95 drop-shadow-md">
-                Your trusted partner for seamless travel experiences across the
-                Emerald Isle.
+                Discover the beauty of Ireland with Tourenzo. As your trusted
+                travel partner, we provide premium immersive guided tours,
+                ensuring every journey across the Emerald Isle is comfortable,
+                safe, and unforgettable.
               </p>
             </div>
 
