@@ -203,12 +203,6 @@ export default function TransferSearchHero() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const tabs = [
-    { id: "transfer", label: "Transfer" },
-    { id: "hourly", label: "By the hour", icon: Clock, href: "/by-the-hour" },
-    { id: "day-trips", label: "Day trips", href: "/day-trips" },
-  ];
-
   // Get display location for hero title
   const displayLocation = pickupLocation || "Dublin";
 
@@ -240,9 +234,7 @@ export default function TransferSearchHero() {
         {/* Hero Text */}
         <div className="text-center mb-10 pt-10">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-5 leading-tight">
-            Discover {displayLocation} with
-            <br className="hidden sm:block" />
-            Comfortable Transfers
+            Private Transfers in {displayLocation}
           </h1>
           <p className="text-base sm:text-lg text-white/90 max-w-2xl mx-auto">
             Seamless city-to-city and airport transfers across {displayLocation} and

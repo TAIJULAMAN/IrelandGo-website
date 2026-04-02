@@ -10,12 +10,10 @@ export default function DreamTour() {
 		<section className="bg-[#111c3a] py-12 sm:py-16">
 			<div className="max-w-5xl mx-auto px-5 md:px-0 text-center text-white">
 				<h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-3 sm:mb-4">
-					Ready to Design Your Dream Tour?
+					Ready to Plan Your Journey?
 				</h2>
 				<p className="text-sm sm:text-base text-white/80 leading-relaxed mb-6 sm:mb-8">
-					Tell us where you want to go, and we&apos;ll build a personalized itinerary just for you.
-					Whether it&apos;s castles, coastlines, or countryside, Tourenzo crafts multi-day
-					journeys that match your pace, interests, and travel style.
+					Tell us where you need to go, and we&apos;ll arrange a transfer that suits your schedule and travel needs. Whether it&apos;s city-to-city, airport, or private travel, Tourenzo ensures a smooth and comfortable journey every time.
 				</p>
 				<Button
 					asChild

@@ -87,13 +87,6 @@ export default function PrivateCarTransferHero() {
         setStops(newStops);
     };
 
-    // Handle search submission
-    const handleSearch = () => {
-        if (pickupLocation.trim() && dropoffLocation.trim()) {
-            router.push(`/transfer/private-car-transfer?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}`);
-        }
-    };
-
     // Handle keyboard navigation for pickup
     const handlePickupKeyDown = (e) => {
         if (!showPickupDropdown || filteredPickupSettlements.length === 0) {
@@ -355,37 +348,6 @@ export default function PrivateCarTransferHero() {
                             </div>
                         </div>
 
-                        {/* Additional Stops */}
-                        {stops.map((stop, index) => (
-                            <div key={index} className="mb-4">
-                                <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                                    <MapPin className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                                    <input
-                                        type="text"
-                                        placeholder={`Stop ${index + 1}`}
-                                        className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
-                                        value={stop}
-                                        onChange={(e) => updateStop(index, e.target.value)}
-                                    />
-                                    <button
-                                        onClick={() => removeStop(index)}
-                                        className="text-red-500 hover:text-red-600 transition"
-                                        aria-label="Remove stop"
-                                    >
-                                        <X className="w-5 h-5" />
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-
-                        <button
-                            onClick={addStop}
-                            className="flex items-center gap-1 text-blue-500 hover:text-blue-600 text-sm font-medium mb-5 transition"
-                        >
-                            <Plus className="w-4 h-4" />
-                            Add Stop
-                        </button>
-
                         {/* Date, Time, Passengers, Luggage */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-5">
                             <div className="col-span-1">
@@ -528,15 +490,15 @@ export default function PrivateCarTransferHero() {
                 <div className="mt-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-around gap-2 text-white shadow-lg">
                     <div className="flex items-center gap-2">
                         <Zap className="w-5 h-5 text-white fill-white" />
-                        <span className="font-medium text-sm sm:text-base">Door-to-door in 20 min</span>
+                        <span className="font-medium text-sm sm:text-base">Door-to-door transfers.</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <PiggyBank className="w-5 h-5 text-white fill-white" />
-                        <span className="font-medium text-sm sm:text-base">From €7 per seat</span>
+                        <span className="font-medium text-sm sm:text-base">Optional Sightseeing.</span>
                     </div>
                     <div className="flex items-center gap-2">
                         <Sparkles className="w-5 h-5 text-white fill-white" />
-                        <span className="font-medium text-sm sm:text-base">Comfortable car</span>
+                        <span className="font-medium text-sm sm:text-base">Premium Vehicles.</span>
                     </div>
                 </div>
 
