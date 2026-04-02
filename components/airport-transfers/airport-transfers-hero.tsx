@@ -16,22 +16,26 @@ export default function AirportTransfersHero() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Filter to show only airports
-  const airports = irishSettlements.filter(s => s.type === "Airport");
+  const airports = irishSettlements.filter((s) => s.type === "Airport");
 
   // Filter airports based on search query
   const filteredAirports = searchQuery.trim()
-    ? airports.filter(
-      (airport) =>
-        airport.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        airport.county.toLowerCase().includes(searchQuery.toLowerCase())
-    ).slice(0, 8) // Limit to 8 results
+    ? airports
+        .filter(
+          (airport) =>
+            airport.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            airport.county.toLowerCase().includes(searchQuery.toLowerCase()),
+        )
+        .slice(0, 8) // Limit to 8 results
     : [];
 
   // Handle search submission
   const handleSearch = (location?: string) => {
     const searchLocation = location || searchQuery;
     if (searchLocation.trim()) {
-      router.push(`/transfer/transfer-search?location=${encodeURIComponent(searchLocation)}`);
+      router.push(
+        `/transfer/transfer-search?location=${encodeURIComponent(searchLocation)}`,
+      );
     }
   };
 
@@ -55,7 +59,7 @@ export default function AirportTransfersHero() {
       case "ArrowDown":
         e.preventDefault();
         setSelectedIndex((prev) =>
-          prev < filteredAirports.length - 1 ? prev + 1 : prev
+          prev < filteredAirports.length - 1 ? prev + 1 : prev,
         );
         break;
       case "ArrowUp":
@@ -102,7 +106,7 @@ export default function AirportTransfersHero() {
     "Dublin Airport",
     "Cork Airport",
     "Knock Airport",
-    "Kerry Airport"
+    "Kerry Airport",
   ];
 
   return (
@@ -110,24 +114,26 @@ export default function AirportTransfersHero() {
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img
-          src="/airport.png"
+          src="/ShannonAirport.webp"
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
-
       </div>
 
       <Header />
 
-      <div className="container mx-auto px-5 md:px-0 pt-10 md:pt-16 pb-10 md:pb-16 flex flex-col items-center text-center gap-5 md:gap-10">
+      <div className="container mx-auto px-5 md:px-0 pt-10 flex flex-col items-center text-center gap-5 md:gap-10">
         <div className="space-y-3 sm:space-y-4 mt-6 sm:mt-8">
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight text-white px-2">
             Reliable Airport Transfers Across
             <br className="hidden sm:block" />
             <span className="text-white"> Ireland</span>
           </h1>
-          <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-white/85 px-4">
-            Book seamless transfers to and from Ireland's major airports.
+          <p className="max-w-5xl mx-auto text-sm sm:text-base md:text-lg text-white/85 px-4">
+            Start your Irish adventure with our premium airport transfer
+            services. Enjoy comfortable, reliable, and prompt journeys
+            connecting you between all major airports and destinations across
+            the Emerald Isle.
           </p>
         </div>
 
@@ -168,8 +174,9 @@ export default function AirportTransfersHero() {
                         handleSearch(airport.name);
                         setShowDropdown(false);
                       }}
-                      className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0 ${index === selectedIndex ? "bg-blue-50" : ""
-                        }`}
+                      className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0 ${
+                        index === selectedIndex ? "bg-blue-50" : ""
+                      }`}
                     >
                       <div className="flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
@@ -218,21 +225,27 @@ export default function AirportTransfersHero() {
             <span className="text-2xl sm:text-3xl font-bold text-white">
               50+
             </span>
-            <span className="text-xs sm:text-sm md:text-base text-white/80">Multi-day Tours</span>
+            <span className="text-xs sm:text-sm md:text-base text-white/80">
+              Multi-day Tours
+            </span>
           </div>
           <div className="hidden sm:block w-1 h-12 bg-white rounded-full" />
           <div className="flex flex-col items-center">
             <span className="text-2xl sm:text-3xl font-bold text-white">
               1000+
             </span>
-            <span className="text-xs sm:text-sm md:text-base text-white/80">Happy Travelers</span>
+            <span className="text-xs sm:text-sm md:text-base text-white/80">
+              Happy Travelers
+            </span>
           </div>
           <div className="hidden sm:block w-1 h-12 bg-white rounded-full" />
           <div className="flex flex-col items-center">
             <span className="text-2xl sm:text-3xl font-bold text-white">
               15+
             </span>
-            <span className="text-xs sm:text-sm md:text-base text-white/80">Years Experience</span>
+            <span className="text-xs sm:text-sm md:text-base text-white/80">
+              Years Experience
+            </span>
           </div>
         </div>
       </div>

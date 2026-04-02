@@ -9,182 +9,205 @@ import { Header2 } from "@/components/common/Header2";
 import { useGetSingleBlogQuery } from "@/Redux/features/blogs/blogsApi";
 
 export default function BlogDetailPage() {
-    const params = useParams();
-    const slug = params.slug as string;
+  const params = useParams();
+  const slug = params.slug as string;
 
-    const { data, isLoading, isError } = useGetSingleBlogQuery(slug, {
-        skip: !slug,
+  const { data, isLoading, isError } = useGetSingleBlogQuery(slug, {
+    skip: !slug,
+  });
+
+  const blog = data?.data;
+
+  const formatDate = (dateStr: string) => {
+    return new Date(dateStr).toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
     });
+  };
 
-    const blog = data?.data;
-
-    const formatDate = (dateStr: string) => {
-        return new Date(dateStr).toLocaleDateString("en-US", {
-            month: "long",
-            day: "numeric",
-            year: "numeric",
-        });
-    };
-
-    // Loading state
-    if (isLoading) {
-        return (
-            <div className="min-h-screen flex flex-col bg-white">
-                <Header2 />
-                <main className="flex-grow pt-24 pb-16">
-                    <div className="container mx-auto px-5 animate-pulse">
-                        {/* Breadcrumb skeleton */}
-                        <div className="max-w-4xl mx-auto mb-6">
-                            <div className="h-4 bg-gray-200 rounded w-48" />
-                        </div>
-                        {/* Title skeleton */}
-                        <div className="max-w-4xl mx-auto mb-8 space-y-3">
-                            <div className="h-10 bg-gray-200 rounded w-full" />
-                            <div className="h-10 bg-gray-200 rounded w-2/3" />
-                        </div>
-                        {/* Image skeleton */}
-                        <div className="max-w-5xl mx-auto rounded-2xl bg-gray-200 aspect-[16/9] mb-10" />
-                        {/* Content skeleton */}
-                        <div className="max-w-3xl mx-auto space-y-4">
-                            <div className="h-4 bg-gray-200 rounded w-full" />
-                            <div className="h-4 bg-gray-200 rounded w-full" />
-                            <div className="h-4 bg-gray-200 rounded w-5/6" />
-                            <div className="h-4 bg-gray-200 rounded w-full" />
-                            <div className="h-4 bg-gray-200 rounded w-4/6" />
-                        </div>
-                    </div>
-                </main>
-                <Footer />
-            </div>
-        );
-    }
-
-    // Error / Not found
-    if (isError || !blog) {
-        return (
-            <div className="min-h-screen flex flex-col bg-white">
-                <Header2 />
-                <div className="flex-grow flex items-center justify-center">
-                    <div className="text-center">
-                        <h1 className="text-2xl font-bold text-gray-900 mb-2">Post Not Found</h1>
-                        <Link href="/blog" className="text-blue-600 hover:underline">Return to Blog</Link>
-                    </div>
-                </div>
-                <Footer />
-            </div>
-        );
-    }
-
+  // Loading state
+  if (isLoading) {
     return (
-        <div className="min-h-screen flex flex-col bg-white">
-            <Header2 />
+      <div className="min-h-screen flex flex-col bg-white">
+        <Header2 />
+        <main className="flex-grow pt-24 pb-16">
+          <div className="container mx-auto px-5 animate-pulse">
+            {/* Breadcrumb skeleton */}
+            <div className="max-w-4xl mx-auto mb-6">
+              <div className="h-4 bg-gray-200 rounded w-48" />
+            </div>
+            {/* Title skeleton */}
+            <div className="max-w-4xl mx-auto mb-8 space-y-3">
+              <div className="h-10 bg-gray-200 rounded w-full" />
+              <div className="h-10 bg-gray-200 rounded w-2/3" />
+            </div>
+            {/* Image skeleton */}
+            <div className="max-w-5xl mx-auto rounded-2xl bg-gray-200 aspect-[16/9] mb-10" />
+            {/* Content skeleton */}
+            <div className="max-w-3xl mx-auto space-y-4">
+              <div className="h-4 bg-gray-200 rounded w-full" />
+              <div className="h-4 bg-gray-200 rounded w-full" />
+              <div className="h-4 bg-gray-200 rounded w-5/6" />
+              <div className="h-4 bg-gray-200 rounded w-full" />
+              <div className="h-4 bg-gray-200 rounded w-4/6" />
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
-            <main className="flex-grow pt-24 pb-16">
-                <article>
-                    {/* Breadcrumb */}
-                    <div className="container mx-auto px-5">
-                        <div className="mb-5">
-                            <nav className="flex items-center gap-2 text-sm text-gray-500">
-                                <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
-                                <span>/</span>
-                                <Link href="/blog" className="hover:text-blue-600 transition-colors">Blog</Link>
-                                <span>/</span>
-                                <span className="text-gray-900 font-medium truncate max-w-[200px]">{blog.title}</span>
-                            </nav>
-                        </div>
-                    </div>
+  // Error / Not found
+  if (isError || !blog) {
+    return (
+      <div className="min-h-screen flex flex-col bg-white">
+        <Header2 />
+        <div className="flex-grow flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              Post Not Found
+            </h1>
+            <Link href="/blog" className="text-blue-600 hover:underline">
+              Return to Blog
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
-                    {/* Title */}
-                    <div className="container mx-auto px-5">
-                        <div className="mb-5">
-                            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
-                                {blog.title}
-                            </h1>
-                            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-                                <div className="flex items-center gap-1.5">
-                                    <Calendar className="w-4 h-4" />
-                                    <span>{formatDate(blog.createdAt)}</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <Tag className="w-4 h-4" />
-                                    <span>{blog.category}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+  return (
+    <div className="min-h-screen flex flex-col bg-white">
+      <Header2 />
 
-                    {/* Hero Image - wider than content */}
-                    {blog.image?.[0] && (
-                        <div className="container mx-auto px-5 mb-10">
-                            <div className="max-w-5xl mx-auto">
-                                <div className="relative rounded-2xl overflow-hidden aspect-[16/9] shadow-md">
-                                    <Image
-                                        src={blog.image[0]}
-                                        alt={blog.title}
-                                        fill
-                                        className="object-cover"
-                                        priority
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    )}
+      <main className="flex-grow pt-24 pb-16">
+        <article>
+          {/* Breadcrumb */}
+          <div className="container mx-auto px-5">
+            <div className="mb-5">
+              <nav className="flex items-center gap-2 text-sm text-gray-500">
+                <Link
+                  href="/"
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  Home
+                </Link>
+                <span>/</span>
+                <Link
+                  href="/blog"
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  Blog
+                </Link>
+                <span>/</span>
+                <span className="text-gray-900 font-medium truncate max-w-[200px]">
+                  {blog.title}
+                </span>
+              </nav>
+            </div>
+          </div>
 
-                    {/* Content area */}
-                    <div className="container mx-auto px-5">
-                        <div className="max-w-3xl mx-auto">
-                            {/* Main content */}
-                            <div className="prose prose-lg prose-gray max-w-none
+          {/* Title */}
+          <div className="container mx-auto px-5">
+            <div className="mb-5">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
+                {blog.title}
+              </h1>
+              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4" />
+                  <span>{formatDate(blog.createdAt)}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Tag className="w-4 h-4" />
+                  <span>{blog.category}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Hero Image - wider than content */}
+          {blog.image?.[0] && (
+            <div className="container mx-auto px-5 mb-10">
+              <div className="">
+                <div className="relative rounded-2xl overflow-hidden aspect-[16/9] shadow-md">
+                  <Image
+                    src={blog.image[0]}
+                    alt={blog.title}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Content area */}
+          <div className="container mx-auto px-5">
+            <div className="max-w-3xl mx-auto">
+              {/* Main content */}
+              <div
+                className="prose prose-lg prose-gray max-w-none
                                 prose-headings:font-bold prose-headings:text-gray-900
                                 prose-p:text-gray-700 prose-p:leading-relaxed
                                 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
                                 prose-img:rounded-xl prose-img:shadow-sm
-                            ">
-                                <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                                    {blog.content}
-                                </p>
-                            </div>
+                            "
+              >
+                <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
+                  {blog.content}
+                </p>
+              </div>
 
-                            {/* Additional images gallery */}
-                            {blog.image && blog.image.length > 1 && (
-                                <div className="mt-10">
-                                    <div className={`grid gap-4 ${blog.image.length === 2 ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3"}`}>
-                                        {blog.image.slice(1).map((img: string, idx: number) => (
-                                            <div key={idx} className="relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm">
-                                                <Image
-                                                    src={img}
-                                                    alt={`${blog.title} - Image ${idx + 2}`}
-                                                    fill
-                                                    className="object-cover"
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
+              {/* Additional images gallery */}
+              {blog.image && blog.image.length > 1 && (
+                <div className="mt-10">
+                  <div
+                    className={`grid gap-4 ${blog.image.length === 2 ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3"}`}
+                  >
+                    {blog.image.slice(1).map((img: string, idx: number) => (
+                      <div
+                        key={idx}
+                        className="relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm"
+                      >
+                        <Image
+                          src={img}
+                          alt={`${blog.title} - Image ${idx + 2}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-                            {/* Divider */}
-                            <hr className="my-10 border-gray-200" />
+              {/* Divider */}
+              <hr className="my-10 border-gray-200" />
 
-                            {/* Back to blog */}
-                            <div className="flex items-center justify-between">
-                                <Link
-                                    href="/blog"
-                                    className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors group"
-                                >
-                                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
-                                    Back to all articles
-                                </Link>
-                                <div className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full">
-                                    {blog.category}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </main>
+              {/* Back to blog */}
+              <div className="flex items-center justify-between">
+                <Link
+                  href="/blog"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors group"
+                >
+                  <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+                  Back to all articles
+                </Link>
+                <div className="inline-block bg-gray-100 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full">
+                  {blog.category}
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </main>
 
-            <Footer />
-        </div>
-    );
+      <Footer />
+    </div>
+  );
 }
