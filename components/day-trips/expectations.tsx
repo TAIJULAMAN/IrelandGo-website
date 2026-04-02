@@ -11,27 +11,27 @@ const items = [
   {
     title: "What's included",
     content:
-      "Your day trip includes professional driver/guide, comfortable transportation, entrance fees to attractions, and complimentary bottled water. We also provide WiFi on board and flexible stops for photos.",
+      "Your day trip includes professional driver/guide, comfortable transportation, and complimentary bottled water. We also provide flexible stops for photos.",
   },
   {
     title: "Good to know before you go",
     content:
-      "Wear comfortable walking shoes and dress in layers as Irish weather can change quickly. Bring a camera, sunscreen, and a light rain jacket. Tours depart on time, so please arrive 15 minutes early at the meeting point.",
+      "For the best experience, wear comfortable walking shoes and dress in layers to suit Ireland’s ever-changing weather. Don’t forget sunscreen and a light rain jacket.",
   },
   {
     title: "Cancellation policy",
     content:
-      "Free cancellation up to 24 hours before the tour starts. Cancellations made within 24 hours are non-refundable. In case of severe weather, we'll offer a full refund or reschedule your tour.",
+      "Free cancellation up to 24 hours before the trip starts. Cancellations made between 24 and 12 hours before the trip are eligible for a 50% refund. Cancellations within 12 hours of the trip are non-refundable.",
   },
 ];
 
 const images = [
-  "https://images.pexels.com/photos/19933729/pexels-photo-19933729.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/13147984/pexels-photo-13147984.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/8828396/pexels-photo-8828396.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/17574921/pexels-photo-17574921.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/19933729/pexels-photo-19933729.jpeg?auto=compress&cs=tinysrgb&w=400",
-  "https://images.pexels.com/photos/13147984/pexels-photo-13147984.jpeg?auto=compress&cs=tinysrgb&w=400",
+  "attractions/1.jpg",
+  "attractions/2.webp",
+  "attractions/3.jpg",
+  "attractions/4.jpg",
+  "attractions/5.jpg",
+  "attractions/6.jpg",
 ];
 
 export default function Expectations() {
@@ -41,7 +41,7 @@ export default function Expectations() {
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-4xl md:text-5xl font-bold mb-10">
-              What to expect on a day trip
+              What to expect on a day trip?
             </h2>
             <Accordion type="single" collapsible className="space-y-3">
               {items.map((item, index) => (
