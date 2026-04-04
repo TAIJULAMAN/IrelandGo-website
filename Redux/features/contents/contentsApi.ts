@@ -16,8 +16,15 @@ const contentsApi = baseApi.injectEndpoints({
             }),
             providesTags: ["content"],
         }),
+        getPopularMultiDayTours: builder.query({
+            query: () => ({
+                url: "trip-services/multi-day-tour/popular",
+                method: "GET",
+            }),
+            providesTags: ["content"],
+        }),
     }),
 });
 
-export const { useGetPrivateTransfersQuery, useGetPopularTripsQuery } =
+export const { useGetPrivateTransfersQuery, useGetPopularTripsQuery, useGetPopularMultiDayToursQuery } =
     contentsApi;

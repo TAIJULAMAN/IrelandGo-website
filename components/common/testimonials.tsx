@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { useGetAllReviewQuery } from "@/Redux/features/review/reviewApi";
 import { SectionHeader } from "../ui/section-header";
+import Image from "next/image";
 
 interface Review {
   id: string;
@@ -13,6 +14,13 @@ interface Review {
   comment: string;
   createdAt: string;
   updatedAt: string;
+  user: {
+    id: string;
+    fullName: string;
+    email: string;
+    profileImage: string;
+    contactNumber: string;
+  };
 }
 
 export function Testimonials() {
@@ -45,9 +53,14 @@ export function Testimonials() {
 
   const visibleReviews = getVisibleReviews();
 
-  // Generate initials from userId as fallback
-  const getInitials = (userId: string) => {
-    return userId.slice(0, 2).toUpperCase();
+  // Generate initials from name as fallback
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
 
   // Format date
@@ -155,12 +168,21 @@ export function Testimonials() {
                 &ldquo;{review.comment}&rdquo;
               </p>
               <div className="flex items-center gap-3 md:gap-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-xs md:text-sm">
-                  {getInitials(review.userId)}
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-xs md:text-sm relative">
+                  {review.user?.profileImage ? (
+                    <Image
+                      src={review.user.profileImage}
+                      alt={review.user.fullName}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    getInitials(review.user?.fullName || "Traveler")
+                  )}
                 </div>
                 <div>
                   <p className="font-bold text-gray-900 text-sm md:text-base">
-                    Traveler
+                    {review.user?.fullName || "Traveler"}
                   </p>
                   <p className="text-xs md:text-sm text-gray-500">
                     {formatDate(review.createdAt)}

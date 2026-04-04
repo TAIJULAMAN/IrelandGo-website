@@ -2,70 +2,45 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Clock, Euro, ChevronLeft, ChevronRight } from "lucide-react"
+import { Clock, Euro, ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useGetPopularMultiDayToursQuery } from "@/Redux/features/contents/contentsApi"
 import { SectionHeader } from "@/components/ui/section-header"
 
 export function PopularMultiDayTours() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const { data: response, isLoading, isError } = useGetPopularMultiDayToursQuery({})
 
-  const tours = [
-    {
-      title: "Dublin to Galway via Cliffs of Moher",
-      image: "/home.png",
-      duration: "6h 30m",
-      groupType: "Private Group",
-      description: "Experience Ireland's most stunning coastal drive with breathtaking views and charming villages.",
-      pricePerPerson: "From €125 / per person",
-    },
-    {
-      title: "Dublin to Galway via Cliffs of Moher",
-      image: "/home.png",
-      duration: "6h 30m",
-      groupType: "Private Group",
-      description: "Experience Ireland's most stunning coastal drive with breathtaking views and charming villages.",
-      pricePerPerson: "From €125 / per person",
-    },
-    {
-      title: "Dublin to Galway via Cliffs of Moher",
-      image: "/home.png",
-      duration: "6h 30m",
-      groupType: "Private Group",
-      description: "Experience Ireland's most stunning coastal drive with breathtaking views and charming villages.",
-      pricePerPerson: "From €125 / per person",
-    },
-    {
-      title: "Dublin to Galway via Cliffs of Moher",
-      image: "/home.png",
-      duration: "6h 30m",
-      groupType: "Private Group",
-      description: "Experience Ireland's most stunning coastal drive with breathtaking views and charming villages.",
-      pricePerPerson: "From €125 / per person",
-    },
-    {
-      title: "Dublin to Galway via Cliffs of Moher",
-      image: "/home.png",
-      duration: "6h 30m",
-      groupType: "Private Group",
-      description: "Experience Ireland's most stunning coastal drive with breathtaking views and charming villages.",
-      pricePerPerson: "From €125 / per person",
-    },
-  ]
+  const tours = response?.data || []
 
   const goToPrevious = () => {
+    if (tours.length === 0) return
     setCurrentIndex((prevIndex) => (prevIndex === 0 ? tours.length - 1 : prevIndex - 1))
   }
 
   const goToNext = () => {
+    if (tours.length === 0) return
     setCurrentIndex((prevIndex) => (prevIndex === tours.length - 1 ? 0 : prevIndex + 1))
   }
 
-  const visibleTours = [
-    tours[currentIndex],
+  const visibleTours = tours.length > 0 ? [
+    tours[currentIndex % tours.length],
     tours[(currentIndex + 1) % tours.length],
     tours[(currentIndex + 2) % tours.length],
-  ]
+  ].filter(Boolean) : []
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+      </div>
+    )
+  }
+
+  if (isError || tours.length === 0) {
+    return null
+  }
 
   return (
     <section className="px-5 md:px-0 py-10 md:py-16 bg-gray-50">
@@ -97,37 +72,33 @@ export function PopularMultiDayTours() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {visibleTours.map((tour, idx) => (
+          {visibleTours.map((tour: any, idx: number) => (
             <div
-              key={idx}
+              key={tour.id || idx}
               className={`rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-white h-full flex flex-col hover:shadow-md transition-shadow duration-300 ${idx > 0 ? "hidden md:flex" : ""
                 }`}
             >
-              <div className="relative h-48 md:h-64 w-full">
-                {tour.image.startsWith("linear-gradient") ? (
-                  <div className="w-full h-full" style={{ background: tour.image }}></div>
-                ) : (
-                  <Image
-                    src={tour.image}
-                    alt={tour.title}
-                    fill
-                    className="object-cover"
-                  />
-                )}
+              <div className="relative h-48 md:h-64 w-full bg-gray-200">
+                <Image
+                  src={tour.images?.[0] || "/placeholder.svg"}
+                  alt={tour.title}
+                  fill
+                  className="object-cover"
+                />
               </div>
               <div className="p-4 md:p-6 flex flex-col flex-grow">
                 <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2 md:mb-3 leading-tight">{tour.title}</h3>
 
                 <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500 mb-3 md:mb-4 font-medium">
                   <Clock className="w-3 h-3 md:w-4 md:h-4" />
-                  <span>{tour.duration}</span>
+                  <span>{tour.tourDays} Days</span>
                   <span>-</span>
-                  <span>{tour.groupType}</span>
+                  <span>{tour.groupType} group</span>
                 </div>
 
                 <div className="flex items-center gap-1 text-blue-600 font-bold text-base md:text-lg mb-2 md:mb-3">
                   <Euro className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>{tour.pricePerPerson}</span>
+                  <span>From €{tour.price}</span>
                 </div>
 
                 <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 line-clamp-3 flex-grow leading-relaxed">
