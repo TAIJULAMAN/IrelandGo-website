@@ -24,11 +24,12 @@ export function PopularMultiDayTours() {
     setCurrentIndex((prevIndex) => (prevIndex === tours.length - 1 ? 0 : prevIndex + 1))
   }
 
-  const visibleTours = tours.length > 0 ? [
+  const showSlider = tours.length >= 3;
+  const visibleTours = showSlider ? [
     tours[currentIndex % tours.length],
     tours[(currentIndex + 1) % tours.length],
     tours[(currentIndex + 2) % tours.length],
-  ].filter(Boolean) : []
+  ].filter(Boolean) : tours;
 
   if (isLoading) {
     return (
@@ -46,13 +47,15 @@ export function PopularMultiDayTours() {
     <section className="px-5 md:px-0 py-10 md:py-16 bg-gray-50">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4">
-          <button
-            onClick={goToPrevious}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Previous tours"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
+          {showSlider && (
+            <button
+              onClick={goToPrevious}
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Previous tours"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
 
           <SectionHeader
             title="Popular Multi-Day Tours"
@@ -62,20 +65,22 @@ export function PopularMultiDayTours() {
             className="mb-0"
           />
 
-          <button
-            onClick={goToNext}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Next tours"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
+          {showSlider && (
+            <button
+              onClick={goToNext}
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Next tours"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {visibleTours.map((tour: any, idx: number) => (
             <div
               key={tour.id || idx}
-              className={`rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-white h-full flex flex-col hover:shadow-md transition-shadow duration-300 ${idx > 0 ? "hidden md:flex" : ""
+              className={`rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-white h-full flex flex-col hover:shadow-md transition-shadow duration-300 ${showSlider && idx > 0 ? "hidden md:flex" : ""
                 }`}
             >
               <div className="relative h-48 md:h-64 w-full bg-gray-200">
@@ -114,22 +119,24 @@ export function PopularMultiDayTours() {
         </div>
 
         {/* Mobile Navigation Buttons */}
-        <div className="flex md:hidden items-center justify-center gap-4 mt-8">
-          <button
-            onClick={goToPrevious}
-            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Previous tours"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={goToNext}
-            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Next tours"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </div>
+        {showSlider && (
+          <div className="flex md:hidden items-center justify-center gap-4 mt-8">
+            <button
+              onClick={goToPrevious}
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Previous tours"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={goToNext}
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Next tours"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   )

@@ -31,11 +31,12 @@ export function PrivateTransfers() {
     return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`
   }
 
-  const visibleTransfers = transfers.length > 0 ? [
+  const showSlider = transfers.length >= 3;
+  const visibleTransfers = showSlider ? [
     transfers[currentIndex % transfers.length],
     transfers[(currentIndex + 1) % transfers.length],
     transfers[(currentIndex + 2) % transfers.length],
-  ].filter(Boolean) : []
+  ].filter(Boolean) : transfers;
 
   if (isLoading) {
     return (
@@ -53,13 +54,15 @@ export function PrivateTransfers() {
     <section className="px-5 md:px-0 py-10 md:py-18 bg-gray-50">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4">
-          <button
-            onClick={goToPrevious}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Previous transfers"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
+          {showSlider && (
+            <button
+              onClick={goToPrevious}
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Previous transfers"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
 
           <SectionHeader
             title="Private Transfers"
@@ -69,20 +72,22 @@ export function PrivateTransfers() {
             className="mb-0"
           />
 
-          <button
-            onClick={goToNext}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Next transfers"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
+          {showSlider && (
+            <button
+              onClick={goToNext}
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Next transfers"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {visibleTransfers.map((transfer, idx) => (
+          {visibleTransfers.map((transfer: any, idx: number) => (
             <div
               key={transfer.id || idx}
-              className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow ${idx > 0 ? 'hidden md:block' : ''
+              className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow ${showSlider && idx > 0 ? 'hidden md:block' : ''
                 }`}
             >
               <div className="relative h-48 md:h-56 overflow-hidden bg-gray-200">
@@ -117,22 +122,24 @@ export function PrivateTransfers() {
         </div>
 
         {/* Mobile Navigation Buttons */}
-        <div className="flex md:hidden items-center justify-center gap-4 mt-8">
-          <button
-            onClick={goToPrevious}
-            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Previous transfers"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={goToNext}
-            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Next transfers"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </div>
+        {showSlider && (
+          <div className="flex md:hidden items-center justify-center gap-4 mt-8">
+            <button
+              onClick={goToPrevious}
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Previous transfers"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={goToNext}
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Next transfers"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+        )}
       </div>
     </section >
   )

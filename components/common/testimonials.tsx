@@ -40,10 +40,11 @@ export function Testimonials() {
     setCurrentIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
   };
 
+  const showSlider = reviews.length >= 3;
   // Get up to 3 visible testimonials based on current index
   const getVisibleReviews = () => {
     if (reviews.length === 0) return [];
-    if (reviews.length <= 3) return reviews;
+    if (!showSlider) return reviews;
     return [
       reviews[currentIndex % reviews.length],
       reviews[(currentIndex + 1) % reviews.length],
@@ -122,13 +123,15 @@ export function Testimonials() {
     <section className="px-5 md:px-0 py-10 md:py-20 bg-gray-50">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4">
-          <button
-            onClick={goToPrevious}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Previous testimonials"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
+          {showSlider && (
+            <button
+              onClick={goToPrevious}
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Previous testimonials"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
 
           <SectionHeader
             title="What Our Customers Say"
@@ -138,20 +141,22 @@ export function Testimonials() {
             className="mb-0"
           />
 
-          <button
-            onClick={goToNext}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Next testimonials"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
+          {showSlider && (
+            <button
+              onClick={goToNext}
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Next testimonials"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {visibleReviews.map((review, idx) => (
             <div
               key={review.id}
-              className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 h-full flex flex-col ${idx === 1 ? "hidden md:flex" : ""} ${idx === 2 ? "hidden lg:flex" : ""}`}
+              className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 h-full flex flex-col ${showSlider && idx === 1 ? "hidden md:flex" : ""} ${showSlider && idx === 2 ? "hidden lg:flex" : ""}`}
             >
               <div className="flex items-center justify-between mb-4 md:mb-6">
                 <div className="flex gap-1">
@@ -194,22 +199,24 @@ export function Testimonials() {
         </div>
 
         {/* Mobile Navigation Buttons */}
-        <div className="flex md:hidden items-center justify-center gap-4 mt-8">
-          <button
-            onClick={goToPrevious}
-            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Previous testimonials"
-          >
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <button
-            onClick={goToNext}
-            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
-            aria-label="Next testimonials"
-          >
-            <ChevronRight className="w-6 h-6" />
-          </button>
-        </div>
+        {showSlider && (
+          <div className="flex md:hidden items-center justify-center gap-4 mt-8">
+            <button
+              onClick={goToPrevious}
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Previous testimonials"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            <button
+              onClick={goToNext}
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              aria-label="Next testimonials"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

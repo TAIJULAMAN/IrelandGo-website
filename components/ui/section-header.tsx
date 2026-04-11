@@ -12,7 +12,7 @@ export function SectionHeader({
   title,
   subtitle,
   description,
-  alignment = "left",
+  alignment = "center",
   className,
 }: SectionHeaderProps) {
   return (
