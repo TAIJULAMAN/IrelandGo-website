@@ -1,6 +1,7 @@
 import { baseApi } from "../baseApi";
 
 const multiDayToursApi = baseApi.injectEndpoints({
+  overrideExisting: true,
   endpoints: (builder) => ({
     getAllMultiDayTours: builder.query({
       query: () => ({
