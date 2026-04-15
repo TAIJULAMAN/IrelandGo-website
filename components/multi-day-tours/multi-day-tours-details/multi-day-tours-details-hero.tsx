@@ -47,7 +47,7 @@ export default function MultiDayToursDetailsHero({ tour }: { tour?: any }) {
             {/* CTA */}
             <div className="mt-8 flex justify-center">
               <Link href={`/contact`}>
-                <button className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-lg transition-transform hover:scale-105 active:scale-95 text-base md:text-lg">
+                <button className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-blue-600 text-white font-bold shadow-lg transition-transform hover:scale-105 active:scale-95 text-base md:text-lg">
                   Book Your Tour
                 </button>
               </Link>
