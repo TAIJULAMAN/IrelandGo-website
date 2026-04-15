@@ -1,83 +1,63 @@
 "use client";
 
 import { Header } from "../common/header";
-
-import { Search, MapPin, Compass } from "lucide-react";
+import { MapPin, Compass, Navigation, Bus } from "lucide-react";
 
 export default function MultiDayToursHero() {
   return (
-    <section className="relative min-h-screen text-white overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0 -z-10">
+    <section className="relative text-white overflow-hidden pb-16">
+      {/* Background */}
+      <div className="absolute inset-0 z-0">
         <img
-          src="/ireland-hero-bg.jpg"
-          alt="Irish landscape"
-          className="w-full h-full object-cover"
+          src="/about.avif"
+          alt="Touring the Irish landscape"
+          className="w-full h-full object-cover animate-in zoom-in-105 duration-1000 ease-out"
         />
-
       </div>
 
-      <Header />
+      <div className="relative z-10">
+        <Header />
+      </div>
 
-      <div className="max-w-6xl mx-auto px-5 pt-16 pb-16 flex flex-col items-center text-center gap-10">
-        <div className="space-y-4 mt-8">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-blue-500">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-5 md:px-0 lg:px-0 flex flex-col items-center justify-center text-center gap-6 pt-10">
+        {/* Main Content */}
+        <div className="space-y-4 max-w-4xl animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150 fill-mode-both">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-[1.1] tracking-tight text-white drop-shadow-2xl">
             Multi-Day Tours
-            <br className="hidden sm:block" />
-            <span className="text-white"> Across Ireland</span>
+            <br />
+            <span className="text-transparent bg-clip-text bg-blue-500">
+              Across Ireland
+            </span>
           </h1>
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-white/85">
-            Experience the best of Ireland&apos;s scenic routes, from coast to
-            countryside, on a private and comfortable journey.
+
+          <p className="max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-white/90 font-light leading-relaxed drop-shadow-md">
+            Experience the best of Ireland&apos;s scenic routes, from sweeping
+            coastlines to the historic countryside, on a private and fully
+            guided journey.
           </p>
         </div>
 
-        {/* Search bar */}
-        <div className="w-full max-w-3xl bg-white rounded-lg shadow-2xl overflow-hidden flex items-stretch">
-          <div className="flex items-center flex-1 px-4 sm:px-5 py-3 sm:py-3.5 gap-3">
-            <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Where would you like to go?"
-              className="w-full bg-transparent outline-none text-sm sm:text-base text-gray-800 placeholder:text-gray-400"
-            />
-          </div>
-          <button className="flex items-center gap-2 px-5 sm:px-7 py-3 sm:py-3.5 bg-blue-600 text-white text-sm sm:text-base font-semibold whitespace-nowrap">
-            <Search className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span>Find Your Tour</span>
-          </button>
-        </div>
-
-        {/* Browse Popular Tours button */}
-        <button className="mt-4 inline-flex items-center gap-3 px-6 sm:px-8 py-2.5 rounded-lg border border-white/40 bg-white/10 backdrop-blur-md text-sm sm:text-base font-medium text-white hover:bg-white/15 transition">
-          <span className="w-6 h-6 rounded-lg flex items-center justify-center">
-            <Compass className="w-3.5 h-3.5" />
-          </span>
-          <span>Browse Popular Tours</span>
-        </button>
-
-        {/* Stats row */}
-        <div className="flex flex-wrap justify-center gap-8 sm:gap-12 mt-4 text-sm sm:text-base">
-          <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-bold text-white">
-              50+
-            </span>
-            <span className="text-white/80">Multi-day Tours</span>
-          </div>
-          <div className="w-1 h-12 bg-white rounded-full" />
-          <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-bold text-white">
-              1000+
-            </span>
-            <span className="text-white/80">Happy Travelers</span>
-          </div>
-          <div className="w-1 h-12 bg-white rounded-full" />
-          <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-bold text-white">
-              15+
-            </span>
-            <span className="text-white/80">Years Experience</span>
-          </div>
+        {/* Stats Section */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-4 gap-3 sm:gap-5 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-500 fill-mode-both">
+          {[
+            { value: "50+", label: "Unique Itineraries", icon: Compass },
+            { value: "Local", label: "Expert Tour Guides", icon: Navigation },
+            { value: "Private", label: "Luxury Transport", icon: Bus },
+            { value: "1000+", label: "Happy Travelers", icon: MapPin },
+          ].map((stat, idx) => (
+            <div
+              key={idx}
+              className="group flex flex-col items-center justify-center p-5 rounded-2xl bg-black/1 backdrop-blur-md border border-white/20 transition-all hover:-translate-y-1 shadow-lg"
+            >
+              <stat.icon className="w-6 h-6 text-green-400 mb-3 opacity-90 group-hover:scale-110 group-hover:opacity-100 transition-all" />
+              <span className="text-2xl sm:text-3xl font-black text-white mb-1 tracking-tight drop-shadow-md">
+                {stat.value}
+              </span>
+              <span className="text-xs font-medium text-green-100/90 uppercase tracking-widest text-center drop-shadow-sm">
+                {stat.label}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </section>
