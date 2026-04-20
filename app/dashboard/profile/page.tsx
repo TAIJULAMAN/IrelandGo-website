@@ -16,13 +16,11 @@ import { toast } from "sonner";
 
 export default function UserProfilePage() {
   const [activeTab, setActiveTab] = useState<"profile" | "password">("profile");
-
   const { data: profileRes, isLoading, isError } = useGetProfileQuery();
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
-  const [changePassword, { isLoading: isChangingPassword }] = useChangePasswordMutation();
-
+  const [changePassword, { isLoading: isChangingPassword }] =
+    useChangePasswordMutation();
   const profileData = profileRes?.data;
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -33,8 +31,6 @@ export default function UserProfilePage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Sync form data when profile data loads
   const [initialized, setInitialized] = useState(false);
   if (profileData && !initialized) {
     setFormData({
@@ -121,7 +117,9 @@ export default function UserProfilePage() {
   if (isError) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-red-500">Failed to load profile. Please try again later.</p>
+        <p className="text-red-500">
+          Failed to load profile. Please try again later.
+        </p>
       </div>
     );
   }
@@ -140,7 +138,11 @@ export default function UserProfilePage() {
           <div className="relative group">
             <div className="h-28 w-28 rounded-full overflow-hidden border-4 border-white shadow-lg">
               <img
-                src={imagePreview || profileData?.profileImage || "/placeholder-avatar.png"}
+                src={
+                  imagePreview ||
+                  profileData?.profileImage ||
+                  "/placeholder-avatar.png"
+                }
                 alt="Profile"
                 className="h-full w-full object-cover"
               />
@@ -206,9 +208,15 @@ export default function UserProfilePage() {
                 <h2 className="text-2xl font-bold text-blue-600 mb-6">
                   Edit Your Profile
                 </h2>
-                <form onSubmit={handleSaveProfile} className="space-y-6 max-w-xl">
+                <form
+                  onSubmit={handleSaveProfile}
+                  className="space-y-6 max-w-xl"
+                >
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-sm font-medium text-blue-600">
+                    <Label
+                      htmlFor="name"
+                      className="text-sm font-medium text-blue-600"
+                    >
                       User Name
                     </Label>
                     <Input
@@ -223,7 +231,10 @@ export default function UserProfilePage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm font-medium text-blue-600">
+                    <Label
+                      htmlFor="email"
+                      className="text-sm font-medium text-blue-600"
+                    >
                       Email
                     </Label>
                     <Input
@@ -237,7 +248,10 @@ export default function UserProfilePage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-sm font-medium text-blue-600">
+                    <Label
+                      htmlFor="phone"
+                      className="text-sm font-medium text-blue-600"
+                    >
                       Contact Number
                     </Label>
                     <Input
@@ -252,7 +266,10 @@ export default function UserProfilePage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="country" className="text-sm font-medium text-blue-600">
+                    <Label
+                      htmlFor="country"
+                      className="text-sm font-medium text-blue-600"
+                    >
                       Country
                     </Label>
                     <Input
@@ -280,7 +297,10 @@ export default function UserProfilePage() {
                 <h2 className="text-2xl font-bold text-blue-600 mb-6">
                   Change Your Password
                 </h2>
-                <form onSubmit={handleChangePassword} className="space-y-6 max-w-xl">
+                <form
+                  onSubmit={handleChangePassword}
+                  className="space-y-6 max-w-xl"
+                >
                   <div className="space-y-2">
                     <Label
                       htmlFor="current-password"
