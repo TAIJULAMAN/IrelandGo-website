@@ -74,7 +74,7 @@ const agentNavLinks = [
   {
     href: `${basePath}/payment-methods`,
     icon: <CreditCard className="h-4 w-4" />,
-    label: "Payment Methods",
+    label: "Onboarding",
   },
   {
     href: `${basePath}/notifications`,

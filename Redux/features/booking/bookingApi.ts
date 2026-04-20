@@ -2,9 +2,17 @@ import { baseApi } from "../baseApi";
 
 export const bookingApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllBookings: builder.query({
+    getAllAgentBookings: builder.query({
       query: (params) => ({
         url: "statistics/agent-bookings",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["booking"],
+    }),
+    getAllUserBookings: builder.query({
+      query: (params) => ({
+        url: "statistics/user-bookings",
         method: "GET",
         params,
       }),
@@ -13,4 +21,5 @@ export const bookingApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllBookingsQuery } = bookingApi;
+export const { useGetAllAgentBookingsQuery, useGetAllUserBookingsQuery } =
+  bookingApi;

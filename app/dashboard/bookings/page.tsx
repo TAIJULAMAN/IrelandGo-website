@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/dialog";
 import {
   CalendarDays,
-  Filter,
   MapPin,
   Clock,
   Users,
@@ -30,122 +29,86 @@ import {
   CheckCircle,
   XCircle,
   DollarSign,
+  Loader2,
 } from "lucide-react";
-
-const bookings = [
-  {
-    id: 1,
-    pickup: "Dublin Airport",
-    destination: "Galway City",
-    date: "2024-12-20",
-    time: "10:00 AM",
-    passengers: 2,
-    vehicleType: "Sedan",
-    status: "Confirmed" as const,
-    payment: "€145",
-  },
-  {
-    id: 2,
-    pickup: "Cork City",
-    destination: "Killarney",
-    date: "2024-12-22",
-    time: "2:30 PM",
-    passengers: 4,
-    vehicleType: "SUV",
-    status: "Pending" as const,
-    payment: "€180",
-  },
-  {
-    id: 3,
-    pickup: "Limerick",
-    destination: "Cliffs of Moher",
-    date: "2024-12-25",
-    time: "9:00 AM",
-    passengers: 6,
-    vehicleType: "Van",
-    status: "Confirmed" as const,
-    payment: "€220",
-  },
-  {
-    id: 4,
-    pickup: "Waterford",
-    destination: "Dublin City",
-    date: "2024-12-18",
-    time: "11:30 AM",
-    passengers: 1,
-    vehicleType: "Sedan",
-    status: "Cancelled" as const,
-    payment: "€120",
-  },
-  {
-    id: 5,
-    pickup: "Dublin City",
-    destination: "Belfast",
-    date: "2024-12-30",
-    time: "8:00 AM",
-    passengers: 3,
-    vehicleType: "SUV",
-    status: "Confirmed" as const,
-    payment: "€195",
-  },
-];
+import { useAppSelector } from "@/Redux/hooks";
+import { useGetProfileQuery } from "@/Redux/features/settings/profileApi";
+import { useGetAllAgentBookingsQuery, useGetAllUserBookingsQuery } from "@/Redux/features/booking/bookingApi";
 
 export default function UserBookingsPage() {
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedBooking, setSelectedBooking] = useState<typeof bookings[0] | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
+  const token = useAppSelector((state) => state.auth.token);
+  const isAuthenticated = !!token;
+
+  const { data: profileData } = useGetProfileQuery(undefined, {
+      skip: !isAuthenticated,
+  });
+
+  const user = profileData?.data;
+  const role = user?.role?.toLowerCase();
+  const isAgent = role === "agent";
+
+  const { 
+    data: agentData, 
+    isLoading: agentLoading, 
+    isError: agentError 
+  } = useGetAllAgentBookingsQuery({}, { skip: !isAuthenticated || !isAgent });
+
+  const { 
+    data: userData, 
+    isLoading: userLoading, 
+    isError: userError 
+  } = useGetAllUserBookingsQuery({}, { skip: !isAuthenticated || isAgent });
+
+  const isLoading = agentLoading || userLoading;
+  const isError = agentError || userError;
+  const data = isAgent ? agentData : userData;
+
+  const bookingsData = data?.data?.recentBookings || [];
+
   // Filter bookings based on status
-  const filteredBookings = bookings.filter((booking) => {
+  const filteredBookings = bookingsData.filter((booking: any) => {
     const matchesStatus =
       statusFilter === "all" ||
       booking.status.toLowerCase() === statusFilter.toLowerCase();
     return matchesStatus;
   });
 
-  // Calculate statistics
-  const totalBookings = bookings.length;
-  const confirmedBookings = bookings.filter((b) => b.status === "Confirmed").length;
-  const pendingBookings = bookings.filter((b) => b.status === "Pending").length;
-  const totalSpent = bookings
-    .filter((b) => b.status === "Confirmed")
-    .reduce((sum, booking) => {
-      const amount = parseFloat(booking.payment.replace(/[€,]/g, ""));
-      return sum + amount;
-    }, 0);
-
   const stats = [
     {
       id: 1,
       label: "Total Bookings",
       icon: <CalendarDays className="h-5 w-5 text-blue-600" />,
-      value: totalBookings,
+      value: data?.data?.totalBookings || 0,
       bgColor: "bg-blue-50",
     },
     {
       id: 2,
       label: "Confirmed",
       icon: <CheckCircle className="h-5 w-5 text-green-600" />,
-      value: confirmedBookings,
+      value: data?.data?.totalConfirmedBookings || 0,
       bgColor: "bg-green-50",
     },
     {
       id: 3,
-      label: "Pending",
+      label: "Completed",
       icon: <Clock className="h-5 w-5 text-orange-600" />,
-      value: pendingBookings,
+      value: data?.data?.totalCompletedBookings || 0,
       bgColor: "bg-orange-50",
     },
     {
       id: 4,
-      label: "Total Spent",
+      label: "Total Earnings",
       icon: <DollarSign className="h-5 w-5 text-purple-600" />,
-      value: `€${totalSpent.toFixed(0)}`,
+      value: `€${data?.data?.totalEarnings || 0}`,
       bgColor: "bg-purple-50",
     },
   ];
 
-  const handleViewBooking = (booking: typeof bookings[0]) => {
+  const handleViewBooking = (booking: any) => {
     setSelectedBooking(booking);
     setIsViewModalOpen(true);
   };
@@ -202,97 +165,150 @@ export default function UserBookingsPage() {
                 <option value="confirmed">Confirmed</option>
                 <option value="pending">Pending</option>
                 <option value="cancelled">Cancelled</option>
+                <option value="completed">Completed</option>
               </select>
             </div>
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-blue-600 hover:bg-blue-600">
-                  <TableHead className="font-semibold text-white rounded-tl-lg">Route</TableHead>
-                  <TableHead className="font-semibold text-white">Date & Time</TableHead>
-                  <TableHead className="font-semibold text-white">Passengers</TableHead>
-                  <TableHead className="font-semibold text-white">Vehicle</TableHead>
-                  <TableHead className="font-semibold text-white">Status</TableHead>
-                  <TableHead className="font-semibold text-white">Payment</TableHead>
-                  <TableHead className="font-semibold text-white text-right rounded-tr-lg">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredBookings.map((booking) => (
-                  <TableRow key={booking.id} className="hover:bg-gray-50">
-                    <TableCell>
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-blue-600" />
-                          <span className="font-medium text-sm">{booking.pickup}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <MapPin className="h-4 w-4 text-green-600" />
-                          <span className="font-medium text-sm">{booking.destination}</span>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <CalendarDays className="h-4 w-4 text-gray-400" />
-                        <div className="text-sm">
-                          <div className="font-medium">
-                            {new Date(booking.date).toLocaleDateString()}
-                          </div>
-                          <div className="text-gray-500">{booking.time}</div>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-gray-400" />
-                        <span className="text-sm">{booking.passengers}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-sm">{booking.vehicleType}</TableCell>
-                    <TableCell>
-                      <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${booking.status === "Confirmed"
-                          ? "bg-green-100 text-green-700"
-                          : booking.status === "Pending"
-                            ? "bg-orange-100 text-orange-700"
-                            : "bg-red-100 text-red-700"
-                          }`}
-                      >
-                        {booking.status === "Confirmed" && (
-                          <CheckCircle className="h-3 w-3" />
-                        )}
-                        {booking.status === "Pending" && (
-                          <Clock className="h-3 w-3" />
-                        )}
-                        {booking.status === "Cancelled" && (
-                          <XCircle className="h-3 w-3" />
-                        )}
-                        {booking.status}
-                      </span>
-                    </TableCell>
-                    <TableCell className="font-semibold text-sm">
-                      {booking.payment}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleViewBooking(booking)}
-                        className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                      >
-                        <Eye className="h-4 w-4 mr-1" />
-                        View
-                      </Button>
-                    </TableCell>
+          {isLoading ? (
+            <div className="flex justify-center flex-col items-center py-12 gap-3 text-gray-500">
+              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              <p>Loading bookings...</p>
+            </div>
+          ) : isError ? (
+            <div className="text-center py-12 text-red-500">
+              Failed to load bookings. Please try again.
+            </div>
+          ) : filteredBookings.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              No bookings found matching your criteria.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-blue-600 hover:bg-blue-600">
+                    <TableHead className="font-semibold text-white rounded-tl-lg">
+                      Route
+                    </TableHead>
+                    <TableHead className="font-semibold text-white">
+                      Date & Time
+                    </TableHead>
+                    <TableHead className="font-semibold text-white">
+                      Client Name
+                    </TableHead>
+                    <TableHead className="font-semibold text-white">
+                      Type
+                    </TableHead>
+                    <TableHead className="font-semibold text-white">
+                      Status
+                    </TableHead>
+                    <TableHead className="font-semibold text-white">
+                      Payment
+                    </TableHead>
+                    <TableHead className="font-semibold text-white text-right rounded-tr-lg">
+                      Actions
+                    </TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+                </TableHeader>
+                <TableBody>
+                  {filteredBookings.map((booking: any, index: number) => (
+                    <TableRow
+                      key={booking._id || booking.id || index}
+                      className="hover:bg-gray-50"
+                    >
+                      <TableCell>
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-blue-600" />
+                            <span className="font-medium text-sm">
+                              {booking.from}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4 text-green-600" />
+                            <span className="font-medium text-sm">
+                              {booking.to}
+                            </span>
+                          </div>
+                          {booking.isReturn && (
+                            <span className="text-xs text-blue-600 font-medium ml-6">
+                              (Return Trip)
+                            </span>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <CalendarDays className="h-4 w-4 text-gray-400" />
+                          <div className="text-sm">
+                            <div className="font-medium">
+                              {new Date(
+                                booking.date || booking.createdAt,
+                              ).toLocaleDateString()}
+                            </div>
+                            <div className="text-gray-500">
+                              {booking.timeSlot?.start}{" "}
+                              {booking.timeSlot?.end
+                                ? `- ${booking.timeSlot.end}`
+                                : ""}
+                            </div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-gray-400" />
+                          <span className="text-sm">{booking.clientName}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-sm">
+                        {booking.serviceType?.replace(/_/g, " ")}
+                      </TableCell>
+                      <TableCell>
+                        <span
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium uppercase ${
+                            booking.status === "CONFIRMED"
+                              ? "bg-green-100 text-green-700"
+                              : booking.status === "PENDING"
+                                ? "bg-orange-100 text-orange-700"
+                                : "bg-red-100 text-red-700"
+                          }`}
+                        >
+                          {booking.status === "CONFIRMED" && (
+                            <CheckCircle className="h-3 w-3" />
+                          )}
+                          {booking.status === "PENDING" && (
+                            <Clock className="h-3 w-3" />
+                          )}
+                          {(booking.status === "CANCELLED" ||
+                            booking.status === "REJECTED") && (
+                            <XCircle className="h-3 w-3" />
+                          )}
+                          {booking.status}
+                        </span>
+                      </TableCell>
+                      <TableCell className="font-semibold text-sm">
+                        €{booking.totalPrice}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleViewBooking(booking)}
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        >
+                          <Eye className="h-4 w-4 mr-1" />
+                          View
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -311,20 +327,22 @@ export default function UserBookingsPage() {
               {/* Status Badge */}
               <div className="flex items-center gap-2">
                 <span
-                  className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium ${selectedBooking.status === "Confirmed"
-                    ? "bg-green-100 text-green-700"
-                    : selectedBooking.status === "Pending"
-                      ? "bg-orange-100 text-orange-700"
-                      : "bg-red-100 text-red-700"
-                    }`}
+                  className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium uppercase ${
+                    selectedBooking.status === "CONFIRMED"
+                      ? "bg-green-100 text-green-700"
+                      : selectedBooking.status === "PENDING"
+                        ? "bg-orange-100 text-orange-700"
+                        : "bg-red-100 text-red-700"
+                  }`}
                 >
-                  {selectedBooking.status === "Confirmed" && (
+                  {selectedBooking.status === "CONFIRMED" && (
                     <CheckCircle className="h-4 w-4" />
                   )}
-                  {selectedBooking.status === "Pending" && (
+                  {selectedBooking.status === "PENDING" && (
                     <Clock className="h-4 w-4" />
                   )}
-                  {selectedBooking.status === "Cancelled" && (
+                  {(selectedBooking.status === "CANCELLED" ||
+                    selectedBooking.status === "REJECTED") && (
                     <XCircle className="h-4 w-4" />
                   )}
                   {selectedBooking.status}
@@ -341,7 +359,7 @@ export default function UserBookingsPage() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Pickup Location</p>
-                      <p className="font-medium">{selectedBooking.pickup}</p>
+                      <p className="font-medium">{selectedBooking.from}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -350,7 +368,14 @@ export default function UserBookingsPage() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Destination</p>
-                      <p className="font-medium">{selectedBooking.destination}</p>
+                      <p className="font-medium">
+                        {selectedBooking.to}{" "}
+                        {selectedBooking.isReturn && (
+                          <span className="text-blue-600 text-xs ml-1">
+                            (Return)
+                          </span>
+                        )}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -360,8 +385,14 @@ export default function UserBookingsPage() {
                     <div>
                       <p className="text-sm text-gray-500">Date & Time</p>
                       <p className="font-medium">
-                        {new Date(selectedBooking.date).toLocaleDateString()} at{" "}
-                        {selectedBooking.time}
+                        {new Date(
+                          selectedBooking.date || selectedBooking.createdAt,
+                        ).toLocaleDateString()}
+                        <br />
+                        {selectedBooking.timeSlot?.start}{" "}
+                        {selectedBooking.timeSlot?.end
+                          ? ` - ${selectedBooking.timeSlot.end}`
+                          : ""}
                       </p>
                     </div>
                   </div>
@@ -370,10 +401,13 @@ export default function UserBookingsPage() {
                       <Users className="h-5 w-5 text-amber-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Passengers</p>
+                      <p className="text-sm text-gray-500">Client Info</p>
                       <p className="font-medium">
-                        {selectedBooking.passengers}{" "}
-                        {selectedBooking.passengers === 1 ? "Person" : "People"}
+                        {selectedBooking.clientName}
+                        <br />
+                        <span className="text-xs text-gray-500 font-normal">
+                          {selectedBooking.user?.email}
+                        </span>
                       </p>
                     </div>
                   </div>
@@ -382,11 +416,22 @@ export default function UserBookingsPage() {
 
               {/* Payment Info */}
               <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
-                <span className="font-semibold text-gray-900">Total Amount</span>
+                <span className="font-semibold text-gray-900">Total Price</span>
                 <span className="text-2xl font-bold text-blue-600">
-                  {selectedBooking.payment}
+                  €{selectedBooking.totalPrice}
                 </span>
               </div>
+
+              {selectedBooking.payments?.[0]?.agent_commission && (
+                <div className="flex items-center justify-between p-4 bg-green-50 rounded-lg mt-2">
+                  <span className="font-semibold text-gray-900">
+                    Your Commission
+                  </span>
+                  <span className="text-xl font-bold text-green-600">
+                    €{selectedBooking.payments[0].agent_commission}
+                  </span>
+                </div>
+              )}
             </div>
           )}
 
