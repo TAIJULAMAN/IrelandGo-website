@@ -42,5 +42,6 @@ export const baseApi = createApi({
     "multiDayTours",
     "booking",
     "notification",
+    "dashboard",
   ],
 });
