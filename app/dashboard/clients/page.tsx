@@ -7,7 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -28,177 +27,105 @@ import {
   Users,
   Eye,
   Edit,
-  Trash2,
   UserCheck,
   UserX,
   Phone,
   Mail,
   MapPin,
-  Filter,
   User,
   Calendar,
-  X,
+  Loader2,
 } from "lucide-react";
-
-// Mock client data
-const mockClients = [
-  {
-    id: 1,
-    name: "John Smith",
-    email: "john.smith@email.com",
-    phone: "+353 87 123 4567",
-    location: "Dublin",
-    totalBookings: 12,
-    totalSpent: "€3,450",
-    status: "Active",
-    joinDate: "2024-01-15",
-    lastBooking: "2024-12-10",
-  },
-  {
-    id: 2,
-    name: "Maria Garcia",
-    email: "maria.garcia@email.com",
-    phone: "+353 86 234 5678",
-    location: "Cork",
-    totalBookings: 8,
-    totalSpent: "€2,100",
-    status: "Active",
-    joinDate: "2024-02-20",
-    lastBooking: "2024-12-05",
-  },
-  {
-    id: 3,
-    name: "David Wilson",
-    email: "david.wilson@email.com",
-    phone: "+353 85 345 6789",
-    location: "Galway",
-    totalBookings: 5,
-    totalSpent: "€1,250",
-    status: "Active",
-    joinDate: "2024-03-10",
-    lastBooking: "2024-11-28",
-  },
-  {
-    id: 4,
-    name: "Sarah O'Connor",
-    email: "sarah.oconnor@email.com",
-    phone: "+353 87 456 7890",
-    location: "Limerick",
-    totalBookings: 15,
-    totalSpent: "€4,800",
-    status: "Active",
-    joinDate: "2023-11-05",
-    lastBooking: "2024-12-12",
-  },
-  {
-    id: 5,
-    name: "Michael Brown",
-    email: "michael.brown@email.com",
-    phone: "+353 86 567 8901",
-    location: "Waterford",
-    totalBookings: 3,
-    totalSpent: "€750",
-    status: "Inactive",
-    joinDate: "2024-05-22",
-    lastBooking: "2024-08-15",
-  },
-  {
-    id: 6,
-    name: "Emma Murphy",
-    email: "emma.murphy@email.com",
-    phone: "+353 85 678 9012",
-    location: "Dublin",
-    totalBookings: 20,
-    totalSpent: "€6,200",
-    status: "Active",
-    joinDate: "2023-09-12",
-    lastBooking: "2024-12-14",
-  },
-];
+import { useGetAllClientsQuery, useUpdateClientMutation } from "@/Redux/features/client/clientApi";
+import { toast } from "sonner";
 
 export default function AgentClientsPage() {
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedClient, setSelectedClient] = useState<typeof mockClients[0] | null>(null);
+  const [selectedClient, setSelectedClient] = useState<any | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [editFormData, setEditFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
+    fullName: "",
+    contactNumber: "",
+    address: "",
+    country: "",
   });
 
+  // Fetch clients from API
+  const { data: clientsResponse, isLoading, isError } = useGetAllClientsQuery({});
+  const [updateClient, { isLoading: isUpdating }] = useUpdateClientMutation();
+
+  const clients = clientsResponse?.data || [];
+
   // Filter clients based on status
-  const filteredClients = mockClients.filter((client) => {
+  const filteredClients = clients.filter((client: any) => {
     const matchesStatus =
       statusFilter === "all" ||
-      client.status.toLowerCase() === statusFilter.toLowerCase();
+      client.status?.toLowerCase() === statusFilter.toLowerCase();
 
     return matchesStatus;
   });
 
   // Calculate statistics
-  const totalClients = mockClients.length;
-  const activeClients = mockClients.filter((c) => c.status === "Active").length;
-  const inactiveClients = mockClients.filter((c) => c.status === "Inactive").length;
+  const totalClientsCount = clients.length;
+  const activeClientsCount = clients.filter((c: any) => c.status === "ACTIVE").length;
+  const inactiveClientsCount = clients.filter((c: any) => c.status !== "ACTIVE").length;
 
   const stats = [
     {
       id: 1,
       label: "Total Clients",
       icon: <Users className="h-5 w-5 text-blue-600" />,
-      value: totalClients,
+      value: totalClientsCount,
       bgColor: "bg-blue-50",
     },
     {
       id: 2,
       label: "Active Clients",
       icon: <UserCheck className="h-5 w-5 text-green-600" />,
-      value: activeClients,
+      value: activeClientsCount,
       bgColor: "bg-green-50",
     },
     {
       id: 3,
       label: "Inactive Clients",
       icon: <UserX className="h-5 w-5 text-orange-600" />,
-      value: inactiveClients,
+      value: inactiveClientsCount,
       bgColor: "bg-orange-50",
-    }
+    },
   ];
 
   // Handler functions
-  const handleViewClient = (client: typeof mockClients[0]) => {
+  const handleViewClient = (client: any) => {
     setSelectedClient(client);
     setIsViewModalOpen(true);
   };
 
-  const handleEditClient = (client: typeof mockClients[0]) => {
+  const handleEditClient = (client: any) => {
     setSelectedClient(client);
     setEditFormData({
-      name: client.name,
-      email: client.email,
-      phone: client.phone,
-      location: client.location,
+      fullName: client.fullName,
+      contactNumber: client.contactNumber,
+      address: client.address,
+      country: client.country || "Ireland",
     });
     setIsEditModalOpen(true);
   };
 
-  const handleDeleteClient = (client: typeof mockClients[0]) => {
-    setSelectedClient(client);
-    setIsDeleteModalOpen(true);
-  };
+  const handleSaveEdit = async () => {
+    if (!selectedClient) return;
 
-  const handleSaveEdit = () => {
-    // TODO: Add API call to update client
-    console.log("Updating client:", selectedClient?.id, editFormData);
-    setIsEditModalOpen(false);
-  };
-
-  const handleConfirmDelete = () => {
-    // TODO: Add API call to delete client
-    console.log("Deleting client:", selectedClient?.id);
-    setIsDeleteModalOpen(false);
+    try {
+      await updateClient({
+        id: selectedClient.id,
+        data: editFormData,
+      }).unwrap();
+      
+      toast.success("Client updated successfully");
+      setIsEditModalOpen(false);
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to update client");
+    }
   };
 
   return (
@@ -209,15 +136,40 @@ export default function AgentClientsPage() {
         description="View and manage all your client information"
       />
 
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {stats.map((stat) => (
+          <Card key={stat.id} className={`${stat.bgColor} border-none shadow-none`}>
+            <CardContent className="p-5 flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">{stat.label}</p>
+                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+              </div>
+              <div className="p-3 bg-white rounded-lg shadow-sm">
+                {stat.icon}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
       {/* Clients Table */}
-      <Card className="">
+      <Card className="shadow-sm border-gray-100">
         <CardHeader className="pb-5">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <CardTitle className="text-xl font-bold">Client List</CardTitle>
-            <div className="">
-              {/* Add Client Button */}
-              <Link href="/agent/clients/add">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+            <div className="flex items-center gap-3">
+               <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="flex h-10 w-[150px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </select>
+              <Link href="/dashboard/clients/add">
+                <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-none">
                   <Users className="h-4 w-4 mr-2" />
                   Add Client
                 </Button>
@@ -230,37 +182,66 @@ export default function AgentClientsPage() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-blue-600 hover:bg-blue-600">
-                  <TableHead className="font-semibold text-white rounded-tl-lg">Client Name</TableHead>
-                  <TableHead className="font-semibold text-white">Contact</TableHead>
-                  <TableHead className="font-semibold text-white">Location</TableHead>
-                  <TableHead className="font-semibold text-center text-white">Bookings</TableHead>
-                  <TableHead className="font-semibold text-center text-white">Total Spent</TableHead>
-                  <TableHead className="font-semibold text-center text-white">Status</TableHead>
-                  <TableHead className="font-semibold text-center text-white rounded-tr-lg">Actions</TableHead>
+                  <TableHead className="font-semibold text-white rounded-tl-lg">
+                    Client Name
+                  </TableHead>
+                  <TableHead className="font-semibold text-white">
+                    Contact
+                  </TableHead>
+                  <TableHead className="font-semibold text-white">
+                    Location
+                  </TableHead>
+                  <TableHead className="font-semibold text-center text-white">
+                    Status
+                  </TableHead>
+                  <TableHead className="font-semibold text-center text-white rounded-tr-lg">
+                    Actions
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredClients.length === 0 ? (
+                {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                    <TableCell colSpan={5} className="text-center py-12">
+                      <div className="flex flex-col items-center gap-2 text-gray-500 font-medium">
+                        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                        <p>Loading clients...</p>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : isError ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-12 text-red-500">
+                      Failed to load clients. Please try again.
+                    </TableCell>
+                  </TableRow>
+                ) : filteredClients.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={5}
+                      className="text-center py-8 text-gray-500"
+                    >
                       No clients found matching your criteria
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredClients.map((client) => (
-                    <TableRow key={client.id} className="hover:bg-gray-50/50">
+                  filteredClients.map((client: any) => (
+                    <TableRow key={client.id} className="hover:bg-gray-50/50 transition-colors">
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-semibold text-sm">
-                            {client.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
+                          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-sm border border-blue-200">
+                            {client.fullName
+                              ?.split(" ")
+                              .map((n: string) => n[0])
+                              .join("") || "U"}
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900">{client.name}</p>
+                            <p className="font-medium text-gray-900">
+                              {client.fullName}
+                            </p>
                             <p className="text-xs text-gray-500">
-                              Joined {new Date(client.joinDate).toLocaleDateString()}
+                              Joined{" "}
+                              {new Date(client.createdAt).toLocaleDateString()}
                             </p>
                           </div>
                         </div>
@@ -269,36 +250,38 @@ export default function AgentClientsPage() {
                         <div className="space-y-1">
                           <div className="flex items-center gap-1.5 text-sm">
                             <Mail className="h-3.5 w-3.5 text-gray-400" />
-                            <span className="text-gray-700">{client.email}</span>
+                            <span className="text-gray-700">
+                              {client.email}
+                            </span>
                           </div>
                           <div className="flex items-center gap-1.5 text-sm">
                             <Phone className="h-3.5 w-3.5 text-gray-400" />
-                            <span className="text-gray-700">{client.phone}</span>
+                            <span className="text-gray-700">
+                              {client.contactNumber}
+                            </span>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-1.5">
-                          <MapPin className="h-4 w-4 text-gray-400" />
-                          <span className="text-sm text-gray-700">{client.location}</span>
+                        <div className="flex flex-col gap-0.5">
+                           <div className="flex items-center gap-1.5">
+                            <MapPin className="h-3.5 w-3.5 text-gray-400" />
+                            <span className="text-sm text-gray-700">
+                              {client.country}
+                            </span>
+                          </div>
+                          <p className="text-xs text-gray-500 pl-5 truncate max-w-[150px]">
+                            {client.address}
+                          </p>
                         </div>
                       </TableCell>
                       <TableCell className="text-center">
-                        <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium">
-                          {client.totalBookings}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <span className="font-semibold text-gray-900">
-                          {client.totalSpent}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-center">
                         <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${client.status === "Active"
-                            ? "bg-green-50 text-green-700 border border-green-200"
-                            : "bg-gray-50 text-gray-600 border border-gray-200"
-                            }`}
+                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                            client.status === "ACTIVE"
+                              ? "bg-green-50 text-green-700 border border-green-200"
+                              : "bg-gray-50 text-gray-600 border border-gray-200"
+                          }`}
                         >
                           {client.status}
                         </span>
@@ -323,15 +306,6 @@ export default function AgentClientsPage() {
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600"
-                            title="Delete Client"
-                            onClick={() => handleDeleteClient(client)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -347,84 +321,89 @@ export default function AgentClientsPage() {
       <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold">Client Details</DialogTitle>
+            <DialogTitle className="text-xl font-bold">
+              Client Details
+            </DialogTitle>
             <DialogDescription>
               View complete information about this client
             </DialogDescription>
           </DialogHeader>
           {selectedClient && (
             <div className="space-y-4 py-4">
+              <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                 <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl border-2 border-white shadow-sm">
+                    {selectedClient.fullName
+                      ?.split(" ")
+                      .map((n: string) => n[0])
+                      .join("") || "U"}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">{selectedClient.fullName}</h3>
+                    <p className="text-sm text-gray-500">Client ID: {selectedClient.id}</p>
+                  </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-600">Full Name</Label>
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-gray-400" />
-                    <p className="text-sm">{selectedClient.name}</p>
+                  <Label className="text-sm font-semibold text-gray-600">
+                    Status
+                  </Label>
+                  <div className="flex">
+                    <span
+                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                        selectedClient.status === "ACTIVE"
+                          ? "bg-green-50 text-green-700 border border-green-200"
+                          : "bg-gray-50 text-gray-600 border border-gray-200"
+                      }`}
+                    >
+                      {selectedClient.status}
+                    </span>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-600">Status</Label>
-                  <span
-                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${selectedClient.status === "Active"
-                      ? "bg-green-50 text-green-700 border border-green-200"
-                      : "bg-gray-50 text-gray-600 border border-gray-200"
-                      }`}
-                  >
-                    {selectedClient.status}
-                  </span>
+                  <Label className="text-sm font-semibold text-gray-600">
+                    Join Date
+                  </Label>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-gray-400" />
+                    <p className="text-sm">
+                      {new Date(selectedClient.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-600">Email</Label>
+                  <Label className="text-sm font-semibold text-gray-600">
+                    Email
+                  </Label>
                   <div className="flex items-center gap-2">
                     <Mail className="h-4 w-4 text-gray-400" />
                     <p className="text-sm">{selectedClient.email}</p>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-600">Phone</Label>
+                  <Label className="text-sm font-semibold text-gray-600">
+                    Phone
+                  </Label>
                   <div className="flex items-center gap-2">
                     <Phone className="h-4 w-4 text-gray-400" />
-                    <p className="text-sm">{selectedClient.phone}</p>
+                    <p className="text-sm">{selectedClient.contactNumber}</p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-sm font-semibold text-gray-600">Location</Label>
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4 text-gray-400" />
-                  <p className="text-sm">{selectedClient.location}</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-600">Total Bookings</Label>
-                  <p className="text-2xl font-bold text-blue-600">{selectedClient.totalBookings}</p>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-600">Total Spent</Label>
-                  <p className="text-2xl font-bold text-green-600">{selectedClient.totalSpent}</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-600">Join Date</Label>
+                <Label className="text-sm font-semibold text-gray-600">
+                  Location
+                </Label>
+                <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-gray-400" />
-                    <p className="text-sm">{new Date(selectedClient.joinDate).toLocaleDateString()}</p>
+                    <MapPin className="h-4 w-4 text-gray-400" />
+                    <p className="text-sm">{selectedClient.country}</p>
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-600">Last Booking</Label>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-gray-400" />
-                    <p className="text-sm">{new Date(selectedClient.lastBooking).toLocaleDateString()}</p>
-                  </div>
+                  <p className="text-sm text-gray-600 pl-6">{selectedClient.address}</p>
                 </div>
               </div>
             </div>
@@ -453,22 +432,11 @@ export default function AgentClientsPage() {
               </Label>
               <Input
                 id="edit-name"
-                value={editFormData.name}
-                onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                value={editFormData.fullName}
+                onChange={(e) =>
+                  setEditFormData({ ...editFormData, fullName: e.target.value })
+                }
                 placeholder="Enter full name"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="edit-email" className="text-sm font-medium">
-                Email <span className="text-red-500">*</span>
-              </Label>
-              <Input
-                id="edit-email"
-                type="email"
-                value={editFormData.email}
-                onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
-                placeholder="Enter email"
               />
             </div>
 
@@ -478,69 +446,54 @@ export default function AgentClientsPage() {
               </Label>
               <Input
                 id="edit-phone"
-                value={editFormData.phone}
-                onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
+                value={editFormData.contactNumber}
+                onChange={(e) =>
+                  setEditFormData({ ...editFormData, contactNumber: e.target.value })
+                }
                 placeholder="Enter phone number"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="edit-location" className="text-sm font-medium">
-                Location
-              </Label>
-              <Input
-                id="edit-location"
-                value={editFormData.location}
-                onChange={(e) => setEditFormData({ ...editFormData, location: e.target.value })}
-                placeholder="Enter location"
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-country" className="text-sm font-medium">
+                  Country
+                </Label>
+                <Input
+                  id="edit-country"
+                  value={editFormData.country}
+                  onChange={(e) =>
+                    setEditFormData({ ...editFormData, country: e.target.value })
+                  }
+                  placeholder="Enter country"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="edit-address" className="text-sm font-medium">
+                  Address
+                </Label>
+                <Input
+                  id="edit-address"
+                  value={editFormData.address}
+                  onChange={(e) =>
+                    setEditFormData({ ...editFormData, address: e.target.value })
+                  }
+                  placeholder="Enter address"
+                />
+              </div>
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleSaveEdit} className="bg-blue-600 hover:bg-blue-700">
-              Save Changes
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Confirmation Modal */}
-      <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-red-600">Delete Client</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this client? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          {selectedClient && (
-            <div className="py-4">
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                <p className="text-sm font-medium text-gray-900">
-                  Client: <span className="font-bold">{selectedClient.name}</span>
-                </p>
-                <p className="text-sm text-gray-600 mt-1">
-                  Email: {selectedClient.email}
-                </p>
-                <p className="text-sm text-gray-600">
-                  Total Bookings: {selectedClient.totalBookings}
-                </p>
-              </div>
-            </div>
-          )}
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsDeleteModalOpen(false)}>
+            <Button variant="outline" onClick={() => setIsEditModalOpen(false)} disabled={isUpdating}>
               Cancel
             </Button>
             <Button
-              variant="destructive"
-              onClick={handleConfirmDelete}
-              className="bg-red-600 hover:bg-red-700"
+              onClick={handleSaveEdit}
+              className="bg-blue-600 hover:bg-blue-700"
+              disabled={isUpdating}
             >
-              Delete Client
+              {isUpdating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+              Save Changes
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -548,3 +501,4 @@ export default function AgentClientsPage() {
     </div>
   );
 }
+

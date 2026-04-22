@@ -7,29 +7,21 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Save, User, Mail, Phone, MapPin, Calendar, Car, Clock } from "lucide-react";
+import { Save, User, Mail, Phone, MapPin, Loader2, Lock } from "lucide-react";
+import { useAddClientMutation } from "@/Redux/features/client/clientApi";
+import { toast } from "sonner";
 
 export default function AddClientPage() {
     const router = useRouter();
+    const [addClient, { isLoading }] = useAddClientMutation();
+
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        fullName: "",
         email: "",
-        phone: "",
+        password: "",
+        contactNumber: "",
         address: "",
-        city: "",
-        country: "",
-        dateOfBirth: "",
-        // Booking Information
-        pickupLocation: "",
-        dropoffLocation: "",
-        pickupDate: "",
-        pickupTime: "",
-        numberOfPassengers: "",
-        vehicleType: "",
-        specialRequests: "",
-        notes: "",
+        country: "Ireland",
     });
 
     const handleInputChange = (
@@ -42,176 +34,133 @@ export default function AddClientPage() {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Add API call to save client data
-        console.log("Form submitted:", formData);
-        // Redirect back to clients list
-        router.push("/agent/clients");
+        
+        try {
+            await addClient({ data: formData }).unwrap();
+            toast.success("Client created successfully");
+            router.push("/dashboard/clients");
+        } catch (error: any) {
+            toast.error(error?.data?.message || "Failed to create client");
+        }
     };
 
     const handleCancel = () => {
-        router.push("/agent/clients");
+        router.push("/dashboard/clients");
     };
 
     return (
-        <div className="flex flex-col gap-5 pb-5 container mx-auto">
+        <div className="flex flex-col gap-5 pb-5 container mx-auto max-w-4xl">
             {/* Header */}
             <PageHeader
                 title="Add New Client"
-                description="Fill in the information below to add a new client"
+                description="Fill in the information below to add a new client to your management list"
                 showBackButton
                 backButtonText="Back to Clients"
-                backButtonHref="/agent/clients"
+                backButtonHref="/dashboard/clients"
             />
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Personal Information */}
-                <Card className="shadow-sm border border-gray-100 bg-white/90 mb-6">
+                <Card className="shadow-sm border border-gray-100 bg-white/90">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg font-bold flex items-center gap-2">
                             <User className="h-5 w-5 text-blue-600" />
-                            Personal Information
+                            Client Information
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="firstName" className="text-sm font-medium">
-                                    First Name <span className="text-red-500">*</span>
+                                <Label htmlFor="fullName" className="text-sm font-medium">
+                                    Full Name <span className="text-red-500">*</span>
                                 </Label>
                                 <Input
-                                    id="firstName"
-                                    name="firstName"
-                                    value={formData.firstName}
+                                    id="fullName"
+                                    name="fullName"
+                                    value={formData.fullName}
                                     onChange={handleInputChange}
-                                    placeholder="Enter first name"
+                                    placeholder="Enter full name"
                                     required
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="lastName" className="text-sm font-medium">
-                                    Last Name <span className="text-red-500">*</span>
+                                <Label htmlFor="email" className="text-sm font-medium">
+                                    Email Address <span className="text-red-500">*</span>
                                 </Label>
-                                <Input
-                                    id="lastName"
-                                    name="lastName"
-                                    value={formData.lastName}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter last name"
-                                    required
-                                />
+                                <div className="relative">
+                                    <Input
+                                        id="email"
+                                        name="email"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        placeholder="client@example.com"
+                                        className="pl-10"
+                                        required
+                                    />
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                </div>
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="dateOfBirth" className="text-sm font-medium">
-                                Date of Birth
-                            </Label>
-                            <div className="relative">
-                                <Input
-                                    id="dateOfBirth"
-                                    name="dateOfBirth"
-                                    type="date"
-                                    value={formData.dateOfBirth}
-                                    onChange={handleInputChange}
-                                    className="pr-10"
-                                />
-                                <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="contactNumber" className="text-sm font-medium">
+                                    Phone Number <span className="text-red-500">*</span>
+                                </Label>
+                                <div className="relative">
+                                    <Input
+                                        id="contactNumber"
+                                        name="contactNumber"
+                                        type="tel"
+                                        value={formData.contactNumber}
+                                        onChange={handleInputChange}
+                                        placeholder="+353 87 123 4567"
+                                        className="pl-10"
+                                        required
+                                    />
+                                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Card>
 
-                {/* Contact Information */}
-                <Card className="shadow-sm border border-gray-100 bg-white/90 mb-6">
-                    <CardHeader className="pb-4">
-                        <CardTitle className="text-lg font-bold flex items-center gap-2">
-                            <Phone className="h-5 w-5 text-green-600" />
-                            Contact Information
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="email" className="text-sm font-medium">
-                                Email Address <span className="text-red-500">*</span>
-                            </Label>
-                            <div className="relative">
-                                <Input
-                                    id="email"
-                                    name="email"
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    placeholder="client@example.com"
-                                    className="pl-10"
-                                    required
-                                />
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="phone" className="text-sm font-medium">
-                                Phone Number <span className="text-red-500">*</span>
-                            </Label>
-                            <div className="relative">
-                                <Input
-                                    id="phone"
-                                    name="phone"
-                                    type="tel"
-                                    value={formData.phone}
-                                    onChange={handleInputChange}
-                                    placeholder="+353 87 123 4567"
-                                    className="pl-10"
-                                    required
-                                />
-                                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                            <div className="space-y-2">
+                                <Label htmlFor="password" className="text-sm font-medium">
+                                    Account Password <span className="text-red-500">*</span>
+                                </Label>
+                                <div className="relative">
+                                    <Input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        value={formData.password}
+                                        onChange={handleInputChange}
+                                        placeholder="Minimum 8 characters"
+                                        className="pl-10"
+                                        required
+                                    />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                </div>
                             </div>
                         </div>
                     </CardContent>
                 </Card>
 
-                {/* Address Information */}
-                <Card className="shadow-sm border border-gray-100 bg-white/90 mb-6">
+                {/* Location Information */}
+                <Card className="shadow-sm border border-gray-100 bg-white/90">
                     <CardHeader className="pb-4">
                         <CardTitle className="text-lg font-bold flex items-center gap-2">
                             <MapPin className="h-5 w-5 text-purple-600" />
-                            Address Information
+                            Location Information
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="address" className="text-sm font-medium">
-                                Street Address
-                            </Label>
-                            <Input
-                                id="address"
-                                name="address"
-                                value={formData.address}
-                                onChange={handleInputChange}
-                                placeholder="Enter street address"
-                            />
-                        </div>
-
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="city" className="text-sm font-medium">
-                                    City
-                                </Label>
-                                <Input
-                                    id="city"
-                                    name="city"
-                                    value={formData.city}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter city"
-                                />
-                            </div>
-
-                            <div className="space-y-2">
                                 <Label htmlFor="country" className="text-sm font-medium">
-                                    Country
+                                    Country <span className="text-red-500">*</span>
                                 </Label>
                                 <Input
                                     id="country"
@@ -219,183 +168,52 @@ export default function AddClientPage() {
                                     value={formData.country}
                                     onChange={handleInputChange}
                                     placeholder="Enter country"
-                                />
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Booking Information */}
-                <Card className="shadow-sm border border-gray-100 bg-white/90 mb-6">
-                    <CardHeader className="pb-4">
-                        <CardTitle className="text-lg font-bold flex items-center gap-2">
-                            <Car className="h-5 w-5 text-orange-600" />
-                            Booking Information
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="pickupLocation" className="text-sm font-medium">
-                                    Pickup Location
-                                </Label>
-                                <div className="relative">
-                                    <Input
-                                        id="pickupLocation"
-                                        name="pickupLocation"
-                                        value={formData.pickupLocation}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter pickup location"
-                                        className="pl-10"
-                                    />
-                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="dropoffLocation" className="text-sm font-medium">
-                                    Dropoff Location
-                                </Label>
-                                <div className="relative">
-                                    <Input
-                                        id="dropoffLocation"
-                                        name="dropoffLocation"
-                                        value={formData.dropoffLocation}
-                                        onChange={handleInputChange}
-                                        placeholder="Enter dropoff location"
-                                        className="pl-10"
-                                    />
-                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="pickupDate" className="text-sm font-medium">
-                                    Pickup Date
-                                </Label>
-                                <div className="relative">
-                                    <Input
-                                        id="pickupDate"
-                                        name="pickupDate"
-                                        type="date"
-                                        value={formData.pickupDate}
-                                        onChange={handleInputChange}
-                                        className="pr-10"
-                                    />
-                                    <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label htmlFor="pickupTime" className="text-sm font-medium">
-                                    Pickup Time
-                                </Label>
-                                <div className="relative">
-                                    <Input
-                                        id="pickupTime"
-                                        name="pickupTime"
-                                        type="time"
-                                        value={formData.pickupTime}
-                                        onChange={handleInputChange}
-                                        className="pr-10"
-                                    />
-                                    <Clock className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="numberOfPassengers" className="text-sm font-medium">
-                                    Number of Passengers
-                                </Label>
-                                <Input
-                                    id="numberOfPassengers"
-                                    name="numberOfPassengers"
-                                    type="number"
-                                    min="1"
-                                    value={formData.numberOfPassengers}
-                                    onChange={handleInputChange}
-                                    placeholder="Enter number of passengers"
+                                    required
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="vehicleType" className="text-sm font-medium">
-                                    Vehicle Type
+                                <Label htmlFor="address" className="text-sm font-medium">
+                                    Full Address <span className="text-red-500">*</span>
                                 </Label>
-                                <select
-                                    id="vehicleType"
-                                    name="vehicleType"
-                                    value={formData.vehicleType}
-                                    onChange={handleInputChange}
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                                >
-                                    <option value="">Select vehicle type</option>
-                                    <option value="sedan">Sedan</option>
-                                    <option value="suv">SUV</option>
-                                    <option value="van">Van</option>
-                                    <option value="minibus">Minibus</option>
-                                    <option value="luxury">Luxury Car</option>
-                                </select>
+                                <div className="relative">
+                                    <Input
+                                        id="address"
+                                        name="address"
+                                        value={formData.address}
+                                        onChange={handleInputChange}
+                                        placeholder="Enter street address"
+                                        className="pl-10"
+                                        required
+                                    />
+                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                                </div>
                             </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="specialRequests" className="text-sm font-medium">
-                                Special Requests (Optional)
-                            </Label>
-                            <Textarea
-                                id="specialRequests"
-                                name="specialRequests"
-                                value={formData.specialRequests}
-                                onChange={handleInputChange}
-                                placeholder="Any special requests for the booking (e.g., child seat, wheelchair accessible)..."
-                                className="min-h-[100px]"
-                            />
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* Additional Notes */}
-                <Card className="shadow-sm border border-gray-100 bg-white/90 mb-6">
-                    <CardHeader className="pb-4">
-                        <CardTitle className="text-lg font-bold">Additional Notes</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-2">
-                            <Label htmlFor="notes" className="text-sm font-medium">
-                                Notes (Optional)
-                            </Label>
-                            <Textarea
-                                id="notes"
-                                name="notes"
-                                value={formData.notes}
-                                onChange={handleInputChange}
-                                placeholder="Add any additional notes about the client..."
-                                className="min-h-[120px]"
-                            />
                         </div>
                     </CardContent>
                 </Card>
 
                 {/* Action Buttons */}
-                <div className="flex items-center justify-end gap-3">
+                <div className="flex items-center justify-end gap-3 pt-4">
                     <Button
                         type="button"
                         variant="outline"
                         onClick={handleCancel}
-                        className="px-6"
+                        className="px-8 shadow-none"
+                        disabled={isLoading}
                     >
                         Cancel
                     </Button>
                     <Button
                         type="submit"
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-8 shadow-none"
+                        disabled={isLoading}
                     >
-                        <Save className="h-4 w-4 mr-2" />
+                        {isLoading ? (
+                            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        ) : (
+                            <Save className="h-4 w-4 mr-2" />
+                        )}
                         Save Client
                     </Button>
                 </div>
@@ -403,3 +221,4 @@ export default function AddClientPage() {
         </div>
     );
 }
+
