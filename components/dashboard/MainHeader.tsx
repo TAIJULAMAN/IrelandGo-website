@@ -4,6 +4,8 @@ import { Menu, Bell } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { ProfileData } from "@/Redux/features/settings/profileApi"
+import Link from "next/link"
+import { useGetMyNotificationsQuery } from "@/Redux/features/notification/notificationApi"
 
 interface DashboardHeaderProps {
     setIsMobileMenuOpen: (open: boolean) => void
@@ -11,6 +13,9 @@ interface DashboardHeaderProps {
 }
 
 export function MainHeader({ setIsMobileMenuOpen, user }: DashboardHeaderProps) {
+    const { data: response } = useGetMyNotificationsQuery();
+    const notifications = response?.data || [];
+    const unreadCount = notifications.filter(n => !n.read).length;
 
     return (
         <header className="h-24 bg-white/80 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-5 md:px-10 sticky top-0 z-10 transition-all">
@@ -31,11 +36,18 @@ export function MainHeader({ setIsMobileMenuOpen, user }: DashboardHeaderProps) 
 
             {/* Actions & User Profile */}
             <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="w-10 h-10 rounded-2xl bg-blue-50 hover:bg-blue-100 relative group transition-all duration-300 shadow-sm border border-blue-100">
-                    <Bell className="w-8 h-8 text-blue-600 transition-transform duration-300 group-hover:rotate-12" />
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                        <span className="relative inline-flex rounded-full h-4 w-4 bg-blue-600 border-2 border-white shadow-sm"></span>
-                    </span>
+                <Button asChild variant="ghost" size="icon" className="w-10 h-10 rounded-2xl bg-blue-50 hover:bg-blue-100 relative group transition-all duration-300 shadow-sm border border-blue-100">
+                    <Link href="/dashboard/notifications">
+                        <Bell className="w-8 h-8 text-blue-600 transition-transform duration-300 group-hover:rotate-12" />
+                        {unreadCount > 0 && (
+                            <span className="absolute -top-1 -right-1 flex h-4 w-4">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-4 w-4 bg-blue-600 border-2 border-white shadow-sm flex items-center justify-center">
+                                    <span className="text-[8px] text-white font-bold">{unreadCount}</span>
+                                </span>
+                            </span>
+                        )}
+                    </Link>
                 </Button>
 
                 <div className="flex items-center gap-3 pl-2 border-l border-gray-100">

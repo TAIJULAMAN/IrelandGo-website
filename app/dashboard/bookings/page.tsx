@@ -33,7 +33,10 @@ import {
 } from "lucide-react";
 import { useAppSelector } from "@/Redux/hooks";
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi";
-import { useGetAllAgentBookingsQuery, useGetAllUserBookingsQuery } from "@/Redux/features/booking/bookingApi";
+import {
+  useGetAllAgentBookingsQuery,
+  useGetAllUserBookingsQuery,
+} from "@/Redux/features/booking/bookingApi";
 
 export default function UserBookingsPage() {
   const [statusFilter, setStatusFilter] = useState("all");
@@ -44,23 +47,23 @@ export default function UserBookingsPage() {
   const isAuthenticated = !!token;
 
   const { data: profileData } = useGetProfileQuery(undefined, {
-      skip: !isAuthenticated,
+    skip: !isAuthenticated,
   });
 
   const user = profileData?.data;
   const role = user?.role?.toLowerCase();
   const isAgent = role === "agent";
 
-  const { 
-    data: agentData, 
-    isLoading: agentLoading, 
-    isError: agentError 
+  const {
+    data: agentData,
+    isLoading: agentLoading,
+    isError: agentError,
   } = useGetAllAgentBookingsQuery({}, { skip: !isAuthenticated || !isAgent });
 
-  const { 
-    data: userData, 
-    isLoading: userLoading, 
-    isError: userError 
+  const {
+    data: userData,
+    isLoading: userLoading,
+    isError: userError,
   } = useGetAllUserBookingsQuery({}, { skip: !isAuthenticated || isAgent });
 
   const isLoading = agentLoading || userLoading;
@@ -86,26 +89,23 @@ export default function UserBookingsPage() {
       bgColor: "bg-blue-50",
     },
     {
-      id: 2,
-      label: "Confirmed",
-      icon: <CheckCircle className="h-5 w-5 text-green-600" />,
-      value: data?.data?.totalConfirmedBookings || 0,
-      bgColor: "bg-green-50",
-    },
-    {
       id: 3,
       label: "Completed",
       icon: <Clock className="h-5 w-5 text-orange-600" />,
       value: data?.data?.totalCompletedBookings || 0,
       bgColor: "bg-orange-50",
     },
-    {
-      id: 4,
-      label: "Total Earnings",
-      icon: <DollarSign className="h-5 w-5 text-purple-600" />,
-      value: `€${data?.data?.totalEarnings || 0}`,
-      bgColor: "bg-purple-50",
-    },
+    ...(isAgent
+      ? [
+          {
+            id: 4,
+            label: "Total Earnings",
+            icon: <DollarSign className="h-5 w-5 text-purple-600" />,
+            value: `€${data?.data?.totalEarnings || 0}`,
+            bgColor: "bg-purple-50",
+          },
+        ]
+      : []),
   ];
 
   const handleViewBooking = (booking: any) => {
@@ -122,7 +122,11 @@ export default function UserBookingsPage() {
       />
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div
+        className={`grid grid-cols-1 sm:grid-cols-2 ${
+          isAgent ? "lg:grid-cols-3" : "lg:grid-cols-2"
+        } gap-5`}
+      >
         {stats.map((stat) => (
           <Card
             key={stat.id}
@@ -300,7 +304,6 @@ export default function UserBookingsPage() {
                           className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
                         >
                           <Eye className="h-4 w-4 mr-1" />
-                          View
                         </Button>
                       </TableCell>
                     </TableRow>

@@ -41,5 +41,6 @@ export const baseApi = createApi({
     "payment-methods",
     "multiDayTours",
     "booking",
+    "notification",
   ],
 });
