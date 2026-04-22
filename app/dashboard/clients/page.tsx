@@ -27,20 +27,23 @@ import {
   Users,
   Eye,
   Edit,
-  UserCheck,
-  UserX,
   Phone,
   Mail,
   MapPin,
-  User,
   Calendar,
   Loader2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { useGetAllClientsQuery, useUpdateClientMutation } from "@/Redux/features/client/clientApi";
+import {
+  useGetAllClientsQuery,
+  useUpdateClientMutation,
+} from "@/Redux/features/client/clientApi";
 import { toast } from "sonner";
 
 export default function AgentClientsPage() {
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 10;
   const [selectedClient, setSelectedClient] = useState<any | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -52,48 +55,19 @@ export default function AgentClientsPage() {
   });
 
   // Fetch clients from API
-  const { data: clientsResponse, isLoading, isError } = useGetAllClientsQuery({});
+  const {
+    data: clientsResponse,
+    isLoading,
+    isError,
+  } = useGetAllClientsQuery({ page: currentPage, limit });
   const [updateClient, { isLoading: isUpdating }] = useUpdateClientMutation();
 
   const clients = clientsResponse?.data || [];
-
-  // Filter clients based on status
-  const filteredClients = clients.filter((client: any) => {
-    const matchesStatus =
-      statusFilter === "all" ||
-      client.status?.toLowerCase() === statusFilter.toLowerCase();
-
-    return matchesStatus;
-  });
+  const meta = clientsResponse?.meta || { total: 0, page: 1 };
+  const totalPages = Math.ceil(meta.total / limit);
 
   // Calculate statistics
-  const totalClientsCount = clients.length;
-  const activeClientsCount = clients.filter((c: any) => c.status === "ACTIVE").length;
-  const inactiveClientsCount = clients.filter((c: any) => c.status !== "ACTIVE").length;
-
-  const stats = [
-    {
-      id: 1,
-      label: "Total Clients",
-      icon: <Users className="h-5 w-5 text-blue-600" />,
-      value: totalClientsCount,
-      bgColor: "bg-blue-50",
-    },
-    {
-      id: 2,
-      label: "Active Clients",
-      icon: <UserCheck className="h-5 w-5 text-green-600" />,
-      value: activeClientsCount,
-      bgColor: "bg-green-50",
-    },
-    {
-      id: 3,
-      label: "Inactive Clients",
-      icon: <UserX className="h-5 w-5 text-orange-600" />,
-      value: inactiveClientsCount,
-      bgColor: "bg-orange-50",
-    },
-  ];
+  const totalClientsCount = meta.total || clients.length;
 
   // Handler functions
   const handleViewClient = (client: any) => {
@@ -120,7 +94,7 @@ export default function AgentClientsPage() {
         id: selectedClient.id,
         data: editFormData,
       }).unwrap();
-      
+
       toast.success("Client updated successfully");
       setIsEditModalOpen(false);
     } catch (error: any) {
@@ -128,55 +102,32 @@ export default function AgentClientsPage() {
     }
   };
 
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-5 pb-5">
-      {/* Header */}
-      <PageHeader
-        title="Clients Management"
-        description="View and manage all your client information"
-      />
-
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {stats.map((stat) => (
-          <Card key={stat.id} className={`${stat.bgColor} border-none shadow-none`}>
-            <CardContent className="p-5 flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-              </div>
-              <div className="p-3 bg-white rounded-lg shadow-sm">
-                {stat.icon}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        {/* Header */}
+        <PageHeader
+          title="Clients Management"
+          description={`View and manage all your ${totalClientsCount} client information`}
+        />
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <Link href="/dashboard/clients/add">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-none">
+              <Users className="h-4 w-4 mr-2" />
+              Add Client
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Clients Table */}
-      <Card className="shadow-sm border-gray-100">
-        <CardHeader className="pb-5">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <CardTitle className="text-xl font-bold">Client List</CardTitle>
-            <div className="flex items-center gap-3">
-               <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="flex h-10 w-[150px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-              <Link href="/dashboard/clients/add">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white shadow-none">
-                  <Users className="h-4 w-4 mr-2" />
-                  Add Client
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </CardHeader>
+      <Card className="">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <Table>
@@ -191,9 +142,6 @@ export default function AgentClientsPage() {
                   <TableHead className="font-semibold text-white">
                     Location
                   </TableHead>
-                  <TableHead className="font-semibold text-center text-white">
-                    Status
-                  </TableHead>
                   <TableHead className="font-semibold text-center text-white rounded-tr-lg">
                     Actions
                   </TableHead>
@@ -202,7 +150,7 @@ export default function AgentClientsPage() {
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-12">
+                    <TableCell colSpan={4} className="text-center py-12">
                       <div className="flex flex-col items-center gap-2 text-gray-500 font-medium">
                         <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
                         <p>Loading clients...</p>
@@ -211,30 +159,30 @@ export default function AgentClientsPage() {
                   </TableRow>
                 ) : isError ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-12 text-red-500">
+                    <TableCell
+                      colSpan={4}
+                      className="text-center py-12 text-red-500"
+                    >
                       Failed to load clients. Please try again.
                     </TableCell>
                   </TableRow>
-                ) : filteredClients.length === 0 ? (
+                ) : clients.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={5}
+                      colSpan={4}
                       className="text-center py-8 text-gray-500"
                     >
-                      No clients found matching your criteria
+                      No clients found in the system
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredClients.map((client: any) => (
-                    <TableRow key={client.id} className="hover:bg-gray-50/50 transition-colors">
+                  clients.map((client: any) => (
+                    <TableRow
+                      key={client.id}
+                      className="hover:bg-gray-50/50 transition-colors"
+                    >
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-sm border border-blue-200">
-                            {client.fullName
-                              ?.split(" ")
-                              .map((n: string) => n[0])
-                              .join("") || "U"}
-                          </div>
                           <div>
                             <p className="font-medium text-gray-900">
                               {client.fullName}
@@ -264,7 +212,7 @@ export default function AgentClientsPage() {
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-col gap-0.5">
-                           <div className="flex items-center gap-1.5">
+                          <div className="flex items-center gap-1.5">
                             <MapPin className="h-3.5 w-3.5 text-gray-400" />
                             <span className="text-sm text-gray-700">
                               {client.country}
@@ -274,17 +222,6 @@ export default function AgentClientsPage() {
                             {client.address}
                           </p>
                         </div>
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                            client.status === "ACTIVE"
-                              ? "bg-green-50 text-green-700 border border-green-200"
-                              : "bg-gray-50 text-gray-600 border border-gray-200"
-                          }`}
-                        >
-                          {client.status}
-                        </span>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center justify-center gap-1">
@@ -314,6 +251,64 @@ export default function AgentClientsPage() {
               </TableBody>
             </Table>
           </div>
+
+          {/* Pagination */}
+          {!isLoading && !isError && clients.length > 0 && totalPages > 1 && (
+            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100">
+              <p className="text-sm text-gray-500">
+                Showing{" "}
+                <span className="font-medium">
+                  {(currentPage - 1) * limit + 1}
+                </span>{" "}
+                to{" "}
+                <span className="font-medium">
+                  {Math.min(currentPage * limit, meta.total)}
+                </span>{" "}
+                of <span className="font-medium">{meta.total}</span> clients
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="h-8 px-2"
+                >
+                  <ChevronLeft className="h-4 w-4 mr-1" />
+                  Previous
+                </Button>
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => (
+                      <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePageChange(page)}
+                        className={`h-8 w-8 p-0 ${
+                          currentPage === page
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : ""
+                        }`}
+                      >
+                        {page}
+                      </Button>
+                    ),
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="h-8 px-2"
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -331,35 +326,31 @@ export default function AgentClientsPage() {
           {selectedClient && (
             <div className="space-y-4 py-4">
               <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
-                 <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl border-2 border-white shadow-sm">
-                    {selectedClient.fullName
+                <div className="h-16 w-16 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xl border-2 border-white shadow-sm overflow-hidden">
+                  {selectedClient.profileImage ? (
+                    <img
+                      src={selectedClient.profileImage}
+                      alt={selectedClient.fullName}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    selectedClient.fullName
                       ?.split(" ")
                       .map((n: string) => n[0])
-                      .join("") || "U"}
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-bold text-gray-900">{selectedClient.fullName}</h3>
-                    <p className="text-sm text-gray-500">Client ID: {selectedClient.id}</p>
-                  </div>
+                      .join("") || "U"
+                  )}
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">
+                    {selectedClient.fullName}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Client ID: {selectedClient.id}
+                  </p>
+                </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-sm font-semibold text-gray-600">
-                    Status
-                  </Label>
-                  <div className="flex">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                        selectedClient.status === "ACTIVE"
-                          ? "bg-green-50 text-green-700 border border-green-200"
-                          : "bg-gray-50 text-gray-600 border border-gray-200"
-                      }`}
-                    >
-                      {selectedClient.status}
-                    </span>
-                  </div>
-                </div>
+              <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold text-gray-600">
                     Join Date
@@ -403,7 +394,9 @@ export default function AgentClientsPage() {
                     <MapPin className="h-4 w-4 text-gray-400" />
                     <p className="text-sm">{selectedClient.country}</p>
                   </div>
-                  <p className="text-sm text-gray-600 pl-6">{selectedClient.address}</p>
+                  <p className="text-sm text-gray-600 pl-6">
+                    {selectedClient.address}
+                  </p>
                 </div>
               </div>
             </div>
@@ -448,7 +441,10 @@ export default function AgentClientsPage() {
                 id="edit-phone"
                 value={editFormData.contactNumber}
                 onChange={(e) =>
-                  setEditFormData({ ...editFormData, contactNumber: e.target.value })
+                  setEditFormData({
+                    ...editFormData,
+                    contactNumber: e.target.value,
+                  })
                 }
                 placeholder="Enter phone number"
               />
@@ -463,7 +459,10 @@ export default function AgentClientsPage() {
                   id="edit-country"
                   value={editFormData.country}
                   onChange={(e) =>
-                    setEditFormData({ ...editFormData, country: e.target.value })
+                    setEditFormData({
+                      ...editFormData,
+                      country: e.target.value,
+                    })
                   }
                   placeholder="Enter country"
                 />
@@ -476,7 +475,10 @@ export default function AgentClientsPage() {
                   id="edit-address"
                   value={editFormData.address}
                   onChange={(e) =>
-                    setEditFormData({ ...editFormData, address: e.target.value })
+                    setEditFormData({
+                      ...editFormData,
+                      address: e.target.value,
+                    })
                   }
                   placeholder="Enter address"
                 />
@@ -484,7 +486,11 @@ export default function AgentClientsPage() {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditModalOpen(false)} disabled={isUpdating}>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditModalOpen(false)}
+              disabled={isUpdating}
+            >
               Cancel
             </Button>
             <Button
@@ -492,7 +498,9 @@ export default function AgentClientsPage() {
               className="bg-blue-600 hover:bg-blue-700"
               disabled={isUpdating}
             >
-              {isUpdating ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+              {isUpdating ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              ) : null}
               Save Changes
             </Button>
           </DialogFooter>
@@ -501,4 +509,3 @@ export default function AgentClientsPage() {
     </div>
   );
 }
-
