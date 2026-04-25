@@ -8,16 +8,14 @@ import { useGetTransfersBasedOnLocationQuery } from "@/Redux/features/transfers/
 export default function PopularTransferRoutes() {
   const searchParams = useSearchParams();
   const locationParam = searchParams.get("location");
-  console.log(locationParam, "locationParam");
 
   const {
-    data: response,
+    data: transfersRoutes,
     isLoading,
     isError,
   } = useGetTransfersBasedOnLocationQuery(locationParam);
 
-  // Extract the array of routes from the response
-  const routes = response?.data || [];
+  const transferRoutes = transfersRoutes?.data || [];
 
   return (
     <section className="bg-white">
@@ -41,22 +39,23 @@ export default function PopularTransferRoutes() {
             <div className="text-center text-red-500 py-10">
               Failed to load routes. Please try again.
             </div>
-          ) : routes.length === 0 ? (
+          ) : transferRoutes.length === 0 ? (
             <div className="text-center text-gray-500 py-10">
               No routes found from this location.
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {routes.map((route: any) => {
-                // Determine image
+              {transferRoutes.map((transferRoute: any) => {
                 const imageUrl =
-                  route.images && route.images.length > 0
-                    ? route.images[0]
+                  transferRoute.images && transferRoute.images.length > 0
+                    ? transferRoute.images[0]
                     : "/p1.png";
 
                 // Format duration based on travelTimeMinutes
-                const hours = Math.floor((route.travelTimeMinutes || 0) / 60);
-                const minutes = (route.travelTimeMinutes || 0) % 60;
+                const hours = Math.floor(
+                  (transferRoute.travelTimeMinutes || 0) / 60,
+                );
+                const minutes = (transferRoute.travelTimeMinutes || 0) % 60;
                 let durationText = "";
                 if (hours > 0) {
                   durationText += `${hours} hour${hours > 1 ? "s" : ""}`;
@@ -69,19 +68,19 @@ export default function PopularTransferRoutes() {
                 }
 
                 // Strip HTML tags for a clean description summary
-                const plainDescription = route.description
-                  ? route.description.replace(/<[^>]*>?/gm, "")
+                const plainDescription = transferRoute.description
+                  ? transferRoute.description.replace(/<[^>]*>?/gm, "")
                   : "No description available.";
 
                 return (
                   <div
-                    key={route.id}
+                    key={transferRoute.id}
                     className="bg-[#f7f9fc] rounded-2xl overflow-hidden shadow-sm flex flex-col"
                   >
                     <div className="h-40 w-full overflow-hidden">
                       <img
                         src={imageUrl}
-                        alt={route.title}
+                        alt={transferRoute.title}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -89,12 +88,15 @@ export default function PopularTransferRoutes() {
                       <div className="flex items-center justify-between">
                         <h3
                           className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-1"
-                          title={route.title}
+                          title={transferRoute.title}
                         >
-                          {route.title}
+                          {transferRoute.title}
                         </h3>
                         <span className="text-xs sm:text-sm text-gray-500 whitespace-nowrap ml-2">
                           {durationText}
+                          {transferRoute.distanceKm
+                            ? ` • ${transferRoute.distanceKm} km`
+                            : ""}
                         </span>
                       </div>
                       <p
@@ -110,10 +112,12 @@ export default function PopularTransferRoutes() {
                             Starting from
                           </span>
                           <span className="font-semibold text-blue-600">
-                            €{route.price}
+                            €{transferRoute.price}
                           </span>
                         </div>
-                        <Link href={`/transfer/private-car-transfer`}>
+                        <Link
+                          href={`/transfer/private-car-transfer?pickup=${transferRoute.from}&dropoff=${transferRoute.to}`}
+                        >
                           <button className="w-full rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2">
                             Book Now
                           </button>

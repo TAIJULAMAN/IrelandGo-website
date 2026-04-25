@@ -21,8 +21,10 @@ export default function TransferJourneyDetails() {
   const [duration, setDuration] = useState<number | null>(null);
 
   // Find settlement data
-  const pickupSettlement = irishSettlements.find(s => s.name === pickupParam);
-  const dropoffSettlement = irishSettlements.find(s => s.name === dropoffParam);
+  const pickupSettlement = irishSettlements.find((s) => s.name === pickupParam);
+  const dropoffSettlement = irishSettlements.find(
+    (s) => s.name === dropoffParam,
+  );
 
   // Fetch route data from OSRM
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function TransferJourneyDetails() {
             setDuration(Math.round(data.routes[0].duration / 60)); // Convert to minutes
           }
         } catch (error) {
-          console.error('Error fetching route:', error);
+          console.error("Error fetching route:", error);
         }
       };
 
@@ -47,7 +49,7 @@ export default function TransferJourneyDetails() {
   }, [pickupSettlement, dropoffSettlement]);
 
   // Calculate estimated price (€0.40 per km base rate)
-  const estimatedPrice = distance ? Math.round(distance * 0.40) : null;
+  const estimatedPrice = distance ? Math.round(distance * 0.4) : null;
 
   // Format duration
   const formatDuration = (minutes: number | null) => {
@@ -89,12 +91,16 @@ export default function TransferJourneyDetails() {
                   A
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-blue-600 mb-1">Pickup Location</p>
+                  <p className="text-sm font-medium text-blue-600 mb-1">
+                    Pickup Location
+                  </p>
                   <p className="text-base sm:text-lg font-bold text-gray-900">
                     {pickupParam || "Select Pickup Location"}
                   </p>
                   <p className="text-sm text-gray-600 mt-1">
-                    {pickupSettlement ? `${pickupSettlement.county}, ${pickupSettlement.province}` : ""}
+                    {pickupSettlement
+                      ? `${pickupSettlement.county}, ${pickupSettlement.province}`
+                      : ""}
                   </p>
                 </div>
               </div>
@@ -114,7 +120,9 @@ export default function TransferJourneyDetails() {
                   B
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-medium text-emerald-600 mb-1">Dropoff Location</p>
+                  <p className="text-sm font-medium text-emerald-600 mb-1">
+                    Dropoff Location
+                  </p>
                   <div className="flex items-center gap-2">
                     <MapPin className="h-5 w-5 text-emerald-600" />
                     <p className="text-base sm:text-lg font-bold text-gray-900">
@@ -136,14 +144,20 @@ export default function TransferJourneyDetails() {
                 <div className="p-2 rounded-full bg-blue-600">
                   <Clock className="h-5 w-5 text-white" />
                 </div>
-                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Duration</p>
-                <p className="text-lg sm:text-xl font-bold text-gray-900">{formatDuration(duration) || "N/A"}</p>
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Duration
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-gray-900">
+                  {formatDuration(duration) || "N/A"}
+                </p>
               </div>
               <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/30 hover:shadow-md transition-shadow">
                 <div className="p-2 rounded-full bg-purple-600">
                   <Route className="h-5 w-5 text-white" />
                 </div>
-                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Distance</p>
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  Distance
+                </p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900">
                   {distance ? `${distance} km` : "N/A"}
                 </p>
@@ -152,7 +166,9 @@ export default function TransferJourneyDetails() {
                 <div className="p-2 rounded-full bg-emerald-600">
                   <Euro className="h-5 w-5 text-white" />
                 </div>
-                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">From</p>
+                <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  From
+                </p>
                 <p className="text-lg sm:text-xl font-bold text-gray-900">
                   {estimatedPrice ? `€${estimatedPrice}` : "N/A"}
                 </p>
