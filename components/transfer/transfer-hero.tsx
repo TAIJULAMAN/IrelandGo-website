@@ -1,32 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { Header } from "../common/header";
 import { Search, MapPin } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { irishSettlements } from "@/lib/irish-settlements";
 
 export default function TransfersHero() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Filter settlements based on search query
-  const filteredSettlements = searchQuery.trim()
-    ? irishSettlements
-        .filter(
-          (settlement) =>
-            settlement.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            settlement.county.toLowerCase().includes(searchQuery.toLowerCase()),
-        )
-        .slice(0, 8) // Limit to 8 results
-    : [];
-
-  // Handle search submission
   const handleSearch = (location?: string) => {
     const searchLocation = location || searchQuery;
     if (searchLocation.trim()) {
@@ -36,66 +19,9 @@ export default function TransfersHero() {
     }
   };
 
-  // Handle popular route click
   const handlePopularRoute = (route: string) => {
     setSearchQuery(route);
   };
-
-  // Handle keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!showDropdown || filteredSettlements.length === 0) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleSearch();
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        setSelectedIndex((prev) =>
-          prev < filteredSettlements.length - 1 ? prev + 1 : prev,
-        );
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
-        break;
-      case "Enter":
-        e.preventDefault();
-        if (selectedIndex >= 0) {
-          const selected = filteredSettlements[selectedIndex];
-          setSearchQuery(selected.name);
-          handleSearch(selected.name);
-          setShowDropdown(false);
-        } else {
-          handleSearch();
-        }
-        break;
-      case "Escape":
-        setShowDropdown(false);
-        setSelectedIndex(-1);
-        break;
-    }
-  };
-
-  // Handle click outside to close dropdown
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const popularRoutes = [
     "Dublin",
@@ -145,11 +71,7 @@ export default function TransfersHero() {
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
-                    setShowDropdown(true);
-                    setSelectedIndex(-1);
                   }}
-                  onFocus={() => setShowDropdown(true)}
-                  onKeyDown={handleKeyDown}
                 />
               </div>
             </div>
