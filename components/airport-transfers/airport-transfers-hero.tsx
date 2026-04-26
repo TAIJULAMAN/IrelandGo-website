@@ -1,35 +1,15 @@
 "use client";
 
-import Link from "next/link";
 import { Header } from "../common/header";
 import { Search, MapPin } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { irishSettlements } from "@/lib/irish-settlements";
 
 export default function AirportTransfersHero() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Filter to show only airports
-  const airports = irishSettlements.filter((s) => s.type === "Airport");
-
-  // Filter airports based on search query
-  const filteredAirports = searchQuery.trim()
-    ? airports
-        .filter(
-          (airport) =>
-            airport.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            airport.county.toLowerCase().includes(searchQuery.toLowerCase()),
-        )
-        .slice(0, 8) // Limit to 8 results
-    : [];
-
-  // Handle search submission
   const handleSearch = (location?: string) => {
     const searchLocation = location || searchQuery;
     if (searchLocation.trim()) {
@@ -38,69 +18,9 @@ export default function AirportTransfersHero() {
       );
     }
   };
-
-  // Handle popular route click
   const handlePopularRoute = (route: string) => {
     setSearchQuery(route);
-    handleSearch(route);
   };
-
-  // Handle keyboard navigation
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!showDropdown || filteredAirports.length === 0) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        handleSearch();
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        setSelectedIndex((prev) =>
-          prev < filteredAirports.length - 1 ? prev + 1 : prev,
-        );
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
-        break;
-      case "Enter":
-        e.preventDefault();
-        if (selectedIndex >= 0) {
-          const selected = filteredAirports[selectedIndex];
-          setSearchQuery(selected.name);
-          handleSearch(selected.name);
-          setShowDropdown(false);
-        } else {
-          handleSearch();
-        }
-        break;
-      case "Escape":
-        setShowDropdown(false);
-        setSelectedIndex(-1);
-        break;
-    }
-  };
-
-  // Handle click outside to close dropdown
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const popularAirports = [
     "Shannon Airport",
     "Dublin Airport",
@@ -111,7 +31,6 @@ export default function AirportTransfersHero() {
 
   return (
     <section className="relative min-h-screen text-white overflow-hidden">
-      {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <img
           src="/ShannonAirport.webp"
@@ -119,7 +38,6 @@ export default function AirportTransfersHero() {
           className="w-full h-full object-cover"
         />
       </div>
-
       <Header />
 
       <div className="container mx-auto px-5 md:px-0 pt-10 flex flex-col items-center text-center gap-5 md:gap-10">
@@ -152,47 +70,9 @@ export default function AirportTransfersHero() {
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
-                    setShowDropdown(true);
-                    setSelectedIndex(-1);
                   }}
-                  onFocus={() => setShowDropdown(true)}
-                  onKeyDown={handleKeyDown}
                 />
               </div>
-
-              {/* Autocomplete Dropdown */}
-              {showDropdown && filteredAirports.length > 0 && (
-                <div
-                  ref={dropdownRef}
-                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto z-50"
-                >
-                  {filteredAirports.map((airport, index) => (
-                    <button
-                      key={airport.id}
-                      onClick={() => {
-                        setSearchQuery(airport.name);
-                        handleSearch(airport.name);
-                        setShowDropdown(false);
-                      }}
-                      className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0 ${
-                        index === selectedIndex ? "bg-blue-50" : ""
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                        <div>
-                          <div className="text-sm font-medium text-gray-900">
-                            {airport.name}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {airport.county}, {airport.province}
-                          </div>
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
 
             <button
