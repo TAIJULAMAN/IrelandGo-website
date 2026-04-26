@@ -1,73 +1,91 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { useState } from "react"
-import { MapPin, Calendar as CalendarIcon, Users, Luggage, Plus, Clock, Search, ChevronDown, Minus } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { Header } from "../common/header"
-import dynamic from "next/dynamic"
-import { irishSettlements } from "@/lib/irish-settlements"
-import Link from "next/link"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { format } from "date-fns"
-import { cn } from "@/lib/utils"
-import { FeatureBadges } from "../common/feature-badges"
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import {
+  MapPin,
+  Calendar as CalendarIcon,
+  Users,
+  Luggage,
+  Plus,
+  Clock,
+  Search,
+  ChevronDown,
+  Minus,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Header } from "../common/header";
+import dynamic from "next/dynamic";
+import { irishSettlements } from "@/lib/irish-settlements";
+import Link from "next/link";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { FeatureBadges } from "../common/feature-badges";
 
-const MapRoute = dynamic(() => import("./map-route").then(mod => ({ default: mod.MapRoute })), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '340px' }}>
-      <p className="text-gray-500">Loading map...</p>
-    </div>
-  )
-})
+const MapRoute = dynamic(
+  () => import("./map-route").then((mod) => ({ default: mod.MapRoute })),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center"
+        style={{ minHeight: "340px" }}
+      >
+        <p className="text-gray-500">Loading map...</p>
+      </div>
+    ),
+  },
+);
 
 export function Hero() {
-  const [activeTab, setActiveTab] = useState("transfer")
-  const [tripType, setTripType] = useState("return")
-  const [oneWayStops, setOneWayStops] = useState<string[]>([])
-  const [returnStops, setReturnStops] = useState<string[]>([])
-  const [pickupLocation, setPickupLocation] = useState("")
-  const [dropoffLocation, setDropoffLocation] = useState("")
+  const [activeTab, setActiveTab] = useState("transfer");
+  const [tripType, setTripType] = useState("return");
+  const [oneWayStops, setOneWayStops] = useState<string[]>([]);
+  const [returnStops, setReturnStops] = useState<string[]>([]);
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [dropoffLocation, setDropoffLocation] = useState("");
 
   // Date and Time state
-  const [date, setDate] = useState<Date | undefined>(new Date())
-  const [time, setTime] = useState("09:00")
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [time, setTime] = useState("09:00");
 
   // Passengers and Luggage state
-  const [adults, setAdults] = useState(2)
-  const [children, setChildren] = useState(0)
-  const [extraBags, setExtraBags] = useState(0)
+  const [adults, setAdults] = useState(2);
+  const [children, setChildren] = useState(0);
+  const [extraBags, setExtraBags] = useState(0);
 
   // Computed totals for display
-  const totalPassengers = adults + children
-  const totalBags = extraBags
-
-  const router = useRouter()
+  const totalPassengers = adults + children;
+  const router = useRouter();
 
   const tabs = [
     { id: "transfer", label: "Transfer" },
     { id: "hourly", label: "By the hour", icon: Clock, href: "/by-the-hour" },
     { id: "day-trips", label: "Day trips", href: "/day-trips" },
-  ]
+  ];
 
-  const handleTabClick = (tab: typeof tabs[0]) => {
+  const handleTabClick = (tab: (typeof tabs)[0]) => {
     if (tab.href) {
-      router.push(tab.href)
+      router.push(tab.href);
     } else {
-      setActiveTab(tab.id)
+      setActiveTab(tab.id);
     }
-  }
+  };
   const removeStop = (index: number) => {
     if (tripType === "one-way") {
-      setOneWayStops(oneWayStops.filter((_, i) => i !== index))
+      setOneWayStops(oneWayStops.filter((_, i) => i !== index));
     } else {
-      setReturnStops(returnStops.filter((_, i) => i !== index))
+      setReturnStops(returnStops.filter((_, i) => i !== index));
     }
-  }
+  };
 
-  const currentStops = tripType === "one-way" ? oneWayStops : returnStops
+  const currentStops = tripType === "one-way" ? oneWayStops : returnStops;
 
   return (
     <section className="relative overflow-hidden min-h-screen">
@@ -85,7 +103,9 @@ export function Hero() {
           <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
             Comfortable car transfers in Ireland
           </h1>
-          <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 px-4">Book private transfers and day tours with professional drivers.</p>
+          <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 px-4">
+            Book private transfers and day tours with professional drivers.
+          </p>
         </div>
 
         {/* Tabs */}
@@ -95,10 +115,11 @@ export function Hero() {
               <button
                 key={tab.id}
                 onClick={() => handleTabClick(tab)}
-                className={`px-5 md:px-6 py-2 md:py-2.5 rounded-full font-medium text-xs md:text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
-                  ? "bg-white text-gray-900 shadow-md"
-                  : "bg-transparent text-white"
-                  }`}
+                className={`px-5 md:px-6 py-2 md:py-2.5 rounded-full font-medium text-xs md:text-sm transition-all flex items-center gap-2 whitespace-nowrap ${
+                  activeTab === tab.id
+                    ? "bg-white text-gray-900 shadow-md"
+                    : "bg-transparent text-white"
+                }`}
               >
                 {tab.label}
               </button>
@@ -114,19 +135,21 @@ export function Hero() {
               <div className="flex gap-2 mb-5">
                 <button
                   onClick={() => setTripType("one-way")}
-                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "one-way"
-                    ? "bg-blue-500 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${
+                    tripType === "one-way"
+                      ? "bg-blue-500 text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
                 >
                   One Way
                 </button>
                 <button
                   onClick={() => setTripType("return")}
-                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "return"
-                    ? "bg-blue-500 text-white shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${
+                    tripType === "return"
+                      ? "bg-blue-500 text-white shadow-md"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
                 >
                   Return
                 </button>
@@ -172,13 +195,13 @@ export function Hero() {
                       value={stop}
                       onChange={(e) => {
                         if (tripType === "one-way") {
-                          const newStops = [...oneWayStops]
-                          newStops[index] = e.target.value
-                          setOneWayStops(newStops)
+                          const newStops = [...oneWayStops];
+                          newStops[index] = e.target.value;
+                          setOneWayStops(newStops);
                         } else {
-                          const newStops = [...returnStops]
-                          newStops[index] = e.target.value
-                          setReturnStops(newStops)
+                          const newStops = [...returnStops];
+                          newStops[index] = e.target.value;
+                          setReturnStops(newStops);
                         }
                       }}
                     />
@@ -187,8 +210,18 @@ export function Hero() {
                       className="text-red-500 hover:text-red-600 transition"
                       aria-label="Remove stop"
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -197,7 +230,6 @@ export function Hero() {
 
               {/* Date, Time, Passengers, Luggage */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-
                 {/* Date & Time */}
                 <div>
                   <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
@@ -210,13 +242,15 @@ export function Hero() {
                           variant={"ghost"}
                           className={cn(
                             "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-gray-700",
-                            !date && "text-muted-foreground"
+                            !date && "text-muted-foreground",
                           )}
                         >
                           <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
                           {date ? (
                             <span>
-                              {format(date, "PPP")} <span className="text-gray-400 mx-1">|</span> {time}
+                              {format(date, "PPP")}{" "}
+                              <span className="text-gray-400 mx-1">|</span>{" "}
+                              {time}
                             </span>
                           ) : (
                             <span>Pick a date</span>
@@ -238,20 +272,24 @@ export function Hero() {
                               {Array.from({ length: 48 }).map((_, i) => {
                                 const hour = Math.floor(i / 2);
                                 const minute = (i % 2) * 30;
-                                const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+                                const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
                                 return (
                                   <Button
                                     key={timeString}
-                                    variant={time === timeString ? "default" : "ghost"}
+                                    variant={
+                                      time === timeString ? "default" : "ghost"
+                                    }
                                     className={cn(
                                       "justify-center h-8 text-sm",
-                                      time === timeString ? "bg-blue-600 hover:bg-blue-700" : "hover:bg-blue-50"
+                                      time === timeString
+                                        ? "bg-blue-600 hover:bg-blue-700"
+                                        : "hover:bg-blue-50",
                                     )}
                                     onClick={() => setTime(timeString)}
                                   >
                                     {timeString}
                                   </Button>
-                                )
+                                );
                               })}
                             </div>
                           </div>
@@ -261,8 +299,6 @@ export function Hero() {
                   </div>
                 </div>
 
-
-
                 {/* Passengers */}
                 <div>
                   <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
@@ -271,11 +307,15 @@ export function Hero() {
                   <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700">
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
+                        >
                           <div className="flex items-center gap-2">
                             <Users className="w-4 h-4 text-blue-500 flex-shrink-0" />
                             <span className="text-sm">
-                              {totalPassengers} Passenger{totalPassengers !== 1 ? 's' : ''}
+                              {totalPassengers} Passenger
+                              {totalPassengers !== 1 ? "s" : ""}
                             </span>
                           </div>
                           <ChevronDown className="w-4 h-4 text-gray-400" />
@@ -285,20 +325,28 @@ export function Hero() {
                         <div className="space-y-6">
                           <div className="flex justify-between items-center">
                             <div>
-                              <h4 className="font-semibold text-base">Adults</h4>
-                              <p className="text-xs text-muted-foreground">Age 12+</p>
+                              <h4 className="font-semibold text-base">
+                                Adults
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                Age 12+
+                              </p>
                             </div>
                             <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1">
                               <Button
                                 variant="ghost"
                                 size="icon"
                                 className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
-                                onClick={() => setAdults(Math.max(1, adults - 1))}
+                                onClick={() =>
+                                  setAdults(Math.max(1, adults - 1))
+                                }
                                 disabled={adults <= 1}
                               >
                                 <Minus className="h-3 w-3" />
                               </Button>
-                              <span className="w-4 text-center font-medium">{adults}</span>
+                              <span className="w-4 text-center font-medium">
+                                {adults}
+                              </span>
                               <Button
                                 variant="ghost"
                                 size="icon"
@@ -311,20 +359,28 @@ export function Hero() {
                           </div>
                           <div className="flex justify-between items-center">
                             <div>
-                              <h4 className="font-semibold text-base">Children</h4>
-                              <p className="text-xs text-muted-foreground">Age 0-12</p>
+                              <h4 className="font-semibold text-base">
+                                Children
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                Age 0-12
+                              </p>
                             </div>
                             <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1">
                               <Button
                                 variant="ghost"
                                 size="icon"
                                 className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
-                                onClick={() => setChildren(Math.max(0, children - 1))}
+                                onClick={() =>
+                                  setChildren(Math.max(0, children - 1))
+                                }
                                 disabled={children <= 0}
                               >
                                 <Minus className="h-3 w-3" />
                               </Button>
-                              <span className="w-4 text-center font-medium">{children}</span>
+                              <span className="w-4 text-center font-medium">
+                                {children}
+                              </span>
                               <Button
                                 variant="ghost"
                                 size="icon"
@@ -337,17 +393,23 @@ export function Hero() {
                           </div>
 
                           <div className="pt-4 border-t">
-                            <h4 className="font-medium mb-3 text-sm">Each passenger is allowed</h4>
+                            <h4 className="font-medium mb-3 text-sm">
+                              Each passenger is allowed
+                            </h4>
                             <div className="space-y-3">
                               <div className="flex items-center gap-3 text-sm text-gray-600">
                                 <Luggage className="w-4 h-4" />
                                 <span className="flex-1">One checked bag</span>
-                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">29 x 21 x 11 inch</span>
+                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                  29 x 21 x 11 inch
+                                </span>
                               </div>
                               <div className="flex items-center gap-3 text-sm text-gray-600">
                                 <Luggage className="w-4 h-4" />
                                 <span className="flex-1">One carry-on bag</span>
-                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">22 x 14 x 9 inch</span>
+                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                  22 x 14 x 9 inch
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -365,11 +427,14 @@ export function Hero() {
                   <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button variant="ghost" className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700">
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
+                        >
                           <div className="flex items-center gap-2">
                             <Luggage className="w-4 h-4 text-blue-500 flex-shrink-0" />
                             <span className="text-sm">
-                              {extraBags} Extra Bag{extraBags !== 1 ? 's' : ''}
+                              {extraBags} Extra Bag{extraBags !== 1 ? "s" : ""}
                             </span>
                           </div>
                           <ChevronDown className="w-4 h-4 text-gray-400" />
@@ -378,25 +443,36 @@ export function Hero() {
                       <PopoverContent className="w-[300px] p-4" align="start">
                         <div className="space-y-4">
                           <div>
-                            <h4 className="font-semibold text-lg mb-1">Need more space?</h4>
+                            <h4 className="font-semibold text-lg mb-1">
+                              Need more space?
+                            </h4>
                             <p className="text-sm text-gray-500 leading-relaxed">
-                              You can add extra sets of bags at no extra cost, but you might need a bigger vehicle.
+                              You can add extra sets of bags at no extra cost,
+                              but you might need a bigger vehicle.
                             </p>
                           </div>
                           <div className="pt-4">
-                            <h4 className="font-semibold text-base mb-1">Extra sets of bags</h4>
-                            <p className="text-xs text-muted-foreground mb-4">One checked bag + one carry on</p>
+                            <h4 className="font-semibold text-base mb-1">
+                              Extra sets of bags
+                            </h4>
+                            <p className="text-xs text-muted-foreground mb-4">
+                              One checked bag + one carry on
+                            </p>
                             <div className="flex items-center gap-3 bg-gray-50 rounded-lg p-1 w-fit">
                               <Button
                                 variant="ghost"
                                 size="icon"
                                 className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
-                                onClick={() => setExtraBags(Math.max(0, extraBags - 1))}
+                                onClick={() =>
+                                  setExtraBags(Math.max(0, extraBags - 1))
+                                }
                                 disabled={extraBags <= 0}
                               >
                                 <Minus className="h-3 w-3" />
                               </Button>
-                              <span className="w-4 text-center font-medium">{extraBags}</span>
+                              <span className="w-4 text-center font-medium">
+                                {extraBags}
+                              </span>
                               <Button
                                 variant="ghost"
                                 size="icon"
@@ -412,7 +488,6 @@ export function Hero() {
                     </Popover>
                   </div>
                 </div>
-
               </div>
 
               {tripType === "return" && (
@@ -435,16 +510,32 @@ export function Hero() {
             </div>
             <div className="rounded-lg overflow-hidden shadow-lg w-[450px] h-[340px] hidden lg:block">
               <MapRoute
-                pickup={irishSettlements.find(s => s.name === pickupLocation) ? {
-                  lat: irishSettlements.find(s => s.name === pickupLocation)!.lat,
-                  lng: irishSettlements.find(s => s.name === pickupLocation)!.lng,
-                  name: pickupLocation
-                } : undefined}
-                dropoff={irishSettlements.find(s => s.name === dropoffLocation) ? {
-                  lat: irishSettlements.find(s => s.name === dropoffLocation)!.lat,
-                  lng: irishSettlements.find(s => s.name === dropoffLocation)!.lng,
-                  name: dropoffLocation
-                } : undefined}
+                pickup={
+                  irishSettlements.find((s) => s.name === pickupLocation)
+                    ? {
+                        lat: irishSettlements.find(
+                          (s) => s.name === pickupLocation,
+                        )!.lat,
+                        lng: irishSettlements.find(
+                          (s) => s.name === pickupLocation,
+                        )!.lng,
+                        name: pickupLocation,
+                      }
+                    : undefined
+                }
+                dropoff={
+                  irishSettlements.find((s) => s.name === dropoffLocation)
+                    ? {
+                        lat: irishSettlements.find(
+                          (s) => s.name === dropoffLocation,
+                        )!.lat,
+                        lng: irishSettlements.find(
+                          (s) => s.name === dropoffLocation,
+                        )!.lng,
+                        name: dropoffLocation,
+                      }
+                    : undefined
+                }
               />
             </div>
           </div>
@@ -454,5 +545,5 @@ export function Hero() {
         </div>
       </div>
     </section>
-  )
+  );
 }

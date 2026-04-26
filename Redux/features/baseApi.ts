@@ -44,5 +44,8 @@ export const baseApi = createApi({
     "notification",
     "dashboard",
     "client",
+    "transfers",
+    "vehicles",
+    "stopages",
   ],
 });

@@ -116,7 +116,7 @@ export default function PopularTransferRoutes() {
                           </span>
                         </div>
                         <Link
-                          href={`/transfer/private-car-transfer?pickup=${transferRoute.from}&dropoff=${transferRoute.to}`}
+                          href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transferRoute.from)}&dropoff=${encodeURIComponent(transferRoute.to)}&transferRoute=${encodeURIComponent(JSON.stringify(transferRoute))}`}
                         >
                           <button className="w-full rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2">
                             Book Now

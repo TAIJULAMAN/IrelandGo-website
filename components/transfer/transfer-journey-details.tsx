@@ -14,11 +14,22 @@ import { useEffect, useState } from "react";
 
 export default function TransferJourneyDetails() {
   const searchParams = useSearchParams();
-  const pickupParam = searchParams.get("pickup") || "";
-  const dropoffParam = searchParams.get("dropoff") || "";
+  const transferRouteParam = searchParams.get("transferRoute");
+  let transferRoute = null;
+  try {
+    if (transferRouteParam) {
+      transferRoute = JSON.parse(transferRouteParam);
+    }
+  } catch (e) {
+    console.error("Failed to parse transfer route", e);
+  }
 
-  const [distance, setDistance] = useState<number | null>(null);
-  const [duration, setDuration] = useState<number | null>(null);
+  const pickupParam = searchParams.get("pickup") || transferRoute?.from || "";
+  const dropoffParam = searchParams.get("dropoff") || transferRoute?.to || "";
+
+  const [distance, setDistance] = useState<number | null>(transferRoute?.distanceKm || null);
+  const [duration, setDuration] = useState<number | null>(transferRoute?.travelTimeMinutes || null);
+  const [estimatedPrice, setEstimatedPrice] = useState<number | null>(transferRoute?.price || null);
 
   // Find settlement data
   const pickupSettlement = irishSettlements.find((s) => s.name === pickupParam);
@@ -28,7 +39,7 @@ export default function TransferJourneyDetails() {
 
   // Fetch route data from OSRM
   useEffect(() => {
-    if (pickupSettlement && dropoffSettlement) {
+    if (!transferRoute?.distanceKm && pickupSettlement && dropoffSettlement) {
       const fetchRoute = async () => {
         try {
           const url = `https://router.project-osrm.org/route/v1/driving/${pickupSettlement.lng},${pickupSettlement.lat};${dropoffSettlement.lng},${dropoffSettlement.lat}?overview=false`;
@@ -36,8 +47,10 @@ export default function TransferJourneyDetails() {
           const data = await response.json();
 
           if (data.routes && data.routes[0]) {
-            setDistance(Math.round(data.routes[0].distance / 1000)); // Convert to km
+            const dist = Math.round(data.routes[0].distance / 1000);
+            setDistance(dist); // Convert to km
             setDuration(Math.round(data.routes[0].duration / 60)); // Convert to minutes
+            setEstimatedPrice(Math.round(dist * 0.40));
           }
         } catch (error) {
           console.error("Error fetching route:", error);
@@ -46,10 +59,7 @@ export default function TransferJourneyDetails() {
 
       fetchRoute();
     }
-  }, [pickupSettlement, dropoffSettlement]);
-
-  // Calculate estimated price (€0.40 per km base rate)
-  const estimatedPrice = distance ? Math.round(distance * 0.4) : null;
+  }, [pickupSettlement, dropoffSettlement, transferRoute]);
 
   // Format duration
   const formatDuration = (minutes: number | null) => {

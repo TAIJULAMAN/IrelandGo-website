@@ -1,51 +1,105 @@
 "use client";
 
 import Link from "next/link";
-import { Clock, MapPin, Info, CheckCircle2 } from "lucide-react";
+import { Clock, MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car } from "lucide-react";
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 
-const stops = [
-  {
-    id: 1,
-    name: "Playa Delfines",
-    tag: "Most Popular",
-    tagColor: "bg-orange-500",
-    duration: "1h 30m",
-    price: "$34",
-    image: "/stop1.png",
-  },
-  {
-    id: 2,
-    name: "Chichen Itza",
-    tag: "Recommended",
-    tagColor: "bg-blue-600",
-    duration: "3h",
-    price: "$80",
-    image: "/stop2.png",
-  },
-  {
-    id: 3,
-    name: "Cenote Dos Ojos",
-    tag: "Nature",
-    tagColor: "bg-emerald-600",
-    duration: "2h",
-    price: "$55",
-    image: "/stop3.png",
-  },
-  {
-    id: 4,
-    name: "Local Market",
-    tag: "Culture",
-    tagColor: "bg-purple-600",
-    duration: "1h 15m",
-    price: "$25",
-    image: "/stop4.png",
-  },
-];
+import { useGetStopsQuery } from "@/Redux/features/stopage/stopageApi";
+import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+
+function formatDuration(minutes: number) {
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  if (h > 0 && m > 0) return `${h}h ${m}m`;
+  if (h > 0) return `${h}h`;
+  return `${m}m`;
+}
+
+function getTagColor(type: string) {
+  switch (type?.toLowerCase()) {
+    case "nature":
+      return "bg-emerald-600";
+    case "museum":
+      return "bg-blue-600";
+    case "heritage":
+      return "bg-orange-500";
+    case "religious":
+      return "bg-purple-600";
+    default:
+      return "bg-gray-600";
+  }
+}
 
 export default function Step3() {
+  const searchParams = useSearchParams();
+  const pickupParam = searchParams.get("pickup") || "";
+  const dropoffParam = searchParams.get("dropoff") || "";
+  const dateParam = searchParams.get("date") || "";
+  const timeParam = searchParams.get("time") || "";
+  const adults = parseInt(searchParams.get("adults") || "2");
+  const children = parseInt(searchParams.get("children") || "0");
+  const extraBags = parseInt(searchParams.get("extraBags") || "0");
+  const vehicleId = searchParams.get("vehicleId");
+  const transferRouteParam = searchParams.get("transferRoute");
+
+  const [selectedStops, setSelectedStops] = useState<any[]>([]);
+
+  let distanceKm = 0;
+  if (transferRouteParam) {
+    try {
+      const parsed = JSON.parse(transferRouteParam);
+      distanceKm = parsed.distanceKm || 0;
+    } catch (e) {}
+  }
+
+  const { data: stopsResponse, isLoading, error } = useGetStopsQuery({});
+  const stops = stopsResponse?.data || [];
+
+  const { data: vehiclesData } = useGetVehiclesQuery({});
+  const vehicles = vehiclesData?.data?.data || [];
+  
+  let transportPrice = 0;
+  let vehicleName = "Vehicle";
+  
+  if (vehicleId && vehicles.length > 0) {
+    const ids = vehicleId.split("+");
+    const selectedVehicles = ids.map((id: string) => vehicles.find((v: any) => v.id === id)).filter(Boolean);
+    
+    if (selectedVehicles.length > 0) {
+      vehicleName = selectedVehicles.map((v: any) => v.name).join(" + ");
+      const basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
+      const pricePerKmSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.pricePerKm, 0);
+      const extraBagsCost = extraBags * 10;
+      
+      transportPrice = Math.round(basePriceSum + (pricePerKmSum * distanceKm)) + extraBagsCost;
+    }
+  }
+
+  const toggleStop = (stop: any) => {
+    if (selectedStops.find((s) => s.id === stop.id)) {
+      setSelectedStops(selectedStops.filter((s) => s.id !== stop.id));
+    } else {
+      setSelectedStops([...selectedStops, stop]);
+    }
+  };
+
+  const stopsCost = selectedStops.reduce((total, stop) => total + stop.price, 0);
+  const totalPrice = transportPrice + stopsCost;
+
+  let formattedDate = "";
+  if (dateParam) {
+    try {
+      const d = new Date(dateParam);
+      formattedDate = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+    } catch (e) {
+      formattedDate = dateParam;
+    }
+  }
+
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col">
       <Header2 />
@@ -106,57 +160,103 @@ export default function Step3() {
         <div className="grid gap-6 lg:gap-8 lg:grid-cols-3 mb-8 lg:mb-10">
           {/* Stops grid */}
           <div className="lg:col-span-2 space-y-4 sm:space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-              {stops.map((stop) => (
-                <div
-                  key={stop.id}
-                  className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow cursor-pointer"
-                >
-                  <div className="relative h-36 sm:h-40 md:h-44 w-full">
-                    <img
-                      src={stop.image}
-                      alt={stop.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span
-                        className={`${stop.tagColor} text-white text-[11px] sm:text-xs font-medium px-2.5 py-1 rounded-full shadow-sm`}
-                      >
-                        {stop.tag}
-                      </span>
-                    </div>
-                    <button
-                      type="button"
-                      className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white shadow-md hover:bg-blue-700 text-lg"
+            {isLoading ? (
+              <div className="flex justify-center items-center h-48">
+                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+              </div>
+            ) : error ? (
+              <div className="flex justify-center items-center h-48 text-red-500">
+                Failed to load stops. Please try again.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                {stops.map((stop: any) => {
+                  const isSelected = selectedStops.some((s) => s.id === stop.id);
+                  return (
+                    <div
+                      key={stop.id}
+                      onClick={() => toggleStop(stop)}
+                      className={`relative bg-white rounded-2xl overflow-hidden flex flex-col transition-all cursor-pointer border-2 ${
+                        isSelected
+                          ? "border-blue-600 ring-2 ring-blue-100 shadow-lg"
+                          : "border-transparent shadow-md hover:border-blue-300 hover:shadow-lg"
+                      }`}
                     >
-                      +
-                    </button>
-                  </div>
+                      <div className="relative h-44 w-full">
+                        <img
+                          src={
+                            stop.image && stop.image.length > 0
+                              ? stop.image[0]
+                              : "/placeholder.png"
+                          }
+                          alt={stop.name}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                        <div className="absolute top-3 left-3 flex items-center bg-white/95 backdrop-blur-sm shadow-sm rounded-md px-2 py-1 gap-1">
+                          <span className="text-blue-600">
+                            {isSelected ? (
+                              <CheckCircle2 className="w-3 h-3 text-blue-600" />
+                            ) : (
+                              <span className="text-yellow-500 text-[10px]">★</span>
+                            )}
+                          </span>
+                          <span className="text-[10px] font-bold text-gray-800 uppercase tracking-wide">
+                            {stop.type || "Activity"}
+                          </span>
+                        </div>
+                        <h3 className="absolute bottom-3 left-4 text-white text-lg font-bold">
+                          {stop.name}
+                        </h3>
+                      </div>
 
-                  <div className="p-4 sm:p-5 flex flex-col gap-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="text-sm sm:text-base font-semibold text-gray-900 truncate">
-                        {stop.name}
-                      </h3>
-                      <span className="text-sm sm:text-base font-semibold text-blue-600">
-                        {stop.price}
-                      </span>
+                      <div
+                        className={`p-4 flex items-center justify-between transition-colors ${
+                          isSelected ? "bg-blue-600" : "bg-white"
+                        }`}
+                      >
+                        <div className="flex items-center gap-1 text-sm font-medium">
+                          <span
+                            className={
+                              isSelected ? "text-blue-100" : "text-blue-600"
+                            }
+                          >
+                            {formatDuration(stop.duration)}
+                          </span>
+                          <span
+                            className={
+                              isSelected ? "text-blue-100" : "text-gray-500"
+                            }
+                          >
+                            for
+                          </span>
+                          <span
+                            className={
+                              isSelected ? "text-white" : "text-gray-900"
+                            }
+                          >
+                            €{stop.price}
+                          </span>
+                        </div>
+                        <div
+                          className={`flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition-colors ${
+                            isSelected
+                              ? "bg-white text-blue-600 hover:bg-gray-100"
+                              : "bg-blue-600 text-white hover:bg-blue-700"
+                          }`}
+                        >
+                          {isSelected ? (
+                            <Pencil className="h-4 w-4" />
+                          ) : (
+                            <Plus className="h-5 w-5" />
+                          )}
+                        </div>
+                      </div>
                     </div>
-
-                    <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500">
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3.5 w-3.5" />
-                        {stop.duration}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="h-3.5 w-3.5" />
-                        Stop
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+                  );
+                })}
+              </div>
+            )}
 
             <button
               type="button"
@@ -168,73 +268,118 @@ export default function Step3() {
 
           {/* Itinerary card */}
           <div>
-            <div className="bg-white rounded-2xl shadow-md p-5 sm:p-6 flex flex-col gap-4">
+            <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col gap-6 sticky top-24">
               <div className="flex items-center justify-between">
-                <h2 className="text-base sm:text-lg font-semibold text-gray-900">
-                  Itinerary
-                </h2>
+                <h2 className="text-xl font-bold text-gray-900">Itinerary</h2>
+                <button className="text-sm font-semibold text-blue-600 hover:text-blue-700">
+                  View details
+                </button>
               </div>
 
-              <div className="space-y-3 text-sm text-gray-700">
-                <div className="flex gap-3">
-                  <div className="mt-1">
-                    <div className="h-2 w-2 rounded-full bg-blue-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium">9:00 AM – Cancun to Xcaret</p>
-                    <p className="text-xs text-gray-500">Departure time</p>
-                  </div>
+              <div>
+                <div className="inline-flex items-center gap-1.5 bg-gray-100 rounded-md px-2 py-1 mb-4">
+                  <span className="text-xs text-gray-600">📅</span>
+                  <span className="text-xs font-semibold text-gray-800">
+                    {formattedDate || "Select Date"}
+                  </span>
                 </div>
 
-                <div className="flex gap-3">
-                  <div className="mt-1">
-                    <div className="h-2 w-2 rounded-full bg-blue-600" />
+                <div className="relative pl-4 border-l-2 border-gray-200 space-y-6 ml-2">
+                  <div className="relative">
+                    <div className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full bg-gray-400" />
+                    <div className="flex justify-between items-start">
+                      <p className="font-bold text-gray-900 text-sm">
+                        {pickupParam || "Pickup Location"}
+                      </p>
+                      <p className="text-xs text-gray-500 font-medium whitespace-nowrap ml-2">
+                        {timeParam || "9:00 AM"}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-medium">Pickup & Drop-off</p>
-                    <p className="text-xs text-gray-500">Cancun Hotel Zone</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <div className="mt-1">
-                    <div className="h-2 w-2 rounded-full bg-blue-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium">2 Passengers, MPV</p>
-                    <p className="text-xs text-gray-500">Vehicle type</p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3">
-                  <div className="mt-1">
-                    <div className="h-2 w-2 rounded-full bg-gray-300" />
-                  </div>
-                  <div>
-                    <p className="font-medium">No Stops</p>
-                    <p className="text-xs text-gray-500">Add stops above</p>
+                  <div className="relative">
+                    <div className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full bg-gray-800" />
+                    <div className="flex justify-between items-start">
+                      <p className="font-bold text-gray-900 text-sm">
+                        {dropoffParam || "Dropoff Location"}
+                      </p>
+                      <p className="text-xs text-gray-500 font-medium whitespace-nowrap ml-2">
+                        TBD
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="border-t border-gray-100 pt-4 mt-2 space-y-3 text-sm">
-                <div className="flex items-center justify-between text-gray-700">
-                  <span>Transport</span>
-                  <span>$94</span>
+              {selectedStops.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-500 font-medium mb-2">Stops</p>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedStops.map((stop) => (
+                      <div
+                        key={stop.id}
+                        className="flex items-center gap-1.5 bg-white border border-blue-600 text-blue-600 rounded-full px-3 py-1 text-xs font-semibold shadow-sm"
+                      >
+                        {stop.name} ({formatDuration(stop.duration)}, €{stop.price})
+                        <button
+                          onClick={() => toggleStop(stop)}
+                          className="hover:bg-blue-100 rounded-full p-0.5 transition-colors"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex items-center justify-between text-gray-500 text-xs">
-                  <span>Stops</span>
-                  <span>$0</span>
+              )}
+
+              <div className="flex items-center justify-between border-t border-b border-gray-100 py-4">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-md px-2 py-1">
+                  <Users className="h-3.5 w-3.5 text-gray-500" />
+                  <span>{adults + children}</span>
                 </div>
-                <div className="flex items-center justify-between text-gray-900 font-semibold text-base">
-                  <span>Total</span>
-                  <span>$94</span>
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-md px-2 py-1">
+                  <Briefcase className="h-3.5 w-3.5 text-gray-500" />
+                  <span>{adults + children + extraBags}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-md px-2 py-1">
+                  <Car className="h-3.5 w-3.5 text-gray-500" />
+                  <span className="truncate max-w-[70px]">
+                    {vehicleName}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-md px-2 py-1">
+                  <MapPin className="h-3.5 w-3.5 text-gray-500" />
+                  <span>
+                    {selectedStops.length} Stop
+                    {selectedStops.length !== 1 ? "s" : ""}
+                  </span>
                 </div>
               </div>
 
-              <div className="flex items-start gap-2 rounded-xl bg-green-50 px-3 py-2 mt-1">
-                <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5" />
-                <p className="text-xs text-green-700">
+              <div className="space-y-3">
+                <h3 className="text-xs font-bold text-gray-900">Price details</h3>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600 font-medium">Transport</span>
+                  <span className="font-semibold text-gray-900">
+                    €{transportPrice}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600 font-medium">Stops</span>
+                  <span className="font-semibold text-gray-900">€{stopsCost}</span>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
+                <span className="font-bold text-gray-900">Total</span>
+                <span className="text-2xl font-bold text-gray-900">
+                  €{totalPrice}
+                </span>
+              </div>
+
+              <div className="flex items-start gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-3">
+                <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
+                <p className="text-xs text-gray-700 font-medium">
                   Free cancellation up to 24 hours before your pickup time.
                 </p>
               </div>
@@ -243,26 +388,32 @@ export default function Step3() {
         </div>
 
         {/* Bottom navigation */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-gray-100 pt-4 mt-2">
-          <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-            <div>
+        <div className="fixed bottom-6 left-0 right-0 z-50 px-4 sm:px-6 pointer-events-none">
+          <div className="max-w-7xl mx-auto flex justify-start">
+            <div className="w-full lg:w-[65%] pointer-events-auto bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100">
               <Button
                 asChild
-                variant="outline"
-                className="w-full sm:w-auto rounded-lg border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                variant="ghost"
+                className="text-blue-600 font-semibold hover:text-blue-700 hover:bg-blue-50 text-sm sm:text-base px-3 py-2 h-auto rounded-xl"
               >
-                <Link href="/booking-flow/step-2">Back</Link>
+                <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>
+                  ← Back
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full px-6 sm:px-8 py-2.5 sm:py-3 h-auto shadow-md hover:shadow-lg transition-all text-sm sm:text-base"
+              >
+                <Link
+                  href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
+                    JSON.stringify(selectedStops),
+                  )}`}
+                >
+                  Next: Checkout
+                </Link>
               </Button>
             </div>
-
-            <Button
-              asChild
-              className="w-full sm:w-auto bg-blue-600 text-white text-sm sm:text-base font-medium rounded-lg px-6 py-2.5"
-            >
-              <Link href="/booking-flow/step-3-details">
-                Proceed to Details & Payment
-              </Link>
-            </Button>
           </div>
         </div>
       </div>

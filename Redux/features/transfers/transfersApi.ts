@@ -7,7 +7,7 @@ const transfersApi = baseApi.injectEndpoints({
         url: `trip-services/from-location/${location}`,
         method: "GET",
       }),
-      providesTags: ["content"],
+      providesTags: ["transfers"],
     }),
   }),
 });
