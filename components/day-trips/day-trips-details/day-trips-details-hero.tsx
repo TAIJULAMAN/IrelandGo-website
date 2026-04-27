@@ -218,7 +218,19 @@ export default function DayTripsDetailsHero() {
 
           {/* CTA */}
           <div className="mt-5 flex justify-center">
-            <Link href={`/booking-flow/step-2`}>
+            <Link
+              href={{
+                pathname: "/booking-flow/step-2",
+                query: {
+                  serviceType: "DAY_TRIP",
+                  pickup: "Dublin", // Default based on title
+                  dropoff: "Galway",
+                  adults: adults.toString(),
+                  children: children.toString(),
+                  extraBags: extraBags.toString(),
+                },
+              }}
+            >
               <button className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm w-full sm:w-auto">
                 Book Your Tour
               </button>

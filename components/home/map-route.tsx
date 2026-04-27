@@ -22,16 +22,21 @@ function MapUpdater({ pickup, dropoff }: MapRouteProps) {
     const map = useMap()
 
     useEffect(() => {
+        if (!map) return;
+
+        // Ensure map is correctly sized
+        map.invalidateSize();
+
         if (pickup && dropoff) {
             const bounds = L.latLngBounds([
                 [pickup.lat, pickup.lng],
                 [dropoff.lat, dropoff.lng]
             ])
-            map.fitBounds(bounds, { padding: [50, 50] })
+            map.fitBounds(bounds, { padding: [50, 50], animate: true })
         } else if (pickup) {
-            map.setView([pickup.lat, pickup.lng], 10)
+            map.setView([pickup.lat, pickup.lng], 12, { animate: true })
         } else if (dropoff) {
-            map.setView([dropoff.lat, dropoff.lng], 10)
+            map.setView([dropoff.lat, dropoff.lng], 12, { animate: true })
         }
     }, [pickup, dropoff, map])
 
@@ -48,28 +53,12 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
 
     // Ensure component only renders on client side
     useEffect(() => {
-        console.log('MapRoute component mounted')
         setIsClient(true)
-        // Increase delay to ensure DOM is fully ready
         const timer = setTimeout(() => {
             setIsMounted(true)
-        }, 200)
-        return () => {
-            clearTimeout(timer)
-            console.log('MapRoute component unmounted')
-        }
+        }, 100)
+        return () => clearTimeout(timer)
     }, [])
-
-    // Force map recreation when pickup or dropoff changes
-    useEffect(() => {
-        if (pickup?.name || dropoff?.name) {
-            // Add a small delay before recreating the map
-            const timer = setTimeout(() => {
-                setMapKey(prev => prev + 1)
-            }, 100)
-            return () => clearTimeout(timer)
-        }
-    }, [pickup?.name, dropoff?.name])
 
     // Fetch route from OSRM when both locations are available
     useEffect(() => {
@@ -128,10 +117,6 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                     zoom={defaultZoom}
                     scrollWheelZoom={true}
                     style={{ height: '100%', width: '100%', minHeight: '400px' }}
-                    key={`map-${mapKey}`}
-                    whenReady={() => {
-                        console.log('Map is ready');
-                    }}
                 >
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

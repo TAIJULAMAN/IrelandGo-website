@@ -410,7 +410,20 @@ export default function ByTheHourHero() {
                   </div>
                 </div>
               </div>
-              <Link href="/booking-flow/step-2">
+              <Link
+                href={{
+                  pathname: "/booking-flow/step-2",
+                  query: {
+                    serviceType: "BY_THE_HOUR",
+                    date: date ? date.toISOString() : "",
+                    time,
+                    duration,
+                    adults: adults.toString(),
+                    children: children.toString(),
+                    extraBags: extraBags.toString(),
+                  },
+                }}
+              >
                 <button className="w-full bg-blue-500 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
                   Search Available Rides →
                 </button>

@@ -6,9 +6,12 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
-import { X, Circle, Clock, CheckCircle2 } from "lucide-react";
+import { X, CheckCircle2 } from "lucide-react";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
-import { useCreateBookingMutation } from "@/Redux/features/booking/bookingApi";
+import { 
+  useCreateBookingUsingServiceIdMutation,
+  useCreateBookingWithoutIdMutation 
+} from "@/Redux/features/booking/bookingApi";
 
 export default function Step3Details() {
   const [showModal, setShowModal] = useState(false);
@@ -26,6 +29,7 @@ export default function Step3Details() {
   const vehicleId = searchParams.get("vehicleId");
   const transferRouteParam = searchParams.get("transferRoute");
   const selectedStopsParam = searchParams.get("selectedStops");
+  const serviceTypeParam = searchParams.get("serviceType") || "TRANSFER";
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -51,48 +55,74 @@ export default function Step3Details() {
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
-  
+
   let transportPrice = 0;
   let basePriceSum = 0;
   let pricePerKmSum = 0;
   const distanceKm = transferRoute?.distanceKm || 0;
-  
+
   if (vehicleId && vehicles.length > 0) {
     const ids = vehicleId.split("+");
-    const selectedVehicles = ids.map((id: string) => vehicles.find((v: any) => v.id === id)).filter(Boolean);
-    
+    const selectedVehicles = ids
+      .map((id: string) => vehicles.find((v: any) => v.id === id))
+      .filter(Boolean);
+
     if (selectedVehicles.length > 0) {
-      basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
-      pricePerKmSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.pricePerKm, 0);
+      basePriceSum = selectedVehicles.reduce(
+        (sum: number, v: any) => sum + v.basePrice,
+        0,
+      );
+      pricePerKmSum = selectedVehicles.reduce(
+        (sum: number, v: any) => sum + v.pricePerKm,
+        0,
+      );
       const extraBagsCost = extraBags * 10;
-      
-      transportPrice = Math.round(basePriceSum + (pricePerKmSum * distanceKm)) + extraBagsCost;
+
+      transportPrice =
+        Math.round(basePriceSum + pricePerKmSum * distanceKm) + extraBagsCost;
     }
   }
 
-  const stopsCost = selectedStops.reduce((total: number, stop: any) => total + stop.price, 0);
+  const stopsCost = selectedStops.reduce(
+    (total: number, stop: any) => total + stop.price,
+    0,
+  );
   const totalPrice = transportPrice + stopsCost;
 
   let formattedDate = dateParam;
   if (dateParam) {
     try {
       const d = new Date(dateParam);
-      formattedDate = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+      formattedDate = d.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      });
     } catch (e) {}
   }
 
-  const [createBooking, { isLoading }] = useCreateBookingMutation();
+  const [createBookingUsingServiceId, { isLoading: isBookingWithIdLoading }] =
+    useCreateBookingUsingServiceIdMutation();
+  const [createBookingWithoutId, { isLoading: isBookingWithoutIdLoading }] =
+    useCreateBookingWithoutIdMutation();
+
+  const isLoading = isBookingWithIdLoading || isBookingWithoutIdLoading;
 
   const handleBooking = async () => {
     const bookingVehiclesMap: Record<string, number> = {};
     if (vehicleId) {
-      vehicleId.split("+").forEach(id => {
+      vehicleId.split("+").forEach((id) => {
         bookingVehiclesMap[id] = (bookingVehiclesMap[id] || 0) + 1;
       });
     }
-    const bookingVehicles = Object.entries(bookingVehiclesMap).map(([id, quantity]) => ({ vehicleId: id, quantity }));
-    const bookingStoppages = selectedStops.map(stop => ({ stoppageId: stop.id, quantity: 1 }));
-    
+    const bookingVehicles = Object.entries(bookingVehiclesMap).map(
+      ([id, quantity]) => ({ vehicleId: id, quantity }),
+    );
+    const bookingStoppages = selectedStops.map((stop) => ({
+      stoppageId: stop.id,
+      quantity: 1,
+    }));
+
     const body = {
       clientName: `${firstName} ${lastName}`.trim() || "Guest User",
       from: pickupParam,
@@ -101,11 +131,11 @@ export default function Step3Details() {
       to: dropoffParam,
       toLat: transferRoute?.toLat || 53.2707,
       toLng: transferRoute?.toLng || -9.0568,
-      serviceType: transferRoute?.serviceType || "PRIVATE_TRANSFER",
+      serviceType: transferRoute?.serviceType || serviceTypeParam,
       travelDate: dateParam || new Date().toISOString().split("T")[0],
       timeSlot: {
         start: timeParam || "09:00 AM",
-        end: timeParam || "09:00 AM"
+        end: timeParam || "09:00 AM",
       },
       passengers: adults + children,
       distanceKm: distanceKm,
@@ -117,12 +147,19 @@ export default function Step3Details() {
       totalPrice: totalPrice,
       isReturn: false,
       bookingVehicles,
-      bookingStoppages
+      bookingStoppages,
     };
 
     try {
-      const serviceId = transferRoute?.id || transferRoute?._id || "default";
-      const res = await createBooking({ serviceId, body }).unwrap();
+      let res;
+      const withoutIdTypes = ["TRANSFER", "BY_THE_HOUR", "PRIVATE_TRANSFER", "AIRPORT_TRANSFER"];
+      
+      if (withoutIdTypes.includes(body.serviceType)) {
+        res = await createBookingWithoutId({ body }).unwrap();
+      } else {
+        const serviceId = transferRoute?.id || transferRoute?._id || "60d5ec49f3b0b30015f8e500";
+        res = await createBookingUsingServiceId({ serviceId, body }).unwrap();
+      }
       const id = res?.data?.id || res?.data?._id || "";
       if (id) setBookingId(id);
       setShowModal(true);
@@ -184,7 +221,8 @@ export default function Step3Details() {
               Step 4: Passenger Details
             </h1>
             <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
-              Please provide your contact information and any special requirements.
+              Please provide your contact information and any special
+              requirements.
             </p>
           </div>
         </div>
@@ -200,7 +238,9 @@ export default function Step3Details() {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 mb-4">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs sm:text-sm font-medium text-gray-700">First Name</label>
+                    <label className="text-xs sm:text-sm font-medium text-gray-700">
+                      First Name
+                    </label>
                     <input
                       type="text"
                       value={firstName}
@@ -210,7 +250,9 @@ export default function Step3Details() {
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs sm:text-sm font-medium text-gray-700">Last Name</label>
+                    <label className="text-xs sm:text-sm font-medium text-gray-700">
+                      Last Name
+                    </label>
                     <input
                       type="text"
                       value={lastName}
@@ -223,7 +265,9 @@ export default function Step3Details() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs sm:text-sm font-medium text-gray-700">Email Address</label>
+                    <label className="text-xs sm:text-sm font-medium text-gray-700">
+                      Email Address
+                    </label>
                     <input
                       type="email"
                       value={email}
@@ -233,7 +277,9 @@ export default function Step3Details() {
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-xs sm:text-sm font-medium text-gray-700">Phone Number</label>
+                    <label className="text-xs sm:text-sm font-medium text-gray-700">
+                      Phone Number
+                    </label>
                     <input
                       type="tel"
                       value={phone}
@@ -267,20 +313,20 @@ export default function Step3Details() {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <label className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-500">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={childSeat}
                       onChange={(e) => setChildSeat(e.target.checked)}
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" 
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <span>Child Seat Required</span>
                   </label>
                   <label className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-500">
-                    <input 
-                      type="checkbox" 
+                    <input
+                      type="checkbox"
                       checked={wheelchair}
                       onChange={(e) => setWheelchair(e.target.checked)}
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" 
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                     />
                     <span>Wheelchair Accessibility</span>
                   </label>
@@ -300,7 +346,8 @@ export default function Step3Details() {
                 <div>
                   <span className="text-gray-500 block mb-1">Route</span>
                   <span className="font-semibold text-gray-900 flex items-center gap-2">
-                    {pickupParam} <span className="text-gray-400">→</span> {dropoffParam}
+                    {pickupParam} <span className="text-gray-400">→</span>{" "}
+                    {dropoffParam}
                   </span>
                 </div>
                 <div>
@@ -312,15 +359,21 @@ export default function Step3Details() {
                 <div>
                   <span className="text-gray-500 block mb-1">Passengers</span>
                   <span className="font-semibold text-gray-900">
-                    {adults + children} Passengers ({adults} Adults, {children} Children)
+                    {adults + children} Passengers ({adults} Adults, {children}{" "}
+                    Children)
                   </span>
                 </div>
                 {selectedStops.length > 0 && (
                   <div>
-                    <span className="text-gray-500 block mb-1">Included Stops</span>
+                    <span className="text-gray-500 block mb-1">
+                      Included Stops
+                    </span>
                     <ul className="space-y-1">
                       {selectedStops.map((stop, i) => (
-                        <li key={i} className="font-medium text-blue-600 flex justify-between">
+                        <li
+                          key={i}
+                          className="font-medium text-blue-600 flex justify-between"
+                        >
                           <span>• {stop.name}</span>
                           <span>€{stop.price}</span>
                         </li>
@@ -332,21 +385,33 @@ export default function Step3Details() {
 
               <div className="flex flex-col gap-2 border-t border-gray-100 pt-4 mt-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-gray-600">Transport</span>
-                  <span className="text-sm font-semibold text-gray-900">€{transportPrice}</span>
+                  <span className="text-sm font-medium text-gray-600">
+                    Transport
+                  </span>
+                  <span className="text-sm font-semibold text-gray-900">
+                    €{transportPrice}
+                  </span>
                 </div>
                 {stopsCost > 0 && (
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-600">Stops</span>
-                    <span className="text-sm font-semibold text-gray-900">€{stopsCost}</span>
+                    <span className="text-sm font-medium text-gray-600">
+                      Stops
+                    </span>
+                    <span className="text-sm font-semibold text-gray-900">
+                      €{stopsCost}
+                    </span>
                   </div>
                 )}
                 <div className="flex items-center justify-between pt-2 mt-1 border-t border-gray-100">
-                  <span className="text-base font-bold text-gray-900">Total</span>
-                  <span className="text-xl font-bold text-blue-600">€{totalPrice}</span>
+                  <span className="text-base font-bold text-gray-900">
+                    Total
+                  </span>
+                  <span className="text-xl font-bold text-blue-600">
+                    €{totalPrice}
+                  </span>
                 </div>
               </div>
-              
+
               <div className="mt-6 flex items-start gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-3">
                 <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
                 <p className="text-xs text-gray-700 font-medium">
@@ -403,17 +468,23 @@ export default function Step3Details() {
               Booking Confirmed!
             </h2>
             <p className="text-xs sm:text-sm text-gray-600 mb-6">
-              Your transfer booking has been successfully created. You will receive an email confirmation shortly.
+              Your transfer booking has been successfully created. You will
+              receive an email confirmation shortly.
             </p>
 
             <div className="rounded-2xl bg-gray-50 px-4 py-4 mb-5 border border-gray-100">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-gray-500">Booking Reference</span>
-                <span className="text-sm font-bold text-gray-900">#{bookingId || `IG-${Math.floor(1000 + Math.random() * 9000)}`}</span>
+                <span className="text-sm font-bold text-gray-900">
+                  #
+                  {bookingId || `IG-${Math.floor(1000 + Math.random() * 9000)}`}
+                </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-500">Total Amount</span>
-                <span className="text-sm font-bold text-blue-600">€{totalPrice}</span>
+                <span className="text-sm font-bold text-blue-600">
+                  €{totalPrice}
+                </span>
               </div>
             </div>
 
@@ -421,7 +492,11 @@ export default function Step3Details() {
               asChild
               className="w-full bg-blue-600 text-white text-sm sm:text-base font-medium rounded-lg py-2.5 mt-1"
             >
-              <Link href={`/booking-flow/payment?${searchParams.toString()}${bookingId ? `&bookingId=${bookingId}` : ""}`}>Proceed to Payment</Link>
+              <Link
+                href={`/booking-flow/payment?${searchParams.toString()}${bookingId ? `&bookingId=${bookingId}` : ""}`}
+              >
+                Proceed to Payment
+              </Link>
             </Button>
           </div>
         </div>
@@ -429,4 +504,3 @@ export default function Step3Details() {
     </section>
   );
 }
-

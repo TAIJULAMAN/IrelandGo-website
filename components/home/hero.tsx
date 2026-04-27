@@ -46,16 +46,10 @@ const MapRoute = dynamic(
 export function Hero() {
   const [activeTab, setActiveTab] = useState("transfer");
   const [tripType, setTripType] = useState("return");
-  const [oneWayStops, setOneWayStops] = useState<string[]>([]);
-  const [returnStops, setReturnStops] = useState<string[]>([]);
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
-
-  // Date and Time state
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("09:00");
-
-  // Passengers and Luggage state
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [extraBags, setExtraBags] = useState(0);
@@ -77,15 +71,6 @@ export function Hero() {
       setActiveTab(tab.id);
     }
   };
-  const removeStop = (index: number) => {
-    if (tripType === "one-way") {
-      setOneWayStops(oneWayStops.filter((_, i) => i !== index));
-    } else {
-      setReturnStops(returnStops.filter((_, i) => i !== index));
-    }
-  };
-
-  const currentStops = tripType === "one-way" ? oneWayStops : returnStops;
 
   return (
     <section className="relative overflow-hidden min-h-screen">
@@ -182,51 +167,6 @@ export function Hero() {
                   </div>
                 </div>
               </div>
-
-              {/* Additional Stops */}
-              {currentStops.map((stop, index) => (
-                <div key={index} className="mb-4">
-                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <MapPin className="w-5 h-5 text-blue-500" />
-                    <input
-                      type="text"
-                      placeholder={`Stop ${index + 1}`}
-                      className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
-                      value={stop}
-                      onChange={(e) => {
-                        if (tripType === "one-way") {
-                          const newStops = [...oneWayStops];
-                          newStops[index] = e.target.value;
-                          setOneWayStops(newStops);
-                        } else {
-                          const newStops = [...returnStops];
-                          newStops[index] = e.target.value;
-                          setReturnStops(newStops);
-                        }
-                      }}
-                    />
-                    <button
-                      onClick={() => removeStop(index)}
-                      className="text-red-500 hover:text-red-600 transition"
-                      aria-label="Remove stop"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              ))}
 
               {/* Date, Time, Passengers, Luggage */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
@@ -501,7 +441,22 @@ export function Hero() {
                   </div>
                 </div>
               )}
-              <Link href="/booking-flow/step-2">
+              <Link
+                href={{
+                  pathname: "/booking-flow/step-2",
+                  query: {
+                    serviceType: activeTab === "transfer" ? "TRANSFER" : activeTab === "hourly" ? "BY_THE_HOUR" : "DAY_TRIP",
+                    tripType,
+                    pickup: pickupLocation,
+                    dropoff: dropoffLocation,
+                    date: date ? date.toISOString() : "",
+                    time,
+                    adults: adults.toString(),
+                    children: children.toString(),
+                    extraBags: extraBags.toString(),
+                  },
+                }}
+              >
                 <Button className="w-full h-10 py-3" variant="outline">
                   <Search className="w-5 h-5" />
                   Find a Ride
