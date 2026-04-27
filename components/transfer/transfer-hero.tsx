@@ -18,11 +18,9 @@ export default function TransfersHero() {
       );
     }
   };
-
   const handlePopularRoute = (route: string) => {
     setSearchQuery(route);
   };
-
   const popularRoutes = [
     "Dublin",
     "Cork",
