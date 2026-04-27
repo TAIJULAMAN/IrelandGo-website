@@ -18,8 +18,20 @@ export const bookingApi = baseApi.injectEndpoints({
       }),
       providesTags: ["booking"],
     }),
+
+    createBooking: builder.mutation({
+      query: ({ serviceId, body }) => ({
+        url: `trip-service-booking/${serviceId}`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["booking"],
+    }),
   }),
 });
 
-export const { useGetAllAgentBookingsQuery, useGetAllUserBookingsQuery } =
-  bookingApi;
+export const {
+  useGetAllAgentBookingsQuery,
+  useGetAllUserBookingsQuery,
+  useCreateBookingMutation,
+} = bookingApi;
