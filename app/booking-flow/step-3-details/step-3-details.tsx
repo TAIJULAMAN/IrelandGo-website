@@ -56,12 +56,17 @@ export default function Step3Details() {
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
 
+  const carPriceParam = searchParams.get("carPrice");
   let transportPrice = 0;
   let basePriceSum = 0;
   let pricePerKmSum = 0;
   const distanceKm = transferRoute?.distanceKm || 0;
 
-  if (vehicleId && vehicles.length > 0) {
+  if (carPriceParam) {
+    // If the exact price is passed from step 2, use it
+    transportPrice = parseFloat(carPriceParam);
+  } else if (vehicleId && vehicles.length > 0) {
+    // Fallback calculation for older links without carPrice
     const ids = vehicleId.split("+");
     const selectedVehicles = ids
       .map((id: string) => vehicles.find((v: any) => v.id === id))

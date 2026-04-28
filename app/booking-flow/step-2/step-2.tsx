@@ -22,6 +22,7 @@ export default function Step2() {
   const pathname = usePathname();
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
 
   const searchParams = useSearchParams();
   const pickupParam = searchParams.get("pickup") || "";
@@ -537,6 +538,10 @@ export default function Step2() {
                             ? "border-blue-600 ring-4 ring-blue-100"
                             : "border-transparent hover:border-blue-300"
                         }`}
+                        onClick={() => {
+                          setSelectedVehicle(option.id);
+                          setSelectedPrice(totalPrice);
+                        }}
                       >
                         {/* Selected Badge */}
                         {selectedVehicle === option.id && (
@@ -658,7 +663,7 @@ export default function Step2() {
             <Link
               href={`/booking-flow/step-3?${searchParams.toString()}&vehicleId=${encodeURIComponent(
                 selectedVehicle || "",
-              )}`}
+              )}&carPrice=${selectedPrice || 0}`}
             >
               Next: Add Stops
             </Link>

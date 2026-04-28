@@ -62,6 +62,8 @@ export default function Step3() {
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
   
+  const carPriceParam = searchParams.get("carPrice");
+  
   let transportPrice = 0;
   let vehicleName = "Vehicle";
   
@@ -71,11 +73,15 @@ export default function Step3() {
     
     if (selectedVehicles.length > 0) {
       vehicleName = selectedVehicles.map((v: any) => v.name).join(" + ");
-      const basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
-      const pricePerKmSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.pricePerKm, 0);
-      const extraBagsCost = extraBags * 10;
       
-      transportPrice = Math.round(basePriceSum + (pricePerKmSum * distanceKm)) + extraBagsCost;
+      if (carPriceParam) {
+        transportPrice = parseFloat(carPriceParam);
+      } else {
+        const basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
+        const pricePerKmSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.pricePerKm, 0);
+        const extraBagsCost = extraBags * 10;
+        transportPrice = Math.round(basePriceSum + (pricePerKmSum * distanceKm)) + extraBagsCost;
+      }
     }
   }
 
