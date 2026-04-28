@@ -32,10 +32,11 @@ export default function ByTheHourHero() {
   // State
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("09:00");
-  const [duration, setDuration] = useState("5-8 Hours");
+  const [duration, setDuration] = useState("2-hours");
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
   const [extraBags, setExtraBags] = useState(0);
+  const [pickupLocation, setPickupLocation] = useState("");
 
   // Derived state
   const totalPassengers = adults + children;
@@ -106,6 +107,8 @@ export default function ByTheHourHero() {
                     <input
                       type="text"
                       placeholder="Enter pickup location"
+                      value={pickupLocation}
+                      onChange={(e) => setPickupLocation(e.target.value)}
                       className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
                     />
                   </div>
@@ -203,18 +206,20 @@ export default function ByTheHourHero() {
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-[200px] p-1" align="start">
-                        {["5-8 Hours", "8-12 Hours", "12+ Hours"].map(
-                          (option) => (
-                            <Button
-                              key={option}
-                              variant="ghost"
-                              className="w-full justify-start font-normal h-9 px-2"
-                              onClick={() => setDuration(option)}
-                            >
-                              {option}
-                            </Button>
-                          ),
-                        )}
+                        <div className="max-h-[300px] overflow-y-auto">
+                          {Array.from({ length: 23 }, (_, i) => `${i + 2}-hours`).map(
+                            (option) => (
+                              <Button
+                                key={option}
+                                variant="ghost"
+                                className="w-full justify-start font-normal h-9 px-2"
+                                onClick={() => setDuration(option)}
+                              >
+                                {option}
+                              </Button>
+                            ),
+                          )}
+                        </div>
                       </PopoverContent>
                     </Popover>
                   </div>
@@ -415,6 +420,8 @@ export default function ByTheHourHero() {
                   pathname: "/booking-flow/step-2",
                   query: {
                     serviceType: "BY_THE_HOUR",
+                    pickup: pickupLocation,
+                    dropoff: pickupLocation,
                     date: date ? date.toISOString() : "",
                     time,
                     duration,

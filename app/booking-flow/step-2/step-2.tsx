@@ -29,6 +29,8 @@ export default function Step2() {
   const adults = parseInt(searchParams.get("adults") || "2");
   const children = parseInt(searchParams.get("children") || "0");
   const extraBags = parseInt(searchParams.get("extraBags") || "0");
+  const serviceType = searchParams.get("serviceType") || "TRANSFER";
+  const durationParam = searchParams.get("duration") || "";
 
   const [localAdults, setLocalAdults] = useState(adults);
   const [localChildren, setLocalChildren] = useState(children);
@@ -481,9 +483,46 @@ export default function Step2() {
 
                 return vehicleOptions.map((option: any) => {
                   const extraBagsCost = localExtraBags * 10;
-                  const pricePerCar =
-                    option.basePrice +
-                    (distanceKm ? option.pricePerKm * distanceKm : 0);
+                  let pricePerCar = 0;
+                  
+                  if (serviceType === "BY_THE_HOUR") {
+                    let hours = 0;
+                    if (durationParam) {
+                      const matches = durationParam.match(/\d+/g);
+                      if (matches) hours = Math.max(...matches.map(Number));
+                    }
+                    if (hours < 2) hours = 2; // Pricing starts at 2 hours
+                    
+                    pricePerCar = option.vehicles.reduce((sum: number, vehicle: any) => {
+                      const name = vehicle.name.toLowerCase();
+                      let basePrice = 0, hr3Add = 0, hr4Add = 0, hr5Add = 0, hr6Add = 0, hr7PlusAdd = 0;
+
+                      if (name.includes("luxury sedan") || name.includes("l sedan")) {
+                        basePrice = 290; hr3Add = 20; hr4Add = 30; hr5Add = 60; hr6Add = 60; hr7PlusAdd = 60;
+                      } else if (name.includes("sedan")) {
+                        basePrice = 275; hr3Add = 15; hr4Add = 25; hr5Add = 55; hr6Add = 55; hr7PlusAdd = 55;
+                      } else if (name.includes("mpv") || name.includes("mvp")) {
+                        basePrice = 285; hr3Add = 20; hr4Add = 30; hr5Add = 60; hr6Add = 60; hr7PlusAdd = 60;
+                      } else if (name.includes("van")) {
+                        basePrice = 295; hr3Add = 25; hr4Add = 35; hr5Add = 65; hr6Add = 65; hr7PlusAdd = 65;
+                      } else {
+                        // Default fallback
+                        basePrice = 285; hr3Add = 20; hr4Add = 30; hr5Add = 60; hr6Add = 60; hr7PlusAdd = 60;
+                      }
+
+                      let vehiclePrice = basePrice;
+                      if (hours >= 3) vehiclePrice += hr3Add;
+                      if (hours >= 4) vehiclePrice += hr4Add;
+                      if (hours >= 5) vehiclePrice += hr5Add;
+                      if (hours >= 6) vehiclePrice += hr6Add;
+                      if (hours >= 7) vehiclePrice += hr7PlusAdd * (hours - 6);
+                      
+                      return sum + vehiclePrice;
+                    }, 0);
+                  } else {
+                    pricePerCar = option.basePrice + (distanceKm ? option.pricePerKm * distanceKm : 0);
+                  }
+                  
                   const totalPrice = Math.round(pricePerCar) + extraBagsCost;
 
                   return (
@@ -552,7 +591,7 @@ export default function Step2() {
                           </div>
                           <div className="text-right whitespace-nowrap">
                             <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-                              {distanceKm ? `€${totalPrice}` : "TBD"}
+                              {distanceKm || serviceType === "BY_THE_HOUR" ? `€${totalPrice}` : "TBD"}
                             </p>
                           </div>
                         </div>
