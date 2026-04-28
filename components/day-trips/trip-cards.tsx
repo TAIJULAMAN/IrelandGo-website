@@ -133,10 +133,11 @@ export default function TripCards() {
                     <div className="text-xs text-gray-600 mb-3">
                       {trip.duration} · {trip.groupSize}
                     </div>
-                    <p className="text-gray-900 text-sm">
-                      <span className="font-semibold">From {trip.price}</span> /
-                      per person
-                    </p>
+                  </div>
+                  <div className="px-4 pb-4">
+                    <button className="w-full bg-blue-600 text-white px-8 py-2.5 rounded-full font-medium transition shadow-md">
+                      View Details
+                    </button>
                   </div>
                 </div>
               </Link>

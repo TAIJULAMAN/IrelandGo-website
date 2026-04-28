@@ -1,6 +1,5 @@
 "use client";
 
-import { Header2 } from "@/components/common/Header2";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useGetTransfersBasedOnLocationQuery } from "@/Redux/features/transfers/transfersApi";
@@ -19,7 +18,7 @@ export default function PopularTransferRoutes() {
 
   return (
     <section className="bg-white">
-      <Header2 />
+
       <div className="w-full px-5 md:px-0 py-10 md:py-16">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-10">
