@@ -230,24 +230,28 @@ export default function Step2() {
                 Choose Vehicle
               </span>
             </div>
+            {serviceType !== "BY_THE_HOUR" && (
+              <>
+                <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
+                <div className="flex items-center gap-2 text-gray-400">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
+                    3
+                  </div>
+                  <span>Add Stops</span>
+                </div>
+              </>
+            )}
             <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
             <div className="flex items-center gap-2 text-gray-400">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
-                3
-              </div>
-              <span>Trip Details</span>
-            </div>
-            <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
-            <div className="flex items-center gap-2 text-gray-400">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
-                4
+                {serviceType === "BY_THE_HOUR" ? "3" : "4"}
               </div>
               <span>Details</span>
             </div>
             <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
             <div className="flex items-center gap-2 text-gray-400">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
-                5
+                {serviceType === "BY_THE_HOUR" ? "4" : "5"}
               </div>
               <span>Payment</span>
             </div>
@@ -661,11 +665,11 @@ export default function Step2() {
             }`}
           >
             <Link
-              href={`/booking-flow/step-3?${searchParams.toString()}&vehicleId=${encodeURIComponent(
+              href={`/booking-flow/${serviceType === "BY_THE_HOUR" ? "step-3-details" : "step-3"}?${searchParams.toString()}&vehicleId=${encodeURIComponent(
                 selectedVehicle || "",
               )}&carPrice=${selectedPrice || 0}`}
             >
-              Next: Add Stops
+              {serviceType === "BY_THE_HOUR" ? "Next: Checkout" : "Next: Add Stops"}
             </Link>
           </Button>
         </div>

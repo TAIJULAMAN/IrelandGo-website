@@ -21,6 +21,7 @@ export default function PaymentStep() {
   const vehicleId = searchParams.get("vehicleId");
   const transferRouteParam = searchParams.get("transferRoute");
   const selectedStopsParam = searchParams.get("selectedStops");
+  const serviceType = searchParams.get("serviceType") || "TRANSFER";
 
   let transferRoute: any = null;
   if (transferRouteParam) {
@@ -91,24 +92,28 @@ export default function PaymentStep() {
               </div>
               <span className="hidden sm:inline">Choose Vehicle</span>
             </div>
+            {serviceType !== "BY_THE_HOUR" && (
+              <>
+                <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
+                    3
+                  </div>
+                  <span className="hidden sm:inline">Add Stops</span>
+                </div>
+              </>
+            )}
             <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
-                3
-              </div>
-              <span className="hidden sm:inline">Add Stops</span>
-            </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
-                4
+                {serviceType === "BY_THE_HOUR" ? "3" : "4"}
               </div>
               <span className="hidden sm:inline">Details</span>
             </div>
             <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold">
-                5
+                {serviceType === "BY_THE_HOUR" ? "4" : "5"}
               </div>
               <span className="hidden sm:inline">Payment</span>
             </div>
@@ -118,7 +123,7 @@ export default function PaymentStep() {
         {/* Heading */}
         <div className="mb-6 sm:mb-8 mt-2 sm:mt-4">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-700 mb-2">
-            Step 5: Payment
+            Step {serviceType === "BY_THE_HOUR" ? "4" : "5"}: Payment
           </h1>
           <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
             Select your preferred payment method for your journey.
