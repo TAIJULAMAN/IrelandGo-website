@@ -28,6 +28,29 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { FeatureBadges } from "../common/feature-badges";
 
+const LOCATIONS = [
+  "All Locations",
+  "Dublin",
+  "Galway",
+  "Cork",
+  "Belfast",
+  "Limerick",
+  "Killarney",
+  "Waterford",
+  "Derry",
+  "Sligo",
+  "Kilkenny",
+  "Wexford",
+  "Tralee",
+  "Ennis",
+  "Drogheda",
+  "Dundalk",
+  "Bray",
+  "Navan",
+  "Athlone",
+  "Shannon Airport",
+];
+
 const MapRoute = dynamic(
   () => import("./map-route").then((mod) => ({ default: mod.MapRoute })),
   {
@@ -143,27 +166,91 @@ export function Hero() {
               {/* Location Inputs */}
               <div className="grid md:grid-cols-2 gap-4 mb-5">
                 <div>
-                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <MapPin className="w-5 h-5 text-blue-500" />
-                    <input
-                      type="text"
-                      placeholder="Pickup Location"
-                      className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
-                      value={pickupLocation}
-                      onChange={(e) => setPickupLocation(e.target.value)}
-                    />
+                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
+                        >
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                            <span className="text-sm">
+                              {pickupLocation || "Pickup Location"}
+                            </span>
+                          </div>
+                          <ChevronDown className="w-4 h-4 text-gray-400" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[250px] p-1" align="start">
+                        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
+                          <div className="p-1 flex flex-col gap-1">
+                            {LOCATIONS.map((loc) => {
+                              const isSelected = pickupLocation === loc;
+                              return (
+                                <Button
+                                  key={loc}
+                                  variant="ghost"
+                                  className={cn(
+                                    "w-full justify-start font-normal h-9 px-3 transition-colors",
+                                    isSelected
+                                      ? "bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 hover:text-blue-700"
+                                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
+                                  )}
+                                  onClick={() => setPickupLocation(loc)}
+                                >
+                                  {loc}
+                                </Button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
                 <div>
-                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <MapPin className="w-5 h-5 text-blue-500" />
-                    <input
-                      type="text"
-                      placeholder="Dropoff Location"
-                      className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
-                      value={dropoffLocation}
-                      onChange={(e) => setDropoffLocation(e.target.value)}
-                    />
+                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
+                        >
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                            <span className="text-sm">
+                              {dropoffLocation || "Dropoff Location"}
+                            </span>
+                          </div>
+                          <ChevronDown className="w-4 h-4 text-gray-400" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[250px] p-1" align="start">
+                        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
+                          <div className="p-1 flex flex-col gap-1">
+                            {LOCATIONS.map((loc) => {
+                              const isSelected = dropoffLocation === loc;
+                              return (
+                                <Button
+                                  key={loc}
+                                  variant="ghost"
+                                  className={cn(
+                                    "w-full justify-start font-normal h-9 px-3 transition-colors",
+                                    isSelected
+                                      ? "bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 hover:text-blue-700"
+                                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
+                                  )}
+                                  onClick={() => setDropoffLocation(loc)}
+                                >
+                                  {loc}
+                                </Button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
               </div>

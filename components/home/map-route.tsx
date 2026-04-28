@@ -46,23 +46,14 @@ function MapUpdater({ pickup, dropoff }: MapRouteProps) {
 export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     const [route, setRoute] = useState<[number, number][]>([])
     const [distance, setDistance] = useState<number | null>(null)
-    const [isClient, setIsClient] = useState(false)
     const [isMounted, setIsMounted] = useState(false)
-    const [mapKey, setMapKey] = useState(0)
-    const [hasError, setHasError] = useState(false)
 
-    // Ensure component only renders on client side
     useEffect(() => {
-        setIsClient(true)
-        const timer = setTimeout(() => {
-            setIsMounted(true)
-        }, 100)
-        return () => clearTimeout(timer)
+        setIsMounted(true)
     }, [])
 
     // Fetch route from OSRM when both locations are available
     useEffect(() => {
-        console.log('Pickup:', pickup, 'Dropoff:', dropoff)
         if (pickup && dropoff) {
             const fetchRoute = async () => {
                 try {
@@ -93,75 +84,58 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     const defaultCenter: [number, number] = [53.4129, -8.2439]
     const defaultZoom = 7
 
-    if (!isClient || !isMounted) {
+    if (!isMounted) {
         return (
-            <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '400px' }}>
+            <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '340px' }}>
                 <p className="text-gray-500">Loading map...</p>
             </div>
         )
     }
 
-    if (hasError) {
-        return (
-            <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '400px' }}>
-                <p className="text-gray-500">Map temporarily unavailable</p>
-            </div>
-        )
-    }
+    return (
+        <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-200" style={{ minHeight: '340px' }}>
+            <MapContainer
+                center={defaultCenter}
+                zoom={defaultZoom}
+                scrollWheelZoom={true}
+                style={{ height: '100%', width: '100%' }}
+            >
+                <TileLayer
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
 
-    try {
-        return (
-            <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-200" style={{ minHeight: '400px' }}>
-                <MapContainer
-                    center={defaultCenter}
-                    zoom={defaultZoom}
-                    scrollWheelZoom={true}
-                    style={{ height: '100%', width: '100%', minHeight: '400px' }}
-                >
-                    <TileLayer
-                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
+                <MapUpdater pickup={pickup} dropoff={dropoff} />
 
-                    <MapUpdater pickup={pickup} dropoff={dropoff} />
-
-                    {pickup && (
-                        <Marker position={[pickup.lat, pickup.lng]}>
-                            <Popup>
-                                <strong>Pickup:</strong> {pickup.name}
-                            </Popup>
-                        </Marker>
-                    )}
-
-                    {dropoff && (
-                        <Marker position={[dropoff.lat, dropoff.lng]}>
-                            <Popup>
-                                <strong>Dropoff:</strong> {dropoff.name}
-                            </Popup>
-                        </Marker>
-                    )}
-
-                    {route.length > 0 && (
-                        <Polyline positions={route} color="blue" weight={4} opacity={0.7} />
-                    )}
-                </MapContainer>
-
-                {distance && (
-                    <div className="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-lg shadow-md z-[1000]">
-                        <p className="text-sm font-medium text-gray-700">
-                            Distance: <span className="text-blue-600">{distance.toFixed(1)} km</span>
-                        </p>
-                    </div>
+                {pickup && (
+                    <Marker position={[pickup.lat, pickup.lng]}>
+                        <Popup>
+                            <strong>Pickup:</strong> {pickup.name}
+                        </Popup>
+                    </Marker>
                 )}
-            </div>
-        )
-    } catch (error) {
-        console.error('Error rendering map:', error);
-        setHasError(true);
-        return (
-            <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '400px' }}>
-                <p className="text-gray-500">Map temporarily unavailable</p>
-            </div>
-        )
-    }
+
+                {dropoff && (
+                    <Marker position={[dropoff.lat, dropoff.lng]}>
+                        <Popup>
+                            <strong>Dropoff:</strong> {dropoff.name}
+                        </Popup>
+                    </Marker>
+                )}
+
+                {route.length > 0 && (
+                    <Polyline positions={route} color="blue" weight={4} opacity={0.7} />
+                )}
+            </MapContainer>
+
+            {distance && (
+                <div className="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-lg shadow-md z-[1000]">
+                    <p className="text-sm font-medium text-gray-700">
+                        Distance: <span className="text-blue-600">{distance.toFixed(1)} km</span>
+                    </p>
+                </div>
+            )}
+        </div>
+    )
 }
+

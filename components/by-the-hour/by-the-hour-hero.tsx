@@ -25,6 +25,29 @@ import {
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
+const LOCATIONS = [
+  "All Locations",
+  "Dublin",
+  "Galway",
+  "Cork",
+  "Belfast",
+  "Limerick",
+  "Killarney",
+  "Waterford",
+  "Derry",
+  "Sligo",
+  "Kilkenny",
+  "Wexford",
+  "Tralee",
+  "Ennis",
+  "Drogheda",
+  "Dundalk",
+  "Bray",
+  "Navan",
+  "Athlone",
+  "Shannon Airport",
+];
+
 export default function ByTheHourHero() {
   const [activeTab, setActiveTab] = useState("by-the-hour");
   const router = useRouter();
@@ -102,15 +125,47 @@ export default function ByTheHourHero() {
                   <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
                     Pickup Location
                   </label>
-                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                    <input
-                      type="text"
-                      placeholder="Enter pickup location"
-                      value={pickupLocation}
-                      onChange={(e) => setPickupLocation(e.target.value)}
-                      className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
-                    />
+                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
+                        >
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <span className="text-sm">
+                              {pickupLocation || "Select pickup location"}
+                            </span>
+                          </div>
+                          <ChevronDown className="w-4 h-4 text-gray-400" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-1" align="start">
+                        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
+                          <div className="p-1 flex flex-col gap-1">
+                            {LOCATIONS.map((loc) => {
+                              const isSelected = pickupLocation === loc;
+                              return (
+                                <Button
+                                  key={loc}
+                                  variant="ghost"
+                                  className={cn(
+                                    "w-full justify-start font-normal h-9 px-3 transition-colors",
+                                    isSelected
+                                      ? "bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 hover:text-blue-700"
+                                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
+                                  )}
+                                  onClick={() => setPickupLocation(loc)}
+                                >
+                                  {loc}
+                                </Button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
               </div>
@@ -200,25 +255,37 @@ export default function ByTheHourHero() {
                         >
                           <div className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                            <span className="text-sm">{duration}</span>
+                            <span className="text-sm capitalize">
+                              {duration.replace("-", " ")}
+                            </span>
                           </div>
                           <ChevronDown className="w-4 h-4 text-gray-400" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-[200px] p-1" align="start">
-                        <div className="max-h-[300px] overflow-y-auto">
-                          {Array.from({ length: 23 }, (_, i) => `${i + 2}-hours`).map(
-                            (option) => (
-                              <Button
-                                key={option}
-                                variant="ghost"
-                                className="w-full justify-start font-normal h-9 px-2"
-                                onClick={() => setDuration(option)}
-                              >
-                                {option}
-                              </Button>
-                            ),
-                          )}
+                      <PopoverContent className="w-[180px] p-1" align="start">
+                        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
+                          <div className="p-1 flex flex-col gap-1">
+                            {Array.from({ length: 23 }, (_, i) => {
+                              const hours = i + 2;
+                              const option = `${hours}-hours`;
+                              const isSelected = duration === option;
+                              return (
+                                <Button
+                                  key={option}
+                                  variant="ghost"
+                                  className={cn(
+                                    "w-full justify-start font-normal h-9 px-3 transition-colors",
+                                    isSelected
+                                      ? "bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 hover:text-blue-700"
+                                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
+                                  )}
+                                  onClick={() => setDuration(option)}
+                                >
+                                  {hours} Hours
+                                </Button>
+                              );
+                            })}
+                          </div>
                         </div>
                       </PopoverContent>
                     </Popover>
