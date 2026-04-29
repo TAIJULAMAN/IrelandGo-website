@@ -519,7 +519,7 @@ export default function Step3Details() {
               className="w-full bg-blue-600 text-white text-sm sm:text-base font-medium rounded-lg py-2.5 mt-1"
             >
               <Link
-                href={`/booking-flow/payment?${searchParams.toString()}${bookingId ? `&bookingId=${bookingId}` : ""}`}
+                href={`/booking-flow/payment?${searchParams.toString()}${bookingId ? `&bookingId=${bookingId}` : ""}&firstName=${firstName}&lastName=${lastName}&email=${email}&phone=${phone}&specialRequests=${specialRequests}`}
               >
                 Proceed to Payment
               </Link>
