@@ -6,7 +6,7 @@ import { useGetTransfersBasedOnLocationQuery } from "@/Redux/features/transfers/
 
 export default function PopularTransferRoutes() {
   const searchParams = useSearchParams();
-  const locationParam = searchParams.get("location");
+  const locationParam = searchParams.get("pickup") || searchParams.get("location");
 
   const {
     data: transfersRoutes,
