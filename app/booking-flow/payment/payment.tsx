@@ -11,7 +11,6 @@ import { usePaymentMutation } from "@/Redux/features/payments/paymentsApi";
 
 export default function PaymentStep() {
   const searchParams = useSearchParams();
-
   const pickupParam = searchParams.get("pickup") || "";
   const dropoffParam = searchParams.get("dropoff") || "";
   const dateParam = searchParams.get("date") || "";
@@ -26,7 +25,6 @@ export default function PaymentStep() {
   const carPriceParam = searchParams.get("carPrice");
   const tripType = searchParams.get("tripType") || "one-way";
   const bookingId = searchParams.get("bookingId") || "";
-
   const [payError, setPayError] = useState("");
   const [payment, { isLoading: isPaying }] = usePaymentMutation();
 
@@ -219,7 +217,8 @@ export default function PaymentStep() {
                 <div className="flex items-center justify-between">
                   <span>Transport {isReturn ? "(one-way)" : "Fare"}</span>
                   <span className="text-gray-900">
-                    €{isReturn ? Math.round(transportPrice / 2) : transportPrice}
+                    €
+                    {isReturn ? Math.round(transportPrice / 2) : transportPrice}
                   </span>
                 </div>
                 {isReturn && (
@@ -268,7 +267,9 @@ export default function PaymentStep() {
                       if (url) {
                         window.location.href = url;
                       } else {
-                        setPayError("No checkout URL returned. Please try again.");
+                        setPayError(
+                          "No checkout URL returned. Please try again.",
+                        );
                       }
                     } catch (e: any) {
                       setPayError(
@@ -279,7 +280,9 @@ export default function PaymentStep() {
                   disabled={isPaying || !bookingId}
                   className="w-full bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg py-2.5 text-sm sm:text-base h-auto disabled:opacity-60"
                 >
-                  {isPaying ? "Redirecting to Stripe..." : "Pay Now with Stripe"}
+                  {isPaying
+                    ? "Redirecting to Stripe..."
+                    : "Pay Now with Stripe"}
                 </Button>
                 {/* <div className="flex items-center gap-2 text-[11px] sm:text-xs text-gray-400 justify-center">
                   <span className="h-px w-8 bg-gray-200" />

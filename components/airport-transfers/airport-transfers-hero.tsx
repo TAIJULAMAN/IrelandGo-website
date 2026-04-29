@@ -14,7 +14,7 @@ export default function AirportTransfersHero() {
     const searchLocation = location || searchQuery;
     if (searchLocation.trim()) {
       router.push(
-        `/transfer/transfer-search?location=${encodeURIComponent(searchLocation)}`,
+        `/transfer/transfer-search?pickup=${encodeURIComponent(searchLocation)}`,
       );
     }
   };
