@@ -14,13 +14,17 @@ export default function TransfersHero() {
     const searchLocation = location || searchQuery;
     if (searchLocation.trim()) {
       router.push(
-        `/transfer/transfer-search?location=${encodeURIComponent(searchLocation)}`,
+        `/transfer/transfer-search?pickup=${encodeURIComponent(searchLocation)}`,
       );
     }
   };
+
   const handlePopularRoute = (route: string) => {
-    setSearchQuery(route);
+    router.push(
+      `/transfer/transfer-search?pickup=${encodeURIComponent(route)}`,
+    );
   };
+
   const popularRoutes = [
     "Dublin",
     "Cork",
@@ -67,9 +71,8 @@ export default function TransfersHero() {
                   placeholder="Enter your departure city or destination"
                   className="w-full bg-transparent outline-none text-sm sm:text-base text-gray-800 placeholder:text-gray-400"
                   value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                  }}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                 />
               </div>
             </div>
@@ -88,7 +91,7 @@ export default function TransfersHero() {
               <button
                 key={index}
                 onClick={() => handlePopularRoute(route)}
-                className="text-blue-600"
+                className="text-blue-600 hover:underline"
               >
                 {route}
               </button>
