@@ -31,6 +31,7 @@ export default function Step2() {
   const children = parseInt(searchParams.get("children") || "0");
   const extraBags = parseInt(searchParams.get("extraBags") || "0");
   const serviceType = searchParams.get("serviceType") || "TRANSFER";
+  const tripType = searchParams.get("tripType") || "one-way";
   const durationParam = searchParams.get("duration") || "";
 
   const [localAdults, setLocalAdults] = useState(adults);
@@ -67,9 +68,9 @@ export default function Step2() {
     }
   };
 
-  // every passenger can carry a bag. if anyone add extra bag then he have to pay and also count as a sit
-  const totalPassengers = adults + children + extraBags;
-  const totalBags = adults + children; // Every passenger can carry a bag. Extra bags count as seats instead.
+  // Passengers = actual people only. Extra bags increase bag count, not seat count.
+  const totalPassengers = adults + children;
+  const totalBags = adults + children + extraBags; // Every passenger gets a bag; extra bags add on top.
 
   const transferRouteParam = searchParams.get("transferRoute");
   let transferRoute = null;
@@ -525,9 +526,31 @@ export default function Step2() {
                       return sum + vehiclePrice;
                     }, 0);
                   } else {
-                    pricePerCar = option.basePrice + (distanceKm ? option.pricePerKm * distanceKm : 0);
+                    // Distance-based pricing table
+                    pricePerCar = option.vehicles.reduce((sum: number, vehicle: any) => {
+                      const name = (vehicle.name || "").toLowerCase();
+                      const km = distanceKm || 0;
+
+                      // Determine vehicle type
+                      let isLSedan = name.includes("luxury sedan") || name.includes("l sedan") || name.includes("lsedan");
+                      let isMPV    = !isLSedan && (name.includes("mpv") || name.includes("mvp") || name.includes("minivan"));
+                      let isVan    = !isLSedan && !isMPV && name.includes("van");
+                      // Default to Sedan
+
+                      // Pricing bands: [maxKm, rate, base]  (maxKm = Infinity for last band)
+                      type Band = [number, number, number];
+                      const sedanBands:  Band[] = [[25,1.8,50],[50,1.8,40],[100,1.8,30],[150,1.8,15],[Infinity,1.9,0]];
+                      const mpvBands:    Band[] = [[25,2.0,65],[50,2.0,55],[100,2.0,45],[150,2.0,30],[Infinity,2.1,0]];
+                      const vanBands:    Band[] = [[25,2.2,80],[50,2.2,70],[100,2.2,60],[150,2.2,45],[Infinity,2.3,0]];
+                      const lSedanBands: Band[] = [[25,2.1,70],[50,2.1,60],[100,2.1,50],[150,2.1,35],[Infinity,2.15,0]];
+
+                      const bands = isLSedan ? lSedanBands : isMPV ? mpvBands : isVan ? vanBands : sedanBands;
+                      const [, rate, base] = bands.find(([max]) => km <= max) || bands[bands.length - 1];
+
+                      return sum + base + rate * km;
+                    }, 0);
                   }
-                  
+
                   const totalPrice = Math.round(pricePerCar) + extraBagsCost;
 
                   return (

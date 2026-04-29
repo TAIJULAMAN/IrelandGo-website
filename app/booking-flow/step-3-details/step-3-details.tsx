@@ -30,6 +30,7 @@ export default function Step3Details() {
   const transferRouteParam = searchParams.get("transferRoute");
   const selectedStopsParam = searchParams.get("selectedStops");
   const serviceTypeParam = searchParams.get("serviceType") || "TRANSFER";
+  const tripType = searchParams.get("tripType") || "one-way";
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -86,6 +87,12 @@ export default function Step3Details() {
       transportPrice =
         Math.round(basePriceSum + pricePerKmSum * distanceKm) + extraBagsCost;
     }
+  }
+
+  // Double transport cost for return trips
+  const isReturn = tripType === "return";
+  if (isReturn) {
+    transportPrice = transportPrice * 2;
   }
 
   const stopsCost = selectedStops.reduce(
@@ -395,12 +402,22 @@ export default function Step3Details() {
               <div className="flex flex-col gap-2 border-t border-gray-100 pt-4 mt-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-600">
-                    Transport
+                    Transport {isReturn ? "(one-way)" : ""}
                   </span>
                   <span className="text-sm font-semibold text-gray-900">
-                    €{transportPrice}
+                    €{isReturn ? Math.round(transportPrice / 2) : transportPrice}
                   </span>
                 </div>
+                {isReturn && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-blue-600">
+                      Return trip (×2)
+                    </span>
+                    <span className="text-sm font-semibold text-blue-600">
+                      €{Math.round(transportPrice / 2)}
+                    </span>
+                  </div>
+                )}
                 {stopsCost > 0 && (
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-gray-600">

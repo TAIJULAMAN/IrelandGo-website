@@ -16,7 +16,7 @@ import {
   Minus,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { irishSettlements } from "@/lib/irish-settlements";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -45,7 +45,6 @@ const MapRoute = dynamic(
 );
 
 export default function TransferSearchHero() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const pickupParam = searchParams.get("pickup") || "";
   const dropoffParam = searchParams.get("dropoff") || "";
@@ -73,24 +72,14 @@ export default function TransferSearchHero() {
   const [dropoffLocation, setDropoffLocation] = useState(
     dropoffParam || transferRoute?.to || "",
   );
-  const [stops, setStops] = useState([]);
   const [showPickupDropdown, setShowPickupDropdown] = useState(false);
   const [showDropoffDropdown, setShowDropoffDropdown] = useState(false);
   const [selectedPickupIndex, setSelectedPickupIndex] = useState(-1);
   const [selectedDropoffIndex, setSelectedDropoffIndex] = useState(-1);
-
-  // Date and time state - initialize from URL params
-  const [pickupDate, setPickupDate] = useState(
-    pickupDateParam ? new Date(pickupDateParam) : undefined,
-  );
-  const [pickupTime, setPickupTime] = useState(pickupTimeParam);
   const [returnDate, setReturnDate] = useState(
     returnDateParam ? new Date(returnDateParam) : undefined,
   );
   const [returnTime, setReturnTime] = useState(returnTimeParam);
-
-  const [oneWayStops, setOneWayStops] = useState([]);
-  const [returnStops, setReturnStops] = useState([]);
   const [date, setDate] = useState(
     pickupDateParam ? new Date(pickupDateParam) : new Date(),
   );
@@ -100,17 +89,6 @@ export default function TransferSearchHero() {
   const [extraBags, setExtraBags] = useState(0);
 
   const totalPassengers = adults + children;
-
-  const removeStop = (index) => {
-    if (tripType === "one-way") {
-      setOneWayStops(oneWayStops.filter((_, i) => i !== index));
-    } else {
-      setReturnStops(returnStops.filter((_, i) => i !== index));
-    }
-  };
-
-  const currentStops = tripType === "one-way" ? oneWayStops : returnStops;
-
   const pickupInputRef = useRef(null);
   const dropoffInputRef = useRef(null);
   const pickupDropdownRef = useRef(null);
@@ -242,7 +220,7 @@ export default function TransferSearchHero() {
   }, []);
 
   // Get display location for hero title
-  const displayLocation = pickupLocation || "Dublin";
+  // const displayLocation = pickupLocation || "Dublin";
 
   return (
     <section className="relative overflow-hidden min-h-screen text-white">
@@ -319,7 +297,7 @@ export default function TransferSearchHero() {
                 </div>
 
                 {/* Pickup Autocomplete Dropdown */}
-                {showPickupDropdown && filteredPickupSettlements.length > 0 && (
+                {/* {showPickupDropdown && filteredPickupSettlements.length > 0 && (
                   <div
                     ref={pickupDropdownRef}
                     className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto z-50"
@@ -349,7 +327,7 @@ export default function TransferSearchHero() {
                       </button>
                     ))}
                   </div>
-                )}
+                )} */}
               </div>
 
               {/* Dropoff Location */}
@@ -373,7 +351,7 @@ export default function TransferSearchHero() {
                 </div>
 
                 {/* Dropoff Autocomplete Dropdown */}
-                {showDropoffDropdown &&
+                {/* {showDropoffDropdown &&
                   filteredDropoffSettlements.length > 0 && (
                     <div
                       ref={dropoffDropdownRef}
@@ -404,54 +382,9 @@ export default function TransferSearchHero() {
                         </button>
                       ))}
                     </div>
-                  )}
+                  )} */}
               </div>
             </div>
-
-            {/* Additional Stops */}
-            {currentStops.map((stop, index) => (
-              <div key={index} className="mb-4">
-                <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                  <MapPin className="w-5 h-5 text-blue-500" />
-                  <input
-                    type="text"
-                    placeholder={`Stop ${index + 1}`}
-                    className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
-                    value={stop}
-                    onChange={(e) => {
-                      if (tripType === "one-way") {
-                        const newStops = [...oneWayStops];
-                        newStops[index] = e.target.value;
-                        setOneWayStops(newStops);
-                      } else {
-                        const newStops = [...returnStops];
-                        newStops[index] = e.target.value;
-                        setReturnStops(newStops);
-                      }
-                    }}
-                  />
-                  <button
-                    onClick={() => removeStop(index)}
-                    className="text-red-500 hover:text-red-600 transition"
-                    aria-label="Remove stop"
-                  >
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ))}
 
             {/* Date, Time, Passengers, Luggage */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
@@ -712,18 +645,73 @@ export default function TransferSearchHero() {
 
             {tripType === "return" && (
               <div className="mb-5">
-                <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                  <input
-                    type="text"
-                    placeholder="Return"
-                    className="w-full outline-none text-sm text-gray-700"
-                  />
+                <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                  Return Date & Time
+                </label>
+                <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"ghost"}
+                        className={cn(
+                          "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-gray-700",
+                          !returnDate && "text-muted-foreground",
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                        {returnDate ? (
+                          <span>
+                            {format(returnDate, "PPP")}{" "}
+                            <span className="text-gray-400 mx-1">|</span> {returnTime}
+                          </span>
+                        ) : (
+                          <span>Pick a return date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <div className="flex">
+                        <div className="border-r">
+                          <Calendar
+                            mode="single"
+                            selected={returnDate}
+                            onSelect={setReturnDate}
+                            initialFocus
+                          />
+                        </div>
+                        <div className="h-[300px] w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
+                          <div className="flex flex-col gap-1">
+                            {Array.from({ length: 48 }).map((_, i) => {
+                              const hour = Math.floor(i / 2);
+                              const minute = (i % 2) * 30;
+                              const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                              return (
+                                <Button
+                                  key={timeString}
+                                  variant={returnTime === timeString ? "default" : "ghost"}
+                                  className={cn(
+                                    "justify-center h-8 text-sm",
+                                    returnTime === timeString
+                                      ? "bg-blue-600 hover:bg-blue-700"
+                                      : "hover:bg-blue-50",
+                                  )}
+                                  onClick={() => setReturnTime(timeString)}
+                                >
+                                  {timeString}
+                                </Button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
             )}
 
             <Link
-              href={`/booking-flow/step-2?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
+              href={`/booking-flow/step-2?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&tripType=${tripType}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
             >
               <Button className="w-full h-10 py-3" variant="outline">
                 <Search className="w-5 h-5 mr-2" />
