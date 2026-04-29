@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Car, MapPin, Clock } from "lucide-react";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
+import { usePaymentMutation } from "@/Redux/features/payments/paymentsApi";
 
 export default function PaymentStep() {
   const searchParams = useSearchParams();
@@ -22,6 +23,12 @@ export default function PaymentStep() {
   const transferRouteParam = searchParams.get("transferRoute");
   const selectedStopsParam = searchParams.get("selectedStops");
   const serviceType = searchParams.get("serviceType") || "TRANSFER";
+  const carPriceParam = searchParams.get("carPrice");
+  const tripType = searchParams.get("tripType") || "one-way";
+  const bookingId = searchParams.get("bookingId") || "";
+
+  const [payError, setPayError] = useState("");
+  const [payment, { isLoading: isPaying }] = usePaymentMutation();
 
   let transferRoute: any = null;
   if (transferRouteParam) {
@@ -39,35 +46,39 @@ export default function PaymentStep() {
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
-  
-  let transportPrice = 0;
-  let basePriceSum = 0;
-  let pricePerKmSum = 0;
+
+  // Resolve vehicle name for display
   let vehicleName = "Vehicle";
-  const distanceKm = transferRoute?.distanceKm || 0;
-  
   if (vehicleId && vehicles.length > 0) {
-    const ids = vehicleId.split("+");
-    const selectedVehicles = ids.map((id: string) => vehicles.find((v: any) => v.id === id)).filter(Boolean);
-    
+    const selectedVehicles = vehicleId
+      .split("+")
+      .map((id: string) => vehicles.find((v: any) => v.id === id))
+      .filter(Boolean);
     if (selectedVehicles.length > 0) {
       vehicleName = selectedVehicles.map((v: any) => v.name).join(" + ");
-      basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
-      pricePerKmSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.pricePerKm, 0);
-      const extraBagsCost = extraBags * 10;
-      
-      transportPrice = Math.round(basePriceSum + (pricePerKmSum * distanceKm)) + extraBagsCost;
     }
   }
 
-  const stopsCost = selectedStops.reduce((total: number, stop: any) => total + stop.price, 0);
+  // Use carPrice from URL (set by step-2), apply return multiplier
+  let transportPrice = carPriceParam ? parseFloat(carPriceParam) : 0;
+  const isReturn = tripType === "return";
+  if (isReturn) transportPrice = transportPrice * 2;
+
+  const stopsCost = selectedStops.reduce(
+    (total: number, stop: any) => total + stop.price,
+    0,
+  );
   const totalPrice = transportPrice + stopsCost;
 
   let formattedDate = dateParam;
   if (dateParam) {
     try {
       const d = new Date(dateParam);
-      formattedDate = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
+      formattedDate = d.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+      });
     } catch (e) {}
   }
 
@@ -149,7 +160,9 @@ export default function PaymentStep() {
                       Pickup Location
                     </p>
                     <p className="font-medium text-gray-900">{pickupParam}</p>
-                    <p className="text-xs text-gray-500">{formattedDate}, {timeParam}</p>
+                    <p className="text-xs text-gray-500">
+                      {formattedDate}, {timeParam}
+                    </p>
                   </div>
                 </div>
 
@@ -171,7 +184,10 @@ export default function PaymentStep() {
                   </div>
                   <div>
                     <p className="font-medium text-gray-900">{vehicleName}</p>
-                    <p className="text-xs text-gray-500">{adults + children} Passengers • {extraBags + adults + children} Bags</p>
+                    <p className="text-xs text-gray-500">
+                      {adults + children} Passengers •{" "}
+                      {extraBags + adults + children} Bags
+                    </p>
                   </div>
                 </div>
 
@@ -181,10 +197,14 @@ export default function PaymentStep() {
                       <Clock className="h-4 w-4" />
                     </div>
                     <div>
-                      <p className="font-medium text-gray-900">Included Stops</p>
+                      <p className="font-medium text-gray-900">
+                        Included Stops
+                      </p>
                       <ul className="text-xs text-gray-500 space-y-1 mt-1">
                         {selectedStops.map((stop, i) => (
-                          <li key={i}>• {stop.name} (€{stop.price})</li>
+                          <li key={i}>
+                            • {stop.name} (€{stop.price})
+                          </li>
                         ))}
                       </ul>
                     </div>
@@ -197,9 +217,19 @@ export default function PaymentStep() {
                   Price Breakdown
                 </p>
                 <div className="flex items-center justify-between">
-                  <span>Transport Fare</span>
-                  <span className="text-gray-900">€{transportPrice}</span>
+                  <span>Transport {isReturn ? "(one-way)" : "Fare"}</span>
+                  <span className="text-gray-900">
+                    €{isReturn ? Math.round(transportPrice / 2) : transportPrice}
+                  </span>
                 </div>
+                {isReturn && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-blue-600">Return trip (×2)</span>
+                    <span className="text-blue-600">
+                      €{Math.round(transportPrice / 2)}
+                    </span>
+                  </div>
+                )}
                 {stopsCost > 0 && (
                   <div className="flex items-center justify-between">
                     <span>Extra Stops</span>
@@ -223,13 +253,35 @@ export default function PaymentStep() {
               </h2>
 
               <div className="space-y-3">
+                {payError && (
+                  <p className="text-xs text-red-500 text-center">{payError}</p>
+                )}
                 <Button
-                  asChild
-                  className="w-full bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg py-2.5 text-sm sm:text-base h-auto"
+                  onClick={async () => {
+                    setPayError("");
+                    try {
+                      const res = await payment({
+                        bookingId,
+                        data: { amount: totalPrice },
+                      }).unwrap();
+                      const url = res?.data?.url;
+                      if (url) {
+                        window.location.href = url;
+                      } else {
+                        setPayError("No checkout URL returned. Please try again.");
+                      }
+                    } catch (e: any) {
+                      setPayError(
+                        e?.data?.message || "Payment failed. Please try again.",
+                      );
+                    }
+                  }}
+                  disabled={isPaying || !bookingId}
+                  className="w-full bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg py-2.5 text-sm sm:text-base h-auto disabled:opacity-60"
                 >
-                  <Link href="/booking-flow/booking-confirmation">Pay Now with Stripe</Link>
+                  {isPaying ? "Redirecting to Stripe..." : "Pay Now with Stripe"}
                 </Button>
-                <div className="flex items-center gap-2 text-[11px] sm:text-xs text-gray-400 justify-center">
+                {/* <div className="flex items-center gap-2 text-[11px] sm:text-xs text-gray-400 justify-center">
                   <span className="h-px w-8 bg-gray-200" />
                   <span>or</span>
                   <span className="h-px w-8 bg-gray-200" />
@@ -239,7 +291,7 @@ export default function PaymentStep() {
                   className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg py-2.5 text-sm sm:text-base h-auto"
                 >
                   <Link href="/booking-flow/booking-confirmation">Pay Now with PayPal</Link>
-                </Button>
+                </Button> */}
               </div>
 
               <p className="mt-2 text-[11px] sm:text-xs text-gray-500 text-center">
@@ -254,4 +306,3 @@ export default function PaymentStep() {
     </section>
   );
 }
-

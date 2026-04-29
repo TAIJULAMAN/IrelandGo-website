@@ -3,9 +3,11 @@ import { baseApi } from "../baseApi";
 const paymentApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     payment: builder.mutation({
-      query: (data) => {
+      query: ({ bookingId, data }: any) => {
+        console.log("bookingId", bookingId);
+        console.log("data", data);
         return {
-          url: "payments/stripe-account-onboarding",
+          url: `payments/create-stripe-checkout-session/${bookingId}`,
           method: "POST",
           body: data,
         };
