@@ -28,28 +28,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { FeatureBadges } from "../common/feature-badges";
 
-const LOCATIONS = [
-  "All Locations",
-  "Dublin",
-  "Galway",
-  "Cork",
-  "Belfast",
-  "Limerick",
-  "Killarney",
-  "Waterford",
-  "Derry",
-  "Sligo",
-  "Kilkenny",
-  "Wexford",
-  "Tralee",
-  "Ennis",
-  "Drogheda",
-  "Dundalk",
-  "Bray",
-  "Navan",
-  "Athlone",
-  "Shannon Airport",
-];
+
 
 const MapRoute = dynamic(
   () => import("./map-route").then((mod) => ({ default: mod.MapRoute })),
@@ -73,6 +52,8 @@ export function Hero() {
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("09:00");
+  const [returnDate, setReturnDate] = useState<Date | undefined>(undefined);
+  const [returnTime, setReturnTime] = useState("09:00");
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [extraBags, setExtraBags] = useState(0);
@@ -166,91 +147,27 @@ export function Hero() {
               {/* Location Inputs */}
               <div className="grid md:grid-cols-2 gap-4 mb-5">
                 <div>
-                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
-                        >
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
-                            <span className="text-sm">
-                              {pickupLocation || "Pickup Location"}
-                            </span>
-                          </div>
-                          <ChevronDown className="w-4 h-4 text-gray-400" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[250px] p-1" align="start">
-                        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
-                          <div className="p-1 flex flex-col gap-1">
-                            {LOCATIONS.map((loc) => {
-                              const isSelected = pickupLocation === loc;
-                              return (
-                                <Button
-                                  key={loc}
-                                  variant="ghost"
-                                  className={cn(
-                                    "w-full justify-start font-normal h-9 px-3 transition-colors",
-                                    isSelected
-                                      ? "bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 hover:text-blue-700"
-                                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-                                  )}
-                                  onClick={() => setPickupLocation(loc)}
-                                >
-                                  {loc}
-                                </Button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
+                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
+                    <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                    <input
+                      type="text"
+                      placeholder="Pickup Location"
+                      className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400 bg-transparent"
+                      value={pickupLocation}
+                      onChange={(e) => setPickupLocation(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div>
-                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
-                        >
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
-                            <span className="text-sm">
-                              {dropoffLocation || "Dropoff Location"}
-                            </span>
-                          </div>
-                          <ChevronDown className="w-4 h-4 text-gray-400" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[250px] p-1" align="start">
-                        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
-                          <div className="p-1 flex flex-col gap-1">
-                            {LOCATIONS.map((loc) => {
-                              const isSelected = dropoffLocation === loc;
-                              return (
-                                <Button
-                                  key={loc}
-                                  variant="ghost"
-                                  className={cn(
-                                    "w-full justify-start font-normal h-9 px-3 transition-colors",
-                                    isSelected
-                                      ? "bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 hover:text-blue-700"
-                                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-                                  )}
-                                  onClick={() => setDropoffLocation(loc)}
-                                >
-                                  {loc}
-                                </Button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
+                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
+                    <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                    <input
+                      type="text"
+                      placeholder="Dropoff Location"
+                      className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400 bg-transparent"
+                      value={dropoffLocation}
+                      onChange={(e) => setDropoffLocation(e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -518,13 +435,70 @@ export function Hero() {
               </div>
 
               {tripType === "return" && (
-                <div className="mb-5">
-                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white">
-                    <input
-                      type="text"
-                      placeholder="Return"
-                      className="w-full outline-none text-sm text-gray-700"
-                    />
+                <div className="mb-6">
+                  <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    Return Date & Time
+                  </label>
+                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"ghost"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-gray-700",
+                            !returnDate && "text-muted-foreground",
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                          {returnDate ? (
+                            <span>
+                              {format(returnDate, "PPP")}{" "}
+                              <span className="text-gray-400 mx-1">|</span> {returnTime}
+                            </span>
+                          ) : (
+                            <span>Pick a return date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <div className="flex">
+                          <div className="border-r">
+                            <Calendar
+                              mode="single"
+                              selected={returnDate}
+                              onSelect={setReturnDate}
+                              initialFocus
+                            />
+                          </div>
+                          <div className="h-[300px] w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
+                            <div className="flex flex-col gap-1">
+                              {Array.from({ length: 48 }).map((_, i) => {
+                                const hour = Math.floor(i / 2);
+                                const minute = (i % 2) * 30;
+                                const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                                return (
+                                  <Button
+                                    key={timeString}
+                                    variant={
+                                      returnTime === timeString ? "default" : "ghost"
+                                    }
+                                    className={cn(
+                                      "justify-center h-8 text-sm",
+                                      returnTime === timeString
+                                        ? "bg-blue-600 hover:bg-blue-700"
+                                        : "hover:bg-blue-50",
+                                    )}
+                                    onClick={() => setReturnTime(timeString)}
+                                  >
+                                    {timeString}
+                                  </Button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
               )}
@@ -538,6 +512,8 @@ export function Hero() {
                     dropoff: dropoffLocation,
                     date: date ? date.toISOString() : "",
                     time,
+                    returnDate: returnDate ? returnDate.toISOString() : "",
+                    returnTime,
                     adults: adults.toString(),
                     children: children.toString(),
                     extraBags: extraBags.toString(),
