@@ -14,12 +14,14 @@ export default function AirportTransfersHero() {
     const searchLocation = location || searchQuery;
     if (searchLocation.trim()) {
       router.push(
-        `/transfer/transfer-search?pickup=${encodeURIComponent(searchLocation)}`,
+        `/transfer/transfer-search?pickup=${encodeURIComponent(searchLocation)}&serviceType=AIRPORT_TRANSFER`,
       );
     }
   };
   const handlePopularRoute = (route: string) => {
-    setSearchQuery(route);
+    router.push(
+      `/transfer/transfer-search?pickup=${encodeURIComponent(route)}&serviceType=AIRPORT_TRANSFER`,
+    );
   };
   const popularAirports = [
     "Shannon Airport",

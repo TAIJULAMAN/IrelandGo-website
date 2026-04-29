@@ -49,6 +49,7 @@ export default function TransferSearchHero() {
   const pickupParam = searchParams.get("pickup") || "";
   const dropoffParam = searchParams.get("dropoff") || "";
   const tripTypeParam = searchParams.get("tripType") || "one-way";
+  const serviceTypeParam = searchParams.get("serviceType") || "TRANSFER";
   const pickupDateParam = searchParams.get("pickupDate");
   const pickupTimeParam = searchParams.get("pickupTime") || "09:00";
   const returnDateParam = searchParams.get("returnDate");
@@ -711,7 +712,7 @@ export default function TransferSearchHero() {
             )}
 
             <Link
-              href={`/booking-flow/step-2?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&tripType=${tripType}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
+              href={`/booking-flow/step-2?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&tripType=${tripType}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&serviceType=${serviceTypeParam}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
             >
               <Button className="w-full h-10 py-3" variant="outline">
                 <Search className="w-5 h-5 mr-2" />
