@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import {
   CheckCircle2,
   MapPin,
@@ -13,7 +14,6 @@ import {
 } from "lucide-react";
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
-import { Button } from "@/components/ui/button";
 
 export default function BookingConfirmationPage() {
   const searchParams = useSearchParams();
@@ -66,33 +66,32 @@ export default function BookingConfirmationPage() {
     ? `#${bookingId.slice(0, 8).toUpperCase()}`
     : `#IG-${Math.floor(10000 + Math.random() * 90000)}`;
 
-  const [feedback, setFeedback] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col">
-      <Header2 />
+      <div className="print:hidden">
+        <Header2 />
+      </div>
 
       <div className="flex-1 py-10 sm:py-14 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Success Banner */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+        <div className="bg-white p-6 sm:p-8 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 print:hidden">
             <CheckCircle2 className="h-9 w-9 text-green-600" />
           </div>
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
             Booking Confirmed!
           </h1>
-          <p className="text-sm text-gray-500 mb-3">
+          <p className="text-sm text-gray-500 mb-3 print:hidden">
             Your transfer has been successfully booked. A confirmation email has
             been sent to you.
           </p>
-          <span className="inline-block bg-blue-50 text-blue-700 font-semibold text-sm px-4 py-1.5 rounded-full border border-blue-200">
+          <span className="inline-block bg-blue-50 text-blue-700 font-semibold text-sm px-4 py-1.5 rounded-full print:bg-transparent print:border-0 print:text-gray-900 print:p-0 print:text-lg">
             Booking Reference: {bookingRef}
           </span>
         </div>
 
         {/* Trip Details */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6">
+        <div className="bg-white rounded-2xl shadow-sm p-5 sm:p-6 print:shadow-none print:border-gray-200 print:p-0">
           <h2 className="text-sm sm:text-base font-semibold text-gray-900 mb-5 pb-3 border-b border-gray-100">
             Trip Details
           </h2>
@@ -233,9 +232,110 @@ export default function BookingConfirmationPage() {
             </div>
           </div>
         </div>
+        {/* What's Next */}
+        <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 print:hidden">
+          <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
+              ?
+            </span>
+            What happens next?
+          </h2>
+          <div className="grid gap-6 sm:grid-cols-3">
+            <div className="space-y-2">
+              <div className="text-blue-600 font-bold text-lg">01</div>
+              <p className="text-sm font-semibold text-gray-900">
+                Email Confirmation
+              </p>
+              <p className="text-xs text-gray-500 leading-relaxed">
+                Check your inbox for a detailed summary of your booking and
+                receipt.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <div className="text-blue-600 font-bold text-lg">02</div>
+              <p className="text-sm font-semibold text-gray-900">
+                Driver Assignment
+              </p>
+              <p className="text-xs text-gray-500 leading-relaxed">
+                We'll notify you once a professional driver is assigned to your
+                trip.
+              </p>
+            </div>
+            <div className="space-y-2">
+              <div className="text-blue-600 font-bold text-lg">03</div>
+              <p className="text-sm font-semibold text-gray-900">
+                Enjoy Your Ride
+              </p>
+              <p className="text-xs text-gray-500 leading-relaxed">
+                Your driver will meet you at the pickup location at the
+                scheduled time.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Need Help */}
+        <div className="bg-blue-600 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden print:hidden">
+          <div className="relative z-10">
+            <h3 className="text-lg font-bold mb-2">Need assistance?</h3>
+            <p className="text-sm text-blue-100 mb-6 max-w-md">
+              Our support team is available 24/7 to help you with any questions
+              about your booking.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button
+                asChild
+                variant="secondary"
+                className="bg-white text-blue-600 hover:bg-blue-50 font-semibold rounded-xl"
+              >
+                <Link href="/contact">Contact Support</Link>
+              </Button>
+              <button
+                onClick={() => window.print()}
+                className="flex items-center gap-2 text-sm font-semibold text-white hover:text-blue-100 transition-colors"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                  />
+                </svg>
+                Print Receipt
+              </button>
+            </div>
+          </div>
+          {/* Decorative background circle */}
+          <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-500 rounded-full opacity-20" />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 print:hidden">
+          <Button
+            asChild
+            variant="outline"
+            className="border-gray-200 text-gray-600 hover:bg-gray-50 hover:text-gray-900 font-semibold rounded-xl px-8 h-12"
+          >
+            <Link href="/">Return to Home</Link>
+          </Button>
+          <Button
+            asChild
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-8 h-12 shadow-lg shadow-blue-200 transition-all hover:-translate-y-0.5"
+          >
+            <Link href="/user/bookings">View My Bookings</Link>
+          </Button>
+        </div>
       </div>
 
-      <Footer />
+      <div className="print:hidden">
+        <Footer />
+      </div>
     </section>
   );
 }
