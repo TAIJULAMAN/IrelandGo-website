@@ -490,7 +490,7 @@ export default function Step2() {
                 return vehicleOptions.map((option: any) => {
                   const extraBagsCost = localExtraBags * 10;
                   let pricePerCar = 0;
-                  
+
                   if (serviceType === "BY_THE_HOUR") {
                     let hours = 0;
                     if (durationParam) {
@@ -498,57 +498,138 @@ export default function Step2() {
                       if (matches) hours = Math.max(...matches.map(Number));
                     }
                     if (hours < 2) hours = 2; // Pricing starts at 2 hours
-                    
-                    pricePerCar = option.vehicles.reduce((sum: number, vehicle: any) => {
-                      const name = vehicle.name.toLowerCase();
-                      let basePrice = 0, hr3Add = 0, hr4Add = 0, hr5Add = 0, hr6Add = 0, hr7PlusAdd = 0;
 
-                      if (name.includes("luxury sedan") || name.includes("l sedan")) {
-                        basePrice = 290; hr3Add = 20; hr4Add = 30; hr5Add = 60; hr6Add = 60; hr7PlusAdd = 60;
-                      } else if (name.includes("sedan")) {
-                        basePrice = 275; hr3Add = 15; hr4Add = 25; hr5Add = 55; hr6Add = 55; hr7PlusAdd = 55;
-                      } else if (name.includes("mpv") || name.includes("mvp")) {
-                        basePrice = 285; hr3Add = 20; hr4Add = 30; hr5Add = 60; hr6Add = 60; hr7PlusAdd = 60;
-                      } else if (name.includes("van")) {
-                        basePrice = 295; hr3Add = 25; hr4Add = 35; hr5Add = 65; hr6Add = 65; hr7PlusAdd = 65;
-                      } else {
-                        // Default fallback
-                        basePrice = 285; hr3Add = 20; hr4Add = 30; hr5Add = 60; hr6Add = 60; hr7PlusAdd = 60;
-                      }
+                    pricePerCar = option.vehicles.reduce(
+                      (sum: number, vehicle: any) => {
+                        const name = vehicle.name.toLowerCase();
+                        let basePrice = 0,
+                          hr3Add = 0,
+                          hr4Add = 0,
+                          hr5Add = 0,
+                          hr6Add = 0,
+                          hr7PlusAdd = 0;
 
-                      let vehiclePrice = basePrice;
-                      if (hours >= 3) vehiclePrice += hr3Add;
-                      if (hours >= 4) vehiclePrice += hr4Add;
-                      if (hours >= 5) vehiclePrice += hr5Add;
-                      if (hours >= 6) vehiclePrice += hr6Add;
-                      if (hours >= 7) vehiclePrice += hr7PlusAdd * (hours - 6);
-                      
-                      return sum + vehiclePrice;
-                    }, 0);
+                        if (
+                          name.includes("luxury sedan") ||
+                          name.includes("l sedan")
+                        ) {
+                          basePrice = 290;
+                          hr3Add = 20;
+                          hr4Add = 30;
+                          hr5Add = 60;
+                          hr6Add = 60;
+                          hr7PlusAdd = 60;
+                        } else if (name.includes("sedan")) {
+                          basePrice = 275;
+                          hr3Add = 15;
+                          hr4Add = 25;
+                          hr5Add = 55;
+                          hr6Add = 55;
+                          hr7PlusAdd = 55;
+                        } else if (
+                          name.includes("mpv") ||
+                          name.includes("mvp")
+                        ) {
+                          basePrice = 285;
+                          hr3Add = 20;
+                          hr4Add = 30;
+                          hr5Add = 60;
+                          hr6Add = 60;
+                          hr7PlusAdd = 60;
+                        } else if (name.includes("van")) {
+                          basePrice = 295;
+                          hr3Add = 25;
+                          hr4Add = 35;
+                          hr5Add = 65;
+                          hr6Add = 65;
+                          hr7PlusAdd = 65;
+                        } else {
+                          // Default fallback
+                          basePrice = 285;
+                          hr3Add = 20;
+                          hr4Add = 30;
+                          hr5Add = 60;
+                          hr6Add = 60;
+                          hr7PlusAdd = 60;
+                        }
+
+                        let vehiclePrice = basePrice;
+                        if (hours >= 3) vehiclePrice += hr3Add;
+                        if (hours >= 4) vehiclePrice += hr4Add;
+                        if (hours >= 5) vehiclePrice += hr5Add;
+                        if (hours >= 6) vehiclePrice += hr6Add;
+                        if (hours >= 7)
+                          vehiclePrice += hr7PlusAdd * (hours - 6);
+
+                        return sum + vehiclePrice;
+                      },
+                      0,
+                    );
                   } else {
                     // Distance-based pricing table
-                    pricePerCar = option.vehicles.reduce((sum: number, vehicle: any) => {
-                      const name = (vehicle.name || "").toLowerCase();
-                      const km = distanceKm || 0;
+                    pricePerCar = option.vehicles.reduce(
+                      (sum: number, vehicle: any) => {
+                        const name = (vehicle.name || "").toLowerCase();
+                        const km = distanceKm || 0;
 
-                      // Determine vehicle type
-                      let isLSedan = name.includes("luxury sedan") || name.includes("l sedan") || name.includes("lsedan");
-                      let isMPV    = !isLSedan && (name.includes("mpv") || name.includes("mvp") || name.includes("minivan"));
-                      let isVan    = !isLSedan && !isMPV && name.includes("van");
-                      // Default to Sedan
+                        // Determine vehicle type
+                        let isLSedan =
+                          name.includes("luxury sedan") ||
+                          name.includes("l sedan") ||
+                          name.includes("lsedan");
+                        let isMPV =
+                          !isLSedan &&
+                          (name.includes("mpv") ||
+                            name.includes("mvp") ||
+                            name.includes("minivan"));
+                        let isVan = !isLSedan && !isMPV && name.includes("van");
 
-                      // Pricing bands: [maxKm, rate, base]  (maxKm = Infinity for last band)
-                      type Band = [number, number, number];
-                      const sedanBands:  Band[] = [[25,1.8,50],[50,1.8,40],[100,1.8,30],[150,1.8,15],[Infinity,1.9,0]];
-                      const mpvBands:    Band[] = [[25,2.0,65],[50,2.0,55],[100,2.0,45],[150,2.0,30],[Infinity,2.1,0]];
-                      const vanBands:    Band[] = [[25,2.2,80],[50,2.2,70],[100,2.2,60],[150,2.2,45],[Infinity,2.3,0]];
-                      const lSedanBands: Band[] = [[25,2.1,70],[50,2.1,60],[100,2.1,50],[150,2.1,35],[Infinity,2.15,0]];
+                        // Pricing bands: [maxKm, rate, base]
+                        type Band = [number, number, number];
+                        const sedanBands: Band[] = [
+                          [25, 1.8, 50],
+                          [50, 1.8, 40],
+                          [100, 1.8, 30],
+                          [150, 1.8, 15],
+                          [Infinity, 1.9, 0],
+                        ];
+                        const mpvBands: Band[] = [
+                          [25, 2.0, 65],
+                          [50, 2.0, 55],
+                          [100, 2.0, 45],
+                          [150, 2.0, 30],
+                          [Infinity, 2.1, 0],
+                        ];
+                        const vanBands: Band[] = [
+                          [25, 2.2, 80],
+                          [50, 2.2, 70],
+                          [100, 2.2, 60],
+                          [150, 2.2, 45],
+                          [Infinity, 2.3, 0],
+                        ];
+                        const lSedanBands: Band[] = [
+                          [25, 2.1, 70],
+                          [50, 2.1, 60],
+                          [100, 2.1, 50],
+                          [150, 2.1, 35],
+                          [Infinity, 2.15, 0],
+                        ];
 
-                      const bands = isLSedan ? lSedanBands : isMPV ? mpvBands : isVan ? vanBands : sedanBands;
-                      const [, rate, base] = bands.find(([max]) => km <= max) || bands[bands.length - 1];
+                        const bands = isLSedan
+                          ? lSedanBands
+                          : isMPV
+                            ? mpvBands
+                            : isVan
+                              ? vanBands
+                              : sedanBands;
+                        const [, rate, base] =
+                          bands.find(([max]) => km <= max) ||
+                          bands[bands.length - 1];
 
-                      return sum + base + rate * km;
-                    }, 0);
+                        return sum + base + rate * km;
+                      },
+                      0,
+                    );
                   }
 
                   const totalPrice = Math.round(pricePerCar) + extraBagsCost;
@@ -623,7 +704,9 @@ export default function Step2() {
                           </div>
                           <div className="text-right whitespace-nowrap">
                             <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-                              {distanceKm || serviceType === "BY_THE_HOUR" ? `€${totalPrice}` : "TBD"}
+                              {distanceKm || serviceType === "BY_THE_HOUR"
+                                ? `€${totalPrice}`
+                                : "TBD"}
                             </p>
                           </div>
                         </div>
@@ -692,7 +775,9 @@ export default function Step2() {
                 selectedVehicle || "",
               )}&carPrice=${selectedPrice || 0}`}
             >
-              {serviceType === "BY_THE_HOUR" ? "Next: Checkout" : "Next: Add Stops"}
+              {serviceType === "BY_THE_HOUR"
+                ? "Next: Checkout"
+                : "Next: Add Stops"}
             </Link>
           </Button>
         </div>
