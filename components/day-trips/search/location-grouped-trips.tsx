@@ -36,7 +36,7 @@ export function LocationGroupedTrips() {
   // Filter groups based on searchLocation if provided
   const locationGroups = searchLocation 
     ? allGroups.filter((group: any) => 
-        group.from?.toLowerCase().includes(searchLocation.toLowerCase())
+        group.from?.toLowerCase() === searchLocation.toLowerCase()
       )
     : allGroups;
 

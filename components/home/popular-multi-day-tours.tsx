@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Clock, Euro, ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
+import { Clock, Euro, ChevronLeft, ChevronRight, Loader2, Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useGetPopularMultiDayToursQuery } from "@/Redux/features/contents/contentsApi"
@@ -23,6 +23,10 @@ export function PopularMultiDayTours() {
     if (tours.length === 0) return
     setCurrentIndex((prevIndex) => (prevIndex === tours.length - 1 ? 0 : prevIndex + 1))
   }
+
+  const stripHtml = (html: string) => {
+    return html?.replace(/<[^>]*>?/gm, "") || "";
+  };
 
   const showSlider = tours.length >= 3;
   const visibleTours = showSlider ? [
@@ -80,39 +84,42 @@ export function PopularMultiDayTours() {
           {visibleTours.map((tour: any, idx: number) => (
             <div
               key={tour.id || idx}
-              className={`rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-white h-full flex flex-col hover:shadow-md transition-shadow duration-300 ${showSlider && idx > 0 ? "hidden md:flex" : ""
+              className={`bg-white rounded-2xl overflow-hidden shadow-md ring-1 ring-slate-200 h-full flex flex-col hover:shadow-lg transition-shadow duration-300 ${showSlider && idx > 0 ? "hidden md:flex" : ""
                 }`}
             >
-              <div className="relative h-48 md:h-64 w-full bg-gray-200">
-                <Image
+              <div className="relative h-44">
+                <img
                   src={tour.images?.[0] || "/placeholder.svg"}
                   alt={tour.title}
-                  fill
-                  className="object-cover"
+                  className="w-full h-full object-cover"
                 />
+                {tour.tourDays && (
+                  <span className="absolute left-3 top-3 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500 text-white shadow-sm">
+                    {tour.tourDays} Day{tour.tourDays > 1 ? "s" : ""}
+                  </span>
+                )}
+                <span className="absolute right-3 top-3 inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white/90 text-slate-800 text-xs font-medium backdrop-blur-sm shadow-sm border border-white/50">
+                  <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />{" "}
+                  {tour.ratings || "0"}
+                </span>
               </div>
-              <div className="p-4 md:p-6 flex flex-col flex-grow">
-                <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-2 md:mb-3 leading-tight">{tour.title}</h3>
-
-                <div className="flex items-center gap-2 text-xs md:text-sm text-gray-500 mb-3 md:mb-4 font-medium">
-                  <Clock className="w-3 h-3 md:w-4 md:h-4" />
-                  <span>{tour.tourDays} Days</span>
-                  <span>-</span>
-                  <span>{tour.groupType} group</span>
-                </div>
-
-                <div className="flex items-center gap-1 text-blue-600 font-bold text-base md:text-lg mb-2 md:mb-3">
-                  <Euro className="w-4 h-4 md:w-5 md:h-5" />
-                  <span>From €{tour.price}</span>
-                </div>
-
-                <p className="text-sm md:text-base text-gray-600 mb-4 md:mb-6 line-clamp-3 flex-grow leading-relaxed">
-                  {tour.description}
+              <div className="p-5 flex-1 flex flex-col">
+                <h3 className="font-semibold text-slate-900 text-lg leading-tight">{tour.title}</h3>
+                <p className="text-slate-600 text-sm mt-2 line-clamp-2 flex-grow leading-relaxed">
+                  {stripHtml(tour.description)}
                 </p>
 
-                <Button asChild className="w-full bg-blue-600 hover:bg-blue-600 text-white font-semibold py-4 md:py-6 rounded-xl mt-auto text-sm md:text-lg shadow-blue-200 shadow-lg">
-                  <Link href="/multi-day-tours">Book Now</Link>
-                </Button>
+                <div className="mt-4 flex items-center justify-between mb-4 pt-4 border-t border-slate-50">
+                  {/* <div className="flex items-center gap-1.5 text-blue-600 font-bold">
+                    <span className="text-xs text-slate-400 font-medium">From</span>
+                    <span className="text-xl">€{tour.price}</span>
+                  </div> */}
+                  <Link href={`/multi-day-tours/${tour.id}`}>
+                    <button className="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-md shadow-blue-100">
+                      View Details
+                    </button>
+                  </Link>
+                </div>
               </div>
             </div>
           ))}

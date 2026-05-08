@@ -114,7 +114,7 @@ export function PrivateTransfers() {
                   asChild
                   className="w-full bg-blue-600 hover:bg-blue-600 text-white font-semibold py-4 md:py-6 rounded-xl mt-auto text-sm md:text-lg shadow-blue-200 shadow-lg"
                 >
-                  <Link href={`/airport-transfers/journey-details?id=${transfer.id}`}>Book Now</Link>
+                  <Link href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transfer.from)}&dropoff=${encodeURIComponent(transfer.to)}&transferRoute=${encodeURIComponent(JSON.stringify(transfer))}`}>Book Now</Link>
                 </Button>
               </div>
             </div>
