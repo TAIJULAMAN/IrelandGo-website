@@ -110,10 +110,6 @@ export function PopularMultiDayTours() {
                 </p>
 
                 <div className="mt-4 flex items-center justify-between mb-4 pt-4 border-t border-slate-50">
-                  {/* <div className="flex items-center gap-1.5 text-blue-600 font-bold">
-                    <span className="text-xs text-slate-400 font-medium">From</span>
-                    <span className="text-xl">€{tour.price}</span>
-                  </div> */}
                   <Link href={`/multi-day-tours/${tour.id}`}>
                     <button className="px-4 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-md shadow-blue-100">
                       View Details

@@ -56,9 +56,8 @@ export default function Dashboard() {
   const dashboardData = isAgent
     ? agentDashboardData?.data
     : userDashboardData?.data;
-  const recentBookings = dashboardData?.recentBookings || [];
+  const recentBookings = dashboardData?.recentBookings?.slice(0, 5) || [];
 
-  // Agent metrics
   const agentMetrics = [
     {
       id: 1,
@@ -67,32 +66,15 @@ export default function Dashboard() {
       icon: <Users className="w-6 h-6 text-blue-600" />,
       bg: "bg-blue-100",
     },
-    // {
-    //   id: 2,
-    //   label: "Active Tours",
-    //   value: "0",
-    //   icon: <MapPin className="w-6 h-6 text-green-600" />,
-    //   bg: "bg-green-100",
-    // },
     {
       id: 3,
       label: "Revenue",
       value: `€${dashboardData?.totalEarnings?.value || 0}`,
       icon: <DollarSign className="w-6 h-6 text-purple-600" />,
       bg: "bg-purple-100",
-    },
-    // {
-    //   id: 4,
-    //   label: "Growth",
-    //   value: `${dashboardData?.totalEarnings?.growthOrDown || 0}%`,
-    //   icon: <TrendingUp className="w-6 h-6 text-orange-600" />,
-    //   bg: "bg-orange-100",
-    //   trend:
-    //     (dashboardData?.totalEarnings?.growthOrDown || 0) >= 0 ? "up" : "down",
-    // },
+    }
   ];
 
-  // User metrics
   const userMetrics = [
     {
       id: 1,
@@ -165,52 +147,52 @@ export default function Dashboard() {
       >
         {isLoading
           ? Array.from({ length: isAgent ? 4 : 3 }).map((_, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
-              >
-                <div className="flex items-center gap-4">
-                  <Skeleton className="w-12 h-12 rounded-full" />
-                  <div className="space-y-2">
-                    <Skeleton className="h-6 w-16" />
-                    <Skeleton className="h-4 w-24" />
-                  </div>
+            <div
+              key={i}
+              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
+            >
+              <div className="flex items-center gap-4">
+                <Skeleton className="w-12 h-12 rounded-full" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-16" />
+                  <Skeleton className="h-4 w-24" />
                 </div>
               </div>
-            ))
+            </div>
+          ))
           : metrics.map((metric) => (
-              <div
-                key={metric.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
-              >
-                <div className="flex items-center gap-4">
-                  <div
-                    className={`w-12 h-12 ${metric.bg} rounded-full flex items-center justify-center`}
-                  >
-                    {metric.icon}
+            <div
+              key={metric.id}
+              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
+            >
+              <div className="flex items-center gap-4">
+                <div
+                  className={`w-12 h-12 ${metric.bg} rounded-full flex items-center justify-center`}
+                >
+                  {metric.icon}
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-2xl font-bold text-gray-900">
+                      {metric.value}
+                    </p>
+                    {metric.label === "Growth" && (
+                      <span
+                        className={`flex items-center text-xs font-medium ${(metric as any).trend === "up" ? "text-green-600" : "text-red-600"}`}
+                      >
+                        {(metric as any).trend === "up" ? (
+                          <ArrowUpRight className="w-3 h-3" />
+                        ) : (
+                          <ArrowDownRight className="w-3 h-3" />
+                        )}
+                      </span>
+                    )}
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <p className="text-2xl font-bold text-gray-900">
-                        {metric.value}
-                      </p>
-                      {metric.label === "Growth" && (
-                        <span
-                          className={`flex items-center text-xs font-medium ${(metric as any).trend === "up" ? "text-green-600" : "text-red-600"}`}
-                        >
-                          {(metric as any).trend === "up" ? (
-                            <ArrowUpRight className="w-3 h-3" />
-                          ) : (
-                            <ArrowDownRight className="w-3 h-3" />
-                          )}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-gray-600">{metric.label}</p>
-                  </div>
+                  <p className="text-sm text-gray-600">{metric.label}</p>
                 </div>
               </div>
-            ))}
+            </div>
+          ))}
       </div>
 
       {/* Recent Bookings Table */}
@@ -299,17 +281,6 @@ export default function Dashboard() {
           </div>
         )}
       </div>
-
-      {/* Upcoming Tours (Agent Only) */}
-      {/* {isAgent && (
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Upcoming Tours</h2>
-                    <div className="text-center py-12">
-                        <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                        <p className="text-gray-600">No upcoming tours scheduled</p>
-                    </div>
-                </div>
-            )} */}
     </div>
   );
 }
