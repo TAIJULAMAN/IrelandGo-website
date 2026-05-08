@@ -10,6 +10,13 @@ const dayTripApi = baseApi.injectEndpoints({
             }),
             providesTags: ["dayTrips"],
         }),
+        getAllDayTripsBasedOnLocation: builder.query({
+            query: () => ({
+                url: `trip-services/private-transfer/from-location-group`,
+                method: "GET",
+            }),
+            providesTags: ["dayTrips"],
+        }),
         getSingleDayTrip: builder.query({
             query: (id) => ({
                 url: `trip-services/${id}`,
@@ -17,7 +24,8 @@ const dayTripApi = baseApi.injectEndpoints({
             }),
             providesTags: ["dayTrips"],
         }),
+
     }),
 });
 
-export const { useGetAllDayTripsQuery, useGetSingleDayTripQuery } = dayTripApi;
+export const { useGetAllDayTripsQuery, useGetSingleDayTripQuery, useGetAllDayTripsBasedOnLocationQuery } = dayTripApi;

@@ -9,6 +9,7 @@ import { Header } from "../common/header";
 
 export default function Hero() {
   const [activeTab, setActiveTab] = useState("day-trips");
+  const [location, setLocation] = useState("");
   const router = useRouter();
 
   const tabs = [
@@ -67,10 +68,12 @@ export default function Hero() {
               <input
                 type="text"
                 placeholder="Explore from..."
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 className="w-full py-4 px-6 pl-12 rounded-full text-gray-800 text-base focus:outline-none shadow-lg bg-white"
               />
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Link href={`/day-trips/day-trip-details`}>
+              <Link href={`/day-trips/search?location=${encodeURIComponent(location)}`}>
                 <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 text-white px-8 py-2.5 rounded-full font-medium transition shadow-md">
                   Search
                 </button>
