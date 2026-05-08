@@ -47,5 +47,6 @@ export const baseApi = createApi({
     "transfers",
     "vehicles",
     "stopages",
+    "dayTrips",
   ],
 });

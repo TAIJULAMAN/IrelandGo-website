@@ -1,17 +1,5 @@
-import DayTripsDetailsHero from "@/components/day-trips/day-trips-details/day-trips-details-hero";
-import TripItinerary from "@/components/day-trips/day-trips-details/trip-Itinerary";
-import FAQ from "@/app/settings/faq/faq";
-import { Testimonials } from "@/components/common/testimonials";
-import { Footer } from "@/components/layout/footer";
+import { redirect } from "next/navigation";
 
 export default function DayTripDetails() {
-  return (
-    <main>
-      <DayTripsDetailsHero />
-      <TripItinerary />
-      <Testimonials />
-      <FAQ />
-      <Footer />
-    </main>
-  );
+  redirect("/day-trips");
 }

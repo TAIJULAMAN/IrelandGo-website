@@ -2,58 +2,42 @@
 
 import { useState } from "react"
 import {
-  ChevronDown,
   MapPin,
   Building2,
   Users,
   Navigation,
-  Clock,
-  Car,
-  Lightbulb,
-  Calendar,
-  Check,
-  X,
   Info
 } from "lucide-react"
 import Link from "next/link"
 
-export default function DayTripItinerary() {
+export default function DayTripItinerary({ trip }: { trip: any }) {
   const [isReadMore, setIsReadMore] = useState(false)
 
   const itineraryItems = [
     {
       time: "09:00 AM",
-      title: "Departure from Paris",
-      description: "Pick-up from your hotel or preferred location in Paris",
+      title: `Departure from ${trip?.from || "Dublin"}`,
+      description: `Pick-up from your hotel or preferred location in ${trip?.from || "Dublin"}`,
       icon: MapPin,
     },
     {
       time: "10:30 AM",
-      title: "Arrive at Giverny",
-      description: "Explore Monet's House and Gardens with guided tour",
+      title: `Arrive at ${trip?.to || "Galway"}`,
+      description: `Explore the beautiful sights of ${trip?.to || "Galway"}`,
       icon: Building2,
     },
     {
       time: "01:00 PM",
       title: "Lunch Break",
-      description: "Traditional French lunch at local restaurant",
+      description: "Traditional Irish lunch at local restaurant",
       icon: Users,
     },
     {
       time: "04:00 PM",
-      title: "Return to Paris",
+      title: `Return to ${trip?.from || "Dublin"}`,
       description: "Comfortable drive back with scenic countryside views",
       icon: Navigation,
     },
-  ]
-
-  const includedItems = [
-    { title: "Transportation", description: "Luxury coach with WiFi" },
-    { title: "Accommodation", description: "2 nights in 4-star hotel" },
-    { title: "Meals", description: "2 meals as specified" },
-    { title: "Expert Guide", description: "Professional tour guide" },
-    { title: "Entry Fees", description: "All attractions included" },
-    { title: "Insurance", description: "Travel insurance covered" },
   ]
 
   return (
@@ -63,12 +47,10 @@ export default function DayTripItinerary() {
         {/* Section 1: About your trip */}
         <div className="mb-10">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">About your trip</h2>
-          <p className={`text-gray-600 text-sm leading-relaxed ${!isReadMore && "line-clamp-3"}`}>
-            A trip to picturesque Hallstatt can be more than just a quick stop to the village so beautiful they copied it in China.
-            You'll have the choice to plunge into world's oldest salt mines via thrilling slides, feel the magic at the Dachstein Ice Caves or simply soak in the serene Alpine atmosphere by the lake.
-            Whether you're looking for a direct transfer or a scenic tour, our professional drivers ensure a comfortable and memorable journey tailored to your needs.
-            Discover local insights you won't find in guidebooks and experience the freedom to explore at your own speed.
-          </p>
+          <div
+            className={`text-gray-600 text-sm leading-relaxed ${!isReadMore && "line-clamp-3"}`}
+            dangerouslySetInnerHTML={{ __html: trip?.description || "A trip to picturesque Ireland can be more than just a quick stop. Whether you're looking for a direct transfer or a scenic tour, our professional drivers ensure a comfortable and memorable journey tailored to your needs." }}
+          />
           <button
             onClick={() => setIsReadMore(!isReadMore)}
             className="text-blue-600 font-medium text-sm mt-2 hover:underline focus:outline-none"
@@ -80,7 +62,7 @@ export default function DayTripItinerary() {
         <hr className="border-gray-100 mb-10" />
 
         {/* Section 2: Highlights Icons */}
-        <div className="space-y-4 mb-10">
+        {/* <div className="space-y-4 mb-10">
           <div className="flex items-start gap-3">
             <Car className="w-5 h-5 text-gray-700 mt-0.5" />
             <p className="text-sm font-medium text-gray-900">Exclusively yours: private vehicle and professional driver</p>
@@ -97,12 +79,12 @@ export default function DayTripItinerary() {
             <Users className="w-5 h-5 text-gray-700 mt-0.5" />
             <p className="text-sm font-medium text-gray-900">Perfectly planned for families, friends, or solo travelers</p>
           </div>
-        </div>
+        </div> */}
 
         <hr className="border-gray-100 mb-10" />
 
         {/* Section 3: What to expect */}
-        <div className="mb-10">
+        {/* <div className="mb-10">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">What to expect</h2>
 
           <div className="space-y-8">
@@ -161,12 +143,12 @@ export default function DayTripItinerary() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <hr className="border-gray-100 mb-10" />
 
         {/* Section 4: Good to know */}
-        <div className="mb-10">
+        {/* <div className="mb-10">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Good to know</h2>
           <div className="space-y-3">
             {includedItems.map((item, index) => (
@@ -185,12 +167,12 @@ export default function DayTripItinerary() {
               <p className="text-sm font-medium text-gray-900">Meals, snacks, and gratuity are not included</p>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <hr className="border-gray-100 mb-10" />
 
         {/* Section 5: Trip at a glance (Mapped from itineraryItems) */}
-        <div className="pb-8">
+        {/* <div className="pb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Your trip at a glance</h2>
 
           <div className="relative border-l-2 border-dashed border-gray-200 ml-3 space-y-12">
@@ -207,8 +189,6 @@ export default function DayTripItinerary() {
                   <p className="text-sm text-gray-600 mb-2">
                     {item.description}
                   </p>
-
-                  {/* Only show images on the second item as a demo like the design, or randomly */}
                   {index === 1 && (
                     <div className="grid grid-cols-2 gap-3 mt-4">
                       <div className="aspect-[4/3] relative rounded-xl overflow-hidden bg-gray-100">
@@ -233,7 +213,7 @@ export default function DayTripItinerary() {
             })}
 
           </div>
-        </div>
+        </div> */}
 
         {/* Footer Note */}
         <div className="mt-8 bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-start gap-3">
@@ -244,13 +224,13 @@ export default function DayTripItinerary() {
         </div>
 
         {/* CTA - Preserved from original */}
-        <div className="mt-8 flex justify-center">
+        {/* <div className="mt-8 flex justify-center">
           <Link href={`/booking-flow/step-2`} className="w-full sm:w-auto">
             <button className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm w-full">
               Book Your Tour
             </button>
           </Link>
-        </div>
+        </div> */}
 
       </div>
     </section>

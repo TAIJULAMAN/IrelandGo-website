@@ -9,6 +9,7 @@ import { Footer } from "@/components/layout/footer";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
+import { useGetSingleDayTripQuery } from "@/Redux/features/dayTrip/dayTripApi";
 import { irishSettlements } from "@/lib/irish-settlements";
 import { useEffect } from "react";
 import {
@@ -33,6 +34,12 @@ export default function Step2() {
   const serviceType = searchParams.get("serviceType") || "TRANSFER";
   const tripType = searchParams.get("tripType") || "one-way";
   const durationParam = searchParams.get("duration") || "";
+  const tripId = searchParams.get("id");
+
+  const { data: dayTripData } = useGetSingleDayTripQuery(tripId as string, {
+    skip: serviceType !== "DAY_TRIP" || !tripId,
+  });
+  const dayTrip = dayTripData?.data;
 
   const [localAdults, setLocalAdults] = useState(adults);
   const [localChildren, setLocalChildren] = useState(children);
@@ -92,7 +99,13 @@ export default function Step2() {
   );
 
   useEffect(() => {
-    if (!transferRoute?.distanceKm && pickupSettlement && dropoffSettlement) {
+    if (serviceType === "DAY_TRIP" && dayTrip?.distanceKm) {
+      setDistanceKm(dayTrip.distanceKm);
+    }
+  }, [dayTrip, serviceType]);
+
+  useEffect(() => {
+    if (!transferRoute?.distanceKm && pickupSettlement && dropoffSettlement && serviceType !== "DAY_TRIP") {
       const fetchRoute = async () => {
         try {
           const url = `https://router.project-osrm.org/route/v1/driving/${pickupSettlement.lng},${pickupSettlement.lat};${dropoffSettlement.lng},${dropoffSettlement.lat}?overview=false`;
@@ -109,7 +122,7 @@ export default function Step2() {
 
       fetchRoute();
     }
-  }, [pickupSettlement, dropoffSettlement, transferRoute]);
+  }, [pickupSettlement, dropoffSettlement, transferRoute, serviceType]);
 
   const { data: vehiclesData, isLoading } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
@@ -231,7 +244,7 @@ export default function Step2() {
                 Choose Vehicle
               </span>
             </div>
-            {serviceType !== "BY_THE_HOUR" && (
+            {serviceType !== "BY_THE_HOUR" && serviceType !== "DAY_TRIP" && (
               <>
                 <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
                 <div className="flex items-center gap-2 text-gray-400">
@@ -245,14 +258,14 @@ export default function Step2() {
             <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
             <div className="flex items-center gap-2 text-gray-400">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
-                {serviceType === "BY_THE_HOUR" ? "3" : "4"}
+                {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "3" : "4"}
               </div>
               <span>Details</span>
             </div>
             <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
             <div className="flex items-center gap-2 text-gray-400">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
-                {serviceType === "BY_THE_HOUR" ? "4" : "5"}
+                {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "4" : "5"}
               </div>
               <span>Payment</span>
             </div>
@@ -704,7 +717,7 @@ export default function Step2() {
                           </div>
                           <div className="text-right whitespace-nowrap">
                             <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-                              {distanceKm || serviceType === "BY_THE_HOUR"
+                              {distanceKm || serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP"
                                 ? `€${totalPrice}`
                                 : "TBD"}
                             </p>
@@ -771,11 +784,11 @@ export default function Step2() {
             }`}
           >
             <Link
-              href={`/booking-flow/${serviceType === "BY_THE_HOUR" ? "step-3-details" : "step-3"}?${searchParams.toString()}&vehicleId=${encodeURIComponent(
+              href={`/booking-flow/${serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "step-3-details" : "step-3"}?${searchParams.toString()}&vehicleId=${encodeURIComponent(
                 selectedVehicle || "",
               )}&carPrice=${selectedPrice || 0}`}
             >
-              {serviceType === "BY_THE_HOUR"
+              {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP"
                 ? "Next: Checkout"
                 : "Next: Add Stops"}
             </Link>

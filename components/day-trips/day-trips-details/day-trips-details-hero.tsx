@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-export default function DayTripsDetailsHero() {
+export default function DayTripsDetailsHero({ trip }: { trip: any }) {
   // Passengers and Luggage state
   const [adults, setAdults] = useState<number>(2)
   const [children, setChildren] = useState<number>(0)
@@ -23,8 +23,8 @@ export default function DayTripsDetailsHero() {
       {/* Background image */}
       <div className="absolute inset-0">
         <img
-          src="/details.png"
-          alt="Scenic Ireland coastline"
+          src={trip?.images?.[0] || "/details.png"}
+          alt={trip?.title || "Scenic Ireland coastline"}
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-slate-900/40" />
@@ -34,22 +34,22 @@ export default function DayTripsDetailsHero() {
       <div className="relative z-10 container mx-auto px-6 flex items-center justify-center min-h-screen">
         <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-6 md:p-8">
           {/* Title & Subtitle */}
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-3">
-            <span className="text-blue-700">Dublin to Galway</span> via Cliffs
-            of Moher
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-3 text-center">
+            {trip?.title}
           </h1>
-          <p className="text-slate-600 md:text-lg text-center">
-            Explore gorgeous coastal scenery and charming Irish towns on a
-            private, guided day tour.
+          <p className="text-slate-600 md:text-lg text-center mb-6 line-clamp-2">
+            {trip?.description
+              ? trip.description.replace(/<[^>]*>?/gm, "").slice(0, 100) + (trip.description.replace(/<[^>]*>?/gm, "").length > 100 ? "..." : "")
+              : "Explore gorgeous coastal scenery and charming Irish towns on a private, guided day tour."}
           </p>
 
           {/* Badges */}
           <div className="mt-5 flex flex-wrap justify-center items-center gap-5">
             <div className="inline-flex items-center gap-2 text-slate-700 text-sm">
-              <Users className="w-4 h-4 text-blue-600" /> Max 12 People
+              <Users className="w-4 h-4 text-blue-600" /> Max {trip?.groupSize || "12"} People
             </div>
             <div className="inline-flex items-center gap-2 text-emerald-700 text-sm font-semibold">
-              From €125/person
+              From €{trip?.price || "125"}/person
             </div>
           </div>
 
@@ -59,6 +59,7 @@ export default function DayTripsDetailsHero() {
               <MapPin className="w-4 h-4 text-blue-500" />
               <Input
                 type="text"
+                defaultValue={trip?.from || ""}
                 placeholder="Pickup Location"
                 className="border-0 bg-transparent h-10 px-0 text-sm placeholder:text-slate-500 focus-visible:ring-0 focus-visible:border-0 shadow-none"
               />
@@ -67,6 +68,7 @@ export default function DayTripsDetailsHero() {
               <Flag className="w-4 h-4 text-blue-500" />
               <Input
                 type="text"
+                defaultValue={trip?.to || ""}
                 placeholder="Dropoff Location"
                 className="border-0 bg-transparent h-10 px-0 text-sm placeholder:text-slate-500 focus-visible:ring-0 focus-visible:border-0 shadow-none"
               />
@@ -223,8 +225,9 @@ export default function DayTripsDetailsHero() {
                 pathname: "/booking-flow/step-2",
                 query: {
                   serviceType: "DAY_TRIP",
-                  pickup: "Dublin", // Default based on title
-                  dropoff: "Galway",
+                  id: trip?.id,
+                  pickup: trip?.from || "Dublin",
+                  dropoff: trip?.to || "Galway",
                   adults: adults.toString(),
                   children: children.toString(),
                   extraBags: extraBags.toString(),

@@ -31,6 +31,7 @@ export default function Step3Details() {
   const selectedStopsParam = searchParams.get("selectedStops");
   const serviceTypeParam = searchParams.get("serviceType") || "TRANSFER";
   const tripType = searchParams.get("tripType") || "one-way";
+  const tripId = searchParams.get("id");
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -169,7 +170,7 @@ export default function Step3Details() {
       if (withoutIdTypes.includes(body.serviceType)) {
         res = await createBookingWithoutId({ body }).unwrap();
       } else {
-        const serviceId = transferRoute?.id || transferRoute?._id || "60d5ec49f3b0b30015f8e500";
+        const serviceId = tripId || transferRoute?.id || transferRoute?._id || "60d5ec49f3b0b30015f8e500";
         res = await createBookingUsingServiceId({ serviceId, body }).unwrap();
       }
       const id = res?.data?.id || res?.data?._id || "";
@@ -202,7 +203,7 @@ export default function Step3Details() {
               </div>
               <span className="hidden sm:inline">Choose Vehicle</span>
             </div>
-            {serviceTypeParam !== "BY_THE_HOUR" && (
+            {serviceTypeParam !== "BY_THE_HOUR" && serviceTypeParam !== "DAY_TRIP" && (
               <>
                 <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
                 <div className="flex items-center gap-2">
@@ -216,14 +217,14 @@ export default function Step3Details() {
             <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold">
-                {serviceTypeParam === "BY_THE_HOUR" ? "3" : "4"}
+                {serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "3" : "4"}
               </div>
               <span className="hidden sm:inline">Details</span>
             </div>
             <div className="flex-1 h-0.5 bg-gray-200 mx-2" />
             <div className="flex items-center gap-2 text-gray-400">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold">
-                {serviceTypeParam === "BY_THE_HOUR" ? "4" : "5"}
+                {serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "4" : "5"}
               </div>
               <span className="hidden sm:inline">Payment</span>
             </div>
@@ -234,7 +235,7 @@ export default function Step3Details() {
         <div className="mb-6 sm:mb-8 mt-2 sm:mt-4 flex justify-between items-end">
           <div>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-700 mb-2">
-              Step {serviceTypeParam === "BY_THE_HOUR" ? "3" : "4"}: Passenger Details
+              Step {serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "3" : "4"}: Passenger Details
             </h1>
             <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
               Please provide your contact information and any special
@@ -457,7 +458,7 @@ export default function Step3Details() {
                 variant="ghost"
                 className="text-blue-600 font-semibold hover:text-blue-700 hover:bg-blue-50 text-sm sm:text-base px-3 py-2 h-auto rounded-xl"
               >
-                <Link href={`/booking-flow/${serviceTypeParam === "BY_THE_HOUR" ? "step-2" : "step-3"}?${searchParams.toString()}`}>
+                <Link href={`/booking-flow/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "step-2" : "step-3"}?${searchParams.toString()}`}>
                   ← Back
                 </Link>
               </Button>

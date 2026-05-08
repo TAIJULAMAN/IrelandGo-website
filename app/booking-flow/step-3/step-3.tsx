@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 
 import { useGetStopsQuery } from "@/Redux/features/stopage/stopageApi";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 function formatDuration(minutes: number) {
   const h = Math.floor(minutes / 60);
@@ -47,6 +47,15 @@ export default function Step3() {
   const transferRouteParam = searchParams.get("transferRoute");
 
   const [selectedStops, setSelectedStops] = useState<any[]>([]);
+  const router = useRouter();
+
+  const serviceType = searchParams.get("serviceType") || "TRANSFER";
+
+  useEffect(() => {
+    if (serviceType === "DAY_TRIP") {
+      router.replace(`/booking-flow/step-3-details?${searchParams.toString()}`);
+    }
+  }, [serviceType, searchParams, router]);
 
   let distanceKm = 0;
   if (transferRouteParam) {
