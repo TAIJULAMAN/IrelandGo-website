@@ -41,7 +41,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
 
     // Fetch directions
     useEffect(() => {
-        if (isLoaded && pickup?.name && dropoff?.name) {
+        if (isLoaded && pickup?.name && dropoff?.name && pickup.name.length > 5 && dropoff.name.length > 5) {
             const directionsService = new google.maps.DirectionsService();
             
             const origin = (pickup.lat !== undefined && pickup.lng !== undefined)
@@ -65,7 +65,8 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                             setDistance(result.routes[0].legs[0].distance.text);
                         }
                     } else {
-                        const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST'];
+                        // Suppress common errors that happen during typing or invalid locations
+                        const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST', 'REQUEST_DENIED', 'OVER_QUERY_LIMIT'];
                         if (!suppressedStatuses.includes(status)) {
                             console.error(`error fetching directions: ${status}`);
                         }

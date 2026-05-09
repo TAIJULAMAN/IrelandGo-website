@@ -29,7 +29,7 @@ import { FeatureBadges } from "../common/feature-badges";
 import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
-const libraries: ("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
+const libraries: ("places" | "drawing" | "geometry" | "visualization")[] = ["places"];
 
 const MapRoute = dynamic(
   () => import("./map-route").then((mod) => ({ default: mod.MapRoute })),
@@ -155,11 +155,10 @@ export function Hero() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-5 md:px-6 py-2 md:py-2.5 rounded-full font-medium text-xs md:text-sm transition-all flex items-center gap-2 whitespace-nowrap ${
-                  activeTab === tab.id
+                className={`px-5 md:px-6 py-2 md:py-2.5 rounded-full font-medium text-xs md:text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
                     ? "bg-white text-gray-900 shadow-md"
                     : "bg-transparent text-white"
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>
@@ -175,21 +174,19 @@ export function Hero() {
               <div className="flex gap-2 mb-5">
                 <button
                   onClick={() => setTripType("one-way")}
-                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${
-                    tripType === "one-way"
+                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "one-way"
                       ? "bg-blue-500 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
                   One Way
                 </button>
                 <button
                   onClick={() => setTripType("return")}
-                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${
-                    tripType === "return"
+                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "return"
                       ? "bg-blue-500 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
+                    }`}
                 >
                   Return
                 </button>
