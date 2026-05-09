@@ -12,6 +12,7 @@ import {
   Search,
   ChevronDown,
   Minus,
+  Timer,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Header } from "../common/header";
@@ -59,6 +60,7 @@ export function Hero() {
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("09:00");
+  const [duration, setDuration] = useState(2);
   const [returnDate, setReturnDate] = useState<Date | undefined>(undefined);
   const [returnTime, setReturnTime] = useState("09:00");
   const [adults, setAdults] = useState(2);
@@ -127,6 +129,18 @@ export function Hero() {
     { id: "day-trips", label: "Day trips" },
   ];
 
+  const router = useRouter();
+
+  const handleTabClick = (id: string) => {
+    if (id === "hourly") {
+      router.push("/by-the-hour");
+    } else if (id === "day-trips") {
+      router.push("/day-trips");
+    } else {
+      setActiveTab(id);
+    }
+  };
+
   return (
     <section className="relative overflow-hidden min-h-screen">
       <Header />
@@ -154,10 +168,10 @@ export function Hero() {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabClick(tab.id)}
                 className={`px-5 md:px-6 py-2 md:py-2.5 rounded-full font-medium text-xs md:text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
-                    ? "bg-white text-gray-900 shadow-md"
-                    : "bg-transparent text-white"
+                  ? "bg-white text-gray-900 shadow-md"
+                  : "bg-transparent text-white"
                   }`}
               >
                 {tab.label}
@@ -170,30 +184,69 @@ export function Hero() {
           {/* Booking Form Container */}
           <div className="flex flex-col lg:flex-row gap-5 container mx-auto bg-white rounded-xl shadow-xl p-4 md:p-5">
             <div className="w-full ">
-              {/* Trip Type Selector */}
-              <div className="flex gap-2 mb-5">
-                <button
-                  onClick={() => setTripType("one-way")}
-                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "one-way"
+              {/* Conditional Trip Type / Duration Selector */}
+              {activeTab === "transfer" ? (
+                <div className="flex gap-2 mb-5">
+                  <button
+                    onClick={() => setTripType("one-way")}
+                    className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "one-way"
                       ? "bg-blue-500 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
-                >
-                  One Way
-                </button>
-                <button
-                  onClick={() => setTripType("return")}
-                  className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "return"
+                      }`}
+                  >
+                    One Way
+                  </button>
+                  <button
+                    onClick={() => setTripType("return")}
+                    className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "return"
                       ? "bg-blue-500 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
-                >
-                  Return
-                </button>
-              </div>
+                      }`}
+                  >
+                    Return
+                  </button>
+                </div>
+              ) : activeTab === "hourly" ? (
+                <div className="mb-5">
+                  <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    Duration (hours)
+                  </label>
+                  <div className="flex items-center gap-3 p-1 bg-gray-50 rounded-lg w-full md:w-fit">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-10 w-10 hover:bg-white shadow-sm rounded-md"
+                      onClick={() => setDuration(Math.max(2, duration - 1))}
+                      disabled={duration <= 2}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <div className="flex items-center gap-2 px-4">
+                      <Timer className="w-5 h-5 text-blue-500" />
+                      <span className="font-bold text-lg min-w-[20px] text-center">
+                        {duration}
+                      </span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-10 w-10 hover:bg-white shadow-sm rounded-md"
+                      onClick={() => setDuration(Math.min(24, duration + 1))}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <div className="mb-5">
+                  <p className="text-sm text-gray-500 italic">
+                    Select a pickup and search for available day trips.
+                  </p>
+                </div>
+              )}
 
               {/* Location Inputs */}
-              <div className="grid md:grid-cols-2 gap-4 mb-5">
+              <div className={`grid ${activeTab === "transfer" ? "md:grid-cols-2" : "grid-cols-1"} gap-4 mb-5`}>
                 <div className="relative" ref={pickupRef}>
                   <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
                     <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
@@ -235,46 +288,48 @@ export function Hero() {
                   )}
                 </div>
 
-                <div className="relative" ref={dropoffRef}>
-                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
-                    <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
-                    <input
-                      type="text"
-                      placeholder="Dropoff Location"
-                      className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400 bg-transparent"
-                      value={dropoffLocation}
-                      onChange={(e) => {
-                        setDropoffLocation(e.target.value);
-                        setDValue(e.target.value);
-                        setShowDropoffDropdown(true);
-                      }}
-                      onFocus={() => setShowDropoffDropdown(true)}
-                    />
-                  </div>
-                  {showDropoffDropdown && dStatus === "OK" && (
-                    <div className="absolute z-50 w-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
-                      {dData.map((suggestion) => (
-                        <button
-                          key={suggestion.place_id}
-                          onClick={() => handleDropoffSelect(suggestion.description)}
-                          className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
-                        >
-                          <div className="flex items-center gap-3">
-                            <MapPin className="w-4 h-4 text-blue-500 shrink-0" />
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">
-                                {suggestion.structured_formatting.main_text}
-                              </div>
-                              <div className="text-xs text-gray-500 text-balance">
-                                {suggestion.structured_formatting.secondary_text}
+                {activeTab === "transfer" && (
+                  <div className="relative" ref={dropoffRef}>
+                    <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
+                      <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                      <input
+                        type="text"
+                        placeholder="Dropoff Location"
+                        className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400 bg-transparent"
+                        value={dropoffLocation}
+                        onChange={(e) => {
+                          setDropoffLocation(e.target.value);
+                          setDValue(e.target.value);
+                          setShowDropoffDropdown(true);
+                        }}
+                        onFocus={() => setShowDropoffDropdown(true)}
+                      />
+                    </div>
+                    {showDropoffDropdown && dStatus === "OK" && (
+                      <div className="absolute z-50 w-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
+                        {dData.map((suggestion) => (
+                          <button
+                            key={suggestion.place_id}
+                            onClick={() => handleDropoffSelect(suggestion.description)}
+                            className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
+                          >
+                            <div className="flex items-center gap-3">
+                              <MapPin className="w-4 h-4 text-blue-500 shrink-0" />
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">
+                                  {suggestion.structured_formatting.main_text}
+                                </div>
+                                <div className="text-xs text-gray-500 text-balance">
+                                  {suggestion.structured_formatting.secondary_text}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* Date, Time, Passengers, Luggage */}
@@ -539,7 +594,7 @@ export function Hero() {
                 </div>
               </div>
 
-              {tripType === "return" && (
+              {activeTab === "transfer" && tripType === "return" && (
                 <div className="mb-6">
                   <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
                     Return Date & Time
@@ -609,14 +664,15 @@ export function Hero() {
               )}
               <Link
                 href={{
-                  pathname: "/booking-flow/step-2",
+                  pathname: activeTab === "day-trips" ? "/day-trips" : "/booking-flow/step-2",
                   query: {
                     serviceType: activeTab === "transfer" ? "TRANSFER" : activeTab === "hourly" ? "BY_THE_HOUR" : "DAY_TRIP",
-                    tripType,
+                    tripType: activeTab === "transfer" ? tripType : "one-way",
                     pickup: pickupLocation,
                     dropoff: dropoffLocation,
                     date: date ? date.toISOString() : "",
                     time,
+                    duration: duration.toString(),
                     returnDate: returnDate ? returnDate.toISOString() : "",
                     returnTime,
                     adults: adults.toString(),
@@ -627,14 +683,14 @@ export function Hero() {
               >
                 <Button className="w-full h-10 py-3" variant="outline">
                   <Search className="w-5 h-5 mr-2" />
-                  Find a Ride
+                  {activeTab === "day-trips" ? "Explore Day Trips" : "Find a Ride"}
                 </Button>
               </Link>
             </div>
             <div className="rounded-lg overflow-hidden shadow-lg w-[450px] h-[340px] hidden lg:block shrink-0">
               <MapRoute
                 pickup={pickupLocation ? { name: pickupLocation } : undefined}
-                dropoff={dropoffLocation ? { name: dropoffLocation } : undefined}
+                dropoff={activeTab === "transfer" && dropoffLocation ? { name: dropoffLocation } : undefined}
               />
             </div>
           </div>
