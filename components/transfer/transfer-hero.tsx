@@ -2,27 +2,98 @@
 
 import { Header } from "../common/header";
 import { Search, MapPin } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useJsApiLoader } from "@react-google-maps/api";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+
+const libraries: ("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
 
 export default function TransfersHero() {
   const router = useRouter();
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const {
+    suggestions: { status, data },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      componentRestrictions: { country: "ie" }, // Restrict to Ireland
+    },
+    debounce: 300,
+  });
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleSearch = (location?: string) => {
     const searchLocation = location || searchQuery;
-    if (searchLocation.trim()) {
-      router.push(
-        `/transfer/transfer-search?pickup=${encodeURIComponent(searchLocation)}`,
-      );
-    }
+    const query = searchLocation.trim()
+      ? `?pickup=${encodeURIComponent(searchLocation)}`
+      : "";
+    router.push(`/transfer/transfer-search${query}`);
   };
 
   const handlePopularRoute = (route: string) => {
-    router.push(
-      `/transfer/transfer-search?pickup=${encodeURIComponent(route)}`,
-    );
+    setSearchQuery(route);
+    setValue(route, false);
+    handleSearch(route);
+  };
+
+  const handleSelect = (description: string) => {
+    setSearchQuery(description);
+    setValue(description, false);
+    clearSuggestions();
+    setShowDropdown(false);
+    handleSearch(description);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const totalItems = data.length;
+    if (showDropdown && totalItems > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev < totalItems - 1 ? prev + 1 : prev));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+      } else if (e.key === "Enter" && selectedIndex >= 0) {
+        e.preventDefault();
+        handleSelect(data[selectedIndex].description);
+      } else if (e.key === "Escape") {
+        setShowDropdown(false);
+      } else if (e.key === "Enter") {
+        handleSearch();
+      }
+    } else if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   const popularRoutes = [
@@ -71,10 +142,47 @@ export default function TransfersHero() {
                   placeholder="Enter your departure city or destination"
                   className="w-full bg-transparent outline-none text-sm sm:text-base text-gray-800 placeholder:text-gray-400"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setSearchQuery(val);
+                    setValue(val);
+                    setShowDropdown(true);
+                    setSelectedIndex(-1);
+                  }}
+                  onFocus={() => setShowDropdown(true)}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
+
+              {/* Autocomplete Dropdown */}
+              {showDropdown && status === "OK" && (
+                <div
+                  ref={dropdownRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-80 overflow-y-auto z-50"
+                >
+                  {/* Google Places Results */}
+                  {data.map((suggestion, index) => (
+                    <button
+                      key={suggestion.place_id}
+                      onClick={() => handleSelect(suggestion.description)}
+                      className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0 ${index === selectedIndex ? "bg-blue-50" : ""
+                        }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {suggestion.structured_formatting.main_text}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {suggestion.structured_formatting.secondary_text}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <button

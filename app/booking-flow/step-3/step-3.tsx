@@ -115,6 +115,12 @@ export default function Step3() {
     }
   }
 
+  const fromLat = searchParams.get("fromLat");
+  const fromLng = searchParams.get("fromLng");
+  const toLat = searchParams.get("toLat");
+  const toLng = searchParams.get("toLng");
+  const coordsParam = fromLat ? `&fromLat=${fromLat}&fromLng=${fromLng}&toLat=${toLat}&toLng=${toLng}` : "";
+
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col">
       <Header2 />
@@ -423,7 +429,7 @@ export default function Step3() {
                 <Link
                   href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
                     JSON.stringify(selectedStops),
-                  )}`}
+                  )}&distanceKm=${distanceKm}${coordsParam}`}
                 >
                   Next: Checkout
                 </Link>

@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { irishSettlements } from "@/lib/irish-settlements";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
@@ -28,6 +27,10 @@ import { format } from "date-fns";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
 
 const MapRoute = dynamic(
   () => import("../home/map-route").then((mod) => ({ default: mod.MapRoute })),
@@ -95,39 +98,38 @@ export default function TransferSearchHero() {
   const pickupDropdownRef = useRef(null);
   const dropoffDropdownRef = useRef(null);
 
-  // Filter settlements for pickup
-  const filteredPickupSettlements = pickupLocation.trim()
-    ? irishSettlements
-        .filter(
-          (settlement) =>
-            settlement.name
-              .toLowerCase()
-              .includes(pickupLocation.toLowerCase()) ||
-            settlement.county
-              .toLowerCase()
-              .includes(pickupLocation.toLowerCase()),
-        )
-        .slice(0, 8)
-    : [];
+  const {
+    ready: pickupReady,
+    value: pickupValue,
+    suggestions: { status: pickupStatus, data: pickupData },
+    setValue: setPickupValue,
+    clearSuggestions: clearPickupSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      componentRestrictions: { country: "ie" },
+    },
+    debounce: 300,
+    defaultValue: pickupLocation,
+  });
 
-  // Filter settlements for dropoff
-  const filteredDropoffSettlements = dropoffLocation.trim()
-    ? irishSettlements
-        .filter(
-          (settlement) =>
-            settlement.name
-              .toLowerCase()
-              .includes(dropoffLocation.toLowerCase()) ||
-            settlement.county
-              .toLowerCase()
-              .includes(dropoffLocation.toLowerCase()),
-        )
-        .slice(0, 8)
-    : [];
+  const {
+    ready: dropoffReady,
+    value: dropoffValue,
+    suggestions: { status: dropoffStatus, data: dropoffData },
+    setValue: setDropoffValue,
+    clearSuggestions: clearDropoffSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      componentRestrictions: { country: "ie" },
+    },
+    debounce: 300,
+    defaultValue: dropoffLocation,
+  });
 
   // Handle keyboard navigation for pickup
   const handlePickupKeyDown = (e) => {
-    if (!showPickupDropdown || filteredPickupSettlements.length === 0) {
+    const totalItems = pickupData.length;
+    if (!showPickupDropdown || totalItems === 0) {
       if (e.key === "Enter") {
         e.preventDefault();
       }
@@ -138,7 +140,7 @@ export default function TransferSearchHero() {
       case "ArrowDown":
         e.preventDefault();
         setSelectedPickupIndex((prev) =>
-          prev < filteredPickupSettlements.length - 1 ? prev + 1 : prev,
+          prev < totalItems - 1 ? prev + 1 : prev,
         );
         break;
       case "ArrowUp":
@@ -148,8 +150,10 @@ export default function TransferSearchHero() {
       case "Enter":
         e.preventDefault();
         if (selectedPickupIndex >= 0) {
-          const selected = filteredPickupSettlements[selectedPickupIndex];
-          setPickupLocation(selected.name);
+          const selected = pickupData[selectedPickupIndex];
+          setPickupLocation(selected.description);
+          setPickupValue(selected.description, false);
+          clearPickupSuggestions();
           setShowPickupDropdown(false);
         }
         break;
@@ -162,7 +166,8 @@ export default function TransferSearchHero() {
 
   // Handle keyboard navigation for dropoff
   const handleDropoffKeyDown = (e) => {
-    if (!showDropoffDropdown || filteredDropoffSettlements.length === 0) {
+    const totalItems = dropoffData.length;
+    if (!showDropoffDropdown || totalItems === 0) {
       if (e.key === "Enter") {
         e.preventDefault();
       }
@@ -173,7 +178,7 @@ export default function TransferSearchHero() {
       case "ArrowDown":
         e.preventDefault();
         setSelectedDropoffIndex((prev) =>
-          prev < filteredDropoffSettlements.length - 1 ? prev + 1 : prev,
+          prev < totalItems - 1 ? prev + 1 : prev,
         );
         break;
       case "ArrowUp":
@@ -183,8 +188,10 @@ export default function TransferSearchHero() {
       case "Enter":
         e.preventDefault();
         if (selectedDropoffIndex >= 0) {
-          const selected = filteredDropoffSettlements[selectedDropoffIndex];
-          setDropoffLocation(selected.name);
+          const selected = dropoffData[selectedDropoffIndex];
+          setDropoffLocation(selected.description);
+          setDropoffValue(selected.description, false);
+          clearDropoffSuggestions();
           setShowDropoffDropdown(false);
         }
         break;
@@ -288,7 +295,9 @@ export default function TransferSearchHero() {
                     className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
                     value={pickupLocation}
                     onChange={(e) => {
-                      setPickupLocation(e.target.value);
+                      const val = e.target.value;
+                      setPickupLocation(val);
+                      setPickupValue(val);
                       setShowPickupDropdown(true);
                       setSelectedPickupIndex(-1);
                     }}
@@ -298,16 +307,18 @@ export default function TransferSearchHero() {
                 </div>
 
                 {/* Pickup Autocomplete Dropdown */}
-                {/* {showPickupDropdown && filteredPickupSettlements.length > 0 && (
+                {showPickupDropdown && pickupStatus === "OK" && (
                   <div
                     ref={pickupDropdownRef}
                     className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto z-50"
                   >
-                    {filteredPickupSettlements.map((settlement, index) => (
+                    {pickupData.map((suggestion, index) => (
                       <button
-                        key={settlement.id}
+                        key={suggestion.place_id}
                         onClick={() => {
-                          setPickupLocation(settlement.name);
+                          setPickupLocation(suggestion.description);
+                          setPickupValue(suggestion.description, false);
+                          clearPickupSuggestions();
                           setShowPickupDropdown(false);
                         }}
                         className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0 ${
@@ -318,17 +329,17 @@ export default function TransferSearchHero() {
                           <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
                           <div>
                             <div className="text-sm font-medium text-gray-900">
-                              {settlement.name}
+                              {suggestion.structured_formatting.main_text}
                             </div>
                             <div className="text-xs text-gray-500">
-                              {settlement.county}, {settlement.province}
+                              {suggestion.structured_formatting.secondary_text}
                             </div>
                           </div>
                         </div>
                       </button>
                     ))}
                   </div>
-                )} */}
+                )}
               </div>
 
               {/* Dropoff Location */}
@@ -342,7 +353,9 @@ export default function TransferSearchHero() {
                     className="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400"
                     value={dropoffLocation}
                     onChange={(e) => {
-                      setDropoffLocation(e.target.value);
+                      const val = e.target.value;
+                      setDropoffLocation(val);
+                      setDropoffValue(val);
                       setShowDropoffDropdown(true);
                       setSelectedDropoffIndex(-1);
                     }}
@@ -352,38 +365,39 @@ export default function TransferSearchHero() {
                 </div>
 
                 {/* Dropoff Autocomplete Dropdown */}
-                {/* {showDropoffDropdown &&
-                  filteredDropoffSettlements.length > 0 && (
-                    <div
-                      ref={dropoffDropdownRef}
-                      className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto z-50"
-                    >
-                      {filteredDropoffSettlements.map((settlement, index) => (
-                        <button
-                          key={settlement.id}
-                          onClick={() => {
-                            setDropoffLocation(settlement.name);
-                            setShowDropoffDropdown(false);
-                          }}
-                          className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0 ${
-                            index === selectedDropoffIndex ? "bg-blue-50" : ""
-                          }`}
-                        >
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-green-500 flex-shrink-0" />
-                            <div>
-                              <div className="text-sm font-medium text-gray-900">
-                                {settlement.name}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                {settlement.county}, {settlement.province}
-                              </div>
+                {showDropoffDropdown && dropoffStatus === "OK" && (
+                  <div
+                    ref={dropoffDropdownRef}
+                    className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto z-50"
+                  >
+                    {dropoffData.map((suggestion, index) => (
+                      <button
+                        key={suggestion.place_id}
+                        onClick={() => {
+                          setDropoffLocation(suggestion.description);
+                          setDropoffValue(suggestion.description, false);
+                          clearDropoffSuggestions();
+                          setShowDropoffDropdown(false);
+                        }}
+                        className={`w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0 ${
+                          index === selectedDropoffIndex ? "bg-blue-50" : ""
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-green-500 flex-shrink-0" />
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {suggestion.structured_formatting.main_text}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {suggestion.structured_formatting.secondary_text}
                             </div>
                           </div>
-                        </button>
-                      ))}
-                    </div>
-                  )} */}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
@@ -722,32 +736,8 @@ export default function TransferSearchHero() {
           </div>
           <div className="rounded-xl overflow-hidden shadow-lg w-full lg:w-[450px] h-[340px] hidden lg:block">
             <MapRoute
-              pickup={
-                irishSettlements.find((s) => s.name === pickupLocation)
-                  ? {
-                      lat: irishSettlements.find(
-                        (s) => s.name === pickupLocation,
-                      ).lat,
-                      lng: irishSettlements.find(
-                        (s) => s.name === pickupLocation,
-                      ).lng,
-                      name: pickupLocation,
-                    }
-                  : undefined
-              }
-              dropoff={
-                irishSettlements.find((s) => s.name === dropoffLocation)
-                  ? {
-                      lat: irishSettlements.find(
-                        (s) => s.name === dropoffLocation,
-                      ).lat,
-                      lng: irishSettlements.find(
-                        (s) => s.name === dropoffLocation,
-                      ).lng,
-                      name: dropoffLocation,
-                    }
-                  : undefined
-              }
+              pickup={pickupLocation ? { name: pickupLocation } : undefined}
+              dropoff={dropoffLocation ? { name: dropoffLocation } : undefined}
             />
           </div>
         </div>

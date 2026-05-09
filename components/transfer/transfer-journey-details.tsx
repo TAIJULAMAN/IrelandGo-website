@@ -9,13 +9,19 @@ import {
   ArrowRight,
   Navigation,
 } from "lucide-react";
-import { irishSettlements } from "@/lib/irish-settlements";
 import { useEffect, useState } from "react";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 export default function TransferJourneyDetails() {
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    libraries: ['places']
+  });
+
   const searchParams = useSearchParams();
   const transferRouteParam = searchParams.get("transferRoute");
-  let transferRoute = null;
+  let transferRoute: any = null;
   try {
     if (transferRouteParam) {
       transferRoute = JSON.parse(transferRouteParam);
@@ -31,35 +37,36 @@ export default function TransferJourneyDetails() {
   const [duration, setDuration] = useState<number | null>(transferRoute?.travelTimeMinutes || null);
   const [estimatedPrice, setEstimatedPrice] = useState<number | null>(transferRoute?.price || null);
 
-  // Find settlement data
-  const pickupSettlement = irishSettlements.find((s) => s.name === pickupParam);
-  const dropoffSettlement = irishSettlements.find(
-    (s) => s.name === dropoffParam,
-  );
-
-  // Fetch route data from OSRM
+  // Fetch route data from Google
   useEffect(() => {
-    if (!transferRoute?.distanceKm && pickupSettlement && dropoffSettlement) {
-      const fetchRoute = async () => {
-        try {
-          const url = `https://router.project-osrm.org/route/v1/driving/${pickupSettlement.lng},${pickupSettlement.lat};${dropoffSettlement.lng},${dropoffSettlement.lat}?overview=false`;
-          const response = await fetch(url);
-          const data = await response.json();
-
-          if (data.routes && data.routes[0]) {
-            const dist = Math.round(data.routes[0].distance / 1000);
-            setDistance(dist); // Convert to km
-            setDuration(Math.round(data.routes[0].duration / 60)); // Convert to minutes
-            setEstimatedPrice(Math.round(dist * 0.40));
+    if (isLoaded && pickupParam && dropoffParam && !transferRoute?.distanceKm) {
+      const directionsService = new google.maps.DirectionsService();
+      
+      directionsService.route(
+        {
+          origin: pickupParam,
+          destination: dropoffParam,
+          travelMode: google.maps.TravelMode.DRIVING,
+        },
+        (result, status) => {
+          if (status === google.maps.DirectionsStatus.OK && result) {
+            const leg = result.routes[0].legs[0];
+            const distKm = Math.round((leg.distance?.value || 0) / 1000);
+            const durationMins = Math.round((leg.duration?.value || 0) / 60);
+            
+            setDistance(distKm);
+            setDuration(durationMins);
+            setEstimatedPrice(Math.round(distKm * 0.40 + 20)); // Base price + per km
+          } else {
+            const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST'];
+            if (!suppressedStatuses.includes(status)) {
+              console.error("Error fetching directions:", status);
+            }
           }
-        } catch (error) {
-          console.error("Error fetching route:", error);
         }
-      };
-
-      fetchRoute();
+      );
     }
-  }, [pickupSettlement, dropoffSettlement, transferRoute]);
+  }, [isLoaded, pickupParam, dropoffParam, transferRoute]);
 
   // Format duration
   const formatDuration = (minutes: number | null) => {
@@ -107,11 +114,6 @@ export default function TransferJourneyDetails() {
                   <p className="text-base sm:text-lg font-bold text-gray-900">
                     {pickupParam || "Select Pickup Location"}
                   </p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {pickupSettlement
-                      ? `${pickupSettlement.county}, ${pickupSettlement.province}`
-                      : ""}
-                  </p>
                 </div>
               </div>
 
@@ -139,11 +141,6 @@ export default function TransferJourneyDetails() {
                       {dropoffParam || "Select Dropoff Location"}
                     </p>
                   </div>
-                  {dropoffSettlement && (
-                    <p className="text-sm text-gray-600 mt-1">
-                      {dropoffSettlement.county}, {dropoffSettlement.province}
-                    </p>
-                  )}
                 </div>
               </div>
             </div>

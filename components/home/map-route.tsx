@@ -1,90 +1,110 @@
 "use client"
 
-import { useEffect, useState } from 'react'
-import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
+import { useEffect, useState, useCallback } from 'react'
+import { GoogleMap, useJsApiLoader, MarkerF, DirectionsRenderer } from '@react-google-maps/api'
 
-// Fix for default marker icons in Next.js
-delete (L.Icon.Default.prototype as any)._getIconUrl
-L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
-    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
-})
+const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+
+const containerStyle = {
+    width: '100%',
+    height: '100%'
+};
+
+const center = {
+    lat: 53.4129,
+    lng: -8.2439
+};
 
 interface MapRouteProps {
-    pickup?: { lat: number; lng: number; name: string }
-    dropoff?: { lat: number; lng: number; name: string }
-}
-
-function MapUpdater({ pickup, dropoff }: MapRouteProps) {
-    const map = useMap()
-
-    useEffect(() => {
-        if (!map) return;
-
-        // Ensure map is correctly sized
-        map.invalidateSize();
-
-        if (pickup && dropoff) {
-            const bounds = L.latLngBounds([
-                [pickup.lat, pickup.lng],
-                [dropoff.lat, dropoff.lng]
-            ])
-            map.fitBounds(bounds, { padding: [50, 50], animate: true })
-        } else if (pickup) {
-            map.setView([pickup.lat, pickup.lng], 12, { animate: true })
-        } else if (dropoff) {
-            map.setView([dropoff.lat, dropoff.lng], 12, { animate: true })
-        }
-    }, [pickup, dropoff, map])
-
-    return null
+    pickup?: { lat?: number; lng?: number; name: string }
+    dropoff?: { lat?: number; lng?: number; name: string }
 }
 
 export function MapRoute({ pickup, dropoff }: MapRouteProps) {
-    const [route, setRoute] = useState<[number, number][]>([])
-    const [distance, setDistance] = useState<number | null>(null)
-    const [isMounted, setIsMounted] = useState(false)
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+        libraries: ['places']
+    })
 
-    useEffect(() => {
-        setIsMounted(true)
+    const [map, setMap] = useState<google.maps.Map | null>(null)
+    const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null)
+    const [distance, setDistance] = useState<string | null>(null)
+
+    const onLoad = useCallback(function callback(map: google.maps.Map) {
+        setMap(map)
     }, [])
 
-    // Fetch route from OSRM when both locations are available
-    useEffect(() => {
-        if (pickup && dropoff) {
-            const fetchRoute = async () => {
-                try {
-                    const url = `https://router.project-osrm.org/route/v1/driving/${pickup.lng},${pickup.lat};${dropoff.lng},${dropoff.lat}?overview=full&geometries=geojson`
-                    const response = await fetch(url)
-                    const data = await response.json()
+    const onUnmount = useCallback(function callback(map: google.maps.Map) {
+        setMap(null)
+    }, [])
 
-                    if (data.routes && data.routes[0]) {
-                        const coordinates = data.routes[0].geometry.coordinates.map(
-                            (coord: [number, number]) => [coord[1], coord[0]] as [number, number]
-                        )
-                        setRoute(coordinates)
-                        setDistance(data.routes[0].distance / 1000) // Convert to km
+    // Fetch directions
+    useEffect(() => {
+        if (isLoaded && pickup?.name && dropoff?.name) {
+            const directionsService = new google.maps.DirectionsService();
+            
+            const origin = (pickup.lat !== undefined && pickup.lng !== undefined)
+                ? { lat: pickup.lat, lng: pickup.lng }
+                : pickup.name;
+            
+            const destination = (dropoff.lat !== undefined && dropoff.lng !== undefined)
+                ? { lat: dropoff.lat, lng: dropoff.lng }
+                : dropoff.name;
+
+            directionsService.route(
+                {
+                    origin: origin,
+                    destination: destination,
+                    travelMode: google.maps.TravelMode.DRIVING,
+                },
+                (result, status) => {
+                    if (status === google.maps.DirectionsStatus.OK) {
+                        setDirections(result);
+                        if (result?.routes[0]?.legs[0]?.distance?.text) {
+                            setDistance(result.routes[0].legs[0].distance.text);
+                        }
+                    } else {
+                        const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST'];
+                        if (!suppressedStatuses.includes(status)) {
+                            console.error(`error fetching directions: ${status}`);
+                        }
+                        setDirections(null);
+                        setDistance(null);
                     }
-                } catch (error) {
-                    console.error('Error fetching route:', error)
                 }
+            );
+        } else {
+            setDirections(null);
+            setDistance(null);
+        }
+    }, [isLoaded, pickup?.name, pickup?.lat, pickup?.lng, dropoff?.name, dropoff?.lat, dropoff?.lng]);
+
+    // Fit bounds when locations change (if directions not available yet)
+    useEffect(() => {
+        if (map && (pickup || dropoff) && !directions) {
+            const bounds = new google.maps.LatLngBounds();
+            
+            if (pickup && pickup.lat !== undefined && pickup.lng !== undefined) {
+                bounds.extend({ lat: pickup.lat, lng: pickup.lng });
+            }
+            if (dropoff && dropoff.lat !== undefined && dropoff.lng !== undefined) {
+                bounds.extend({ lat: dropoff.lat, lng: dropoff.lng });
             }
 
-            fetchRoute()
-        } else {
-            setRoute([])
-            setDistance(null)
+            if (pickup?.lat !== undefined && dropoff?.lat !== undefined) {
+                map.fitBounds(bounds);
+            } else if (pickup?.lat !== undefined) {
+                map.setCenter({ lat: pickup.lat!, lng: pickup.lng! });
+                map.setZoom(12);
+            } else if (dropoff?.lat !== undefined) {
+                map.setCenter({ lat: dropoff.lat!, lng: dropoff.lng! });
+                map.setZoom(12);
+            }
         }
-    }, [pickup, dropoff])
+    }, [map, pickup, dropoff, directions]);
 
-    // Default center (Ireland)
-    const defaultCenter: [number, number] = [53.4129, -8.2439]
-    const defaultZoom = 7
-
-    if (!isMounted) {
+    if (!isLoaded) {
         return (
             <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '340px' }}>
                 <p className="text-gray-500">Loading map...</p>
@@ -94,48 +114,54 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
 
     return (
         <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-200" style={{ minHeight: '340px' }}>
-            <MapContainer
-                center={defaultCenter}
-                zoom={defaultZoom}
-                scrollWheelZoom={true}
-                style={{ height: '100%', width: '100%' }}
+            <GoogleMap
+                mapContainerStyle={containerStyle}
+                center={center}
+                zoom={7}
+                onLoad={onLoad}
+                onUnmount={onUnmount}
+                options={{
+                    zoomControl: true,
+                    streetViewControl: false,
+                    mapTypeControl: false,
+                    fullscreenControl: false,
+                }}
             >
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-
-                <MapUpdater pickup={pickup} dropoff={dropoff} />
-
-                {pickup && (
-                    <Marker position={[pickup.lat, pickup.lng]}>
-                        <Popup>
-                            <strong>Pickup:</strong> {pickup.name}
-                        </Popup>
-                    </Marker>
+                {directions && (
+                    <DirectionsRenderer
+                        directions={directions}
+                        options={{
+                            polylineOptions: {
+                                strokeColor: "#3b82f6",
+                                strokeWeight: 5,
+                                strokeOpacity: 0.8
+                            },
+                        }}
+                    />
                 )}
 
-                {dropoff && (
-                    <Marker position={[dropoff.lat, dropoff.lng]}>
-                        <Popup>
-                            <strong>Dropoff:</strong> {dropoff.name}
-                        </Popup>
-                    </Marker>
+                {!directions && pickup && pickup.lat !== undefined && pickup.lng !== undefined && (
+                    <MarkerF
+                        position={{ lat: pickup.lat, lng: pickup.lng }}
+                        label={{ text: "P", color: "white" }}
+                    />
                 )}
 
-                {route.length > 0 && (
-                    <Polyline positions={route} color="blue" weight={4} opacity={0.7} />
+                {!directions && dropoff && dropoff.lat !== undefined && dropoff.lng !== undefined && (
+                    <MarkerF
+                        position={{ lat: dropoff.lat, lng: dropoff.lng }}
+                        label={{ text: "D", color: "white" }}
+                    />
                 )}
-            </MapContainer>
+            </GoogleMap>
 
             {distance && (
                 <div className="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-lg shadow-md z-[1000]">
                     <p className="text-sm font-medium text-gray-700">
-                        Distance: <span className="text-blue-600">{distance.toFixed(1)} km</span>
+                        Distance: <span className="text-blue-600">{distance}</span>
                     </p>
                 </div>
             )}
         </div>
     )
 }
-

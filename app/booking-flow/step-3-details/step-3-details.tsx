@@ -62,13 +62,10 @@ export default function Step3Details() {
   let transportPrice = 0;
   let basePriceSum = 0;
   let pricePerKmSum = 0;
-  const distanceKm = transferRoute?.distanceKm || 0;
+  const distanceKmParam = searchParams.get("distanceKm");
+  const distanceKm = distanceKmParam ? parseFloat(distanceKmParam) : (transferRoute?.distanceKm || 0);
 
-  if (carPriceParam) {
-    // If the exact price is passed from step 2, use it
-    transportPrice = parseFloat(carPriceParam);
-  } else if (vehicleId && vehicles.length > 0) {
-    // Fallback calculation for older links without carPrice
+  if (vehicleId && vehicles.length > 0) {
     const ids = vehicleId.split("+");
     const selectedVehicles = ids
       .map((id: string) => vehicles.find((v: any) => v.id === id))
@@ -83,11 +80,15 @@ export default function Step3Details() {
         (sum: number, v: any) => sum + v.pricePerKm,
         0,
       );
-      const extraBagsCost = extraBags * 10;
-
-      transportPrice =
-        Math.round(basePriceSum + pricePerKmSum * distanceKm) + extraBagsCost;
     }
+  }
+
+  if (carPriceParam) {
+    // If the exact price is passed from step 2, use it
+    transportPrice = parseFloat(carPriceParam);
+  } else {
+    const extraBagsCost = extraBags * 10;
+    transportPrice = Math.round(basePriceSum + pricePerKmSum * distanceKm) + extraBagsCost;
   }
 
   // Double transport cost for return trips
@@ -121,6 +122,11 @@ export default function Step3Details() {
 
   const isLoading = isBookingWithIdLoading || isBookingWithoutIdLoading;
 
+  const fromLat = searchParams.get("fromLat");
+  const fromLng = searchParams.get("fromLng");
+  const toLat = searchParams.get("toLat");
+  const toLng = searchParams.get("toLng");
+
   const handleBooking = async () => {
     const bookingVehiclesMap: Record<string, number> = {};
     if (vehicleId) {
@@ -139,11 +145,11 @@ export default function Step3Details() {
     const body = {
       clientName: `${firstName} ${lastName}`.trim() || "Guest User",
       from: pickupParam,
-      fromLat: transferRoute?.fromLat || 53.3498, // Example default if missing
-      fromLng: transferRoute?.fromLng || -6.2603,
+      fromLat: fromLat ? parseFloat(fromLat) : (transferRoute?.fromLat || 53.3498),
+      fromLng: fromLng ? parseFloat(fromLng) : (transferRoute?.fromLng || -6.2603),
       to: dropoffParam,
-      toLat: transferRoute?.toLat || 53.2707,
-      toLng: transferRoute?.toLng || -9.0568,
+      toLat: toLat ? parseFloat(toLat) : (transferRoute?.toLat || 53.2707),
+      toLng: toLng ? parseFloat(toLng) : (transferRoute?.toLng || -9.0568),
       serviceType: transferRoute?.serviceType || serviceTypeParam,
       travelDate: dateParam || new Date().toISOString().split("T")[0],
       timeSlot: {
@@ -163,11 +169,13 @@ export default function Step3Details() {
       bookingStoppages,
     };
 
+    console.log("Sending booking request with body:", body);
+
     try {
       let res;
-      const withoutIdTypes = ["TRANSFER", "BY_THE_HOUR", "PRIVATE_TRANSFER", "AIRPORT_TRANSFER"];
+      const withoutIdTypes = ["TRANSFER", "BY_THE_HOUR", "PRIVATE_TRANSFER", "AIRPORT_TRANSFER", "PRIVATE_CAR_TRANSFER"];
       
-      if (withoutIdTypes.includes(body.serviceType)) {
+      if (withoutIdTypes.includes(body.serviceType) || !tripId) {
         res = await createBookingWithoutId({ body }).unwrap();
       } else {
         const serviceId = tripId || transferRoute?.id || transferRoute?._id || "60d5ec49f3b0b30015f8e500";
@@ -176,9 +184,12 @@ export default function Step3Details() {
       const id = res?.data?.id || res?.data?._id || "";
       if (id) setBookingId(id);
       setShowModal(true);
-    } catch (e) {
-      console.error("Booking failed", e);
-      alert("Failed to process booking. Please try again.");
+    } catch (e: any) {
+      console.error("Booking failed. Full error:", JSON.stringify(e, null, 2));
+      console.error("Error status:", e?.status);
+      console.error("Error data (detailed):", JSON.stringify(e?.data, null, 2));
+      const errorMessage = e?.data?.message || e?.message || "Unknown error";
+      alert(`Failed to process booking: ${errorMessage}`);
     }
   };
 

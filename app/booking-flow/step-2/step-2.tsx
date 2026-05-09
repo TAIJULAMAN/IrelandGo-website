@@ -10,8 +10,8 @@ import { Footer } from "@/components/layout/footer";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import { useGetSingleDayTripQuery } from "@/Redux/features/dayTrip/dayTripApi";
-import { irishSettlements } from "@/lib/irish-settlements";
 import { useEffect } from "react";
+import { useJsApiLoader } from "@react-google-maps/api";
 import {
   Popover,
   PopoverContent,
@@ -19,6 +19,12 @@ import {
 } from "@/components/ui/popover";
 
 export default function Step2() {
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    libraries: ['places']
+  });
+
   const router = useRouter();
   const pathname = usePathname();
   const sliderRef = useRef<HTMLDivElement | null>(null);
@@ -80,7 +86,7 @@ export default function Step2() {
   const totalBags = adults + children + extraBags; // Every passenger gets a bag; extra bags add on top.
 
   const transferRouteParam = searchParams.get("transferRoute");
-  let transferRoute = null;
+  let transferRoute: any = null;
   try {
     if (transferRouteParam) {
       transferRoute = JSON.parse(transferRouteParam);
@@ -92,11 +98,12 @@ export default function Step2() {
   const [distanceKm, setDistanceKm] = useState<number | null>(
     transferRoute?.distanceKm || null,
   );
-
-  const pickupSettlement = irishSettlements.find((s) => s.name === pickupParam);
-  const dropoffSettlement = irishSettlements.find(
-    (s) => s.name === dropoffParam,
-  );
+  const [coords, setCoords] = useState<{
+    fromLat: number;
+    fromLng: number;
+    toLat: number;
+    toLng: number;
+  } | null>(null);
 
   useEffect(() => {
     if (serviceType === "DAY_TRIP" && dayTrip?.distanceKm) {
@@ -105,24 +112,35 @@ export default function Step2() {
   }, [dayTrip, serviceType]);
 
   useEffect(() => {
-    if (!transferRoute?.distanceKm && pickupSettlement && dropoffSettlement && serviceType !== "DAY_TRIP") {
-      const fetchRoute = async () => {
-        try {
-          const url = `https://router.project-osrm.org/route/v1/driving/${pickupSettlement.lng},${pickupSettlement.lat};${dropoffSettlement.lng},${dropoffSettlement.lat}?overview=false`;
-          const response = await fetch(url);
-          const data = await response.json();
-
-          if (data.routes && data.routes[0]) {
-            setDistanceKm(Math.round(data.routes[0].distance / 1000));
+    if (isLoaded && !transferRoute?.distanceKm && pickupParam && dropoffParam && serviceType !== "DAY_TRIP") {
+      const directionsService = new google.maps.DirectionsService();
+      
+      directionsService.route(
+        {
+          origin: pickupParam,
+          destination: dropoffParam,
+          travelMode: google.maps.TravelMode.DRIVING,
+        },
+        (result, status) => {
+          if (status === google.maps.DirectionsStatus.OK && result) {
+            const leg = result.routes[0].legs[0];
+            setDistanceKm(Math.round((leg.distance?.value || 0) / 1000));
+            setCoords({
+              fromLat: leg.start_location.lat(),
+              fromLng: leg.start_location.lng(),
+              toLat: leg.end_location.lat(),
+              toLng: leg.end_location.lng(),
+            });
+          } else {
+            const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST'];
+            if (!suppressedStatuses.includes(status)) {
+              console.error("Error fetching route:", status);
+            }
           }
-        } catch (error) {
-          console.error("Error fetching route:", error);
         }
-      };
-
-      fetchRoute();
+      );
     }
-  }, [pickupSettlement, dropoffSettlement, transferRoute, serviceType]);
+  }, [isLoaded, pickupParam, dropoffParam, transferRoute, serviceType]);
 
   const { data: vehiclesData, isLoading } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
@@ -786,7 +804,7 @@ export default function Step2() {
             <Link
               href={`/booking-flow/${serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "step-3-details" : "step-3"}?${searchParams.toString()}&vehicleId=${encodeURIComponent(
                 selectedVehicle || "",
-              )}&carPrice=${selectedPrice || 0}`}
+              )}&carPrice=${selectedPrice || 0}&distanceKm=${distanceKm || 0}${coords ? `&fromLat=${coords.fromLat}&fromLng=${coords.fromLng}&toLat=${coords.toLat}&toLng=${coords.toLng}` : ""}`}
             >
               {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP"
                 ? "Next: Checkout"
