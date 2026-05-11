@@ -10,13 +10,14 @@ import usePlacesAutocomplete, {
   getLatLng,
 } from "use-places-autocomplete";
 
-const libraries: ("places" | "drawing" | "geometry" | "localContext" | "visualization")[] = ["places"];
+const libraries: any = ["places"];
 
 export default function TransfersHero() {
   const router = useRouter();
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    libraries: libraries,
   });
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -34,6 +35,7 @@ export default function TransfersHero() {
       componentRestrictions: { country: "ie" }, // Restrict to Ireland
     },
     debounce: 300,
+    initOnMount: isLoaded,
   });
 
   useEffect(() => {

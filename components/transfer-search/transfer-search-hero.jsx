@@ -31,6 +31,9 @@ import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
+import { useJsApiLoader } from "@react-google-maps/api";
+
+const libraries = ["places"];
 
 const MapRoute = dynamic(
   () => import("../home/map-route").then((mod) => ({ default: mod.MapRoute })),
@@ -98,6 +101,12 @@ export default function TransferSearchHero() {
   const pickupDropdownRef = useRef(null);
   const dropoffDropdownRef = useRef(null);
 
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    libraries: libraries,
+  });
+
   const {
     ready: pickupReady,
     value: pickupValue,
@@ -110,6 +119,7 @@ export default function TransferSearchHero() {
     },
     debounce: 300,
     defaultValue: pickupLocation,
+    initOnMount: isLoaded,
   });
 
   const {
@@ -124,6 +134,7 @@ export default function TransferSearchHero() {
     },
     debounce: 300,
     defaultValue: dropoffLocation,
+    initOnMount: isLoaded,
   });
 
   // Handle keyboard navigation for pickup

@@ -30,7 +30,7 @@ import { FeatureBadges } from "../common/feature-badges";
 import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
-const libraries: ("places" | "drawing" | "geometry" | "visualization")[] = ["places"];
+const libraries: any = ["places"];
 
 const MapRoute = dynamic(
   () => import("./map-route").then((mod) => ({ default: mod.MapRoute })),

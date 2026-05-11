@@ -10,7 +10,7 @@ import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { cn } from "@/lib/utils";
 
-const LIBRARIES: ("places" | "drawing" | "geometry" | "visualization")[] = ["places"];
+const LIBRARIES: any = ["places"];
 
 export default function Hero() {
   const [activeTab, setActiveTab] = useState("day-trips");
@@ -40,6 +40,7 @@ export default function Hero() {
     },
     debounce: 300,
     defaultValue: location,
+    initOnMount: isLoaded,
   });
 
   const tabs = [

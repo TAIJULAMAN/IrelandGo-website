@@ -15,7 +15,7 @@ import { useState, useRef, useEffect } from "react";
 import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
-const libraries: ("places" | "drawing" | "geometry" | "visualization")[] = ["places"];
+const libraries: any = ["places"];
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FeatureBadges } from "../common/feature-badges";
@@ -61,6 +61,7 @@ export default function ByTheHourHero() {
       componentRestrictions: { country: "ie" },
     },
     debounce: 300,
+    initOnMount: isLoaded,
   });
 
   useEffect(() => {

@@ -22,9 +22,9 @@ interface MapRouteProps {
 
 export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
+        id: "google-map-script",
         googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-        libraries: ['places']
+        libraries: ["places"] as any
     })
 
     const [map, setMap] = useState<google.maps.Map | null>(null)

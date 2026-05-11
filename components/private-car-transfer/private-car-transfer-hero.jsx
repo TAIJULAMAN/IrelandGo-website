@@ -127,6 +127,7 @@ export default function PrivateCarTransferHero() {
     requestOptions: { componentRestrictions: { country: "ie" } },
     debounce: 300,
     defaultValue: pickupLocation,
+    initOnMount: isLoaded,
   });
 
   const {
@@ -139,6 +140,7 @@ export default function PrivateCarTransferHero() {
     requestOptions: { componentRestrictions: { country: "ie" } },
     debounce: 300,
     defaultValue: dropoffLocation,
+    initOnMount: isLoaded,
   });
 
   // Handle keyboard navigation for pickup

@@ -14,7 +14,7 @@ import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { useSearchParams } from "next/navigation";
 
-const LIBRARIES: ("places" | "drawing" | "geometry" | "visualization")[] = ["places"];
+const LIBRARIES: any = ["places"];
 
 export function SearchHero({ trip }: { trip?: any }) {
   const searchParams = useSearchParams();
@@ -63,6 +63,7 @@ export function SearchHero({ trip }: { trip?: any }) {
     requestOptions: { componentRestrictions: { country: "ie" } },
     debounce: 300,
     defaultValue: pickupLocation,
+    initOnMount: isLoaded,
   });
 
   const {
@@ -75,6 +76,7 @@ export function SearchHero({ trip }: { trip?: any }) {
     requestOptions: { componentRestrictions: { country: "ie" } },
     debounce: 300,
     defaultValue: dropoffLocation,
+    initOnMount: isLoaded,
   });
 
   // Handle keyboard navigation for pickup
