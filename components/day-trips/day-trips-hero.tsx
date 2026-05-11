@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FeatureBadges } from "../common/feature-badges";
 import { Header } from "../common/header";
-import { useJsApiLoader, Library } from "@react-google-maps/api";
+import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { cn } from "@/lib/utils";
 
-const LIBRARIES: Library[] = ["places"];
+const LIBRARIES: ("places" | "drawing" | "geometry" | "visualization")[] = ["places"];
 
 export default function Hero() {
   const [activeTab, setActiveTab] = useState("day-trips");
@@ -121,8 +121,8 @@ export default function Hero() {
                   key={tab.id}
                   onClick={() => handleTabClick(tab)}
                   className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
-                      ? "bg-white text-gray-900 shadow-md"
-                      : "bg-transparent text-white hover:bg-white/10"
+                    ? "bg-white text-gray-900 shadow-md"
+                    : "bg-transparent text-white hover:bg-white/10"
                     }`}
                 >
                   {tab.label}

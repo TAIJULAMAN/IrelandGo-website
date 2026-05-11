@@ -10,15 +10,15 @@ import { Calendar } from "@/components/ui/calendar";
 import { useState, useRef, useEffect } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { useJsApiLoader, Library } from "@react-google-maps/api";
+import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { useSearchParams } from "next/navigation";
 
-const LIBRARIES: Library[] = ["places"];
+const LIBRARIES: ("places" | "drawing" | "geometry" | "visualization")[] = ["places"];
 
 export function SearchHero({ trip }: { trip?: any }) {
   const searchParams = useSearchParams();
-  
+
   // URL Params
   const pickupParam = searchParams.get("pickup") || "";
   const dropoffParam = searchParams.get("dropoff") || "";
@@ -34,7 +34,7 @@ export function SearchHero({ trip }: { trip?: any }) {
   const [extraBags, setExtraBags] = useState<number>(extraBagsParam);
   const [date, setDate] = useState<Date | undefined>(dateParam ? new Date(dateParam) : undefined);
   const [time, setTime] = useState(timeParam);
-  
+
   const [pickupLocation, setPickupLocation] = useState(pickupParam || trip?.from || "");
   const [dropoffLocation, setDropoffLocation] = useState(dropoffParam || trip?.to || "");
   const [showPickupDropdown, setShowPickupDropdown] = useState(false);

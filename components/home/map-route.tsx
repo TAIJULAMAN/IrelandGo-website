@@ -39,15 +39,14 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
         setMap(null)
     }, [])
 
-    // Fetch directions
     useEffect(() => {
         if (isLoaded && pickup?.name && dropoff?.name && pickup.name.length > 5 && dropoff.name.length > 5) {
             const directionsService = new google.maps.DirectionsService();
-            
+
             const origin = (pickup.lat !== undefined && pickup.lng !== undefined)
                 ? { lat: pickup.lat, lng: pickup.lng }
                 : pickup.name;
-            
+
             const destination = (dropoff.lat !== undefined && dropoff.lng !== undefined)
                 ? { lat: dropoff.lat, lng: dropoff.lng }
                 : dropoff.name;
@@ -65,7 +64,6 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                             setDistance(result.routes[0].legs[0].distance.text);
                         }
                     } else {
-                        // Suppress common errors that happen during typing or invalid locations
                         const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST', 'REQUEST_DENIED', 'OVER_QUERY_LIMIT'];
                         if (!suppressedStatuses.includes(status)) {
                             console.error(`error fetching directions: ${status}`);
@@ -81,11 +79,10 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
         }
     }, [isLoaded, pickup?.name, pickup?.lat, pickup?.lng, dropoff?.name, dropoff?.lat, dropoff?.lng]);
 
-    // Fit bounds when locations change (if directions not available yet)
     useEffect(() => {
         if (map && (pickup || dropoff) && !directions) {
             const bounds = new google.maps.LatLngBounds();
-            
+
             if (pickup && pickup.lat !== undefined && pickup.lng !== undefined) {
                 bounds.extend({ lat: pickup.lat, lng: pickup.lng });
             }
@@ -112,6 +109,28 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
             </div>
         )
     }
+    const getPickupPos = () => {
+        if (pickup?.lat !== undefined && pickup?.lng !== undefined) {
+            return { lat: pickup.lat, lng: pickup.lng };
+        }
+        if (directions && directions.routes[0]?.legs[0]?.start_location) {
+            return directions.routes[0].legs[0].start_location;
+        }
+        return null;
+    };
+
+    const getDropoffPos = () => {
+        if (dropoff?.lat !== undefined && dropoff?.lng !== undefined) {
+            return { lat: dropoff.lat, lng: dropoff.lng };
+        }
+        if (directions && directions.routes[0]?.legs[0]?.end_location) {
+            return directions.routes[0].legs[0].end_location;
+        }
+        return null;
+    };
+
+    const pickupPos = getPickupPos();
+    const dropoffPos = getDropoffPos();
 
     return (
         <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-200" style={{ minHeight: '340px' }}>
@@ -132,6 +151,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                     <DirectionsRenderer
                         directions={directions}
                         options={{
+                            suppressMarkers: true, // Disable default A/B markers
                             polylineOptions: {
                                 strokeColor: "#3b82f6",
                                 strokeWeight: 5,
@@ -140,17 +160,16 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                         }}
                     />
                 )}
-
-                {!directions && pickup && pickup.lat !== undefined && pickup.lng !== undefined && (
+                {pickupPos && (
                     <MarkerF
-                        position={{ lat: pickup.lat, lng: pickup.lng }}
+                        position={pickupPos}
                         label={{ text: "P", color: "white" }}
                     />
                 )}
 
-                {!directions && dropoff && dropoff.lat !== undefined && dropoff.lng !== undefined && (
+                {dropoffPos && (
                     <MarkerF
-                        position={{ lat: dropoff.lat, lng: dropoff.lng }}
+                        position={dropoffPos}
                         label={{ text: "D", color: "white" }}
                     />
                 )}
