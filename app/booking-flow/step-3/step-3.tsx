@@ -80,6 +80,12 @@ export default function Step3() {
     type: stop.type || (stop.types && stop.types[0]) || "Activity",
   }));
 
+  const sortedStops = [...stops].sort((a, b) => 
+    (b.totalRatings || b.user_ratings_total || b.rating || 0) - (a.totalRatings || a.user_ratings_total || a.rating || 0)
+  );
+  const mostPopularId = sortedStops[0]?.id;
+  const recommendedId = sortedStops[1]?.id;
+
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
 
@@ -221,18 +227,14 @@ export default function Step3() {
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                        <div className="absolute top-3 left-3 flex items-center bg-white/95 backdrop-blur-sm shadow-sm rounded-md px-2 py-1 gap-1">
-                          <span className="text-blue-600">
-                            {isSelected ? (
-                              <CheckCircle2 className="w-3 h-3 text-blue-600" />
-                            ) : (
-                              <span className="text-yellow-500 text-[10px]">★</span>
-                            )}
-                          </span>
-                          <span className="text-[10px] font-bold text-gray-800 uppercase tracking-wide">
-                            {stop.type || "Activity"}
-                          </span>
-                        </div>
+                        {(stop.id === mostPopularId || stop.id === recommendedId) && (
+                          <div className="absolute top-3 left-3 flex items-center bg-white/95 backdrop-blur-sm shadow-sm rounded-md px-2 py-1 gap-1">
+                            <span className="text-yellow-500 text-[10px]">★</span>
+                            <span className="text-[10px] font-bold text-gray-800 uppercase tracking-wide">
+                              {stop.id === mostPopularId ? "Most Popular" : "Recommended"}
+                            </span>
+                          </div>
+                        )}
                         <h3 className="absolute bottom-3 left-4 text-white text-lg font-bold">
                           {stop.name}
                         </h3>
@@ -438,6 +440,6 @@ export default function Step3() {
       </div>
 
       <Footer />
-    </section>
+    </section >
   );
 }

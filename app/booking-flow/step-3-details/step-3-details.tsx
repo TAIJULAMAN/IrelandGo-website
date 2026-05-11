@@ -8,9 +8,9 @@ import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { X, CheckCircle2 } from "lucide-react";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
-import { 
+import {
   useCreateBookingUsingServiceIdMutation,
-  useCreateBookingWithoutIdMutation 
+  useCreateBookingWithoutIdMutation
 } from "@/Redux/features/booking/bookingApi";
 
 export default function Step3Details() {
@@ -45,14 +45,14 @@ export default function Step3Details() {
   if (transferRouteParam) {
     try {
       transferRoute = JSON.parse(transferRouteParam);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   let selectedStops: any[] = [];
   if (selectedStopsParam) {
     try {
       selectedStops = JSON.parse(selectedStopsParam);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
@@ -112,7 +112,7 @@ export default function Step3Details() {
         month: "short",
         day: "numeric",
       });
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const [createBookingUsingServiceId, { isLoading: isBookingWithIdLoading }] =
@@ -144,8 +144,6 @@ export default function Step3Details() {
 
     let safeTravelDate = dateParam || new Date().toISOString();
     if (new Date(safeTravelDate) < new Date()) {
-      // If the selected date is technically in the past (e.g. due to time spent filling the form),
-      // bump it to slightly in the future to pass strict backend Zod validation
       safeTravelDate = new Date(Date.now() + 2 * 60000).toISOString();
     }
 
@@ -181,7 +179,7 @@ export default function Step3Details() {
     try {
       let res;
       const withoutIdTypes = ["TRANSFER", "BY_THE_HOUR", "PRIVATE_TRANSFER", "AIRPORT_TRANSFER", "PRIVATE_CAR_TRANSFER"];
-      
+
       if (withoutIdTypes.includes(body.serviceType) || !tripId) {
         res = await createBookingWithoutId({ body }).unwrap();
       } else {
