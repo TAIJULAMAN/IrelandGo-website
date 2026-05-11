@@ -814,9 +814,13 @@ export default function Step2() {
               }`}
           >
             <Link
+              onClick={(e) => {
+                if (!selectedVehicle) e.preventDefault();
+              }}
               href={`/booking-flow/${serviceType === "TRANSFER" || serviceType === "PRIVATE_TRANSFER" || serviceType === "AIRPORT_TRANSFER" ? "step-3" : "step-3-details"}?${searchParams.toString()}&vehicleId=${encodeURIComponent(
                 selectedVehicle || "",
               )}&carPrice=${selectedPrice || 0}&distanceKm=${distanceKm || 0}${coords ? `&fromLat=${coords.fromLat}&fromLng=${coords.fromLng}&toLat=${coords.toLat}&toLng=${coords.toLng}` : ""}`}
+              className={!selectedVehicle ? "pointer-events-none" : ""}
             >
               {serviceType === "TRANSFER" || serviceType === "PRIVATE_TRANSFER" || serviceType === "AIRPORT_TRANSFER"
                 ? "Next: Add Stops"

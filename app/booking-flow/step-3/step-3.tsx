@@ -426,7 +426,7 @@ export default function Step3() {
               >
                 <Link
                   href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
-                    JSON.stringify(selectedStops),
+                    JSON.stringify(selectedStops.map(s => ({ id: s.id, name: s.name, price: s.price, duration: s.duration })))
                   )}&distanceKm=${distanceKm}${coordsParam}`}
                 >
                   Next: Checkout

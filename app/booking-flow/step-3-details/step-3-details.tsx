@@ -142,6 +142,13 @@ export default function Step3Details() {
       quantity: 1,
     }));
 
+    let safeTravelDate = dateParam || new Date().toISOString();
+    if (new Date(safeTravelDate) < new Date()) {
+      // If the selected date is technically in the past (e.g. due to time spent filling the form),
+      // bump it to slightly in the future to pass strict backend Zod validation
+      safeTravelDate = new Date(Date.now() + 2 * 60000).toISOString();
+    }
+
     const body = {
       clientName: `${firstName} ${lastName}`.trim() || "Guest User",
       from: pickupParam,
@@ -151,7 +158,7 @@ export default function Step3Details() {
       toLat: toLat ? parseFloat(toLat) : (transferRoute?.toLat || 53.2707),
       toLng: toLng ? parseFloat(toLng) : (transferRoute?.toLng || -9.0568),
       serviceType: transferRoute?.serviceType || serviceTypeParam,
-      travelDate: dateParam || new Date().toISOString().split("T")[0],
+      travelDate: safeTravelDate,
       timeSlot: {
         start: timeParam || "09:00 AM",
         end: timeParam || "09:00 AM",
