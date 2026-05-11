@@ -11,7 +11,11 @@ import {
   Plus,
 } from "lucide-react";
 import { Header } from "../common/header";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useJsApiLoader } from "@react-google-maps/api";
+import usePlacesAutocomplete from "use-places-autocomplete";
+
+const libraries: ("places" | "drawing" | "geometry" | "visualization")[] = ["places"];
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FeatureBadges } from "../common/feature-badges";
@@ -25,29 +29,6 @@ import {
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
-const LOCATIONS = [
-  "All Locations",
-  "Dublin",
-  "Galway",
-  "Cork",
-  "Belfast",
-  "Limerick",
-  "Killarney",
-  "Waterford",
-  "Derry",
-  "Sligo",
-  "Kilkenny",
-  "Wexford",
-  "Tralee",
-  "Ennis",
-  "Drogheda",
-  "Dundalk",
-  "Bray",
-  "Navan",
-  "Athlone",
-  "Shannon Airport",
-];
-
 export default function ByTheHourHero() {
   const [activeTab, setActiveTab] = useState("by-the-hour");
   const router = useRouter();
@@ -60,10 +41,70 @@ export default function ByTheHourHero() {
   const [children, setChildren] = useState(0);
   const [extraBags, setExtraBags] = useState(0);
   const [pickupLocation, setPickupLocation] = useState("");
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Derived state
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    libraries,
+  });
+
+  const {
+    suggestions: { status, data },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      componentRestrictions: { country: "ie" },
+    },
+    debounce: 300,
+  });
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelect = (description: string) => {
+    setPickupLocation(description);
+    setValue(description, false);
+    clearSuggestions();
+    setShowDropdown(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const totalItems = data.length;
+    if (showDropdown && totalItems > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev < totalItems - 1 ? prev + 1 : prev));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
+      } else if (e.key === "Enter" && selectedIndex >= 0) {
+        e.preventDefault();
+        handleSelect(data[selectedIndex].description);
+      } else if (e.key === "Escape") {
+        setShowDropdown(false);
+      }
+    }
+  };
+
   const totalPassengers = adults + children;
-
   const tabs = [
     { id: "transfer", label: "Transfer", href: "/" },
     { id: "by-the-hour", label: "By the hour", href: "/by-the-hour" },
@@ -87,10 +128,8 @@ export default function ByTheHourHero() {
           className="w-full h-full object-cover"
         />
       </div>
-
       <div className="relative z-10">
         <Header />
-
         <div className="max-w-7xl mx-auto px-5 py-16 text-center">
           <h1 className="text-5xl md:text-6xl font-bold mb-4 mt-8">
             Book a Private Driver by the Hour – Travel Your Way
@@ -105,11 +144,10 @@ export default function ByTheHourHero() {
                 <button
                   key={tab.id}
                   onClick={() => handleTabClick(tab)}
-                  className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all flex items-center gap-2 whitespace-nowrap ${
-                    activeTab === tab.id
-                      ? "bg-white text-gray-900 shadow-md"
-                      : "bg-transparent text-white hover:bg-white/10"
-                  }`}
+                  className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
+                    ? "bg-white text-gray-900 shadow-md"
+                    : "bg-transparent text-white hover:bg-white/10"
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -125,47 +163,57 @@ export default function ByTheHourHero() {
                   <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
                     Pickup Location
                   </label>
-                  <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
-                        >
-                          <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
-                            <span className="text-sm">
-                              {pickupLocation || "Select pickup location"}
-                            </span>
-                          </div>
-                          <ChevronDown className="w-4 h-4 text-gray-400" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[200px] p-1" align="start">
-                        <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
-                          <div className="p-1 flex flex-col gap-1">
-                            {LOCATIONS.map((loc) => {
-                              const isSelected = pickupLocation === loc;
-                              return (
-                                <Button
-                                  key={loc}
-                                  variant="ghost"
-                                  className={cn(
-                                    "w-full justify-start font-normal h-9 px-3 transition-colors",
-                                    isSelected
-                                      ? "bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 hover:text-blue-700"
-                                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
-                                  )}
-                                  onClick={() => setPickupLocation(loc)}
-                                >
-                                  {loc}
-                                </Button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
+                  <div className="relative">
+                    <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
+                      <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        placeholder="Select pickup location"
+                        className="w-full bg-transparent outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                        value={pickupLocation}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setPickupLocation(val);
+                          setValue(val);
+                          setShowDropdown(true);
+                          setSelectedIndex(-1);
+                        }}
+                        onFocus={() => setShowDropdown(true)}
+                        onKeyDown={handleKeyDown}
+                      />
+                    </div>
+
+                    {/* Autocomplete Dropdown */}
+                    {showDropdown && status === "OK" && (
+                      <div
+                        ref={dropdownRef}
+                        className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-80 overflow-y-auto z-50"
+                      >
+                        {data.map((suggestion, index) => (
+                          <button
+                            key={suggestion.place_id}
+                            onClick={() => handleSelect(suggestion.description)}
+                            className={cn(
+                              "w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0",
+                              index === selectedIndex ? "bg-blue-50" : "",
+                            )}
+                          >
+                            <div className="flex items-center gap-2">
+                              <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                              <div>
+                                <div className="text-sm font-medium text-gray-900">
+                                  {suggestion.structured_formatting.main_text}
+                                </div>
+                                <div className="text-xs text-gray-500">
+                                  {suggestion.structured_formatting.secondary_text}
+                                </div>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
