@@ -2,14 +2,14 @@ import { baseApi } from "../baseApi";
 
 const stopageApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getStops: builder.query({
-      query: () => ({
-        url: `stoppages`,
-        method: "GET",
+    searchPopularStops: builder.mutation({
+      query: (data) => ({
+        url: `stoppages/search-stoppage/popular`,
+        method: "POST",
+        body: data,
       }),
-      providesTags: ["stopages"],
     }),
   }),
 });
 
-export const { useGetStopsQuery } = stopageApi;
+export const { useSearchPopularStopsMutation } = stopageApi;

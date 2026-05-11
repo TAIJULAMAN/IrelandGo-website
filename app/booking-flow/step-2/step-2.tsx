@@ -81,9 +81,8 @@ export default function Step2() {
     }
   };
 
-  // Passengers = actual people only. Extra bags increase bag count, not seat count.
   const totalPassengers = adults + children;
-  const totalBags = adults + children + extraBags; // Every passenger gets a bag; extra bags add on top.
+  const totalBags = adults + children + extraBags;
 
   const transferRouteParam = searchParams.get("transferRoute");
   let transferRoute: any = null;
@@ -114,7 +113,7 @@ export default function Step2() {
   useEffect(() => {
     if (isLoaded && !transferRoute?.distanceKm && pickupParam && dropoffParam && serviceType !== "DAY_TRIP") {
       const directionsService = new google.maps.DirectionsService();
-      
+
       directionsService.route(
         {
           origin: pickupParam,
@@ -192,7 +191,6 @@ export default function Step2() {
       }
     }
 
-    // Remove duplicates based on combination ID and sort them by price
     const uniqueOptionsMap = new Map();
     options.forEach((combo) => {
       const id = combo
@@ -672,11 +670,10 @@ export default function Step2() {
                       onClick={() => setSelectedVehicle(option.id)}
                     >
                       <div
-                        className={`bg-white rounded-2xl shadow-lg p-5 flex flex-col hover:shadow-2xl transition-all duration-300 cursor-pointer h-full border-2 ${
-                          selectedVehicle === option.id
-                            ? "border-blue-600 ring-4 ring-blue-100"
-                            : "border-transparent hover:border-blue-300"
-                        }`}
+                        className={`bg-white rounded-2xl shadow-lg p-5 flex flex-col hover:shadow-2xl transition-all duration-300 cursor-pointer h-full border-2 ${selectedVehicle === option.id
+                          ? "border-blue-600 ring-4 ring-blue-100"
+                          : "border-transparent hover:border-blue-300"
+                          }`}
                         onClick={() => {
                           setSelectedVehicle(option.id);
                           setSelectedPrice(totalPrice);
@@ -764,11 +761,10 @@ export default function Step2() {
 
                         {/* Select Button */}
                         <button
-                          className={`mt-auto w-full py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${
-                            selectedVehicle === option.id
-                              ? "bg-blue-600 text-white shadow-md"
-                              : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-700"
-                          }`}
+                          className={`mt-auto w-full py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${selectedVehicle === option.id
+                            ? "bg-blue-600 text-white shadow-md"
+                            : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                            }`}
                         >
                           {selectedVehicle === option.id
                             ? "Selected"
@@ -795,20 +791,19 @@ export default function Step2() {
           <Button
             asChild
             disabled={!selectedVehicle}
-            className={`px-10 sm:px-12 py-2.5 sm:py-3 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ${
-              selectedVehicle
-                ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
-                : "bg-gray-300 cursor-not-allowed"
-            }`}
+            className={`px-10 sm:px-12 py-2.5 sm:py-3 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ${selectedVehicle
+              ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+              : "bg-gray-300 cursor-not-allowed"
+              }`}
           >
             <Link
-              href={`/booking-flow/${serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "step-3-details" : "step-3"}?${searchParams.toString()}&vehicleId=${encodeURIComponent(
+              href={`/booking-flow/${serviceType === "TRANSFER" || serviceType === "PRIVATE_TRANSFER" || serviceType === "AIRPORT_TRANSFER" ? "step-3" : "step-3-details"}?${searchParams.toString()}&vehicleId=${encodeURIComponent(
                 selectedVehicle || "",
               )}&carPrice=${selectedPrice || 0}&distanceKm=${distanceKm || 0}${coords ? `&fromLat=${coords.fromLat}&fromLng=${coords.fromLng}&toLat=${coords.toLat}&toLng=${coords.toLng}` : ""}`}
             >
-              {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP"
-                ? "Next: Checkout"
-                : "Next: Add Stops"}
+              {serviceType === "TRANSFER" || serviceType === "PRIVATE_TRANSFER" || serviceType === "AIRPORT_TRANSFER"
+                ? "Next: Add Stops"
+                : "Next: Checkout"}
             </Link>
           </Button>
         </div>

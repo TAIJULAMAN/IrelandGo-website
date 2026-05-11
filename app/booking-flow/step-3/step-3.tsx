@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { Clock, MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car } from "lucide-react";
+import { MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car } from "lucide-react";
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 
-import { useGetStopsQuery } from "@/Redux/features/stopage/stopageApi";
+import { useSearchPopularStopsMutation } from "@/Redux/features/stopage/stopageApi";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -17,21 +17,6 @@ function formatDuration(minutes: number) {
   if (h > 0 && m > 0) return `${h}h ${m}m`;
   if (h > 0) return `${h}h`;
   return `${m}m`;
-}
-
-function getTagColor(type: string) {
-  switch (type?.toLowerCase()) {
-    case "nature":
-      return "bg-emerald-600";
-    case "museum":
-      return "bg-blue-600";
-    case "heritage":
-      return "bg-orange-500";
-    case "religious":
-      return "bg-purple-600";
-    default:
-      return "bg-gray-600";
-  }
 }
 
 export default function Step3() {
@@ -52,7 +37,7 @@ export default function Step3() {
   const serviceType = searchParams.get("serviceType") || "TRANSFER";
 
   useEffect(() => {
-    if (serviceType === "DAY_TRIP") {
+    if (serviceType === "DAY_TRIP" || serviceType === "BY_THE_HOUR") {
       router.replace(`/booking-flow/step-3-details?${searchParams.toString()}`);
     }
   }, [serviceType, searchParams, router]);
@@ -62,27 +47,54 @@ export default function Step3() {
     try {
       const parsed = JSON.parse(transferRouteParam);
       distanceKm = parsed.distanceKm || 0;
-    } catch (e) {}
+    } catch (e) { }
   }
 
-  const { data: stopsResponse, isLoading, error } = useGetStopsQuery({});
-  const stops = stopsResponse?.data || [];
+  const [searchPopularStops, { data: popularStopsResponse, isLoading, error }] = useSearchPopularStopsMutation();
+
+  const fromLat = searchParams.get("fromLat");
+  const fromLng = searchParams.get("fromLng");
+  const toLat = searchParams.get("toLat");
+  const toLng = searchParams.get("toLng");
+
+  useEffect(() => {
+    if (fromLat && fromLng && toLat && toLng) {
+      searchPopularStops({
+        to: {
+          location: dropoffParam,
+          coordinates: [parseFloat(toLat), parseFloat(toLng)],
+        },
+        from: {
+          location: pickupParam,
+          coordinates: [parseFloat(fromLat), parseFloat(fromLng)],
+        },
+      });
+    }
+  }, [fromLat, fromLng, toLat, toLng, dropoffParam, pickupParam, searchPopularStops]);
+
+  const stops = (popularStopsResponse?.data?.data || []).map((stop: any) => ({
+    ...stop,
+    duration: stop.duration || 60,
+    price: stop.price || 20,
+    image: Array.isArray(stop.image) ? stop.image : [stop.image].filter(Boolean),
+    type: stop.type || (stop.types && stop.types[0]) || "Activity",
+  }));
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
-  
+
   const carPriceParam = searchParams.get("carPrice");
-  
+
   let transportPrice = 0;
   let vehicleName = "Vehicle";
-  
+
   if (vehicleId && vehicles.length > 0) {
     const ids = vehicleId.split("+");
     const selectedVehicles = ids.map((id: string) => vehicles.find((v: any) => v.id === id)).filter(Boolean);
-    
+
     if (selectedVehicles.length > 0) {
       vehicleName = selectedVehicles.map((v: any) => v.name).join(" + ");
-      
+
       if (carPriceParam) {
         transportPrice = parseFloat(carPriceParam);
       } else {
@@ -115,10 +127,6 @@ export default function Step3() {
     }
   }
 
-  const fromLat = searchParams.get("fromLat");
-  const fromLng = searchParams.get("fromLng");
-  const toLat = searchParams.get("toLat");
-  const toLng = searchParams.get("toLng");
   const coordsParam = fromLat ? `&fromLat=${fromLat}&fromLng=${fromLng}&toLat=${toLat}&toLng=${toLng}` : "";
 
   return (
@@ -197,11 +205,10 @@ export default function Step3() {
                     <div
                       key={stop.id}
                       onClick={() => toggleStop(stop)}
-                      className={`relative bg-white rounded-2xl overflow-hidden flex flex-col transition-all cursor-pointer border-2 ${
-                        isSelected
-                          ? "border-blue-600 ring-2 ring-blue-100 shadow-lg"
-                          : "border-transparent shadow-md hover:border-blue-300 hover:shadow-lg"
-                      }`}
+                      className={`relative bg-white rounded-2xl overflow-hidden flex flex-col transition-all cursor-pointer border-2 ${isSelected
+                        ? "border-blue-600 ring-2 ring-blue-100 shadow-lg"
+                        : "border-transparent shadow-md hover:border-blue-300 hover:shadow-lg"
+                        }`}
                     >
                       <div className="relative h-44 w-full">
                         <img
@@ -232,9 +239,8 @@ export default function Step3() {
                       </div>
 
                       <div
-                        className={`p-4 flex items-center justify-between transition-colors ${
-                          isSelected ? "bg-blue-600" : "bg-white"
-                        }`}
+                        className={`p-4 flex items-center justify-between transition-colors ${isSelected ? "bg-blue-600" : "bg-white"
+                          }`}
                       >
                         <div className="flex items-center gap-1 text-sm font-medium">
                           <span
@@ -260,11 +266,10 @@ export default function Step3() {
                           </span>
                         </div>
                         <div
-                          className={`flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition-colors ${
-                            isSelected
-                              ? "bg-white text-blue-600 hover:bg-gray-100"
-                              : "bg-blue-600 text-white hover:bg-blue-700"
-                          }`}
+                          className={`flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition-colors ${isSelected
+                            ? "bg-white text-blue-600 hover:bg-gray-100"
+                            : "bg-blue-600 text-white hover:bg-blue-700"
+                            }`}
                         >
                           {isSelected ? (
                             <Pencil className="h-4 w-4" />
@@ -278,13 +283,6 @@ export default function Step3() {
                 })}
               </div>
             )}
-
-            <button
-              type="button"
-              className="text-xs sm:text-sm text-gray-500 hover:text-blue-600 font-medium underline-offset-4 hover:underline"
-            >
-              Skip stop selection
-            </button>
           </div>
 
           {/* Itinerary card */}
