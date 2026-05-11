@@ -74,8 +74,8 @@ export default function Step3() {
 
   const stops = (popularStopsResponse?.data?.data || []).map((stop: any) => ({
     ...stop,
-    duration: stop.duration || 60,
-    price: stop.price || 20,
+    duration: stop.duration !== undefined ? stop.duration : 60,
+    price: stop.price !== undefined ? stop.price : 20,
     image: Array.isArray(stop.image) ? stop.image : [stop.image].filter(Boolean),
     type: stop.type || (stop.types && stop.types[0]) || "Activity",
   }));

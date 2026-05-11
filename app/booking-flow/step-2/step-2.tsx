@@ -111,35 +111,52 @@ export default function Step2() {
   }, [dayTrip, serviceType]);
 
   useEffect(() => {
-    if (isLoaded && !transferRoute?.distanceKm && pickupParam && dropoffParam && serviceType !== "DAY_TRIP") {
-      const directionsService = new google.maps.DirectionsService();
+    let isMounted = true;
+    if (isLoaded && pickupParam && dropoffParam && serviceType !== "DAY_TRIP") {
+      // If we don't have coords OR we don't have distanceKm, we must run DirectionsService
+      if (!coords || !distanceKm) {
+        const directionsService = new google.maps.DirectionsService();
 
-      directionsService.route(
-        {
-          origin: pickupParam,
-          destination: dropoffParam,
-          travelMode: google.maps.TravelMode.DRIVING,
-        },
-        (result, status) => {
-          if (status === google.maps.DirectionsStatus.OK && result) {
-            const leg = result.routes[0].legs[0];
-            setDistanceKm(Math.round((leg.distance?.value || 0) / 1000));
-            setCoords({
-              fromLat: leg.start_location.lat(),
-              fromLng: leg.start_location.lng(),
-              toLat: leg.end_location.lat(),
-              toLng: leg.end_location.lng(),
-            });
-          } else {
-            const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST'];
-            if (!suppressedStatuses.includes(status)) {
-              console.error("Error fetching route:", status);
+        directionsService.route(
+          {
+            origin: pickupParam,
+            destination: dropoffParam,
+            travelMode: google.maps.TravelMode.DRIVING,
+          },
+          (result, status) => {
+            if (!isMounted) return;
+            
+            if (status === google.maps.DirectionsStatus.OK && result) {
+              const leg = result.routes[0].legs[0];
+              
+              // Only set distanceKm if it wasn't provided by transferRoute
+              if (!transferRoute?.distanceKm) {
+                setDistanceKm(Math.round((leg.distance?.value || 0) / 1000));
+              }
+              
+              // Always capture coordinates if missing, required for step 3
+              if (!coords) {
+                setCoords({
+                  fromLat: leg.start_location.lat(),
+                  fromLng: leg.start_location.lng(),
+                  toLat: leg.end_location.lat(),
+                  toLng: leg.end_location.lng(),
+                });
+              }
+            } else {
+              const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST'];
+              if (!suppressedStatuses.includes(status)) {
+                console.error("Error fetching route:", status);
+              }
             }
           }
-        }
-      );
+        );
+      }
     }
-  }, [isLoaded, pickupParam, dropoffParam, transferRoute, serviceType]);
+    return () => {
+      isMounted = false;
+    };
+  }, [isLoaded, pickupParam, dropoffParam, transferRoute, serviceType, coords, distanceKm]);
 
   const { data: vehiclesData, isLoading } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
