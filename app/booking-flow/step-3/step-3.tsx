@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car } from "lucide-react";
+import { MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car, ChevronLeft, ChevronRight, Minus, AlertCircle, Clock, Map } from "lucide-react";
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 
-import { useSearchPopularStopsMutation } from "@/Redux/features/stopage/stopageApi";
+import { useSearchPopularStopsMutation, useGetSingleStoppageQuery } from "@/Redux/features/stopage/stopageApi";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -17,6 +17,128 @@ function formatDuration(minutes: number) {
   if (h > 0 && m > 0) return `${h}h ${m}m`;
   if (h > 0) return `${h}h`;
   return `${m}m`;
+}
+
+function SingleStoppageModal({
+  stopId,
+  onClose,
+  baseStop,
+  existingStop,
+  onAddOrUpdate,
+  onRemove,
+  calculatePrice
+}: any) {
+  const { data, isFetching } = useGetSingleStoppageQuery(stopId, { skip: !stopId });
+  const stopData = data?.data?.data || data?.data || baseStop;
+
+  const [durationMinutes, setDurationMinutes] = useState(existingStop ? existingStop.duration : (stopData?.duration || 120));
+  const [imgIndex, setImgIndex] = useState(0);
+
+  useEffect(() => {
+    if (existingStop && durationMinutes !== existingStop.duration) {
+      onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) });
+    }
+  }, [durationMinutes]);
+
+  if (!stopId) return null;
+
+  const images = Array.isArray(stopData?.image) ? stopData.image : [stopData?.image].filter(Boolean);
+  if (images.length === 0) images.push("/placeholder.png");
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="bg-white rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-xl font-bold text-gray-900">{stopData?.name || baseStop?.name}</h2>
+          <button onClick={onClose} className="p-1.5 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
+            <X className="h-5 w-5 text-gray-600" />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 vehicle-scroll">
+          {isFetching ? (
+            <div className="flex justify-center items-center h-48">
+              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+            </div>
+          ) : (
+            <>
+              <div className="relative h-64 w-full rounded-xl overflow-hidden group">
+                <img src={images[imgIndex]} alt={stopData?.name} className="w-full h-full object-cover" />
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i === 0 ? images.length - 1 : i - 1)); }}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 bg-white/80 rounded-full shadow-sm hover:bg-white text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i === images.length - 1 ? 0 : i + 1)); }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-white/80 rounded-full shadow-sm hover:bg-white text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                      {images.map((_: any, idx: number) => (
+                        <div key={idx} className={`h-1.5 rounded-full transition-all ${idx === imgIndex ? "w-4 bg-white" : "w-1.5 bg-white/60"}`} />
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+                <div className="flex-1 min-w-[100px]">
+                  <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
+                    <Clock className="h-3.5 w-3.5 text-purple-500" /> Suggested time
+                  </div>
+                  <div className="font-semibold text-sm">{formatDuration(stopData?.duration || 120)}</div>
+                </div>
+                <div className="flex-1 min-w-[100px] border-l border-gray-200 pl-3">
+                  <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
+                    <Map className="h-3.5 w-3.5 text-green-500" /> Attraction type
+                  </div>
+                  <div className="font-semibold text-sm">{stopData?.type || stopData?.types?.[0] || "Traveler favorite"}</div>
+                </div>
+                <div className="flex-1 min-w-[100px] border-l border-gray-200 pl-3">
+                  <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
+                    <AlertCircle className="h-3.5 w-3.5 text-yellow-500" /> Entrance
+                  </div>
+                  <div className="font-semibold text-sm">Not included</div>
+                </div>
+              </div>
+
+              <p className="text-gray-600 text-sm leading-relaxed">
+                {stopData?.description || "A beautiful attraction to add to your journey."}
+              </p>
+            </>
+          )}
+        </div>
+
+        <div className="p-4 border-t flex items-center justify-between gap-4 bg-white">
+          <div className="flex items-center gap-3 bg-gray-50 p-1.5 rounded-full border border-gray-200">
+            <button onClick={() => setDurationMinutes((p: number) => Math.max(30, p - 30))} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
+              <Minus className="h-4 w-4" />
+            </button>
+            <span className="font-semibold w-8 text-center text-sm">{formatDuration(durationMinutes)}</span>
+            <button onClick={() => setDurationMinutes((p: number) => p + 30)} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
+              <Plus className="h-4 w-4" />
+            </button>
+          </div>
+
+          {existingStop ? (
+            <Button onClick={() => { onRemove(baseStop); onClose(); }} variant="outline" className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700">
+              Remove
+            </Button>
+          ) : (
+            <Button onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+              Add
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default function Step3() {
@@ -32,6 +154,7 @@ export default function Step3() {
   const transferRouteParam = searchParams.get("transferRoute");
 
   const [selectedStops, setSelectedStops] = useState<any[]>([]);
+  const [selectedModalStopId, setSelectedModalStopId] = useState<string | null>(null);
   const router = useRouter();
 
   const serviceType = searchParams.get("serviceType") || "TRANSFER";
@@ -72,20 +195,6 @@ export default function Step3() {
     }
   }, [fromLat, fromLng, toLat, toLng, dropoffParam, pickupParam, searchPopularStops]);
 
-  const stops = (popularStopsResponse?.data?.data || []).map((stop: any) => ({
-    ...stop,
-    duration: stop.duration !== undefined ? stop.duration : 60,
-    price: stop.price !== undefined ? stop.price : 20,
-    image: Array.isArray(stop.image) ? stop.image : [stop.image].filter(Boolean),
-    type: stop.type || (stop.types && stop.types[0]) || "Activity",
-  }));
-
-  const sortedStops = [...stops].sort((a, b) => 
-    (b.totalRatings || b.user_ratings_total || b.rating || 0) - (a.totalRatings || a.user_ratings_total || a.rating || 0)
-  );
-  const mostPopularId = sortedStops[0]?.id;
-  const recommendedId = sortedStops[1]?.id;
-
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
 
@@ -93,6 +202,7 @@ export default function Step3() {
 
   let transportPrice = 0;
   let vehicleName = "Vehicle";
+  let basePriceSumForStops = 20; // Default fallback
 
   if (vehicleId && vehicles.length > 0) {
     const ids = vehicleId.split("+");
@@ -101,10 +211,12 @@ export default function Step3() {
     if (selectedVehicles.length > 0) {
       vehicleName = selectedVehicles.map((v: any) => v.name).join(" + ");
 
+      const basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
+      basePriceSumForStops = basePriceSum > 0 ? basePriceSum : 20;
+
       if (carPriceParam) {
         transportPrice = parseFloat(carPriceParam);
       } else {
-        const basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
         const pricePerKmSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.pricePerKm, 0);
         const extraBagsCost = extraBags * 10;
         transportPrice = Math.round(basePriceSum + (pricePerKmSum * distanceKm)) + extraBagsCost;
@@ -112,11 +224,61 @@ export default function Step3() {
     }
   }
 
+  function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  const calculateStopPrice = (stop: any, durationMinutes: number) => {
+    let extraDistance = 0;
+    if (fromLat && fromLng && toLat && toLng && stop.latitude && stop.longitude) {
+      const distFromOrigin = getDistanceFromLatLonInKm(parseFloat(fromLat), parseFloat(fromLng), stop.latitude, stop.longitude);
+      const distToDest = getDistanceFromLatLonInKm(stop.latitude, stop.longitude, parseFloat(toLat), parseFloat(toLng));
+      const directDist = getDistanceFromLatLonInKm(parseFloat(fromLat), parseFloat(fromLng), parseFloat(toLat), parseFloat(toLng));
+      extraDistance = Math.max(0, distFromOrigin + distToDest - directDist);
+    }
+    const stopDistance = stop.distance || stop.distanceKm || extraDistance;
+    const stoppagePrice = basePriceSumForStops + (stopDistance * 1.2);
+    return Math.round(stoppagePrice * (durationMinutes / 60));
+  };
+
+  const stops = (popularStopsResponse?.data?.data || []).map((stop: any) => {
+    const duration = stop.duration !== undefined ? stop.duration : 60;
+    return {
+      ...stop,
+      duration,
+      price: calculateStopPrice(stop, duration),
+      image: Array.isArray(stop.image) ? stop.image : [stop.image].filter(Boolean),
+      type: stop.type || (stop.types && stop.types[0]) || "Activity",
+    };
+  });
+
+  const sortedStops = [...stops].sort((a, b) =>
+    (b.totalRatings || b.user_ratings_total || b.rating || 0) - (a.totalRatings || a.user_ratings_total || a.rating || 0)
+  );
+  const mostPopularId = sortedStops[0]?.id;
+  const recommendedId = sortedStops[1]?.id;
+
   const toggleStop = (stop: any) => {
     if (selectedStops.find((s) => s.id === stop.id)) {
       setSelectedStops(selectedStops.filter((s) => s.id !== stop.id));
     } else {
       setSelectedStops([...selectedStops, stop]);
+    }
+  };
+
+  const handleUpdateStop = (updatedStop: any) => {
+    if (selectedStops.find((s) => s.id === updatedStop.id)) {
+      setSelectedStops(selectedStops.map(s => s.id === updatedStop.id ? updatedStop : s));
+    } else {
+      setSelectedStops([...selectedStops, updatedStop]);
     }
   };
 
@@ -268,6 +430,12 @@ export default function Step3() {
                           </span>
                         </div>
                         <div
+                          onClick={(e) => {
+                            if (isSelected) {
+                              e.stopPropagation();
+                              setSelectedModalStopId(stop.id);
+                            }
+                          }}
                           className={`flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition-colors ${isSelected
                             ? "bg-white text-blue-600 hover:bg-gray-100"
                             : "bg-blue-600 text-white hover:bg-blue-700"
@@ -440,6 +608,27 @@ export default function Step3() {
       </div>
 
       <Footer />
+
+      {selectedModalStopId && (
+        <SingleStoppageModal
+          stopId={selectedModalStopId}
+          onClose={() => setSelectedModalStopId(null)}
+          baseStop={stops.find((s: any) => s.id === selectedModalStopId) || {}}
+          existingStop={selectedStops.find((s: any) => s.id === selectedModalStopId)}
+          onAddOrUpdate={handleUpdateStop}
+          onRemove={toggleStop}
+          calculatePrice={calculateStopPrice}
+        />
+      )}
+
+      <style jsx>{`
+        .vehicle-scroll {
+          scrollbar-width: none;
+        }
+        .vehicle-scroll::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section >
   );
 }
