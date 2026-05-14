@@ -184,11 +184,11 @@ export default function Step3() {
     if (fromLat && fromLng && toLat && toLng) {
       searchPopularStops({
         to: {
-          location: dropoffParam,
+          location: dropoffParam.split(",")[0].trim(),
           coordinates: [parseFloat(toLat), parseFloat(toLng)],
         },
         from: {
-          location: pickupParam,
+          location: pickupParam.split(",")[0].trim(),
           coordinates: [parseFloat(fromLat), parseFloat(fromLng)],
         },
       });
@@ -249,7 +249,8 @@ export default function Step3() {
     return Math.round(stoppagePrice * (durationMinutes / 60));
   };
 
-  const stops = (popularStopsResponse?.data?.data || []).map((stop: any) => {
+  const stopsData = popularStopsResponse?.data?.data || popularStopsResponse?.data || [];
+  const stops = (Array.isArray(stopsData) ? stopsData : []).map((stop: any) => {
     const duration = stop.duration !== undefined ? stop.duration : 60;
     return {
       ...stop,

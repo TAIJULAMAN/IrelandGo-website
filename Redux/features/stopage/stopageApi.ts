@@ -4,7 +4,7 @@ const stopageApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     searchPopularStops: builder.mutation({
       query: (data) => ({
-        url: `stoppages/search-stoppage/popular`,
+        url: `stoppages/search-stoppage`,
         method: "POST",
         body: data,
       }),
