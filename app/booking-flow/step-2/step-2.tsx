@@ -117,40 +117,41 @@ export default function Step2() {
       if (!coords || !distanceKm) {
         const directionsService = new google.maps.DirectionsService();
 
-        directionsService.route(
-          {
-            origin: pickupParam,
-            destination: dropoffParam,
-            travelMode: google.maps.TravelMode.DRIVING,
-          },
-          (result, status) => {
-            if (!isMounted) return;
+        try {
+          directionsService.route(
+            {
+              origin: pickupParam,
+              destination: dropoffParam,
+              travelMode: google.maps.TravelMode.DRIVING,
+              region: "ie",
+            },
+            (result, status) => {
+              if (!isMounted) return;
 
-            if (status === google.maps.DirectionsStatus.OK && result) {
-              const leg = result.routes[0].legs[0];
+              if (status === google.maps.DirectionsStatus.OK && result) {
+                const leg = result.routes[0].legs[0];
 
-              // Only set distanceKm if it wasn't provided by transferRoute
-              if (!transferRoute?.distanceKm) {
-                setDistanceKm(Math.round((leg.distance?.value || 0) / 1000));
-              }
+                // Only set distanceKm if it wasn't provided by transferRoute
+                if (!transferRoute?.distanceKm) {
+                  setDistanceKm(Math.round((leg.distance?.value || 0) / 1000));
+                }
 
-              // Always capture coordinates if missing, required for step 3
-              if (!coords) {
-                setCoords({
-                  fromLat: leg.start_location.lat(),
-                  fromLng: leg.start_location.lng(),
-                  toLat: leg.end_location.lat(),
-                  toLng: leg.end_location.lng(),
-                });
+                // Always capture coordinates if missing, required for step 3
+                if (!coords) {
+                  setCoords({
+                    fromLat: leg.start_location.lat(),
+                    fromLng: leg.start_location.lng(),
+                    toLat: leg.end_location.lat(),
+                    toLng: leg.end_location.lng(),
+                  });
+                }
               }
-            } else {
-              const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST'];
-              if (!suppressedStatuses.includes(status)) {
-                console.error("Error fetching route:", status);
-              }
+              // Silently ignore NOT_FOUND / ZERO_RESULTS — not a fatal error
             }
-          }
-        );
+          );
+        } catch (_e) {
+          // Suppress uncaught MapsRequestError from the SDK
+        }
       }
     }
     return () => {

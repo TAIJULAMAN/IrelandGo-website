@@ -202,26 +202,16 @@ export default function Step3() {
   }
 
   const [searchPopularStops, { data: popularStopsResponse, isLoading, error }] = useSearchPopularStopsMutation();
+  console.log("popularStopsResponse", popularStopsResponse)
 
-  // const fromLat = searchParams.get("fromLat");
-  // const fromLng = searchParams.get("fromLng");
-  // const toLat = searchParams.get("toLat");
-  // const toLng = searchParams.get("toLng");
-
-  // useEffect(() => {
-  //   if (fromLat && fromLng && toLat && toLng) {
-  //     searchPopularStops({
-  //       to: {
-  //         location: dropoffParam.split(",")[0].trim(),
-  //         coordinates: [parseFloat(toLat), parseFloat(toLng)],
-  //       },
-  //       from: {
-  //         location: pickupParam.split(",")[0].trim(),
-  //         coordinates: [parseFloat(fromLat), parseFloat(fromLng)],
-  //       },
-  //     });
-  //   }
-  // }, [fromLat, fromLng, toLat, toLng, dropoffParam, pickupParam, searchPopularStops]);
+  useEffect(() => {
+    if (pickupParam && dropoffParam) {
+      searchPopularStops({
+        from: { location: pickupParam.split(",")[0].trim() },
+        to: { location: dropoffParam.split(",")[0].trim() },
+      });
+    }
+  }, [pickupParam, dropoffParam, searchPopularStops]);
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
@@ -252,38 +242,22 @@ export default function Step3() {
     }
   }
 
-  function getDistanceFromLatLonInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
-    const R = 6371; // Radius of the earth in km
-    const dLat = (lat2 - lat1) * (Math.PI / 180);
-    const dLon = (lon2 - lon1) * (Math.PI / 180);
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c;
-  }
-
   const calculateStopPrice = (stop: any, durationMinutes: number) => {
-    let extraDistance = 0;
-    if (fromLat && fromLng && toLat && toLng && stop.latitude && stop.longitude) {
-      const distFromOrigin = getDistanceFromLatLonInKm(parseFloat(fromLat), parseFloat(fromLng), stop.latitude, stop.longitude);
-      const distToDest = getDistanceFromLatLonInKm(stop.latitude, stop.longitude, parseFloat(toLat), parseFloat(toLng));
-      const directDist = getDistanceFromLatLonInKm(parseFloat(fromLat), parseFloat(fromLng), parseFloat(toLat), parseFloat(toLng));
-      extraDistance = Math.max(0, distFromOrigin + distToDest - directDist);
-    }
-    const stopDistance = stop.distance || stop.distanceKm || extraDistance;
+    const stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
     const stoppagePrice = basePriceSumForStops + (stopDistance * 1.2);
     return Math.round(stoppagePrice * (durationMinutes / 60));
   };
 
-  const stopsData = popularStopsResponse?.data?.data || popularStopsResponse?.data || [];
+  const stopsData = popularStopsResponse?.data?.searchableStoppage || [];
   const stops = (Array.isArray(stopsData) ? stopsData : []).map((stop: any) => {
     const duration = stop.duration !== undefined ? stop.duration : 60;
     return {
       ...stop,
       duration,
       price: calculateStopPrice(stop, duration),
+      // normalise location fields so card/modal can use latitude/longitude directly
+      latitude: stop.latitude ?? stop.location?.lat,
+      longitude: stop.longitude ?? stop.location?.lng,
       image: Array.isArray(stop.image) ? stop.image : [stop.image].filter(Boolean),
       type: stop.type || (stop.types && stop.types[0]) || "Activity",
     };
@@ -324,7 +298,6 @@ export default function Step3() {
     }
   }
 
-  const coordsParam = fromLat ? `&fromLat=${fromLat}&fromLng=${fromLng}&toLat=${toLat}&toLng=${toLng}` : "";
 
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col">
@@ -494,7 +467,7 @@ export default function Step3() {
                 <Link
                   href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
                     JSON.stringify(selectedStops.map(s => ({ id: s.id, name: s.name, price: s.price, duration: s.duration })))
-                  )}&distanceKm=${distanceKm}${coordsParam}`}
+                  )}&distanceKm=${distanceKm}`}
                 >
                   Next: Checkout
                 </Link>
