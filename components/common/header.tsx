@@ -47,31 +47,31 @@ export function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 relative ${isScrolled ? "shadow-md py-4" : "py-8"}`}
+      className={`fixed top-0 left-0 right-0 z-999 transition-all duration-300 ${isScrolled ? "shadow-md py-4 backdrop-blur-sm text-gray-900" : "py-8"}`}
     >
       {/* Desktop navigation */}
       <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex gap-10 text-md z-10">
         <Link
           href="/transfer"
-          className="text-white transition font-bold hover:text-blue-400"
+          className="text-blue-500 transition font-bold"
         >
           Transfers
         </Link>
         <Link
           href="/multi-day-tours"
-          className="text-white transition font-bold hover:text-blue-400"
+          className="text-blue-500 transition font-bold"
         >
           Tours
         </Link>
         <Link
           href="/contact"
-          className="text-white transition font-bold hover:text-blue-400"
+          className="text-blue-500 transition font-bold"
         >
           Contact
         </Link>
         <Link
           href="/blog"
-          className="text-white transition font-bold hover:text-blue-400"
+          className="text-blue-500 transition font-bold"
         >
           Blog
         </Link>
@@ -229,11 +229,11 @@ export function Header() {
           <Link href="/">
             <div className="flex items-center gap-2">
               <Image src="/logo.png" alt="Logo" width={40} height={40} />
-              <span className="text-xl font-bold text-white">Tourenzo</span>
+              <span className="text-xl font-bold text-blue-500">Tourenzo</span>
             </div>
           </Link>
           <button
-            className="md:hidden ml-auto text-white focus:outline-none"
+            className="md:hidden ml-auto text-gray-900 focus:outline-none"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle navigation"
           >
@@ -242,7 +242,7 @@ export function Header() {
           <div className="hidden md:flex items-center gap-6">
             <Link
               href="/auth/login"
-              className="text-white font-medium hover:text-blue-200 transition-colors"
+              className="text-blue-500 font-medium transition-colors"
             >
               Travel agents & B2B
             </Link>

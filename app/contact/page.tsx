@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Header2 } from "@/components/common/Header2";
 import { useContactMutation } from "@/Redux/features/contact/contactApi";
 import { toast } from "sonner";
+import { Header } from "@/components/common/header";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -49,22 +50,20 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header2 />
-
-      <main className="py-16">
+    <>
+      <Header />
+      <main className="relative min-h-screen text-white overflow-hidden px-5 pt-10 md:pt-48 mb-10">
         <section className="container mx-auto px-5 md:px-0 mb-16">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-2xl md:text-5xl font-bold text-black mb-3 md:mb-4 text-balance leading-tight px-4">
               Get in Touch
             </h1>
-            <p className="text-xl text-gray-600 leading-relaxed">
+            <p className="text-base md:text-lg text-black mb-6 md:mb-8 px-4">
               Have questions? We'd love to hear from you. Send us a message and
               we'll respond as soon as possible.
             </p>
           </div>
         </section>
-
         <div className="container mx-auto px-5 md:px-0">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
             {/* Contact Form */}
@@ -168,8 +167,8 @@ export default function Contact() {
                   />
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={isLoading}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6 text-base font-semibold disabled:opacity-70"
                 >
@@ -272,8 +271,7 @@ export default function Contact() {
           </div>
         </div>
       </main>
-
       <Footer />
-    </div>
+    </>
   );
 }
