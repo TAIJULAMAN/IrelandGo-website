@@ -44,8 +44,8 @@ export function HowItWorks() {
             return (
               <div key={idx} className="relative group">
                 <div className="flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 bg-white md:bg-transparent">
-                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg shadow-blue-200 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10">
-                    <Icon className="w-8 h-8 text-white" />
+                  <div className="w-20 h-20 rounded-2xl bg-white border-2 border-blue-100 shadow-lg shadow-blue-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10">
+                    <Icon className="w-8 h-8 text-blue-600" />
                     {/* Step number badge */}
                     <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-white border-4 border-blue-50 flex items-center justify-center font-bold text-blue-600 text-sm shadow-sm">
                       {idx + 1}

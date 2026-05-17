@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
-import { X, CheckCircle2 } from "lucide-react";
+import { X, CheckCircle2, ChevronDown } from "lucide-react";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import {
   useCreateBookingUsingServiceIdMutation,
@@ -36,10 +36,64 @@ export default function Step3Details() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [phonePrefix, setPhonePrefix] = useState("+353");
+  const [phonePrefixOpen, setPhonePrefixOpen] = useState(false);
+  const phonePrefixRef = useRef<HTMLDivElement>(null);
   const [phone, setPhone] = useState("");
+  const [phoneError, setPhoneError] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [childSeat, setChildSeat] = useState(false);
   const [wheelchair, setWheelchair] = useState(false);
+
+  // Close prefix dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (phonePrefixRef.current && !phonePrefixRef.current.contains(e.target as Node)) {
+        setPhonePrefixOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const COUNTRY_CODES = [
+    { code: "+353", iso: "ie", label: "IE" },
+    { code: "+44",  iso: "gb", label: "GB" },
+    { code: "+1",   iso: "us", label: "US" },
+    { code: "+49",  iso: "de", label: "DE" },
+    { code: "+33",  iso: "fr", label: "FR" },
+    { code: "+34",  iso: "es", label: "ES" },
+    { code: "+39",  iso: "it", label: "IT" },
+    { code: "+31",  iso: "nl", label: "NL" },
+    { code: "+48",  iso: "pl", label: "PL" },
+    { code: "+91",  iso: "in", label: "IN" },
+    { code: "+86",  iso: "cn", label: "CN" },
+    { code: "+81",  iso: "jp", label: "JP" },
+    { code: "+82",  iso: "kr", label: "KR" },
+    { code: "+61",  iso: "au", label: "AU" },
+    { code: "+55",  iso: "br", label: "BR" },
+    { code: "+52",  iso: "mx", label: "MX" },
+    { code: "+27",  iso: "za", label: "ZA" },
+    { code: "+971", iso: "ae", label: "AE" },
+    { code: "+966", iso: "sa", label: "SA" },
+    { code: "+7",   iso: "ru", label: "RU" },
+  ];
+
+  const validateEmail = (val: string) => {
+    if (!val) return "Email is required";
+    if (!val.includes("@")) return "Please enter a valid email address (must include @)";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return "Please enter a valid email address";
+    return "";
+  };
+
+  const validatePhone = (val: string) => {
+    if (!val) return "Phone number is required";
+    if (!/^\d{6,15}$/.test(val.replace(/\s/g, ""))) return "Enter a valid phone number (digits only, 6–15 digits)";
+    return "";
+  };
+
+  const isFormValid = firstName && lastName && !validateEmail(email) && !validatePhone(phone);
 
   let transferRoute: any = null;
   if (transferRouteParam) {
@@ -199,7 +253,7 @@ export default function Step3Details() {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen flex flex-col pb-24">
+    <section className="bg-gray-50 min-h-screen flex flex-col">
       <Header2 />
 
       <div className="flex-1 py-10 sm:py-12 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -297,6 +351,7 @@ export default function Step3Details() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                  {/* Email */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs sm:text-sm font-medium text-gray-700">
                       Email Address
@@ -304,22 +359,91 @@ export default function Step3Details() {
                     <input
                       type="email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (emailError) setEmailError(validateEmail(e.target.value));
+                      }}
+                      onBlur={() => setEmailError(validateEmail(email))}
                       placeholder="Enter your email address"
-                      className="h-10 sm:h-11 rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className={`h-10 sm:h-11 rounded-lg border bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent ${
+                        emailError
+                          ? "border-red-400 focus:ring-red-400"
+                          : "border-gray-200 focus:ring-blue-500"
+                      }`}
                     />
+                    {emailError && (
+                      <p className="text-xs text-red-500 mt-0.5">{emailError}</p>
+                    )}
                   </div>
+
+                  {/* Phone with country prefix */}
                   <div className="flex flex-col gap-1.5">
                     <label className="text-xs sm:text-sm font-medium text-gray-700">
                       Phone Number
                     </label>
-                    <input
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      placeholder="Enter your phone number"
-                      className="h-10 sm:h-11 rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
+                    <div
+                      ref={phonePrefixRef}
+                      className={`flex h-10 sm:h-11 rounded-lg border bg-gray-50 overflow-visible focus-within:ring-2 focus-within:border-transparent relative ${
+                        phoneError
+                          ? "border-red-400 focus-within:ring-red-400"
+                          : "border-gray-200 focus-within:ring-blue-500"
+                      }`}
+                    >
+                      {/* Custom flag prefix button */}
+                      <button
+                        type="button"
+                        onClick={() => setPhonePrefixOpen(o => !o)}
+                        className="h-full flex items-center gap-1.5 bg-gray-100 border-r border-gray-200 px-2.5 text-sm text-gray-700 shrink-0 hover:bg-gray-200 transition-colors rounded-l-lg focus:outline-none"
+                      >
+                        <img
+                          src={`https://flagcdn.com/w20/${COUNTRY_CODES.find(c => c.code === phonePrefix)?.iso}.png`}
+                          alt={phonePrefix}
+                          className="w-5 h-3.5 object-cover rounded-sm"
+                        />
+                        <span className="font-medium tracking-tight">{phonePrefix}</span>
+                        <ChevronDown className={`h-3.5 w-3.5 text-gray-500 transition-transform ${phonePrefixOpen ? "rotate-180" : ""}`} />
+                      </button>
+
+                      {/* Dropdown list */}
+                      {phonePrefixOpen && (
+                        <div className="absolute top-full left-0 mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-xl overflow-y-auto max-h-56 min-w-[160px]">
+                          {COUNTRY_CODES.map(c => (
+                            <button
+                              key={c.code + c.label}
+                              type="button"
+                              onClick={() => { setPhonePrefix(c.code); setPhonePrefixOpen(false); }}
+                              className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm hover:bg-blue-50 transition-colors ${
+                                phonePrefix === c.code ? "bg-blue-50 text-blue-700 font-semibold" : "text-gray-700"
+                              }`}
+                            >
+                              <img
+                                src={`https://flagcdn.com/w20/${c.iso}.png`}
+                                alt={c.label}
+                                className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                              />
+                              <span className="font-medium">{c.code}</span>
+                              <span className="text-gray-400 text-xs ml-auto">{c.label}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+
+                      <input
+                        type="tel"
+                        value={phone}
+                        onChange={(e) => {
+                          const digits = e.target.value.replace(/[^\d\s]/g, "");
+                          setPhone(digits);
+                          if (phoneError) setPhoneError(validatePhone(digits));
+                        }}
+                        onBlur={() => setPhoneError(validatePhone(phone))}
+                        placeholder="Phone number"
+                        className="flex-1 bg-transparent px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none rounded-r-lg"
+                      />
+                    </div>
+                    {phoneError && (
+                      <p className="text-xs text-red-500 mt-0.5">{phoneError}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -365,6 +489,28 @@ export default function Step3Details() {
                   </label>
                 </div>
               </div>
+            </div>
+
+            {/* Bottom navigation – inline below the form card, matching card width */}
+            <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-4">
+              <Button
+                asChild
+                variant="ghost"
+                className="text-blue-600 font-semibold hover:text-blue-700 hover:bg-blue-50 text-sm sm:text-base px-3 py-2 h-auto rounded-xl"
+              >
+                <Link href={`/booking-flow/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "step-2" : "step-3"}?${searchParams.toString()}`}>
+                  ← Back
+                </Link>
+              </Button>
+
+              <Button
+                type="button"
+                onClick={handleBooking}
+                disabled={isLoading || !isFormValid}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full px-6 sm:px-8 py-2.5 sm:py-3 h-auto shadow-md hover:shadow-lg transition-all text-sm sm:text-base disabled:opacity-50"
+              >
+                {isLoading ? "Processing..." : "Complete Booking"}
+              </Button>
             </div>
           </div>
 
@@ -465,31 +611,6 @@ export default function Step3Details() {
           </div>
         </div>
 
-        {/* Bottom navigation */}
-        <div className="fixed bottom-6 left-0 right-0 z-50 px-4 sm:px-6 pointer-events-none">
-          <div className="max-w-7xl mx-auto flex justify-start">
-            <div className="w-full lg:w-[65%] pointer-events-auto bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100">
-              <Button
-                asChild
-                variant="ghost"
-                className="text-blue-600 font-semibold hover:text-blue-700 hover:bg-blue-50 text-sm sm:text-base px-3 py-2 h-auto rounded-xl"
-              >
-                <Link href={`/booking-flow/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "step-2" : "step-3"}?${searchParams.toString()}`}>
-                  ← Back
-                </Link>
-              </Button>
-
-              <Button
-                type="button"
-                onClick={handleBooking}
-                disabled={isLoading || !firstName || !lastName || !email}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full px-6 sm:px-8 py-2.5 sm:py-3 h-auto shadow-md hover:shadow-lg transition-all text-sm sm:text-base disabled:opacity-50"
-              >
-                {isLoading ? "Processing..." : "Complete Booking"}
-              </Button>
-            </div>
-          </div>
-        </div>
       </div>
 
       <Footer />

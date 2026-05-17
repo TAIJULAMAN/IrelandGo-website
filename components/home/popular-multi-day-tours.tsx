@@ -1,9 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Clock, Euro, ChevronLeft, ChevronRight, Loader2, Star } from "lucide-react"
-import Image from "next/image"
+import { ChevronLeft, ChevronRight, Loader2, Star } from "lucide-react"
 import Link from "next/link"
 import { useGetPopularMultiDayToursQuery } from "@/Redux/features/contents/contentsApi"
 import { SectionHeader } from "@/components/ui/section-header"
@@ -13,22 +11,21 @@ export function PopularMultiDayTours() {
   const { data: response, isLoading, isError } = useGetPopularMultiDayToursQuery({})
 
   const tours = response?.data || []
+  console.log("response of multi day tours", tours)
 
   const goToPrevious = () => {
     if (tours.length === 0) return
     setCurrentIndex((prevIndex) => (prevIndex === 0 ? tours.length - 1 : prevIndex - 1))
   }
-
   const goToNext = () => {
     if (tours.length === 0) return
     setCurrentIndex((prevIndex) => (prevIndex === tours.length - 1 ? 0 : prevIndex + 1))
   }
-
   const stripHtml = (html: string) => {
     return html?.replace(/<[^>]*>?/gm, "") || "";
   };
 
-  const showSlider = tours.length >= 3;
+  const showSlider = tours.length >= 4;
   const visibleTours = showSlider ? [
     tours[currentIndex % tours.length],
     tours[(currentIndex + 1) % tours.length],

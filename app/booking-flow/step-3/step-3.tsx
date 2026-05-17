@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 import { useSearchPopularStopsMutation, useGetSingleStoppageQuery } from "@/Redux/features/stopage/stopageApi";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 function formatDuration(minutes: number) {
@@ -33,12 +33,22 @@ function SingleStoppageModal({
 
   const [durationMinutes, setDurationMinutes] = useState(existingStop ? existingStop.duration : (stopData?.duration || 120));
   const [imgIndex, setImgIndex] = useState(0);
+  const touchStartX = useRef<number | null>(null);
 
-  useEffect(() => {
-    if (existingStop && durationMinutes !== existingStop.duration) {
-      onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) });
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(delta) > 40) {
+      if (delta < 0) setImgIndex(i => (i === images.length - 1 ? 0 : i + 1));
+      else setImgIndex(i => (i === 0 ? images.length - 1 : i - 1));
     }
-  }, [durationMinutes]);
+    touchStartX.current = null;
+  };
+
+  const isDurationChanged = existingStop && durationMinutes !== existingStop.duration;
 
   if (!stopId) return null;
 
@@ -46,10 +56,10 @@ function SingleStoppageModal({
   if (images.length === 0) images.push("/placeholder.png");
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="bg-white rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[100] flex items-center md:items-center justify-center bg-black/60 backdrop-blur-sm md:p-5">
+      <div className="bg-white rounded-lg sm:rounded-2xl max-w-sm md:max-w-2xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[70vh] md:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-bold text-gray-900">{stopData?.name || baseStop?.name}</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900">{stopData?.name || baseStop?.name}</h2>
           <button onClick={onClose} className="p-1.5 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
             <X className="h-5 w-5 text-gray-600" />
           </button>
@@ -62,7 +72,11 @@ function SingleStoppageModal({
             </div>
           ) : (
             <>
-              <div className="relative h-64 w-full rounded-xl overflow-hidden group">
+              <div
+                className="relative h-44 sm:h-64 w-full rounded-xl overflow-hidden group"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
                 <img src={images[imgIndex]} alt={stopData?.name} className="w-full h-full object-cover" />
                 {images.length > 1 && (
                   <>
@@ -127,9 +141,23 @@ function SingleStoppageModal({
           </div>
 
           {existingStop ? (
-            <Button onClick={() => { onRemove(baseStop); onClose(); }} variant="outline" className="flex-1 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700">
-              Remove
-            </Button>
+            <div className="flex flex-1 gap-2">
+              <Button
+                onClick={() => { onRemove(baseStop); onClose(); }}
+                variant="outline"
+                className="flex-1 bg-blue-500 text-white"
+              >
+                Remove
+              </Button>
+              {isDurationChanged && (
+                <Button
+                  onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }}
+                  className="flex-1 bg-blue-500 text-white"
+                >
+                  Update
+                </Button>
+              )}
+            </div>
           ) : (
             <Button onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
               Add
@@ -175,25 +203,25 @@ export default function Step3() {
 
   const [searchPopularStops, { data: popularStopsResponse, isLoading, error }] = useSearchPopularStopsMutation();
 
-  const fromLat = searchParams.get("fromLat");
-  const fromLng = searchParams.get("fromLng");
-  const toLat = searchParams.get("toLat");
-  const toLng = searchParams.get("toLng");
+  // const fromLat = searchParams.get("fromLat");
+  // const fromLng = searchParams.get("fromLng");
+  // const toLat = searchParams.get("toLat");
+  // const toLng = searchParams.get("toLng");
 
-  useEffect(() => {
-    if (fromLat && fromLng && toLat && toLng) {
-      searchPopularStops({
-        to: {
-          location: dropoffParam.split(",")[0].trim(),
-          coordinates: [parseFloat(toLat), parseFloat(toLng)],
-        },
-        from: {
-          location: pickupParam.split(",")[0].trim(),
-          coordinates: [parseFloat(fromLat), parseFloat(fromLng)],
-        },
-      });
-    }
-  }, [fromLat, fromLng, toLat, toLng, dropoffParam, pickupParam, searchPopularStops]);
+  // useEffect(() => {
+  //   if (fromLat && fromLng && toLat && toLng) {
+  //     searchPopularStops({
+  //       to: {
+  //         location: dropoffParam.split(",")[0].trim(),
+  //         coordinates: [parseFloat(toLat), parseFloat(toLng)],
+  //       },
+  //       from: {
+  //         location: pickupParam.split(",")[0].trim(),
+  //         coordinates: [parseFloat(fromLat), parseFloat(fromLng)],
+  //       },
+  //     });
+  //   }
+  // }, [fromLat, fromLng, toLat, toLng, dropoffParam, pickupParam, searchPopularStops]);
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
@@ -302,43 +330,43 @@ export default function Step3() {
     <section className="bg-gray-50 min-h-screen flex flex-col">
       <Header2 />
 
-      <div className="flex-1 py-10 sm:py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex-1 py-6 sm:py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         {/* Step progress */}
-        <div className="mb-8 sm:mb-10">
+        <div className="mb-6 sm:mb-10">
           <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold shrink-0">
                 1
               </div>
-              <span>Trip Details</span>
+              <span className="hidden sm:inline">Trip Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
+            <div className="flex-1 h-0.5 bg-blue-500 mx-1 sm:mx-2" />
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold shrink-0">
                 2
               </div>
-              <span>Choose Vehicle</span>
+              <span className="hidden sm:inline">Choose Vehicle</span>
             </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold">
+            <div className="flex-1 h-0.5 bg-blue-500 mx-1 sm:mx-2" />
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold shrink-0">
                 3
               </div>
-              <span>Add Stops</span>
+              <span className="hidden sm:inline">Add Stops</span>
             </div>
-            <div className="flex-1 h-0.5 bg-gray-200 mx-2" />
-            <div className="flex items-center gap-2 text-gray-400">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold">
+            <div className="flex-1 h-0.5 bg-gray-200 mx-1 sm:mx-2" />
+            <div className="flex items-center gap-1.5 sm:gap-2 text-gray-400">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold shrink-0">
                 4
               </div>
-              <span>Details</span>
+              <span className="hidden sm:inline">Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-gray-200 mx-2" />
-            <div className="flex items-center gap-2 text-gray-400">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold">
+            <div className="flex-1 h-0.5 bg-gray-200 mx-1 sm:mx-2" />
+            <div className="flex items-center gap-1.5 sm:gap-2 text-gray-400">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold shrink-0">
                 5
               </div>
-              <span>Payment</span>
+              <span className="hidden sm:inline">Payment</span>
             </div>
           </div>
         </div>
@@ -355,9 +383,9 @@ export default function Step3() {
         </div>
 
         {/* Main content */}
-        <div className="grid gap-6 lg:gap-8 lg:grid-cols-3 mb-8 lg:mb-10">
+        <div className="grid gap-4 sm:gap-6 lg:gap-8 lg:grid-cols-3 mb-6 sm:mb-8 lg:mb-10">
           {/* Stops grid */}
-          <div className="lg:col-span-2 space-y-4 sm:space-y-5">
+          <div className="lg:col-span-2 space-y-3 sm:space-y-5">
             {isLoading ? (
               <div className="flex justify-center items-center h-48">
                 <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
@@ -367,19 +395,22 @@ export default function Step3() {
                 Failed to load stops. Please try again.
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
                 {stops.map((stop: any) => {
                   const isSelected = selectedStops.some((s) => s.id === stop.id);
                   return (
                     <div
                       key={stop.id}
                       onClick={() => toggleStop(stop)}
-                      className={`relative bg-white rounded-2xl overflow-hidden flex flex-col transition-all cursor-pointer border-2 ${isSelected
-                        ? "border-blue-600 ring-2 ring-blue-100 shadow-lg"
-                        : "border-transparent shadow-md hover:border-blue-300 hover:shadow-lg"
+                      className={`relative bg-white rounded-2xl overflow-hidden transition-all cursor-pointer border-2
+                        flex flex-row sm:flex-col
+                        ${isSelected
+                          ? "border-blue-600 ring-2 ring-blue-100 shadow-lg"
+                          : "border-transparent shadow-md hover:border-blue-300 hover:shadow-lg"
                         }`}
                     >
-                      <div className="relative h-44 w-full">
+                      {/* Image – full width on sm+, fixed left column on mobile */}
+                      <div className="relative w-28 shrink-0 sm:w-full h-auto sm:h-44">
                         <img
                           src={
                             stop.image && stop.image.length > 0
@@ -388,47 +419,40 @@ export default function Step3() {
                           }
                           alt={stop.name}
                           className="w-full h-full object-cover"
+                          style={{ minHeight: '100px' }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent sm:from-black/80 sm:via-black/20" />
                         {(stop.id === mostPopularId || stop.id === recommendedId) && (
-                          <div className="absolute top-3 left-3 flex items-center bg-white/95 backdrop-blur-sm shadow-sm rounded-md px-2 py-1 gap-1">
-                            <span className="text-yellow-500 text-[10px]">★</span>
-                            <span className="text-[10px] font-bold text-gray-800 uppercase tracking-wide">
-                              {stop.id === mostPopularId ? "Most Popular" : "Recommended"}
+                          <div className="absolute top-2 left-2 flex items-center bg-white/95 backdrop-blur-sm shadow-sm rounded-md px-1.5 py-0.5 gap-0.5 sm:top-3 sm:left-3 sm:px-2 sm:py-1 sm:gap-1">
+                            <span className="text-yellow-500 text-[9px] sm:text-[10px]">★</span>
+                            <span className="text-[9px] sm:text-[10px] font-bold text-gray-800 uppercase tracking-wide">
+                              {stop.id === mostPopularId ? "Popular" : "Pick"}
                             </span>
                           </div>
                         )}
-                        <h3 className="absolute bottom-3 left-4 text-white text-lg font-bold">
+                        {/* Name only visible on sm+ inside image */}
+                        <h3 className="hidden sm:block absolute bottom-3 left-4 text-white text-lg font-bold">
                           {stop.name}
                         </h3>
                       </div>
 
+                      {/* Info row – stacks differently on mobile */}
                       <div
-                        className={`p-4 flex items-center justify-between transition-colors ${isSelected ? "bg-blue-600" : "bg-white"
+                        className={`flex-1 flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 sm:p-4 transition-colors gap-1 sm:gap-0 ${isSelected ? "bg-blue-600" : "bg-white"
                           }`}
                       >
-                        <div className="flex items-center gap-1 text-sm font-medium">
-                          <span
-                            className={
-                              isSelected ? "text-blue-100" : "text-blue-600"
-                            }
-                          >
-                            {formatDuration(stop.duration)}
-                          </span>
-                          <span
-                            className={
-                              isSelected ? "text-blue-100" : "text-gray-500"
-                            }
-                          >
-                            for
-                          </span>
-                          <span
-                            className={
-                              isSelected ? "text-white" : "text-gray-900"
-                            }
-                          >
-                            €{stop.price}
-                          </span>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-1">
+                          {/* Name visible on mobile inside info row */}
+                          <p className={`sm:hidden font-bold text-sm leading-tight ${isSelected ? "text-white" : "text-gray-900"}`}>
+                            {stop.name}
+                          </p>
+                          <div className="flex items-center gap-1 text-sm font-medium">
+                            <span className={isSelected ? "text-blue-100" : "text-blue-600"}>
+                              {formatDuration(stop.duration)}
+                            </span>
+                            <span className={isSelected ? "text-blue-100" : "text-gray-500"}>for</span>
+                            <span className={isSelected ? "text-white" : "text-gray-900"}>€{stop.price}</span>
+                          </div>
                         </div>
                         <div
                           onClick={(e) => {
@@ -437,16 +461,12 @@ export default function Step3() {
                               setSelectedModalStopId(stop.id);
                             }
                           }}
-                          className={`flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition-colors ${isSelected
+                          className={`flex h-8 w-8 items-center justify-center rounded-full shadow-sm transition-colors shrink-0 ${isSelected
                             ? "bg-white text-blue-600 hover:bg-gray-100"
                             : "bg-blue-600 text-white hover:bg-blue-700"
                             }`}
                         >
-                          {isSelected ? (
-                            <Pencil className="h-4 w-4" />
-                          ) : (
-                            <Plus className="h-5 w-5" />
-                          )}
+                          {isSelected ? <Pencil className="h-4 w-4" /> : <Plus className="h-5 w-5" />}
                         </div>
                       </div>
                     </div>
@@ -454,10 +474,36 @@ export default function Step3() {
                 })}
               </div>
             )}
+
+            {/* Bottom navigation – inline below stops */}
+            <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-2">
+              <Button
+                asChild
+                variant="ghost"
+                className="text-blue-600 font-semibold hover:text-blue-700 hover:bg-blue-50 text-sm sm:text-base px-3 py-2 h-auto rounded-xl"
+              >
+                <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>
+                  ← Back
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full px-6 sm:px-8 py-2.5 sm:py-3 h-auto shadow-md hover:shadow-lg transition-all text-sm sm:text-base"
+              >
+                <Link
+                  href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
+                    JSON.stringify(selectedStops.map(s => ({ id: s.id, name: s.name, price: s.price, duration: s.duration })))
+                  )}&distanceKm=${distanceKm}${coordsParam}`}
+                >
+                  Next: Checkout
+                </Link>
+              </Button>
+            </div>
           </div>
 
-          {/* Itinerary card */}
-          <div>
+          {/* Itinerary card – hidden on mobile, shown on lg+ */}
+          <div className="hidden lg:block">
             <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col gap-6 sticky top-24">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-gray-900">Itinerary</h2>
@@ -577,35 +623,24 @@ export default function Step3() {
           </div>
         </div>
 
-        {/* Bottom navigation */}
-        <div className="fixed bottom-6 left-0 right-0 z-50 px-4 sm:px-6 pointer-events-none">
-          <div className="max-w-7xl mx-auto flex justify-start">
-            <div className="w-full lg:w-[65%] pointer-events-auto bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100">
-              <Button
-                asChild
-                variant="ghost"
-                className="text-blue-600 font-semibold hover:text-blue-700 hover:bg-blue-50 text-sm sm:text-base px-3 py-2 h-auto rounded-xl"
-              >
-                <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>
-                  ← Back
-                </Link>
-              </Button>
-
-              <Button
-                asChild
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full px-6 sm:px-8 py-2.5 sm:py-3 h-auto shadow-md hover:shadow-lg transition-all text-sm sm:text-base"
-              >
-                <Link
-                  href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
-                    JSON.stringify(selectedStops.map(s => ({ id: s.id, name: s.name, price: s.price, duration: s.duration })))
-                  )}&distanceKm=${distanceKm}${coordsParam}`}
-                >
-                  Next: Checkout
-                </Link>
-              </Button>
+        {/* Mobile price summary bar – visible only below lg */}
+        <div className="lg:hidden mt-4 bg-white rounded-2xl shadow-md border border-gray-100 px-4 py-3 flex items-center justify-between gap-3">
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-500 font-medium">Total</span>
+            <span className="text-xl font-bold text-gray-900">€{totalPrice}</span>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap justify-end">
+            {selectedStops.length > 0 && (
+              <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full border border-blue-200">
+                {selectedStops.length} stop{selectedStops.length !== 1 ? "s" : ""} selected
+              </span>
+            )}
+            <div className="flex items-center gap-1.5 text-xs text-gray-500">
+              <span>🚗 {vehicleName}</span>
             </div>
           </div>
         </div>
+
       </div>
 
       <Footer />
