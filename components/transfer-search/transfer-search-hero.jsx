@@ -95,6 +95,9 @@ export default function TransferSearchHero() {
   const [children, setChildren] = useState(0);
   const [extraBags, setExtraBags] = useState(0);
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const totalPassengers = adults + children;
   const pickupInputRef = useRef(null);
   const dropoffInputRef = useRef(null);
@@ -442,6 +445,7 @@ export default function TransferSearchHero() {
                               mode="single"
                               selected={date}
                               onSelect={setDate}
+                              disabled={{ before: today }}
                               initialFocus
                             />
                           </div>
@@ -697,6 +701,7 @@ export default function TransferSearchHero() {
                               mode="single"
                               selected={returnDate}
                               onSelect={setReturnDate}
+                              disabled={date ? { before: date } : { before: today }}
                               initialFocus
                             />
                           </div>

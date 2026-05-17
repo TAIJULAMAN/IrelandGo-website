@@ -46,6 +46,9 @@ export default function ByTheHourHero() {
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
@@ -256,6 +259,7 @@ export default function ByTheHourHero() {
                                 mode="single"
                                 selected={date}
                                 onSelect={setDate}
+                                disabled={{ before: today }}
                                 initialFocus
                               />
                             </div>

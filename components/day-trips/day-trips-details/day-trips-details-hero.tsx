@@ -17,6 +17,10 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
   const [extraBags, setExtraBags] = useState<number>(0)
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("09:00");
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   return (
     <section className="relative w-full h-[80vh]">
       <Header />
@@ -89,6 +93,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
                         mode="single"
                         selected={date}
                         onSelect={setDate}
+                        disabled={{ before: today }}
                         initialFocus
                       />
                     </div>

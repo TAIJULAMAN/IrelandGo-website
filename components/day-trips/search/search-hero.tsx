@@ -42,6 +42,9 @@ export function SearchHero({ trip }: { trip?: any }) {
   const [selectedPickupIndex, setSelectedPickupIndex] = useState(-1);
   const [selectedDropoffIndex, setSelectedDropoffIndex] = useState(-1);
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
   const pickupInputRef = useRef<HTMLInputElement>(null);
   const dropoffInputRef = useRef<HTMLInputElement>(null);
   const pickupDropdownRef = useRef<HTMLDivElement>(null);
@@ -283,6 +286,7 @@ export function SearchHero({ trip }: { trip?: any }) {
                         mode="single"
                         selected={date}
                         onSelect={setDate}
+                        disabled={{ before: today }}
                         initialFocus
                       />
                     </div>
