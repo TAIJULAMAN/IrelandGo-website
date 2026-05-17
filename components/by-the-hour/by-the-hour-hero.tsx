@@ -49,6 +49,8 @@ export default function ByTheHourHero() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
@@ -231,7 +233,7 @@ export default function ByTheHourHero() {
                       Date & Time
                     </label>
                     <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
-                      <Popover>
+                      <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                         <PopoverTrigger asChild>
                           <Button
                             variant={"ghost"}
@@ -281,7 +283,10 @@ export default function ByTheHourHero() {
                                           ? "bg-blue-600 hover:bg-blue-700"
                                           : "hover:bg-blue-50",
                                       )}
-                                      onClick={() => setTime(timeString)}
+                                      onClick={() => {
+                                        setTime(timeString);
+                                        setIsCalendarOpen(false);
+                                      }}
                                     >
                                       {timeString}
                                     </Button>

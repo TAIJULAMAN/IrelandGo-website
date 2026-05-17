@@ -125,15 +125,15 @@ export default function Step2() {
           },
           (result, status) => {
             if (!isMounted) return;
-            
+
             if (status === google.maps.DirectionsStatus.OK && result) {
               const leg = result.routes[0].legs[0];
-              
+
               // Only set distanceKm if it wasn't provided by transferRoute
               if (!transferRoute?.distanceKm) {
                 setDistanceKm(Math.round((leg.distance?.value || 0) / 1000));
               }
-              
+
               // Always capture coordinates if missing, required for step 3
               if (!coords) {
                 setCoords({
@@ -318,7 +318,7 @@ export default function Step2() {
 
         {/* Vehicle slider */}
         <div className="mb-10">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6">
             <div className="flex items-center gap-3">
               <div className="h-1 w-12 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full"></div>
               <p className="text-sm font-semibold text-gray-700">
@@ -328,7 +328,7 @@ export default function Step2() {
 
             <div className="flex items-center gap-2">
               <div className="bg-blue-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center shadow-sm">
-                One way
+                {tripType === "round-trip" || tripType === "return" ? "Round trip" : "One way"}
               </div>
               <Popover>
                 <PopoverTrigger asChild>
@@ -516,7 +516,7 @@ export default function Step2() {
 
           <div
             ref={sliderRef}
-            className="vehicle-scroll flex gap-5 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory"
+            className="vehicle-scroll flex gap-5 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory justify-center"
           >
             {isLoading ? (
               <div className="w-full text-center py-10 text-gray-500">

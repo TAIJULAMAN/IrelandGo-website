@@ -21,6 +21,8 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+
   return (
     <section className="relative w-full h-[80vh]">
       <Header />
@@ -66,7 +68,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
             </label>
             {/* Date Picker */}
             <div className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12">
-              <Popover>
+              <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant={"ghost"}
@@ -113,7 +115,10 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
                                   ? "bg-blue-600 hover:bg-blue-700 text-white"
                                   : "hover:bg-blue-50 text-slate-600"
                               )}
-                              onClick={() => setTime(timeString)}
+                              onClick={() => {
+                                setTime(timeString);
+                                setIsCalendarOpen(false);
+                              }}
                             >
                               {timeString}
                             </Button>

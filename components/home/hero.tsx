@@ -70,6 +70,9 @@ export function Hero() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isReturnCalendarOpen, setIsReturnCalendarOpen] = useState(false);
+
   const [showPickupDropdown, setShowPickupDropdown] = useState(false);
   const [showDropoffDropdown, setShowDropoffDropdown] = useState(false);
   const pickupRef = useRef<HTMLDivElement>(null);
@@ -343,7 +346,7 @@ export function Hero() {
                       Date & Time
                     </label>
                     <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
-                      <Popover>
+                      <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                         <PopoverTrigger asChild>
                           <Button
                             variant={"ghost"}
@@ -393,7 +396,10 @@ export function Hero() {
                                           ? "bg-blue-600 hover:bg-blue-700"
                                           : "hover:bg-blue-50",
                                       )}
-                                      onClick={() => setTime(timeString)}
+                                      onClick={() => {
+                                        setTime(timeString);
+                                        setIsCalendarOpen(false);
+                                      }}
                                     >
                                       {timeString}
                                     </Button>
@@ -604,7 +610,7 @@ export function Hero() {
                       Return Date & Time
                     </label>
                     <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
-                      <Popover>
+                      <Popover open={isReturnCalendarOpen} onOpenChange={setIsReturnCalendarOpen}>
                         <PopoverTrigger asChild>
                           <Button
                             variant={"ghost"}
@@ -653,7 +659,10 @@ export function Hero() {
                                           ? "bg-blue-600 hover:bg-blue-700"
                                           : "hover:bg-blue-50",
                                       )}
-                                      onClick={() => setReturnTime(timeString)}
+                                      onClick={() => {
+                                        setReturnTime(timeString);
+                                        setIsReturnCalendarOpen(false);
+                                      }}
                                     >
                                       {timeString}
                                     </Button>
