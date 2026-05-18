@@ -14,7 +14,8 @@ export default function DayTrips() {
             <Expectations />
             <Memories />
             <Testimonials />
-            <FAQ />        </main>
+            <FAQ />
+        </main>
     )
 }
 

@@ -29,16 +29,18 @@ export default function BlogListingPage() {
 
   return (
 
-    <>      <div>
+    <>
+      <div className="space-y-10">
         <section
-          className="relative text-white flex flex-col min-h-[70vh] bg-cover bg-center bg-no-repeat px-5 pt-10 md:pt-48 mb-10"
+          className="relative text-white flex flex-col justify-center min-h-[50vh] md:min-h-[60vh] lg:min-h-[50vh] bg-cover bg-center bg-no-repeat px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 pt-8 sm:pt-8 md:pt-34 mb-10"
           style={{
             backgroundImage: 'url("/by-the-hour.jpg")',
           }}
         >
-          <div className="max-w-7xl mx-auto py-10 px-5 md:px-0 flex flex-col items-center justify-center text-center gap-6 md:gap-8">
+          <div className="absolute inset-0 bg-black/40 z-0" />
+          <div className="max-w-7xl mx-auto py-10 px-5 md:px-0 flex flex-col items-center justify-center text-center gap-6 md:gap-8 relative z-10">
             <div className="space-y-4 max-w-4xl mx-auto">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
+              <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-5">
                 Explore Ireland with Tourenzo
               </h1>
               <p className="text-base md:text-lg text-white mb-6 md:mb-8 px-4">
@@ -47,9 +49,9 @@ export default function BlogListingPage() {
             </div>
           </div>
         </section>
-        <main className="flex-grow container mx-auto px-5 py-12 md:py-16 -mt-10 relative z-10">
+        <main className="flex-grow container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-12 md:py-10 mt-16 md:mt-24 relative z-10">
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
@@ -73,11 +75,11 @@ export default function BlogListingPage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {blogs.map((blog) => (
                 <Link key={blog.id} href={`/blog/${blog.id}`} className="group">
                   <article className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
-                    <div className="relative overflow-hidden h-60">
+                    <div className="relative overflow-hidden h-60 bg-gray-100">
                       <Image
                         src={blog.image?.[0] || "/placeholder.jpg"}
                         alt={blog.title}
@@ -125,7 +127,8 @@ export default function BlogListingPage() {
               ))}
             </div>
           )}
-        </main>      </div>
+        </main>
+      </div>
     </>
 
   );

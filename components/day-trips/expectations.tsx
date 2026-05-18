@@ -36,11 +36,11 @@ const images = [
 
 export default function Expectations() {
   return (
-    <div className="bg-slate-800 text-white py-20">
-      <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
+    <div className="bg-slate-900 text-white py-12 sm:py-16 md:py-20">
+      <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-10">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 md:mb-10 text-center lg:text-left">
               What to expect on a day trip?
             </h2>
             <Accordion type="single" collapsible className="space-y-3">
