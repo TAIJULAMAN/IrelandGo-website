@@ -49,8 +49,8 @@ export function Header() {
     <>
       <header
         className={`fixed top-0 left-0 right-0 z-999 transition-all duration-300 ${isScrolled
-          ? "py-3 sm:py-3 md:py-3 lg:py-3 xl:py-3 backdrop-blur-md bg-white/95"
-          : "py-3 sm:py-3 md:py-3 lg:py-3 xl:py-3 bg-transparent text-white"
+          ? "py-5 sm:py-5 md:py-5 lg:py-6 xl:py-6 backdrop-blur-md bg-white/95"
+          : "py-5 sm:py-5 md:py-5 lg:py-6 xl:py-6 bg-transparent text-white"
           }`}
       >
         {/* Desktop navigation */}

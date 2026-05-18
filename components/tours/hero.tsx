@@ -1,6 +1,6 @@
 "use client"
 
-import { Header } from '../common/header';
+import { Header } from '../layout/header';
 
 export default function Hero() {
     return (

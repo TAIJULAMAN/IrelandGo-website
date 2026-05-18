@@ -27,13 +27,13 @@ export function SafetyComfort() {
   ]
 
   return (
-    <section className=" px-5 md:px-0 py-10 md:py-16 bg-gray-50">
-      <div className="container mx-auto grid md:grid-cols-2 gap-5 md:gap-10 items-center">
+    <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-16 bg-gray-50">
+      <div className="container mx-auto grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
         <div className="space-y-4 md:space-y-8">
           <SectionHeader
             title="Safety & Comfort"
             subtitle="Our Priority"
-            className="mb-6 md:mb-12"
+            className="mb-6 md:mb-12 text-center md:text-left [&_span]:md:text-left [&_h2]:md:text-left"
           />
           {features.map((feature, idx) => {
             const Icon = feature.icon

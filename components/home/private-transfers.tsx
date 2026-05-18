@@ -87,8 +87,9 @@ export function PrivateTransfers() {
           {visibleTransfers.map((transfer: any, idx: number) => (
             <div
               key={transfer.id || idx}
-              className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow ${showSlider && idx > 0 ? 'hidden md:block' : ''
-                }`}
+              className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow ${
+                showSlider && idx === 2 ? 'hidden lg:block' : ''
+              } ${showSlider && idx === 1 ? 'hidden md:block' : ''}`}
             >
               <div className="relative h-48 md:h-56 overflow-hidden bg-gray-200">
                 <img
@@ -98,12 +99,12 @@ export function PrivateTransfers() {
                 />
               </div>
               <div className="p-4 md:p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="font-semibold text-gray-900 text-sm md:text-base">{transfer.from}</span>
-                  <div className="flex items-center gap-2 px-2 md:px-3">
-                    <Image src="/divider.png" alt="" width={80} height={80} />
+                <div className="flex items-center justify-between mb-3 gap-2">
+                  <span className="font-semibold text-gray-900 text-xs sm:text-sm md:text-base truncate max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-none" title={transfer.from}>{transfer.from}</span>
+                  <div className="flex items-center shrink-0">
+                    <Image src="/divider.png" alt="" width={80} height={12} className="w-10 sm:w-14 md:w-20 h-auto" />
                   </div>
-                  <span className="font-semibold text-gray-900 text-sm md:text-base">{transfer.to}</span>
+                  <span className="font-semibold text-gray-900 text-xs sm:text-sm md:text-base truncate max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-none" title={transfer.to}>{transfer.to}</span>
                 </div>
 
                 <p className="text-xs md:text-sm text-gray-600 mb-4">

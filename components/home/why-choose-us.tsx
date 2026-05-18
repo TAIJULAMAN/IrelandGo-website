@@ -36,8 +36,8 @@ export function WhyChooseUs() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-gray-50 to-white">
-      <div className="container mx-auto px-5">
+    <section className="py-16 md:py-24 bg-white">
+      <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
         <SectionHeader
           title="Why Travelers Choose Us"
           subtitle="Our Advantages"
@@ -51,7 +51,7 @@ export function WhyChooseUs() {
             return (
               <div
                 key={idx}
-                className="group flex flex-col justify-center items-center bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 hover:-translate-y-1"
+                className="group flex flex-col justify-center items-center text-center bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="w-14 h-14 rounded-xl bg-blue-50 group-hover:bg-blue-600 transition-colors duration-300 flex items-center justify-center mb-6">
                   <Icon className="w-7 h-7 text-blue-600 group-hover:text-white transition-colors duration-300" />

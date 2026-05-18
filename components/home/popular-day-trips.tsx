@@ -36,7 +36,7 @@ export function PopularDayTrips() {
   if (isError || trips.length === 0) return null
 
   return (
-    <section className="px-5 md:px-0 py-10 md:py-20">
+    <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 sm:py-12 md:py-14 lg:py-16 xl:py-18 bg-gray-50">
       <div className="container mx-auto">
         {/* Header row with arrows */}
         <div className="flex flex-col md:flex-row items-center justify-center md:justify-between mb-8 md:mb-12 gap-4">

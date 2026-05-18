@@ -86,11 +86,10 @@ export default function VerifyCode() {
                                                 value={digit}
                                                 onChange={(e) => handleChange(index, e.target.value)}
                                                 onKeyDown={(e) => handleKeyDown(index, e)}
-                                                className={`w-11 h-13 sm:w-13 sm:h-15 text-center text-lg sm:text-xl font-bold border-2 rounded-xl outline-none transition-all ${
-                                                    digit
-                                                        ? "border-blue-500 bg-blue-50/50 text-blue-700"
-                                                        : "border-gray-200 bg-gray-50/50 text-gray-900 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20"
-                                                }`}
+                                                className={`w-11 h-13 sm:w-13 sm:h-15 text-center text-lg sm:text-xl font-bold border-2 rounded-xl outline-none transition-all ${digit
+                                                    ? "border-blue-500 bg-blue-50/50 text-blue-700"
+                                                    : "border-gray-200 bg-gray-50/50 text-gray-900 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20"
+                                                    }`}
                                             />
                                         ))}
                                     </div>
@@ -99,11 +98,10 @@ export default function VerifyCode() {
                                 {/* Submit */}
                                 <Link href="/auth/reset-password">
                                     <Button
-                                        className={`w-full py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-xl transition-all active:scale-[0.98] group mt-1 ${
-                                            isCodeComplete
-                                                ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30"
-                                                : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                        }`}
+                                        className={`w-full py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-xl transition-all active:scale-[0.98] group mt-1 ${isCodeComplete
+                                            ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30"
+                                            : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                            }`}
                                         disabled={!isCodeComplete}
                                     >
                                         Verify Code
@@ -112,30 +110,12 @@ export default function VerifyCode() {
                                 </Link>
                             </form>
 
-                            {/* Resend */}
-                            <div className="mt-6 text-center lg:text-left">
-                                <p className="text-sm text-gray-500">
-                                    Didn&apos;t receive the code?{" "}
-                                    <button className="text-blue-600 hover:text-blue-700 font-semibold transition-colors underline underline-offset-2">
-                                        Resend
-                                    </button>
-                                </p>
-                            </div>
-
                             {/* Back link */}
                             <div className="mt-4 text-center lg:text-left">
                                 <Link href="/auth/forgot-password" className="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 transition-colors group">
                                     <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-0.5 transition-transform" />
                                     Back to forgot password
                                 </Link>
-                            </div>
-
-                            {/* Timer note */}
-                            <div className="mt-6 p-4 bg-amber-50/70 rounded-xl border border-amber-100/80 flex items-center gap-3">
-                                <Clock className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                                <p className="text-xs sm:text-sm text-amber-700/80 font-medium">
-                                    Code expires in: <span className="font-bold text-amber-800">9:45</span>
-                                </p>
                             </div>
                         </div>
                     </div>

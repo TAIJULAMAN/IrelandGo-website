@@ -75,7 +75,7 @@ export function Testimonials() {
   // Loading skeleton
   if (isLoading) {
     return (
-      <section className="px-5 md:px-0 py-10 md:py-20 bg-gray-50">
+      <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-20 bg-gray-50">
         <div className="container mx-auto">
           <SectionHeader
             title="What Our Customers Say"
@@ -120,7 +120,7 @@ export function Testimonials() {
   if (reviews.length === 0) return null;
 
   return (
-    <section className="px-5 md:px-0 py-10 md:py-20 bg-gray-50">
+    <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-20 bg-gray-50">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4">
           {showSlider && (

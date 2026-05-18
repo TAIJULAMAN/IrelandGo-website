@@ -33,19 +33,21 @@ export function RecentBlogs() {
   if (isLoading) {
     return (
       <section className="py-16 md:py-24 bg-gray-50">
-        <div className="container mx-auto px-5">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+        <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-4">
             <SectionHeader
               title="Latest from our Blog"
               subtitle="Travel Inspiration"
-              className="mb-0"
+              className="mb-0 text-center md:text-left [&_span]:md:text-left [&_h2]:md:text-left"
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[1, 2, 3].map((i) => (
+            {[1, 2, 3].map((i, idx) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse"
+                className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse ${
+                  idx === 2 ? "block md:hidden lg:block" : ""
+                }`}
               >
                 <div className="h-60 bg-gray-200" />
                 <div className="p-6 space-y-3">
@@ -67,12 +69,12 @@ export function RecentBlogs() {
 
   return (
     <section className="py-16 md:py-24 bg-gray-50">
-      <div className="container mx-auto px-5">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+      <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-4">
           <SectionHeader
             title="Explore Ireland's Best Destinations"
             subtitle="Travel Inspiration"
-            className="mb-0"
+            className="mb-0 text-center md:text-left [&_span]:md:text-left [&_h2]:md:text-left"
           />
           <Link
             href="/blog"
@@ -84,8 +86,12 @@ export function RecentBlogs() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {blogs.map((blog) => (
-            <Link key={blog.id} href={`/blog/${blog.id}`} className="group">
+          {blogs.map((blog, idx) => (
+            <Link
+              key={blog.id}
+              href={`/blog/${blog.id}`}
+              className={`group ${idx === 2 ? "block md:hidden lg:block" : ""}`}
+            >
               <article className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
                 <div className="relative overflow-hidden h-60">
                   <Image

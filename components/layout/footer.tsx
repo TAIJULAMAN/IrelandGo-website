@@ -7,8 +7,8 @@ interface FooterProps {
 export function Footer({ className = "" }: FooterProps) {
   return (
     <footer className={`bg-[#0b1930] border-t text-white w-full ${className}`}>
-      <div className="container mx-auto px-5 sm:px-6 md:px-8 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <img
@@ -146,7 +146,7 @@ export function Footer({ className = "" }: FooterProps) {
             </address>
           </div>
         </div>
-        <div className="border-t border-gray-700 mt-8 pt-6 text-center text-sm text-gray-400">
+        <div className="border-t border-gray-700 mt-10 md:mt-12 pt-6 text-center text-sm text-gray-400">
           <p>© {new Date().getFullYear()} Tourenzo. All rights reserved.</p>
         </div>
       </div>
