@@ -6,7 +6,6 @@ import { PopularMultiDayTours } from "@/components/home/popular-multi-day-tours"
 import { SafetyComfort } from "@/components/home/safety-comfort"
 import { WhyChooseUs } from "@/components/home/why-choose-us"
 import { Testimonials } from "@/components/common/testimonials"
-import { Footer } from "@/components/layout/footer"
 import { NewsLetter } from "@/components/home/news-letter"
 import { RecentBlogs } from "@/components/home/recent-blogs"
 
@@ -23,7 +22,6 @@ export default function Home() {
       <Testimonials />
       <RecentBlogs />
       <NewsLetter />
-      <Footer />
     </main>
   )
 }

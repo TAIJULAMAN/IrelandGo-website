@@ -147,9 +147,7 @@ export function Hero() {
   };
 
   return (
-    <>
-      <Header />
-      <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
+    <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
         <div className="absolute inset-0 z-0">
           <img
             src="/transfer-hero.jpg"
@@ -157,7 +155,7 @@ export function Hero() {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="max-w-7xl mx-auto px-5 py-16 relative z-10">
+        <div className="max-w-7xl 2xl:max-w-8xl mx-auto px-5 sm:px-6 md:px-8 py-16 relative z-10">
           {/* Hero Text */}
           <div className="text-center mb-5 md:mb-10 pt-10">
             <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
@@ -714,6 +712,5 @@ export function Hero() {
           </div>
         </div>
       </section>
-    </>
   );
 }

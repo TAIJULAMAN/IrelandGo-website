@@ -1,15 +1,11 @@
 "use client";
 
-import { Header2 } from "@/components/common/Header2";
-import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Clock, MapPin, Phone } from "lucide-react";
 
 export default function RealTimeTracking() {
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col">
-      <Header2 />
-
       <div className="flex-1 py-8 sm:py-10 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
         {/* Page title */}
         <div className="text-center mb-2">
@@ -201,9 +197,6 @@ export default function RealTimeTracking() {
             </div>
           </div>
         </div>
-      </div>
-
-      <Footer />
-    </section>
+      </div>    </section>
   );
 }

@@ -5,7 +5,6 @@ import { useGetAllMultiDayToursQuery } from "@/Redux/features/multi-day-tours/mu
 import MultiDayToursDetailsHero from "@/components/multi-day-tours/multi-day-tours-details/multi-day-tours-details-hero";
 import FAQ from "@/app/settings/faq/faq";
 import { Testimonials } from "@/components/common/testimonials";
-import { Footer } from "@/components/layout/footer";
 
 export default function MultiDayTourDetails({
   params,
@@ -37,8 +36,6 @@ export default function MultiDayTourDetails({
     <main>
       <MultiDayToursDetailsHero tour={tour} />
       <Testimonials />
-      <FAQ />
-      <Footer />
-    </main>
+      <FAQ />    </main>
   );
 }

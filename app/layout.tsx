@@ -7,6 +7,8 @@ import ReduxProvider from "@/Redux/ReduxProvider"
 import { Toaster } from "sonner"
 import "./globals.css"
 
+import { ClientLayout } from "@/components/layout/client-layout"
+
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
@@ -52,7 +54,7 @@ export default function RootLayout({
       <body className={`font-sans antialiased`}>
         <ReduxProvider>
           <AuthProvider>
-            {children}
+            <ClientLayout>{children}</ClientLayout>
           </AuthProvider>
           <Toaster position="top-center" richColors />
         </ReduxProvider>

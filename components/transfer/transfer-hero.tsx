@@ -107,9 +107,7 @@ export default function TransfersHero() {
   ];
 
   return (
-    <>
-      <Header />
-      <section className="relative min-h-screen text-white overflow-hidden">
+    <section className="relative min-h-screen text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="/transfer.png"
@@ -117,7 +115,7 @@ export default function TransfersHero() {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="max-w-7xl mx-auto px-5 pt-10 md:pt-48 relative z-10 flex flex-col items-center text-center gap-5 md:gap-10">
+        <div className="max-w-7xl 2xl:max-w-8xl mx-auto px-5 sm:px-6 md:px-8 pt-10 md:pt-48 relative z-10 flex flex-col items-center text-center gap-5 md:gap-10">
           <div className="text-center mb-5 md:mb-10 pt-10">
             <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
               Reliable Private Transfers Across
@@ -193,7 +191,7 @@ export default function TransfersHero() {
                 <span>Find Transfers</span>
               </button>
             </div>
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs md:text-lg text-gray-600 mt-2">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm md:text-base text-gray-600 mt-2">
               <span className="font-medium text-gray-700">Popular routes:</span>
               {popularRoutes.map((route, index) => (
                 <button
@@ -238,7 +236,5 @@ export default function TransfersHero() {
           </div>
         </div>
       </section>
-    </>
-
   );
 }

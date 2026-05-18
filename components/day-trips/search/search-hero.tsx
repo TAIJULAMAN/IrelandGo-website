@@ -1,6 +1,5 @@
 "use client";
 
-import { Header } from "@/components/common/header";
 import { MapPin, Flag, Calendar as CalendarIcon, ChevronDown, Plus, Minus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -141,9 +140,7 @@ export function SearchHero({ trip }: { trip?: any }) {
   }, []);
 
   return (
-    <section className="relative w-full h-[80vh] flex flex-col">
-      <Header />
-      {/* Background image */}
+    <section className="relative w-full h-[80vh] flex flex-col">      {/* Background image */}
       <div className="absolute inset-0 z-0">
         <img
           src="/day-trips.jpg"

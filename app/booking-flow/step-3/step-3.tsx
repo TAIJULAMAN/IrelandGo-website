@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car, ChevronLeft, ChevronRight, Minus, AlertCircle, Clock, Map, Search } from "lucide-react";
-import { Header2 } from "@/components/common/Header2";
-import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 
 import { useSearchPopularStopsMutation, useGetSingleStoppageQuery } from "@/Redux/features/stopage/stopageApi";
@@ -318,8 +316,6 @@ export default function Step3() {
 
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col">
-      <Header2 />
-
       <div className="flex-1 py-6 sm:py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         {/* Step progress */}
         <div className="mb-6 sm:mb-10">
@@ -670,9 +666,6 @@ export default function Step3() {
         </div>
 
       </div>
-
-      <Footer />
-
       {selectedModalStopId && (
         <SingleStoppageModal
           stopId={selectedModalStopId}

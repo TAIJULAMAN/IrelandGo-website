@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Header2 } from "@/components/common/Header2";
-import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Car, MapPin, Clock } from "lucide-react";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
@@ -82,8 +80,6 @@ export default function PaymentStep() {
 
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col">
-      <Header2 />
-
       <div className="flex-1 py-10 sm:py-12 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         {/* Step progress */}
         <div className="mb-8 sm:mb-10">
@@ -303,9 +299,6 @@ export default function PaymentStep() {
             </div>
           </div>
         </div>
-      </div>
-
-      <Footer />
-    </section>
+      </div>    </section>
   );
 }

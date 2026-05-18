@@ -46,40 +46,80 @@ export function Header() {
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-999 transition-all duration-300 ${isScrolled ? "shadow-md py-4 backdrop-blur-sm text-gray-900" : "py-8"}`}
-    >
-      {/* Desktop navigation */}
-      <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex gap-10 text-md z-10">
-        <Link
-          href="/transfer"
-          className="text-blue-500 transition font-bold"
-        >
-          Transfers
-        </Link>
-        <Link
-          href="/multi-day-tours"
-          className="text-blue-500 transition font-bold"
-        >
-          Tours
-        </Link>
-        <Link
-          href="/contact"
-          className="text-blue-500 transition font-bold"
-        >
-          Contact
-        </Link>
-        <Link
-          href="/blog"
-          className="text-blue-500 transition font-bold"
-        >
-          Blog
-        </Link>
-      </nav>
+    <>
+      <header
+        className={`fixed top-0 left-0 right-0 z-999 transition-all duration-300 ${isScrolled
+          ? "py-3 sm:py-3 md:py-3 lg:py-3 xl:py-3 backdrop-blur-md bg-white/95"
+          : "py-3 sm:py-3 md:py-3 lg:py-3 xl:py-3 bg-transparent text-white"
+          }`}
+      >
+        {/* Desktop navigation */}
+        <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex gap-5 xl:gap-10 text-xs sm:text-sm md:text-sm lg:text-base z-10">
+          <Link
+            href="/transfer"
+            className="text-blue-500 font-semibold"
+          >
+            Transfers
+          </Link>
+          <Link
+            href="/multi-day-tours"
+            className="text-blue-500 font-semibold"
+          >
+            Tours
+          </Link>
+          <Link
+            href="/contact"
+            className="text-blue-500 font-semibold"
+          >
+            Contact
+          </Link>
+          <Link
+            href="/blog"
+            className="text-blue-500 hover:text-blue-600 transition font-bold duration-200"
+          >
+            Blog
+          </Link>
+        </nav>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <Link href="/">
+              <div className="flex items-center gap-2">
+                <Image src="/logo.png" alt="Logo" width={40} height={40} />
+                <span className="text-xl font-bold text-blue-500">Tourenzo</span>
+              </div>
+            </Link>
+            <button
+              className="lg:hidden ml-auto text-blue-500 focus:outline-none p-1.5 rounded-lg"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle navigation"
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+            <div className="hidden lg:flex md:flex xl:flex items-center gap-5">
+              <Link
+                href="/auth/login"
+                className="text-blue-500 font-medium transition-colors text-sm xl:text-base"
+              >
+                Travel Agents & B2B
+              </Link>
+              {isAuthenticated ? (
+                <UserAvatar />
+              ) : (
+                <Link href="/auth/login">
+                  <Button className="bg-blue-500 text-white px-5 xl:px-6 py-2 rounded-md text-sm md:text-base">
+                    Login
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
 
       {/* Mobile navigation */}
       {isMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
+        <div className="fixed inset-0 z-[9999] lg:hidden">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
@@ -87,22 +127,22 @@ export function Header() {
           />
 
           {/* Drawer */}
-          <nav className="relative h-full w-[80%] max-w-[300px] bg-white shadow-2xl flex flex-col p-6 animate-in slide-in-from-left duration-300">
+          <nav className="absolute top-0 left-0 z-50 h-full w-[80%] max-w-[300px] bg-white shadow-2xl flex flex-col p-5 animate-in slide-in-from-left duration-300">
             {/* Drawer Header */}
             <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
               <Link href="/" onClick={() => setIsMenuOpen(false)}>
                 <div className="flex items-center gap-2">
                   <Image src="/logo.png" alt="Logo" width={32} height={32} />
-                  <span className="text-lg font-bold text-gray-900">
+                  <span className="text-lg font-bold text-blue-500">
                     Tourenzo
                   </span>
                 </div>
               </Link>
               <button
                 onClick={() => setIsMenuOpen(false)}
-                className="p-2 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full transition"
+                className="p-2 text-gray-900"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 
@@ -153,7 +193,7 @@ export function Header() {
             {/* Drawer Footer (Auth) */}
             <div className="mt-auto pt-6 border-t border-gray-100">
               {isAuthenticated && user ? (
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
                     {user?.profileImage ? (
                       <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
@@ -223,41 +263,6 @@ export function Header() {
           </nav>
         </div>
       )}
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
-          <Link href="/">
-            <div className="flex items-center gap-2">
-              <Image src="/logo.png" alt="Logo" width={40} height={40} />
-              <span className="text-xl font-bold text-blue-500">Tourenzo</span>
-            </div>
-          </Link>
-          <button
-            className="md:hidden ml-auto text-gray-900 focus:outline-none"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle navigation"
-          >
-            <Menu className="w-6 h-6" />
-          </button>
-          <div className="hidden md:flex items-center gap-6">
-            <Link
-              href="/auth/login"
-              className="text-blue-500 font-medium transition-colors"
-            >
-              Travel agents & B2B
-            </Link>
-            {isAuthenticated ? (
-              <UserAvatar />
-            ) : (
-              <Link href="/auth/login">
-                <Button className="bg-blue-500 text-white px-6 py-2 rounded-md">
-                  Login
-                </Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-    </header>
+    </>
   );
 }

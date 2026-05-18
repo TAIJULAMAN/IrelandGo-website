@@ -1,11 +1,9 @@
 "use client";
 
-import { Footer } from "@/components/layout/footer";
 import { Calendar, ArrowLeft, Tag } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Header2 } from "@/components/common/Header2";
 import { useGetSingleBlogQuery } from "@/Redux/features/blogs/blogsApi";
 
 export default function BlogDetailPage() {
@@ -29,9 +27,7 @@ export default function BlogDetailPage() {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col bg-white">
-        <Header2 />
-        <main className="flex-grow pt-24 pb-16">
+      <div className="min-h-screen flex flex-col bg-white">        <main className="flex-grow pt-24 pb-16">
           <div className="container mx-auto px-5 animate-pulse">
             {/* Breadcrumb skeleton */}
             <div className="max-w-4xl mx-auto mb-6">
@@ -53,18 +49,14 @@ export default function BlogDetailPage() {
               <div className="h-4 bg-gray-200 rounded w-4/6" />
             </div>
           </div>
-        </main>
-        <Footer />
-      </div>
+        </main>      </div>
     );
   }
 
   // Error / Not found
   if (isError || !blog) {
     return (
-      <div className="min-h-screen flex flex-col bg-white">
-        <Header2 />
-        <div className="flex-grow flex items-center justify-center">
+      <div className="min-h-screen flex flex-col bg-white">        <div className="flex-grow flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               Post Not Found
@@ -73,16 +65,12 @@ export default function BlogDetailPage() {
               Return to Blog
             </Link>
           </div>
-        </div>
-        <Footer />
-      </div>
+        </div>      </div>
     );
   }
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <Header2 />
-
       <main className="flex-grow pt-24 pb-16">
         <article>
           {/* Breadcrumb */}
@@ -205,9 +193,6 @@ export default function BlogDetailPage() {
             </div>
           </div>
         </article>
-      </main>
-
-      <Footer />
-    </div>
+      </main>    </div>
   );
 }

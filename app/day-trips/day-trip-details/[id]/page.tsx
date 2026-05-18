@@ -5,7 +5,6 @@ import DayTripsDetailsHero from "@/components/day-trips/day-trips-details/day-tr
 import TripItinerary from "@/components/day-trips/day-trips-details/trip-Itinerary";
 import FAQ from "@/app/settings/faq/faq";
 import { Testimonials } from "@/components/common/testimonials";
-import { Footer } from "@/components/layout/footer";
 import { useGetSingleDayTripQuery } from "@/Redux/features/dayTrip/dayTripApi";
 
 export default function DayTripDetails({ params }: { params: Promise<{ id: string }> }) {
@@ -42,8 +41,6 @@ export default function DayTripDetails({ params }: { params: Promise<{ id: strin
       <DayTripsDetailsHero trip={trip} />
       <TripItinerary trip={trip} />
       <Testimonials />
-      <FAQ />
-      <Footer />
-    </main>
+      <FAQ />    </main>
   );
 }

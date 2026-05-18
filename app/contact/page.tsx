@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Footer } from "@/components/layout/footer";
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Header2 } from "@/components/common/Header2";
 import { useContactMutation } from "@/Redux/features/contact/contactApi";
 import { toast } from "sonner";
-import { Header } from "@/components/common/header";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -50,10 +47,9 @@ export default function Contact() {
   };
 
   return (
-    <>
-      <Header />
-      <main className="relative min-h-screen text-white overflow-hidden px-5 pt-10 md:pt-48 mb-10">
-        <section className="container mx-auto px-5 md:px-0 mb-16">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <main className="flex-1 relative text-white overflow-hidden px-5 sm:px-6 md:px-8 pt-10 md:pt-48 pb-10">
+        <section className="container mx-auto px-5 sm:px-6 md:px-8 mb-16">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-2xl md:text-5xl font-bold text-black mb-3 md:mb-4 text-balance leading-tight px-4">
               Get in Touch
@@ -64,7 +60,7 @@ export default function Contact() {
             </p>
           </div>
         </section>
-        <div className="container mx-auto px-5 md:px-0">
+        <div className="container mx-auto px-5 sm:px-6 md:px-8">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
             {/* Contact Form */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -271,7 +267,6 @@ export default function Contact() {
           </div>
         </div>
       </main>
-      <Footer />
-    </>
+    </div>
   );
 }

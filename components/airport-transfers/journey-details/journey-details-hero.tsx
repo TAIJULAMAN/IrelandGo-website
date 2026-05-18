@@ -1,6 +1,5 @@
 "use client";
 
-import { Header2 } from "@/components/common/Header2";
 import { Clock, PlaneTakeoff, Star, MapPin, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 
@@ -10,9 +9,6 @@ export default function JourneyDetailsHero() {
       {/* Background Decor */}
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-30 pointer-events-none" />
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-72 h-72 bg-emerald-50 rounded-full blur-3xl opacity-30 pointer-events-none" />
-
-      <Header2 />
-
       <div className="container mx-auto px-5 sm:px-5 lg:px-0 py-10 lg:py-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-5 lg:gap-10 items-center">
           {/* Text content */}

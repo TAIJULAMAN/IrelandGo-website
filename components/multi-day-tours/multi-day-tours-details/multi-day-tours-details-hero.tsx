@@ -1,6 +1,5 @@
 "use client";
 
-import { Header } from "@/components/common/header";
 import Link from "next/link";
 import React from "react";
 
@@ -16,9 +15,7 @@ export default function MultiDayToursDetailsHero({ tour }: { tour?: any }) {
     <>
       <section className="relative w-full h-[400px] md:h-[500px] lg:h-[60vh] min-h-[400px] flex flex-col justify-center overflow-hidden">
         {/* Header positioned at top */}
-        <div className="absolute top-0 left-0 w-full z-50">
-          <Header />
-        </div>
+        <div className="absolute top-0 left-0 w-full z-50">        </div>
 
         {/* Background image & overlay */}
         <div className="absolute inset-0 z-0">

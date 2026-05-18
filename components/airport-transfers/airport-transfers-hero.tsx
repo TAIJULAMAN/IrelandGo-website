@@ -40,8 +40,6 @@ export default function AirportTransfersHero() {
           className="w-full h-full object-cover"
         />
       </div>
-      <Header />
-
       <div className="container mx-auto px-5 md:px-0 pt-10 flex flex-col items-center text-center gap-5 md:gap-10">
         <div className="space-y-3 sm:space-y-4 mt-6 sm:mt-8">
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight text-white px-2">

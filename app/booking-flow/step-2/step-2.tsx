@@ -4,8 +4,6 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Users, Luggage, Check, Plus, Minus, ChevronDown } from "lucide-react";
-import { Header2 } from "@/components/common/Header2";
-import { Footer } from "@/components/layout/footer";
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
@@ -257,9 +255,7 @@ export default function Step2() {
   );
 
   return (
-    <section className="bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 min-h-screen flex flex-col">
-      <Header2 />
-      <div className="container mx-auto flex-1 py-10 md:py-16 px-5 md:px-0">
+    <section className="bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 min-h-screen flex flex-col">      <div className="container mx-auto flex-1 py-10 md:py-16 px-5 md:px-0">
         {/* Step progress */}
         <div className="mb-8 sm:mb-10">
           <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-600">
@@ -830,8 +826,6 @@ export default function Step2() {
           </Button>
         </div>
       </div>
-      <Footer />
-
       <style jsx>{`
         .vehicle-scroll {
           scrollbar-width: none;

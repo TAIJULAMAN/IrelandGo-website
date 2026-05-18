@@ -1,7 +1,5 @@
 "use client";
 
-import { Header2 } from "@/components/common/Header2";
-import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Lock, Eye, EyeOff, CheckCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -33,8 +31,6 @@ export default function ResetPassword() {
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Header2 />
-
             <main className="pt-24 pb-16 md:pt-28 md:pb-20">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-5xl mx-auto">
@@ -155,9 +151,6 @@ export default function ResetPassword() {
                         </div>
                     </div>
                 </div>
-            </main>
-
-            <Footer />
-        </div>
+            </main>        </div>
     );
 }

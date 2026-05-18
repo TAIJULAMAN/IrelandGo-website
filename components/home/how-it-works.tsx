@@ -26,8 +26,8 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-white">
-      <div className="container mx-auto px-5">
+    <section className="py-10 sm:py-14 md:py-16 lg:py-18 xl:py-20 bg-white">
+      <div className="container mx-auto px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
         <SectionHeader
           title="Simple 4 Steps to Start Your Journey"
           subtitle="How It Works"
@@ -35,15 +35,15 @@ export function HowItWorks() {
           alignment="center"
         />
 
-        <div className="grid md:grid-cols-4 gap-8 relative">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-8 lg:gap-10 relative">
           {/* Connecting line for desktop */}
-          <div className="hidden md:block absolute top-[2.5rem] left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-100 -z-10" />
+          <div className="hidden lg:block absolute top-[2.5rem] left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-blue-100 via-blue-200 to-blue-100 -z-10" />
 
           {steps.map((step, idx) => {
             const Icon = step.icon;
             return (
               <div key={idx} className="relative group">
-                <div className="flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 bg-white md:bg-transparent">
+                <div className="flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 bg-white lg:bg-transparent">
                   <div className="w-20 h-20 rounded-2xl bg-white border-2 border-blue-100 shadow-lg shadow-blue-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10">
                     <Icon className="w-8 h-8 text-blue-600" />
                     {/* Step number badge */}
@@ -62,7 +62,7 @@ export function HowItWorks() {
 
                 {/* Mobile Arrow */}
                 {idx < steps.length - 1 && (
-                  <div className="md:hidden flex justify-center py-4">
+                  <div className="sm:hidden flex justify-center py-4">
                     <ArrowRight className="w-6 h-6 text-gray-300" />
                   </div>
                 )}

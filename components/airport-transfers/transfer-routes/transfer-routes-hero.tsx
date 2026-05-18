@@ -1,6 +1,5 @@
 "use client";
 
-import { Header } from "@/components/common/header";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, Users, Luggage, Plus, Search } from "lucide-react";
 import Image from "next/image";
@@ -18,9 +17,6 @@ export default function TransferRoutesHero() {
 				/>
 
 			</div>
-
-			<Header />
-
 			<div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 				{/* Hero Text */}
 				<div className="text-center mb-10 pt-10">

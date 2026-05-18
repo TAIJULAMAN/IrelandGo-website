@@ -126,9 +126,7 @@ export default function ByTheHourHero() {
   };
 
   return (
-    <>
-      <Header />
-      <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
+    <>      <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
         <div className="absolute inset-0 z-0">
           <img
             src="/by-the-hour.jpg"

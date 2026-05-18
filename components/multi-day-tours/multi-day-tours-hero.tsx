@@ -5,9 +5,7 @@ import { MapPin, Compass, Navigation, Bus } from "lucide-react";
 
 export default function MultiDayToursHero() {
   return (
-    <>
-      <Header />
-      <section className="relative min-h-screen text-white overflow-hidden">
+    <>      <section className="relative min-h-screen text-white overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="/about.avif"

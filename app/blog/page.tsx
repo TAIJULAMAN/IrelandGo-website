@@ -1,10 +1,8 @@
 "use client";
 
-import { Footer } from "@/components/layout/footer";
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar } from "lucide-react";
-import { Header } from "@/components/common/header";
 import { useGetAllBlogsQuery } from "@/Redux/features/blogs/blogsApi";
 
 interface Blog {
@@ -31,9 +29,7 @@ export default function BlogListingPage() {
 
   return (
 
-    <>
-      <Header />
-      <div>
+    <>      <div>
         <section
           className="relative text-white flex flex-col min-h-[70vh] bg-cover bg-center bg-no-repeat px-5 pt-10 md:pt-48 mb-10"
           style={{
@@ -129,9 +125,7 @@ export default function BlogListingPage() {
               ))}
             </div>
           )}
-        </main>
-        <Footer />
-      </div>
+        </main>      </div>
     </>
 
   );

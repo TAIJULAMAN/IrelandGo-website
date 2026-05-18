@@ -1,5 +1,4 @@
 import FAQ from "@/app/settings/faq/faq";
-import { Footer } from "@/components/layout/footer";
 import { Testimonials } from "@/components/common/testimonials";
 import TransferJourneyDetails from "@/components/transfer/transfer-journey-details";
 import PrivateCarTransferHero from "@/components/private-car-transfer/private-car-transfer-hero";
@@ -17,8 +16,6 @@ export default function PrivateCarTransfer() {
       </Suspense>
       <TravelTips />
       <Testimonials />
-      <FAQ />
-      <Footer />
-    </div>
+      <FAQ />    </div>
   );
 }

@@ -3,8 +3,6 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { XCircle, MapPin, Car, AlertCircle, ArrowLeft } from "lucide-react";
-import { Header2 } from "@/components/common/Header2";
-import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 
@@ -45,8 +43,6 @@ export default function PaymentCancelPage() {
 
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col">
-      <Header2 />
-
       <div className="flex-1 py-10 sm:py-16 max-w-2xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         {/* Cancel Icon */}
         <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
@@ -96,9 +92,6 @@ export default function PaymentCancelPage() {
             </Link>
           </Button>
         </div>
-      </div>
-
-      <Footer />
-    </section>
+      </div>    </section>
   );
 }

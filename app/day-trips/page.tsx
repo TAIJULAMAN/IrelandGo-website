@@ -3,7 +3,6 @@ import Expectations from "@/components/day-trips/expectations";
 import FAQ from "@/app/settings/faq/faq";
 import Memories from "@/components/day-trips/memories";
 import TripCards from "@/components/day-trips/trip-cards";
-import { Footer } from "@/components/layout/footer";
 import { Testimonials } from "@/components/common/testimonials";
 
 export default function DayTrips() {
@@ -15,9 +14,7 @@ export default function DayTrips() {
             <Expectations />
             <Memories />
             <Testimonials />
-            <FAQ />
-            <Footer />
-        </main>
+            <FAQ />        </main>
     )
 }
 

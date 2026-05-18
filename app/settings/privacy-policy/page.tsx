@@ -1,7 +1,5 @@
 "use client";
 
-import { Header2 } from "@/components/common/Header2";
-import { Footer } from "@/components/layout/footer";
 import { useGetPrivacyQuery } from "@/Redux/features/settings/privacyApi";
 
 export default function PrivacyPolicy() {
@@ -19,8 +17,6 @@ export default function PrivacyPolicy() {
 
     return (
         <div className="h-screen bg-gray-50">
-            <Header2 />
-
             <main className="container mx-auto px-5 md:px-0 py-16 h-[calc(100vh-200px)] overflow-y-auto">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                     Privacy Policy
@@ -60,9 +56,6 @@ export default function PrivacyPolicy() {
                         <p className="text-gray-500 text-lg">Privacy policy not available.</p>
                     </div>
                 )}
-            </main>
-
-            <Footer />
-        </div>
+            </main>        </div>
     );
 }

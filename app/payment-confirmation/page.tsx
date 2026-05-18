@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
-import { Header2 } from "@/components/common/Header2";
-import { Footer } from "@/components/layout/footer";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 
 export default function PaymentConfirmationPage() {
@@ -66,9 +64,7 @@ export default function PaymentConfirmationPage() {
 
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col">
-      <div className="print:hidden">
-        <Header2 />
-      </div>
+      <div className="print:hidden">      </div>
 
       <div className="flex-1 py-10 sm:py-14 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Success Banner */}
@@ -187,9 +183,7 @@ export default function PaymentConfirmationPage() {
         </div>
       </div>
 
-      <div className="print:hidden">
-        <Footer />
-      </div>
+      <div className="print:hidden">      </div>
     </section>
   );
 }

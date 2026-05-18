@@ -2,7 +2,6 @@
 
 import { MapPin, Flag, Calendar as CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Header } from "@/components/common/header";
 import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
@@ -24,9 +23,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   return (
-    <section className="relative w-full h-[80vh]">
-      <Header />
-      <div className="absolute inset-0">
+    <section className="relative w-full h-[80vh]">      <div className="absolute inset-0">
         <img
           src={trip?.images?.[0] || "/details.png"}
           alt={trip?.title || "Scenic Ireland coastline"}
