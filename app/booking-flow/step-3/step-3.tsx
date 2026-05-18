@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car, ChevronLeft, ChevronRight, Minus, AlertCircle, Clock, Map } from "lucide-react";
+import { MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car, ChevronLeft, ChevronRight, Minus, AlertCircle, Clock, Map, Search } from "lucide-react";
 import { Header2 } from "@/components/common/Header2";
 import { Footer } from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
@@ -183,7 +183,24 @@ export default function Step3() {
 
   const [selectedStops, setSelectedStops] = useState<any[]>([]);
   const [selectedModalStopId, setSelectedModalStopId] = useState<string | null>(null);
+  const [customStopName, setCustomStopName] = useState("");
+  const [customStopDuration, setCustomStopDuration] = useState(60);
   const router = useRouter();
+
+  const handleAddCustomStop = () => {
+    const trimmed = customStopName.trim();
+    if (!trimmed) return;
+    const customStop = {
+      id: `custom-${Date.now()}`,
+      name: trimmed,
+      duration: customStopDuration,
+      price: Math.round((basePriceSumForStops || 20) * (customStopDuration / 60)),
+      image: [],
+      isCustom: true,
+    };
+    setSelectedStops(prev => [...prev, customStop]);
+    setCustomStopName("");
+  };
 
   const serviceType = searchParams.get("serviceType") || "TRANSFER";
 
@@ -447,6 +464,44 @@ export default function Step3() {
                 })}
               </div>
             )}
+
+            {/* Custom stop entry – shown after the predefined grid */}
+            <div className="mt-4 space-y-3">
+              <div className="flex items-start gap-2 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+                <Search className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                <p className="text-xs sm:text-sm text-blue-700 font-medium">
+                  Want a different stop? Add your own custom stop below.
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={customStopName}
+                  onChange={(e) => setCustomStopName(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleAddCustomStop()}
+                  placeholder="Add stop name"
+                  className="flex-1 h-10 sm:h-11 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <select
+                  value={customStopDuration}
+                  onChange={(e) => setCustomStopDuration(Number(e.target.value))}
+                  className="h-10 sm:h-11 rounded-lg border border-gray-200 bg-white px-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shrink-0"
+                >
+                  {[30, 60, 90, 120, 150, 180, 240].map(m => (
+                    <option key={m} value={m}>{formatDuration(m)}</option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  onClick={handleAddCustomStop}
+                  disabled={!customStopName.trim()}
+                  className="h-10 sm:h-11 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white text-sm font-semibold rounded-lg transition-colors shrink-0 flex items-center gap-1.5"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add
+                </button>
+              </div>
+            </div>
 
             {/* Bottom navigation – inline below stops */}
             <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-2">
