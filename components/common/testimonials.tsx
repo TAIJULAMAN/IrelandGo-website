@@ -133,13 +133,15 @@ export function Testimonials() {
             </button>
           )}
 
-          <SectionHeader
-            title="What Our Customers Say"
-            subtitle="Testimonials"
-            description="Trusted by happy travelers worldwide for our premium service and local expertise."
-            alignment="center"
-            className="mb-0"
-          />
+          <div className="flex-1 flex justify-center">
+            <SectionHeader
+              title="What Our Customers Say"
+              subtitle="Testimonials"
+              description="Trusted by happy travelers worldwide for our premium service and local expertise."
+              alignment="center"
+              className="mb-0"
+            />
+          </div>
 
           {showSlider && (
             <button

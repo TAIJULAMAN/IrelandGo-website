@@ -21,7 +21,7 @@ export function WhyChooseUs() {
     {
       icon: Sparkles,
       title: "Luxury Fleet",
-      description: "Take-out Mercedes-Bnez from above.",
+      description: "Experience superior comfort in our modern fleet of sedans and vans.",
     },
     {
       icon: Map,
