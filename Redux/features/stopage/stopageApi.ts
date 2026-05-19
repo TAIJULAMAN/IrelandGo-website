@@ -12,8 +12,15 @@ const stopageApi = baseApi.injectEndpoints({
     getSingleStoppage: builder.query({
       query: (id) => `stoppages/single-stoppage/${id}`,
     }),
+    addExtraStoppages: builder.mutation({
+      query: (data) => ({
+        url: `stoppages/add-extra-stoppage`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useSearchPopularStopsMutation, useGetSingleStoppageQuery } = stopageApi;
+export const { useSearchPopularStopsMutation, useGetSingleStoppageQuery, useAddExtraStoppagesMutation } = stopageApi;

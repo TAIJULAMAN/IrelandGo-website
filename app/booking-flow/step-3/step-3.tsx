@@ -4,10 +4,11 @@ import Link from "next/link";
 import { MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car, ChevronLeft, ChevronRight, Minus, AlertCircle, Clock, Map, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-import { useSearchPopularStopsMutation, useGetSingleStoppageQuery } from "@/Redux/features/stopage/stopageApi";
+import { useSearchPopularStopsMutation, useGetSingleStoppageQuery, useAddExtraStoppagesMutation } from "@/Redux/features/stopage/stopageApi";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 function formatDuration(minutes: number) {
   const h = Math.floor(minutes / 60);
@@ -179,25 +180,134 @@ export default function Step3() {
   const vehicleId = searchParams.get("vehicleId");
   const transferRouteParam = searchParams.get("transferRoute");
 
+  let distanceKm = 0;
+  let transferRoute: any = null;
+  if (transferRouteParam) {
+    try {
+      transferRoute = JSON.parse(transferRouteParam);
+      distanceKm = transferRoute.distanceKm || 0;
+    } catch (e) { }
+  }
+
+  const fromLat = searchParams.get("fromLat") || transferRoute?.fromLat || "";
+  const fromLng = searchParams.get("fromLng") || transferRoute?.fromLng || "";
+  const toLat = searchParams.get("toLat") || transferRoute?.toLat || "";
+  const toLng = searchParams.get("toLng") || transferRoute?.toLng || "";
+  const coordsParam = fromLat ? `&fromLat=${fromLat}&fromLng=${fromLng}&toLat=${toLat}&toLng=${toLng}` : "";
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    libraries: ["places"] as any
+  });
+
   const [selectedStops, setSelectedStops] = useState<any[]>([]);
   const [selectedModalStopId, setSelectedModalStopId] = useState<string | null>(null);
   const [customStopName, setCustomStopName] = useState("");
   const [customStopDuration, setCustomStopDuration] = useState(60);
+  const [customStopLat, setCustomStopLat] = useState<number | null>(null);
+  const [customStopLng, setCustomStopLng] = useState<number | null>(null);
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const router = useRouter();
 
-  const handleAddCustomStop = () => {
+  const [addExtraStoppages] = useAddExtraStoppagesMutation();
+
+  useEffect(() => {
+    if (isLoaded && inputRef.current) {
+      const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
+        componentRestrictions: { country: "ie" },
+        fields: ["name", "geometry", "formatted_address"],
+        types: ["establishment"], // Prefer actual places/establishments over addresses/geocodes
+      });
+
+      if (fromLat && fromLng && toLat && toLng) {
+        const bounds = new window.google.maps.LatLngBounds();
+        bounds.extend({ lat: parseFloat(fromLat.toString()), lng: parseFloat(fromLng.toString()) });
+        bounds.extend({ lat: parseFloat(toLat.toString()), lng: parseFloat(toLng.toString()) });
+        autocomplete.setBounds(bounds);
+      }
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (place && place.geometry && place.geometry.location) {
+          const lat = place.geometry.location.lat();
+          const lng = place.geometry.location.lng();
+          const name = place.name || place.formatted_address || "";
+          setCustomStopName(name);
+          setCustomStopLat(lat);
+          setCustomStopLng(lng);
+        }
+      });
+
+      const handleInput = () => {
+        const val = inputRef.current?.value || "";
+        setCustomStopName(val);
+        if (!val.trim()) {
+          setCustomStopLat(null);
+          setCustomStopLng(null);
+        }
+      };
+
+      inputRef.current.addEventListener("input", handleInput);
+      autocompleteRef.current = autocomplete;
+
+      return () => {
+        if (inputRef.current) {
+          inputRef.current.removeEventListener("input", handleInput);
+        }
+      };
+    }
+  }, [isLoaded, fromLat, fromLng, toLat, toLng]);
+
+  const handleAddCustomStop = async () => {
     const trimmed = customStopName.trim();
     if (!trimmed) return;
-    const customStop = {
-      id: `custom-${Date.now()}`,
-      name: trimmed,
-      duration: customStopDuration,
-      price: Math.round((basePriceSumForStops || 20) * (customStopDuration / 60)),
-      image: [],
-      isCustom: true,
-    };
-    setSelectedStops(prev => [...prev, customStop]);
-    setCustomStopName("");
+
+    if (!customStopLat || !customStopLng) {
+      alert("Please select a valid stop location from the search dropdown.");
+      return;
+    }
+
+    try {
+      const response = await addExtraStoppages({
+        location: trimmed,
+        latitude: customStopLat,
+        longitude: customStopLng,
+      }).unwrap();
+
+      console.log("Custom stoppage added successfully:", response);
+
+      const addedStoppage = response?.data?.searchableStoppage?.[0] || response?.data || response;
+      const stoppageId = addedStoppage?.id || addedStoppage?._id || `added-${Date.now()}`;
+      const stoppageName = addedStoppage?.name || addedStoppage?.googleName || trimmed;
+      const stoppageImage = addedStoppage?.image || [];
+      const stoppageAddress = addedStoppage?.address || "";
+
+      const customStop = {
+        id: stoppageId,
+        name: stoppageName,
+        duration: customStopDuration,
+        price: calculateStopPrice({ roadDistance: 0 }, customStopDuration),
+        image: stoppageImage,
+        address: stoppageAddress,
+        isCustom: true,
+        latitude: customStopLat,
+        longitude: customStopLng,
+      };
+
+      setSelectedStops(prev => [...prev, customStop]);
+      setCustomStopName("");
+      setCustomStopLat(null);
+      setCustomStopLng(null);
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+    } catch (e: any) {
+      console.error("Failed to add stoppage:", e);
+      alert("Failed to add stoppage. Please select a location from the search dropdown.");
+    }
   };
 
   const serviceType = searchParams.get("serviceType") || "TRANSFER";
@@ -208,25 +318,27 @@ export default function Step3() {
     }
   }, [serviceType, searchParams, router]);
 
-  let distanceKm = 0;
-  if (transferRouteParam) {
-    try {
-      const parsed = JSON.parse(transferRouteParam);
-      distanceKm = parsed.distanceKm || 0;
-    } catch (e) { }
-  }
+
+
+  console.log("Stoppages Page Coordinates:", { fromLat, fromLng, toLat, toLng });
 
   const [searchPopularStops, { data: popularStopsResponse, isLoading, error }] = useSearchPopularStopsMutation();
   console.log("popularStopsResponse", popularStopsResponse)
 
   useEffect(() => {
-    if (pickupParam && dropoffParam) {
+    if (pickupParam && dropoffParam && fromLat && fromLng && toLat && toLng) {
       searchPopularStops({
-        from: { location: pickupParam.split(",")[0].trim() },
-        to: { location: dropoffParam.split(",")[0].trim() },
+        from: {
+          location: pickupParam.split(",")[0].trim(),
+          coordinates: [parseFloat(fromLat.toString()), parseFloat(fromLng.toString())],
+        },
+        to: {
+          location: dropoffParam.split(",")[0].trim(),
+          coordinates: [parseFloat(toLat.toString()), parseFloat(toLng.toString())],
+        },
       });
     }
-  }, [pickupParam, dropoffParam, searchPopularStops]);
+  }, [pickupParam, dropoffParam, searchPopularStops, fromLat, fromLng, toLat, toLng]);
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
@@ -259,12 +371,37 @@ export default function Step3() {
 
   const calculateStopPrice = (stop: any, durationMinutes: number) => {
     const stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
-    const stoppagePrice = basePriceSumForStops + (stopDistance * 1.2);
-    return Math.round(stoppagePrice * (durationMinutes / 60));
+    const baseHourPrice = Math.round(basePriceSumForStops + (stopDistance * 1.2));
+    
+    const extraMinutes = durationMinutes - 60;
+    if (extraMinutes <= 0) {
+      return baseHourPrice;
+    }
+    
+    const extraHours = Math.floor(extraMinutes / 60);
+    const remainingMinutes = extraMinutes % 60;
+    
+    let extraCost = extraHours * 50;
+    if (remainingMinutes > 0) {
+      extraCost += 30;
+    }
+    
+    return baseHourPrice + extraCost;
+  };
+
+  const getStopImageUrl = (stop: any) => {
+    if (stop.image && stop.image.length > 0) {
+      return stop.image[0];
+    }
+    if (stop.latitude && stop.longitude) {
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+      return `https://maps.googleapis.com/maps/api/staticmap?center=${stop.latitude},${stop.longitude}&zoom=15&size=500x300&markers=color:blue%7C${stop.latitude},${stop.longitude}&key=${apiKey}`;
+    }
+    return "/placeholder.png";
   };
 
   const stopsData = popularStopsResponse?.data?.searchableStoppage || [];
-  const stops = (Array.isArray(stopsData) ? stopsData : []).map((stop: any) => {
+  const apiStops = (Array.isArray(stopsData) ? stopsData : []).map((stop: any) => {
     const duration = stop.duration !== undefined ? stop.duration : 60;
     return {
       ...stop,
@@ -278,7 +415,10 @@ export default function Step3() {
     };
   });
 
-  const sortedStops = [...stops].sort((a, b) =>
+  const customStopsInSelected = selectedStops.filter((s: any) => s.isCustom);
+  const stops = [...apiStops, ...customStopsInSelected];
+
+  const sortedStops = [...apiStops].sort((a, b) =>
     (b.totalRatings || b.user_ratings_total || b.rating || 0) - (a.totalRatings || a.user_ratings_total || a.rating || 0)
   );
   const mostPopularId = sortedStops[0]?.id;
@@ -398,11 +538,7 @@ export default function Step3() {
                       {/* Image – full width on sm+, fixed left column on mobile */}
                       <div className="relative w-28 shrink-0 sm:w-full h-auto sm:h-44">
                         <img
-                          src={
-                            stop.image && stop.image.length > 0
-                              ? stop.image[0]
-                              : "/placeholder.png"
-                          }
+                          src={getStopImageUrl(stop)}
                           alt={stop.name}
                           className="w-full h-full object-cover"
                           style={{ minHeight: '100px' }}
@@ -416,10 +552,18 @@ export default function Step3() {
                             </span>
                           </div>
                         )}
-                        {/* Name only visible on sm+ inside image */}
-                        <h3 className="hidden sm:block absolute bottom-3 left-4 text-white text-lg font-bold">
-                          {stop.name}
-                        </h3>
+                        {/* Name and Address only visible on sm+ inside image */}
+                        <div className="hidden sm:flex absolute bottom-3 left-4 right-4 flex-col text-white">
+                          <h3 className="text-lg font-bold leading-snug drop-shadow-md">
+                            {stop.name}
+                          </h3>
+                          {stop.address && (
+                            <span className="text-[11px] font-medium opacity-90 flex items-center gap-1 mt-0.5 drop-shadow-sm">
+                              <MapPin className="h-3 w-3 shrink-0" />
+                              <span className="truncate">{stop.address}</span>
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       {/* Info row – stacks differently on mobile */}
@@ -432,6 +576,12 @@ export default function Step3() {
                           <p className={`sm:hidden font-bold text-sm leading-tight ${isSelected ? "text-white" : "text-gray-900"}`}>
                             {stop.name}
                           </p>
+                          {stop.address && (
+                            <span className={`sm:hidden text-[10px] flex items-center gap-1 mb-1 leading-tight ${isSelected ? "text-blue-100" : "text-gray-500"}`}>
+                              <MapPin className="h-2.5 w-2.5 shrink-0" />
+                              <span className="truncate max-w-[150px]">{stop.address}</span>
+                            </span>
+                          )}
                           <div className="flex items-center gap-1 text-sm font-medium">
                             <span className={isSelected ? "text-blue-100" : "text-blue-600"}>
                               {formatDuration(stop.duration)}
@@ -469,33 +619,53 @@ export default function Step3() {
                   Want a different stop? Add your own custom stop below.
                 </p>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <input
+                  ref={inputRef}
                   type="text"
-                  value={customStopName}
-                  onChange={(e) => setCustomStopName(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleAddCustomStop()}
-                  placeholder="Add stop name"
+                  placeholder="Search location to add stop"
                   className="flex-1 h-10 sm:h-11 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
-                <select
-                  value={customStopDuration}
-                  onChange={(e) => setCustomStopDuration(Number(e.target.value))}
-                  className="h-10 sm:h-11 rounded-lg border border-gray-200 bg-white px-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer shrink-0"
-                >
-                  {[30, 60, 90, 120, 150, 180, 240].map(m => (
-                    <option key={m} value={m}>{formatDuration(m)}</option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  onClick={handleAddCustomStop}
-                  disabled={!customStopName.trim()}
-                  className="h-10 sm:h-11 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white text-sm font-semibold rounded-lg transition-colors shrink-0 flex items-center gap-1.5"
-                >
-                  <Plus className="h-4 w-4" />
-                  Add
-                </button>
+                <div className="flex gap-2 shrink-0 justify-between sm:justify-start">
+                  <div className="flex items-center border border-gray-200 rounded-lg bg-white h-10 sm:h-11 overflow-hidden shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => setCustomStopDuration(prev => Math.max(30, prev - 30))}
+                      disabled={customStopDuration <= 30}
+                      className="h-full px-3 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-transparent transition-colors flex items-center justify-center border-r border-gray-100"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <span className="px-3 text-sm font-semibold text-gray-700 min-w-[70px] text-center select-none">
+                      {formatDuration(customStopDuration)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setCustomStopDuration(prev => Math.min(240, prev + 30))}
+                      disabled={customStopDuration >= 240}
+                      className="h-full px-3 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-transparent transition-colors flex items-center justify-center border-l border-gray-100"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
+
+                  <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg h-10 sm:h-11 px-3 shrink-0 select-none">
+                    <span className="text-sm font-bold text-gray-800">
+                      €{calculateStopPrice({ roadDistance: 0 }, customStopDuration)}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleAddCustomStop}
+                    disabled={!customStopName.trim() || !customStopLat}
+                    className="h-10 sm:h-11 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white text-sm font-semibold rounded-lg transition-colors shrink-0 flex items-center gap-1.5"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Add
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -518,7 +688,7 @@ export default function Step3() {
                 <Link
                   href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
                     JSON.stringify(selectedStops.map(s => ({ id: s.id, name: s.name, price: s.price, duration: s.duration })))
-                  )}&distanceKm=${distanceKm}`}
+                  )}&distanceKm=${distanceKm}${coordsParam}`}
                 >
                   Next: Checkout
                 </Link>
@@ -571,23 +741,51 @@ export default function Step3() {
               </div>
 
               {selectedStops.length > 0 && (
-                <div>
-                  <p className="text-xs text-gray-500 font-medium mb-2">Stops</p>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedStops.map((stop) => (
-                      <div
-                        key={stop.id}
-                        className="flex items-center gap-1.5 bg-white border border-blue-600 text-blue-600 rounded-full px-3 py-1 text-xs font-semibold shadow-sm"
-                      >
-                        {stop.name} ({formatDuration(stop.duration)}, €{stop.price})
-                        <button
-                          onClick={() => toggleStop(stop)}
-                          className="hover:bg-blue-100 rounded-full p-0.5 transition-colors"
+                <div className="space-y-2.5">
+                  <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Selected Stops</p>
+                  <div className="space-y-2">
+                    {selectedStops.map((stop) => {
+                      const imageUrl = getStopImageUrl(stop);
+                      return (
+                        <div
+                          key={stop.id}
+                          className="relative flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all"
                         >
-                          <X className="h-3 w-3" />
-                        </button>
-                      </div>
-                    ))}
+                          <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-gray-50 border border-gray-100">
+                            <img
+                              src={imageUrl}
+                              alt={stop.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-1 min-w-0 pr-6">
+                            <h4 className="text-xs sm:text-sm font-bold text-gray-900 truncate">
+                              {stop.name}
+                            </h4>
+                            {stop.address && (
+                              <p className="text-[10px] text-gray-400 font-medium flex items-center gap-0.5 truncate mt-0.5">
+                                <MapPin className="h-2.5 w-2.5 text-gray-300 shrink-0" />
+                                {stop.address}
+                              </p>
+                            )}
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <span className="text-[10px] font-bold text-blue-600 bg-blue-50 px-1.5 py-0.5 rounded">
+                                {formatDuration(stop.duration)}
+                              </span>
+                              <span className="text-[10px] font-bold text-gray-900 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">
+                                €{stop.price}
+                              </span>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => toggleStop(stop)}
+                            className="absolute top-2 right-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full p-1 transition-colors"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -684,6 +882,32 @@ export default function Step3() {
         }
         .vehicle-scroll::-webkit-scrollbar {
           display: none;
+        }
+      `}</style>
+      <style>{`
+        .pac-container {
+          z-index: 999999 !important;
+          border-radius: 12px !important;
+          border: 1px solid #e5e7eb !important;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+          font-family: inherit !important;
+          margin-top: 4px !important;
+        }
+        .pac-item {
+          padding: 10px 14px !important;
+          cursor: pointer !important;
+          display: flex !important;
+          align-items: center !important;
+        }
+        .pac-item:hover {
+          background-color: #f3f4f6 !important;
+        }
+        .pac-item-query {
+          font-size: 14px !important;
+          color: #1f2937 !important;
+        }
+        .pac-matched {
+          font-weight: 600 !important;
         }
       `}</style>
     </section >
