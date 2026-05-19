@@ -57,25 +57,25 @@ export default function Step3Details() {
 
   const COUNTRY_CODES = [
     { code: "+353", iso: "ie", label: "IE" },
-    { code: "+44",  iso: "gb", label: "GB" },
-    { code: "+1",   iso: "us", label: "US" },
-    { code: "+49",  iso: "de", label: "DE" },
-    { code: "+33",  iso: "fr", label: "FR" },
-    { code: "+34",  iso: "es", label: "ES" },
-    { code: "+39",  iso: "it", label: "IT" },
-    { code: "+31",  iso: "nl", label: "NL" },
-    { code: "+48",  iso: "pl", label: "PL" },
-    { code: "+91",  iso: "in", label: "IN" },
-    { code: "+86",  iso: "cn", label: "CN" },
-    { code: "+81",  iso: "jp", label: "JP" },
-    { code: "+82",  iso: "kr", label: "KR" },
-    { code: "+61",  iso: "au", label: "AU" },
-    { code: "+55",  iso: "br", label: "BR" },
-    { code: "+52",  iso: "mx", label: "MX" },
-    { code: "+27",  iso: "za", label: "ZA" },
+    { code: "+44", iso: "gb", label: "GB" },
+    { code: "+1", iso: "us", label: "US" },
+    { code: "+49", iso: "de", label: "DE" },
+    { code: "+33", iso: "fr", label: "FR" },
+    { code: "+34", iso: "es", label: "ES" },
+    { code: "+39", iso: "it", label: "IT" },
+    { code: "+31", iso: "nl", label: "NL" },
+    { code: "+48", iso: "pl", label: "PL" },
+    { code: "+91", iso: "in", label: "IN" },
+    { code: "+86", iso: "cn", label: "CN" },
+    { code: "+81", iso: "jp", label: "JP" },
+    { code: "+82", iso: "kr", label: "KR" },
+    { code: "+61", iso: "au", label: "AU" },
+    { code: "+55", iso: "br", label: "BR" },
+    { code: "+52", iso: "mx", label: "MX" },
+    { code: "+27", iso: "za", label: "ZA" },
     { code: "+971", iso: "ae", label: "AE" },
     { code: "+966", iso: "sa", label: "SA" },
-    { code: "+7",   iso: "ru", label: "RU" },
+    { code: "+7", iso: "ru", label: "RU" },
   ];
 
   const validateEmail = (val: string) => {
@@ -251,7 +251,7 @@ export default function Step3Details() {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen flex flex-col">
+    <section className="bg-gray-50 min-h-screen flex flex-col pt-20">
       <div className="flex-1 py-10 sm:py-12 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         {/* Step progress */}
         <div className="mb-8 sm:mb-10">
@@ -361,11 +361,10 @@ export default function Step3Details() {
                       }}
                       onBlur={() => setEmailError(validateEmail(email))}
                       placeholder="Enter your email address"
-                      className={`h-10 sm:h-11 rounded-lg border bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent ${
-                        emailError
+                      className={`h-10 sm:h-11 rounded-lg border bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent ${emailError
                           ? "border-red-400 focus:ring-red-400"
                           : "border-gray-200 focus:ring-blue-500"
-                      }`}
+                        }`}
                     />
                     {emailError && (
                       <p className="text-xs text-red-500 mt-0.5">{emailError}</p>
@@ -379,11 +378,10 @@ export default function Step3Details() {
                     </label>
                     <div
                       ref={phonePrefixRef}
-                      className={`flex h-10 sm:h-11 rounded-lg border bg-gray-50 overflow-visible focus-within:ring-2 focus-within:border-transparent relative ${
-                        phoneError
+                      className={`flex h-10 sm:h-11 rounded-lg border bg-gray-50 overflow-visible focus-within:ring-2 focus-within:border-transparent relative ${phoneError
                           ? "border-red-400 focus-within:ring-red-400"
                           : "border-gray-200 focus-within:ring-blue-500"
-                      }`}
+                        }`}
                     >
                       {/* Custom flag prefix button */}
                       <button
@@ -408,9 +406,8 @@ export default function Step3Details() {
                               key={c.code + c.label}
                               type="button"
                               onClick={() => { setPhonePrefix(c.code); setPhonePrefixOpen(false); }}
-                              className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm hover:bg-blue-50 transition-colors ${
-                                phonePrefix === c.code ? "bg-blue-50 text-blue-700 font-semibold" : "text-gray-700"
-                              }`}
+                              className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm hover:bg-blue-50 transition-colors ${phonePrefix === c.code ? "bg-blue-50 text-blue-700 font-semibold" : "text-gray-700"
+                                }`}
                             >
                               <img
                                 src={`https://flagcdn.com/w20/${c.iso}.png`}

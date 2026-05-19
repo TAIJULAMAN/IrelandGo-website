@@ -372,20 +372,20 @@ export default function Step3() {
   const calculateStopPrice = (stop: any, durationMinutes: number) => {
     const stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
     const baseHourPrice = Math.round(basePriceSumForStops + (stopDistance * 1.2));
-    
+
     const extraMinutes = durationMinutes - 60;
     if (extraMinutes <= 0) {
       return baseHourPrice;
     }
-    
+
     const extraHours = Math.floor(extraMinutes / 60);
     const remainingMinutes = extraMinutes % 60;
-    
+
     let extraCost = extraHours * 50;
     if (remainingMinutes > 0) {
       extraCost += 30;
     }
-    
+
     return baseHourPrice + extraCost;
   };
 
@@ -407,7 +407,6 @@ export default function Step3() {
       ...stop,
       duration,
       price: calculateStopPrice(stop, duration),
-      // normalise location fields so card/modal can use latitude/longitude directly
       latitude: stop.latitude ?? stop.location?.lat,
       longitude: stop.longitude ?? stop.location?.lng,
       image: Array.isArray(stop.image) ? stop.image : [stop.image].filter(Boolean),
@@ -455,7 +454,7 @@ export default function Step3() {
 
 
   return (
-    <section className="bg-gray-50 min-h-screen flex flex-col">
+    <section className="bg-gray-50 min-h-screen flex flex-col pt-20">
       <div className="flex-1 py-6 sm:py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         {/* Step progress */}
         <div className="mb-6 sm:mb-10">

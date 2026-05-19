@@ -30,14 +30,14 @@ export default function PaymentStep() {
   if (transferRouteParam) {
     try {
       transferRoute = JSON.parse(transferRouteParam);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   let selectedStops: any[] = [];
   if (selectedStopsParam) {
     try {
       selectedStops = JSON.parse(selectedStopsParam);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
@@ -75,11 +75,11 @@ export default function PaymentStep() {
         month: "short",
         day: "numeric",
       });
-    } catch (e) {}
+    } catch (e) { }
   }
 
   return (
-    <section className="bg-gray-50 min-h-screen flex flex-col">
+    <section className="bg-gray-50 min-h-screen flex flex-col pt-20">
       <div className="flex-1 py-10 sm:py-12 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8">
         {/* Step progress */}
         <div className="mb-8 sm:mb-10">
@@ -280,17 +280,6 @@ export default function PaymentStep() {
                     ? "Redirecting to Stripe..."
                     : "Pay Now with Stripe"}
                 </Button>
-                {/* <div className="flex items-center gap-2 text-[11px] sm:text-xs text-gray-400 justify-center">
-                  <span className="h-px w-8 bg-gray-200" />
-                  <span>or</span>
-                  <span className="h-px w-8 bg-gray-200" />
-                </div>
-                <Button
-                  asChild
-                  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg py-2.5 text-sm sm:text-base h-auto"
-                >
-                  <Link href="/booking-flow/booking-confirmation">Pay Now with PayPal</Link>
-                </Button> */}
               </div>
 
               <p className="mt-2 text-[11px] sm:text-xs text-gray-500 text-center">
@@ -299,6 +288,7 @@ export default function PaymentStep() {
             </div>
           </div>
         </div>
-      </div>    </section>
+      </div>
+    </section>
   );
 }

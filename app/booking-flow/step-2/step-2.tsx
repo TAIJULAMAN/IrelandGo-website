@@ -255,49 +255,49 @@ export default function Step2() {
   );
 
   return (
-    <section className="bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 min-h-screen flex flex-col">      <div className="container mx-auto flex-1 py-10 md:py-16 px-5 md:px-0">
+    <section className="bg-gray-50 min-h-screen flex flex-col pt-20">
+      <div className="flex-1 py-6 sm:py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+
         {/* Step progress */}
-        <div className="mb-8 sm:mb-10">
+        <div className="mb-6 sm:mb-10">
           <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-blue-700 text-white text-sm font-bold shadow-md">
-                <Check className="h-5 w-5" />
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold shrink-0">
+                <Check className="h-4 w-4" />
               </div>
-              <span className="font-semibold text-blue-700">Trip Details</span>
+              <span className="hidden sm:inline font-semibold text-blue-700">Trip Details</span>
             </div>
-            <div className="flex-1 h-1 bg-gradient-to-r from-blue-600 to-blue-500 mx-2 rounded-full" />
-            <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-sm font-bold shadow-md">
+            <div className="flex-1 h-0.5 bg-blue-500 mx-1 sm:mx-2" />
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold shrink-0">
                 2
               </div>
-              <span className="font-semibold text-blue-700">
-                Choose Vehicle
-              </span>
+              <span className="hidden sm:inline font-semibold text-blue-700">Choose Vehicle</span>
             </div>
             {serviceType !== "BY_THE_HOUR" && serviceType !== "DAY_TRIP" && (
               <>
-                <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
-                <div className="flex items-center gap-2 text-gray-400">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
+                <div className="flex-1 h-0.5 bg-gray-200 mx-1 sm:mx-2" />
+                <div className="flex items-center gap-1.5 sm:gap-2 text-gray-400">
+                  <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold shrink-0">
                     3
                   </div>
-                  <span>Add Stops</span>
+                  <span className="hidden sm:inline">Add Stops</span>
                 </div>
               </>
             )}
-            <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
-            <div className="flex items-center gap-2 text-gray-400">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
+            <div className="flex-1 h-0.5 bg-gray-200 mx-1 sm:mx-2" />
+            <div className="flex items-center gap-1.5 sm:gap-2 text-gray-400">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold shrink-0">
                 {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "3" : "4"}
               </div>
-              <span>Details</span>
+              <span className="hidden sm:inline">Details</span>
             </div>
-            <div className="flex-1 h-1 bg-gray-300 mx-2 rounded-full" />
-            <div className="flex items-center gap-2 text-gray-400">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 text-sm font-semibold">
+            <div className="flex-1 h-0.5 bg-gray-200 mx-1 sm:mx-2" />
+            <div className="flex items-center gap-1.5 sm:gap-2 text-gray-400">
+              <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold shrink-0">
                 {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "4" : "5"}
               </div>
-              <span>Payment</span>
+              <span className="hidden sm:inline">Payment</span>
             </div>
           </div>
         </div>
@@ -341,10 +341,10 @@ export default function Step2() {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
-                  className="w-[600px] p-6 shadow-xl rounded-2xl"
+                  className="w-[calc(100vw-32px)] sm:w-[500px] md:w-[600px] p-4 sm:p-6 shadow-xl rounded-2xl max-h-[90vh] overflow-y-auto"
                   align="end"
                 >
-                  <div className="flex gap-6">
+                  <div className="flex flex-col md:flex-row gap-6">
                     {/* Left Column: Passengers */}
                     <div className="flex-1 space-y-6">
                       <div className="flex justify-between items-center">
@@ -454,7 +454,7 @@ export default function Step2() {
                       </div>
                     </div>
 
-                    <div className="w-[1px] bg-gray-300"></div>
+                    <div className="hidden md:block w-[1px] bg-gray-300"></div>
 
                     {/* Right Column: Extra Bags */}
                     <div className="flex-1 space-y-6 flex flex-col justify-between">
@@ -513,7 +513,7 @@ export default function Step2() {
 
           <div
             ref={sliderRef}
-            className="vehicle-scroll flex gap-5 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory justify-center"
+            className="vehicle-scroll flex gap-5 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory justify-start md:justify-center px-4"
           >
             {isLoading ? (
               <div className="w-full text-center py-10 text-gray-500">
@@ -794,19 +794,19 @@ export default function Step2() {
         </div>
 
         {/* Next button */}
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 px-4 w-full">
           <Button
             asChild
-            variant="outline"
-            className="px-8 sm:px-10 py-2.5 sm:py-3 border-2 border-gray-300 text-gray-700 text-sm sm:text-base font-semibold rounded-lg hover:bg-gray-50"
+
+            className="w-full  sm:w-auto text-white bg-blue-500 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
           >
             <Link href="/booking-flow/step-1">Back</Link>
           </Button>
           <Button
             asChild
             disabled={!selectedVehicle}
-            className={`px-10 sm:px-12 py-2.5 sm:py-3 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ${selectedVehicle
-              ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+            className={`w-full sm:w-auto px-10 sm:px-12 py-2.5 sm:py-3 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center ${selectedVehicle
+              ? "bg-blue-500"
               : "bg-gray-300 cursor-not-allowed"
               }`}
           >
