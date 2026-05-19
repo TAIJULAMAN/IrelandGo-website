@@ -173,11 +173,10 @@ export default function UserProfilePage() {
           <div className="flex gap-8 px-8">
             <button
               onClick={() => setActiveTab("profile")}
-              className={`py-4 px-2 font-medium transition-colors relative ${
-                activeTab === "profile"
+              className={`py-4 px-2 font-medium transition-colors relative ${activeTab === "profile"
                   ? "text-blue-600"
                   : "text-gray-500 hover:text-gray-700"
-              }`}
+                }`}
             >
               Edit Profile
               {activeTab === "profile" && (
@@ -186,11 +185,10 @@ export default function UserProfilePage() {
             </button>
             <button
               onClick={() => setActiveTab("password")}
-              className={`py-4 px-2 font-medium transition-colors relative ${
-                activeTab === "password"
+              className={`py-4 px-2 font-medium transition-colors relative ${activeTab === "password"
                   ? "text-blue-600"
                   : "text-gray-500 hover:text-gray-700"
-              }`}
+                }`}
             >
               Change Password
               {activeTab === "password" && (
@@ -226,7 +224,7 @@ export default function UserProfilePage() {
                         setFormData({ ...formData, name: e.target.value })
                       }
                       placeholder="Enter full name"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      className="border-gray-300 focus:border-blue-600 focus:ring-blue-600"
                     />
                   </div>
 
@@ -243,7 +241,7 @@ export default function UserProfilePage() {
                       value={formData.email}
                       disabled
                       placeholder="Enter email"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 bg-gray-50 cursor-not-allowed"
+                      className="border-gray-300 focus:border-blue-600 focus:ring-blue-600 bg-gray-50 cursor-not-allowed"
                     />
                   </div>
 
@@ -261,7 +259,7 @@ export default function UserProfilePage() {
                         setFormData({ ...formData, phone: e.target.value })
                       }
                       placeholder="Enter contact number"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      className="border-gray-300 focus:border-blue-600 focus:ring-blue-600"
                     />
                   </div>
 
@@ -279,7 +277,7 @@ export default function UserProfilePage() {
                         setFormData({ ...formData, country: e.target.value })
                       }
                       placeholder="Enter country"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      className="border-gray-300 focus:border-blue-600 focus:ring-blue-600"
                     />
                   </div>
 
@@ -319,7 +317,7 @@ export default function UserProfilePage() {
                         })
                       }
                       placeholder="Enter current password"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      className="border-gray-300 focus:border-blue-600 focus:ring-blue-600"
                     />
                   </div>
 
@@ -341,7 +339,7 @@ export default function UserProfilePage() {
                         })
                       }
                       placeholder="Enter new password"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      className="border-gray-300 focus:border-blue-600 focus:ring-blue-600"
                     />
                   </div>
 
@@ -363,7 +361,7 @@ export default function UserProfilePage() {
                         })
                       }
                       placeholder="Confirm new password"
-                      className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      className="border-gray-300 focus:border-blue-600 focus:ring-blue-600"
                     />
                   </div>
 

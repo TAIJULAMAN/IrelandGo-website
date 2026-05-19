@@ -169,8 +169,8 @@ export default function ByTheHourHero() {
                     Pickup Location
                   </label>
                   <div className="relative">
-                    <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
-                      <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                    <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200">
+                      <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
                       <input
                         ref={inputRef}
                         type="text"
@@ -205,7 +205,7 @@ export default function ByTheHourHero() {
                             )}
                           >
                             <div className="flex items-center gap-2">
-                              <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                              <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
                               <div>
                                 <div className="text-sm font-medium text-gray-900">
                                   {suggestion.structured_formatting.main_text}
@@ -240,7 +240,7 @@ export default function ByTheHourHero() {
                             !date && "text-muted-foreground",
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                           {date ? (
                             <span>
                               {format(date, "PPP")}{" "}
@@ -311,7 +311,7 @@ export default function ByTheHourHero() {
                           className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
                         >
                           <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <Clock className="w-4 h-4 text-blue-600 flex-shrink-0" />
                             <span className="text-sm capitalize">
                               {duration.replace("-", " ")}
                             </span>
@@ -362,7 +362,7 @@ export default function ByTheHourHero() {
                           className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
                         >
                           <div className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <Users className="w-4 h-4 text-blue-600 flex-shrink-0" />
                             <span className="text-sm">
                               {totalPassengers} Passenger
                               {totalPassengers !== 1 ? "s" : ""}
@@ -450,14 +450,14 @@ export default function ByTheHourHero() {
                               <div className="flex items-center gap-3 text-sm text-gray-600">
                                 <Luggage className="w-4 h-4" />
                                 <span className="flex-1">One checked bag</span>
-                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                                   29 x 21 x 11 inch
                                 </span>
                               </div>
                               <div className="flex items-center gap-3 text-sm text-gray-600">
                                 <Luggage className="w-4 h-4" />
                                 <span className="flex-1">One carry-on bag</span>
-                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                                   22 x 14 x 9 inch
                                 </span>
                               </div>
@@ -482,7 +482,7 @@ export default function ByTheHourHero() {
                           className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
                         >
                           <div className="flex items-center gap-2">
-                            <Luggage className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <Luggage className="w-4 h-4 text-blue-600 flex-shrink-0" />
                             <span className="text-sm">
                               {extraBags} Extra Bag{extraBags !== 1 ? "s" : ""}
                             </span>
@@ -555,7 +555,7 @@ export default function ByTheHourHero() {
                   },
                 }}
               >
-                <button className="w-full bg-blue-500 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
+                <button className="w-full bg-blue-600 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
                   Search Available Rides →
                 </button>
               </Link>

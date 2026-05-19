@@ -35,7 +35,7 @@ export function PopularMultiDayTours() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
       </div>
     )
   }
@@ -51,7 +51,7 @@ export function PopularMultiDayTours() {
           {showSlider && (
             <button
               onClick={goToPrevious}
-              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Previous tours"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -69,7 +69,7 @@ export function PopularMultiDayTours() {
           {showSlider && (
             <button
               onClick={goToNext}
-              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Next tours"
             >
               <ChevronRight className="w-6 h-6" />
@@ -123,14 +123,14 @@ export function PopularMultiDayTours() {
           <div className="flex md:hidden items-center justify-center gap-4 mt-8">
             <button
               onClick={goToPrevious}
-              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Previous tours"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={goToNext}
-              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Next tours"
             >
               <ChevronRight className="w-6 h-6" />

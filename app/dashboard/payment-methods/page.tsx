@@ -26,7 +26,7 @@ export default function UserPaymentMethodsPage() {
       <div className="flex flex-col gap-6 px-6 pt-6 max-w-5xl">
         {/* Banner */}
         <div className="bg-[#F4F8FA] border border-[#E5EDF4] rounded-xl p-5">
-          <h2 className="text-blue-500 font-medium text-[15px] mb-1">
+          <h2 className="text-blue-600 font-medium text-[15px] mb-1">
             Setup Payout Method
           </h2>
           <p className="text-[14px] text-[#4B5563]">
@@ -41,7 +41,7 @@ export default function UserPaymentMethodsPage() {
             <div className="flex items-center gap-4 mb-20">
               <div className="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
                 <CreditCard
-                  className="h-[22px] w-[22px] text-blue-500"
+                  className="h-[22px] w-[22px] text-blue-600"
                   strokeWidth={1.5}
                 />
               </div>
@@ -61,7 +61,7 @@ export default function UserPaymentMethodsPage() {
                 Connect your Stripe account to start receiving payments
                 automatically.
               </p>
-              <Button className="bg-blue-500 text-white font-medium rounded-lg px-5 py-2.5 h-auto transition-colors">
+              <Button className="bg-blue-600 text-white font-medium rounded-lg px-5 py-2.5 h-auto transition-colors">
                 Connect Stripe
               </Button>
             </div>

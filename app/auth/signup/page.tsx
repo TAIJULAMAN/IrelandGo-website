@@ -56,7 +56,7 @@ export default function Signup() {
                                                 id="name"
                                                 name="name"
                                                 required
-                                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm"
+                                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                                 placeholder="John Doe"
                                             />
                                         </div>
@@ -72,7 +72,7 @@ export default function Signup() {
                                                 id="phone"
                                                 name="phone"
                                                 required
-                                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm"
+                                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                                 placeholder="+353 1 234 5678"
                                             />
                                         </div>
@@ -91,7 +91,7 @@ export default function Signup() {
                                             id="email"
                                             name="email"
                                             required
-                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm"
+                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                             placeholder="you@example.com"
                                         />
                                     </div>
@@ -107,7 +107,7 @@ export default function Signup() {
                                             type="button"
                                             onClick={() => setRole("user")}
                                             className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-xl font-medium transition-all text-sm ${role === "user"
-                                                ? "border-blue-500 bg-blue-50 text-blue-700 shadow-sm shadow-blue-500/10"
+                                                ? "border-blue-600 bg-blue-50 text-blue-700 shadow-sm shadow-blue-600/10"
                                                 : "border-gray-200 bg-gray-50/50 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
                                                 }`}
                                         >
@@ -116,7 +116,7 @@ export default function Signup() {
                                                 Traveler
                                             </span>
                                             {role === "user" && (
-                                                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                                                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
                                                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                                     </svg>
@@ -127,7 +127,7 @@ export default function Signup() {
                                             type="button"
                                             onClick={() => setRole("agent")}
                                             className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-xl font-medium transition-all text-sm ${role === "agent"
-                                                ? "border-blue-500 bg-blue-50 text-blue-700 shadow-sm shadow-blue-500/10"
+                                                ? "border-blue-600 bg-blue-50 text-blue-700 shadow-sm shadow-blue-600/10"
                                                 : "border-gray-200 bg-gray-50/50 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
                                                 }`}
                                         >
@@ -136,7 +136,7 @@ export default function Signup() {
                                                 Agent
                                             </span>
                                             {role === "agent" && (
-                                                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                                                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
                                                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                                     </svg>
@@ -159,7 +159,7 @@ export default function Signup() {
                                                 id="password"
                                                 name="password"
                                                 required
-                                                className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm"
+                                                className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                                 placeholder="Strong password"
                                             />
                                             <button
@@ -182,7 +182,7 @@ export default function Signup() {
                                                 id="confirmPassword"
                                                 name="confirmPassword"
                                                 required
-                                                className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm"
+                                                className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                                 placeholder="Re-enter password"
                                             />
                                             <button
@@ -202,7 +202,7 @@ export default function Signup() {
                                         type="checkbox"
                                         id="terms"
                                         required
-                                        className="w-4 h-4 mt-0.5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                                        className="w-4 h-4 mt-0.5 text-blue-600 border-gray-300 rounded focus:ring-blue-600 cursor-pointer"
                                     />
                                     <label htmlFor="terms" className="ml-2.5 text-xs sm:text-sm text-gray-500 leading-relaxed">
                                         I agree to the{" "}

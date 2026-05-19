@@ -262,7 +262,7 @@ export default function Step3Details() {
               </div>
               <span className="hidden sm:inline">Trip Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
+            <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
                 2
@@ -271,7 +271,7 @@ export default function Step3Details() {
             </div>
             {serviceTypeParam !== "BY_THE_HOUR" && serviceTypeParam !== "DAY_TRIP" && (
               <>
-                <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
+                <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
                 <div className="flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
                     3
@@ -280,7 +280,7 @@ export default function Step3Details() {
                 </div>
               </>
             )}
-            <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
+            <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold">
                 {serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "3" : "4"}
@@ -329,7 +329,7 @@ export default function Step3Details() {
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       placeholder="Enter your first name"
-                      className="h-10 sm:h-11 rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="h-10 sm:h-11 rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     />
                   </div>
                   <div className="flex flex-col gap-1.5">
@@ -341,7 +341,7 @@ export default function Step3Details() {
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       placeholder="Enter your last name"
-                      className="h-10 sm:h-11 rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="h-10 sm:h-11 rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -362,8 +362,8 @@ export default function Step3Details() {
                       onBlur={() => setEmailError(validateEmail(email))}
                       placeholder="Enter your email address"
                       className={`h-10 sm:h-11 rounded-lg border bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent ${emailError
-                          ? "border-red-400 focus:ring-red-400"
-                          : "border-gray-200 focus:ring-blue-500"
+                        ? "border-red-400 focus:ring-red-400"
+                        : "border-gray-200 focus:ring-blue-600"
                         }`}
                     />
                     {emailError && (
@@ -379,8 +379,8 @@ export default function Step3Details() {
                     <div
                       ref={phonePrefixRef}
                       className={`flex h-10 sm:h-11 rounded-lg border bg-gray-50 overflow-visible focus-within:ring-2 focus-within:border-transparent relative ${phoneError
-                          ? "border-red-400 focus-within:ring-red-400"
-                          : "border-gray-200 focus-within:ring-blue-500"
+                        ? "border-red-400 focus-within:ring-red-400"
+                        : "border-gray-200 focus-within:ring-blue-600"
                         }`}
                     >
                       {/* Custom flag prefix button */}
@@ -452,7 +452,7 @@ export default function Step3Details() {
                   value={specialRequests}
                   onChange={(e) => setSpecialRequests(e.target.value)}
                   placeholder="Add special requests or additional information..."
-                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent resize-none"
                 />
               </div>
 
@@ -462,21 +462,21 @@ export default function Step3Details() {
                   Additional Services
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <label className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-500">
+                  <label className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-600">
                     <input
                       type="checkbox"
                       checked={childSeat}
                       onChange={(e) => setChildSeat(e.target.checked)}
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
                     />
                     <span>Child Seat Required</span>
                   </label>
-                  <label className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-500">
+                  <label className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-600">
                     <input
                       type="checkbox"
                       checked={wheelchair}
                       onChange={(e) => setWheelchair(e.target.checked)}
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
                     />
                     <span>Wheelchair Accessibility</span>
                   </label>

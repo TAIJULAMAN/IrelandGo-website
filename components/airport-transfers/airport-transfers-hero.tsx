@@ -60,7 +60,7 @@ export default function AirportTransfersHero() {
           {/* Top row: input + button */}
           <div className="flex flex-col sm:flex-row items-stretch gap-3">
             <div className="relative flex-1">
-              <div className="flex items-center border border-gray-200 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 bg-white focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200 transition-all">
+              <div className="flex items-center border border-gray-200 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 bg-white focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200 transition-all">
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
                 <input
                   ref={inputRef}

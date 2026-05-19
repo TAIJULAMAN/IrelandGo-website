@@ -173,14 +173,14 @@ export default function RealTimeTracking() {
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-blue-500" />
+                  <span className="mt-1 h-2 w-2 rounded-full bg-blue-600" />
                   <div>
                     <p className="font-medium text-gray-800">Driver is 5 minutes away</p>
                     <p className="text-gray-500">7 minutes ago</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-2">
-                  <span className="mt-1 h-2 w-2 rounded-full bg-blue-500" />
+                  <span className="mt-1 h-2 w-2 rounded-full bg-blue-600" />
                   <div>
                     <p className="font-medium text-gray-800">Driver accepted your booking</p>
                     <p className="text-gray-500">10 minutes ago</p>

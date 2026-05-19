@@ -16,16 +16,16 @@ export default function PrivacyPolicy() {
     };
 
     return (
-        <div className="h-screen bg-gray-50">
-            <main className="container mx-auto px-5 md:px-0 py-16 h-[calc(100vh-200px)] overflow-y-auto">
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <div className="min-h-screen bg-gray-50 pt-10 md:pt-32 pb-16 flex justify-center">
+            <main className="container mx-auto px-5 sm:px-5 md:px-8 lg:px-10">
+                <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-3 md:mb-4 text-balance leading-tight">
                     Privacy Policy
                 </h1>
 
                 {isLoading ? (
                     <div className="animate-pulse">
                         <div className="h-4 bg-gray-200 rounded w-48 mb-8" />
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 space-y-4">
+                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 space-y-4">
                             <div className="h-4 bg-gray-200 rounded w-full" />
                             <div className="h-4 bg-gray-200 rounded w-5/6" />
                             <div className="h-4 bg-gray-200 rounded w-full" />
@@ -36,13 +36,13 @@ export default function PrivacyPolicy() {
                     </div>
                 ) : privacy ? (
                     <>
-                        <p className="text-gray-600 mb-8">
+                        <p className="text-gray-600 mb-8 text-sm sm:text-base">
                             Last updated: {formatDate(privacy.updatedAt)}
                         </p>
 
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                        <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8">
                             <div
-                                className="prose prose-lg prose-gray max-w-none
+                                className="prose prose-sm sm:prose-base md:prose-lg prose-gray max-w-none
                                     prose-headings:font-semibold prose-headings:text-gray-900
                                     prose-p:text-gray-700 prose-p:leading-relaxed
                                     prose-ul:text-gray-700 prose-li:text-gray-700
@@ -56,6 +56,7 @@ export default function PrivacyPolicy() {
                         <p className="text-gray-500 text-lg">Privacy policy not available.</p>
                     </div>
                 )}
-            </main>        </div>
+            </main>
+        </div>
     );
 }

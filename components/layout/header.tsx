@@ -57,25 +57,25 @@ export function Header() {
         <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex gap-5 xl:gap-10 text-xs sm:text-sm md:text-sm lg:text-base z-10">
           <Link
             href="/transfer"
-            className="text-blue-500 font-semibold"
+            className="text-blue-600 font-semibold"
           >
             Transfers
           </Link>
           <Link
             href="/multi-day-tours"
-            className="text-blue-500 font-semibold"
+            className="text-blue-600 font-semibold"
           >
             Tours
           </Link>
           <Link
             href="/contact"
-            className="text-blue-500 font-semibold"
+            className="text-blue-600 font-semibold"
           >
             Contact
           </Link>
           <Link
             href="/blog"
-            className="text-blue-500 hover:text-blue-600 transition font-bold duration-200"
+            className="text-blue-600 hover:text-blue-600 transition font-bold duration-200"
           >
             Blog
           </Link>
@@ -86,11 +86,11 @@ export function Header() {
             <Link href="/">
               <div className="flex items-center gap-2">
                 <Image src="/logo.png" alt="Logo" width={40} height={40} />
-                <span className="text-xl font-bold text-blue-500">Tourenzo</span>
+                <span className="text-xl font-bold text-blue-600">Tourenzo</span>
               </div>
             </Link>
             <button
-              className="lg:hidden ml-auto text-blue-500 focus:outline-none p-1.5 rounded-lg"
+              className="lg:hidden ml-auto text-blue-600 focus:outline-none p-1.5 rounded-lg"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle navigation"
             >
@@ -99,7 +99,7 @@ export function Header() {
             <div className="hidden lg:flex md:flex xl:flex items-center gap-5">
               <Link
                 href="/auth/login"
-                className="text-blue-500 font-medium transition-colors text-sm xl:text-base"
+                className="text-blue-600 font-medium transition-colors text-sm xl:text-base"
               >
                 Travel Agents & B2B
               </Link>
@@ -107,7 +107,7 @@ export function Header() {
                 <UserAvatar />
               ) : (
                 <Link href="/auth/login">
-                  <Button className="bg-blue-500 text-white px-5 xl:px-6 py-2 rounded-md text-sm md:text-base">
+                  <Button className="bg-blue-600 text-white px-5 xl:px-6 py-2 rounded-md text-sm md:text-base">
                     Login
                   </Button>
                 </Link>
@@ -133,7 +133,7 @@ export function Header() {
               <Link href="/" onClick={() => setIsMenuOpen(false)}>
                 <div className="flex items-center gap-2">
                   <Image src="/logo.png" alt="Logo" width={32} height={32} />
-                  <span className="text-lg font-bold text-blue-500">
+                  <span className="text-lg font-bold text-blue-600">
                     Tourenzo
                   </span>
                 </div>

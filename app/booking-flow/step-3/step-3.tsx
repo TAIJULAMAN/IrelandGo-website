@@ -144,14 +144,14 @@ function SingleStoppageModal({
               <Button
                 onClick={() => { onRemove(baseStop); onClose(); }}
                 variant="outline"
-                className="flex-1 bg-blue-500 text-white"
+                className="flex-1 bg-blue-600 text-white"
               >
                 Remove
               </Button>
               {isDurationChanged && (
                 <Button
                   onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }}
-                  className="flex-1 bg-blue-500 text-white"
+                  className="flex-1 bg-blue-600 text-white"
                 >
                   Update
                 </Button>
@@ -465,14 +465,14 @@ export default function Step3() {
               </div>
               <span className="hidden sm:inline">Trip Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-1 sm:mx-2" />
+            <div className="flex-1 h-0.5 bg-blue-600 mx-1 sm:mx-2" />
             <div className="flex items-center gap-1.5 sm:gap-2">
               <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold shrink-0">
                 2
               </div>
               <span className="hidden sm:inline">Choose Vehicle</span>
             </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-1 sm:mx-2" />
+            <div className="flex-1 h-0.5 bg-blue-600 mx-1 sm:mx-2" />
             <div className="flex items-center gap-1.5 sm:gap-2">
               <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold shrink-0">
                 3
@@ -613,7 +613,7 @@ export default function Step3() {
             {/* Custom stop entry – shown after the predefined grid */}
             <div className="mt-4 space-y-3">
               <div className="flex items-start gap-2 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
-                <Search className="h-4 w-4 text-blue-500 mt-0.5 shrink-0" />
+                <Search className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
                 <p className="text-xs sm:text-sm text-blue-700 font-medium">
                   Want a different stop? Add your own custom stop below.
                 </p>
@@ -624,7 +624,7 @@ export default function Step3() {
                   type="text"
                   onKeyDown={(e) => e.key === "Enter" && handleAddCustomStop()}
                   placeholder="Search location to add stop"
-                  className="flex-1 h-10 sm:h-11 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 h-10 sm:h-11 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
                 <div className="flex gap-2 shrink-0 justify-between sm:justify-start">
                   <div className="flex items-center border border-gray-200 rounded-lg bg-white h-10 sm:h-11 overflow-hidden shrink-0">

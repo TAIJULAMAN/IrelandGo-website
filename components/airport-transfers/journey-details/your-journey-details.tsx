@@ -30,7 +30,7 @@ export default function YourJourneyDetails() {
             <div className="space-y-5">
               {/* Origin */}
               <div className="flex items-start gap-3">
-                <div className="mt-2 mb-10 flex h-7 w-7 items-center justify-center rounded-full bg-blue-500 text-white text-sm font-semibold">
+                <div className="mt-2 mb-10 flex h-7 w-7 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-semibold">
                   A
                 </div>
                 <div>
@@ -92,17 +92,17 @@ export default function YourJourneyDetails() {
             {/* Metrics row */}
             <div className="mt-6 grid grid-cols-3 gap-4 text-center text-xs sm:text-sm text-gray-700 border-t border-gray-100 pt-4">
               <div className="flex flex-col items-center gap-1">
-                <Clock className="h-4 w-4 text-blue-500" />
+                <Clock className="h-4 w-4 text-blue-600" />
                 <p className="font-medium">Duration</p>
                 <p className="text-gray-600">2h 30m</p>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <Route className="h-4 w-4 text-blue-500" />
+                <Route className="h-4 w-4 text-blue-600" />
                 <p className="font-medium">Distance</p>
                 <p className="text-gray-600">220 km</p>
               </div>
               <div className="flex flex-col items-center gap-1">
-                <Euro className="h-4 w-4 text-blue-500" />
+                <Euro className="h-4 w-4 text-blue-600" />
                 <p className="font-medium">From</p>
                 <p className="text-gray-600">€85</p>
               </div>

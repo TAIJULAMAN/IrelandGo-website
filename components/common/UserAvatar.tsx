@@ -63,14 +63,14 @@ export function UserAvatar() {
 
                 </div>
                 <div className="hidden lg:flex flex-col items-start mr-1">
-                    <p className="text-sm font-bold text-blue-500">
+                    <p className="text-sm font-bold text-blue-600">
                         {user?.fullName}
                     </p>
                     <span className="text-[10px] items-center py-0 px-2 rounded-full bg-blue-600 text-white font-semibold uppercase tracking-tighter">
                         {user?.role}
                     </span>
                 </div>
-                <ChevronDown className={`w-4 h-4 text-blue-500 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-blue-600 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isOpen && (

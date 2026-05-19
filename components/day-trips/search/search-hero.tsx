@@ -169,7 +169,7 @@ export function SearchHero({ trip }: { trip?: any }) {
             {/* Pickup Location */}
             <div className="relative">
               <label className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12 hover:border-blue-400 transition">
-                <MapPin className="w-4 h-4 text-blue-500" />
+                <MapPin className="w-4 h-4 text-blue-600" />
                 <Input
                   ref={pickupInputRef}
                   type="text"
@@ -214,7 +214,7 @@ export function SearchHero({ trip }: { trip?: any }) {
             {/* Dropoff Location */}
             <div className="relative">
               <label className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12 hover:border-blue-400 transition">
-                <Flag className="w-4 h-4 text-blue-500" />
+                <Flag className="w-4 h-4 text-blue-600" />
                 <Input
                   ref={dropoffInputRef}
                   type="text"
@@ -267,7 +267,7 @@ export function SearchHero({ trip }: { trip?: any }) {
                       !date && "text-slate-500"
                     )}
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                     {date ? (
                       <span>
                         {format(date, "PPP")}{" "}

@@ -267,7 +267,7 @@ export default function Step2() {
               </div>
               <span className="hidden sm:inline font-semibold text-blue-700">Trip Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-1 sm:mx-2" />
+            <div className="flex-1 h-0.5 bg-blue-600 mx-1 sm:mx-2" />
             <div className="flex items-center gap-1.5 sm:gap-2">
               <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold shrink-0">
                 2
@@ -437,7 +437,7 @@ export default function Step2() {
                             <span className="flex-1 font-medium text-gray-800">
                               One checked bag
                             </span>
-                            <span className="text-xs text-blue-600 bg-transparent px-3 py-1 rounded-full border border-blue-500 font-medium whitespace-nowrap">
+                            <span className="text-xs text-blue-600 bg-transparent px-3 py-1 rounded-full border border-blue-600 font-medium whitespace-nowrap">
                               29 x 21 x 11 inch
                             </span>
                           </div>
@@ -446,7 +446,7 @@ export default function Step2() {
                             <span className="flex-1 font-medium text-gray-800">
                               One carry-on bag
                             </span>
-                            <span className="text-xs text-blue-600 bg-transparent px-3 py-1 rounded-full border border-blue-500 font-medium whitespace-nowrap">
+                            <span className="text-xs text-blue-600 bg-transparent px-3 py-1 rounded-full border border-blue-600 font-medium whitespace-nowrap">
                               22 x 14 x 9 inch
                             </span>
                           </div>
@@ -718,7 +718,7 @@ export default function Step2() {
                                 className="flex flex-col items-center"
                               >
                                 {index > 0 && (
-                                  <div className="text-blue-500 my-1 font-bold bg-blue-100 rounded-full p-1">
+                                  <div className="text-blue-600 my-1 font-bold bg-blue-100 rounded-full p-1">
                                     <Plus className="h-3 w-3" />
                                   </div>
                                 )}
@@ -798,7 +798,7 @@ export default function Step2() {
           <Button
             asChild
 
-            className="w-full  sm:w-auto text-white bg-blue-500 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+            className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
           >
             <Link href="/booking-flow/step-1">Back</Link>
           </Button>
@@ -806,7 +806,7 @@ export default function Step2() {
             asChild
             disabled={!selectedVehicle}
             className={`w-full sm:w-auto px-10 sm:px-12 py-2.5 sm:py-3 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center ${selectedVehicle
-              ? "bg-blue-500"
+              ? "bg-blue-600"
               : "bg-gray-300 cursor-not-allowed"
               }`}
           >

@@ -126,7 +126,7 @@ export function Testimonials() {
           {showSlider && (
             <button
               onClick={goToPrevious}
-              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Previous testimonials"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -146,7 +146,7 @@ export function Testimonials() {
           {showSlider && (
             <button
               onClick={goToNext}
-              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Next testimonials"
             >
               <ChevronRight className="w-6 h-6" />
@@ -175,7 +175,7 @@ export function Testimonials() {
                 &ldquo;{review.comment}&rdquo;
               </p>
               <div className="flex items-center gap-3 md:gap-4">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-xs md:text-sm relative">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-bold text-xs md:text-sm relative">
                   {review.user?.profileImage ? (
                     <Image
                       src={review.user.profileImage}
@@ -205,14 +205,14 @@ export function Testimonials() {
           <div className="flex md:hidden items-center justify-center gap-4 mt-8">
             <button
               onClick={goToPrevious}
-              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Previous testimonials"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={goToNext}
-              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Next testimonials"
             >
               <ChevronRight className="w-6 h-6" />

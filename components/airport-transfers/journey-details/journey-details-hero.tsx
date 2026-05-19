@@ -30,7 +30,7 @@ export default function JourneyDetailsHero() {
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div className="p-4 rounded-xl bg-white border border-gray-100 shadow-xs hover:shadow-md transition-shadow">
-                <Clock className="h-5 w-5 text-blue-500 mb-2" />
+                <Clock className="h-5 w-5 text-blue-600 mb-2" />
                 <div className="font-semibold text-gray-900">2h 30m</div>
                 <div className="text-xs text-gray-500">Est. Duration</div>
               </div>

@@ -90,7 +90,7 @@ export default function PaymentStep() {
               </div>
               <span className="hidden sm:inline">Trip Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
+            <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
                 2
@@ -99,7 +99,7 @@ export default function PaymentStep() {
             </div>
             {serviceType !== "BY_THE_HOUR" && serviceType !== "DAY_TRIP" && (
               <>
-                <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
+                <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
                 <div className="flex items-center gap-2">
                   <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
                     3
@@ -108,14 +108,14 @@ export default function PaymentStep() {
                 </div>
               </>
             )}
-            <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
+            <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
                 {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "3" : "4"}
               </div>
               <span className="hidden sm:inline">Details</span>
             </div>
-            <div className="flex-1 h-0.5 bg-blue-500 mx-2" />
+            <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold">
                 {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "4" : "5"}

@@ -6,7 +6,7 @@ interface FooterProps {
 
 export function Footer({ className = "" }: FooterProps) {
   return (
-    <footer className={`bg-[#0b1930] border-t text-white w-full ${className}`}>
+    <footer className={`bg-gray-900 text-white w-full ${className}`}>
       <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           <div>

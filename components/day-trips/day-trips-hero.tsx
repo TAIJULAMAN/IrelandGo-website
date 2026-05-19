@@ -173,7 +173,7 @@ export default function Hero() {
                       setShowDropdown(false);
                     }}
                   >
-                    <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                    <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
                     <div>
                       <div className="text-sm font-semibold text-gray-900">
                         {suggestion.structured_formatting.main_text}

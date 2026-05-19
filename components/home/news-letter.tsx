@@ -73,7 +73,7 @@ export function NewsLetter() {
 
         <div className="relative h-64 md:h-96 lg:h-[600px] w-full md:w-auto flex items-center justify-center">
           <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-            <div className="group relative w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 animate-float">
+            <div className="group relative w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-600 flex items-center justify-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 animate-float">
               <Mail className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-white" />
               <div className="absolute -top-2 -right-2 w-6 h-6 md:w-8 md:h-8 bg-green-500 rounded-full flex items-center justify-center">
                 <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-white" />

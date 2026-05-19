@@ -36,7 +36,7 @@ export default function ForgotPassword() {
                                             id="email"
                                             name="email"
                                             required
-                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm"
+                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                             placeholder="you@example.com"
                                         />
                                     </div>
@@ -61,7 +61,7 @@ export default function ForgotPassword() {
 
                             {/* Info note */}
                             <div className="mt-6 p-4 bg-blue-50/70 rounded-xl border border-blue-100/80 flex items-start gap-3">
-                                <Info className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+                                <Info className="w-4 h-4 text-blue-600 flex-shrink-0 mt-0.5" />
                                 <p className="text-xs sm:text-sm text-blue-700/80 leading-relaxed">
                                     The verification code will be sent to your registered email address and will expire in 10 minutes.
                                 </p>

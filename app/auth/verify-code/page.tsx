@@ -87,8 +87,8 @@ export default function VerifyCode() {
                                                 onChange={(e) => handleChange(index, e.target.value)}
                                                 onKeyDown={(e) => handleKeyDown(index, e)}
                                                 className={`w-11 h-13 sm:w-13 sm:h-15 text-center text-lg sm:text-xl font-bold border-2 rounded-xl outline-none transition-all ${digit
-                                                    ? "border-blue-500 bg-blue-50/50 text-blue-700"
-                                                    : "border-gray-200 bg-gray-50/50 text-gray-900 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-500/20"
+                                                    ? "border-blue-600 bg-blue-50/50 text-blue-700"
+                                                    : "border-gray-200 bg-gray-50/50 text-gray-900 focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"
                                                     }`}
                                             />
                                         ))}

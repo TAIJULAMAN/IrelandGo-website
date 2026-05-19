@@ -41,7 +41,7 @@ export function PrivateTransfers() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
       </div>
     )
   }
@@ -57,7 +57,7 @@ export function PrivateTransfers() {
           {showSlider && (
             <button
               onClick={goToPrevious}
-              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Previous transfers"
             >
               <ChevronLeft className="w-6 h-6" />
@@ -75,7 +75,7 @@ export function PrivateTransfers() {
           {showSlider && (
             <button
               onClick={goToNext}
-              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Next transfers"
             >
               <ChevronRight className="w-6 h-6" />
@@ -87,9 +87,8 @@ export function PrivateTransfers() {
           {visibleTransfers.map((transfer: any, idx: number) => (
             <div
               key={transfer.id || idx}
-              className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow ${
-                showSlider && idx === 2 ? 'hidden lg:block' : ''
-              } ${showSlider && idx === 1 ? 'hidden md:block' : ''}`}
+              className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow ${showSlider && idx === 2 ? 'hidden lg:block' : ''
+                } ${showSlider && idx === 1 ? 'hidden md:block' : ''}`}
             >
               <div className="relative h-48 md:h-56 overflow-hidden bg-gray-200">
                 <img
@@ -127,14 +126,14 @@ export function PrivateTransfers() {
           <div className="flex md:hidden items-center justify-center gap-4 mt-8">
             <button
               onClick={goToPrevious}
-              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Previous transfers"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button
               onClick={goToNext}
-              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+              className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
               aria-label="Next transfers"
             >
               <ChevronRight className="w-6 h-6" />

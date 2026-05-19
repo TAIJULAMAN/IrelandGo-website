@@ -81,11 +81,10 @@ export default function MultiDayToursOurMultiDayTours() {
           <button
             onClick={onPrev}
             disabled={total <= perPage}
-            className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors ${
-              total <= perPage
+            className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors ${total <= perPage
                 ? "border-slate-200 text-slate-300 cursor-not-allowed"
-                : "border-blue-500 text-blue-500 hover:bg-blue-50"
-            }`}
+                : "border-blue-600 text-blue-600 hover:bg-blue-50"
+              }`}
           >
             <ChevronLeft className="w-9 h-9" />
           </button>
@@ -101,11 +100,10 @@ export default function MultiDayToursOurMultiDayTours() {
           <button
             onClick={onNext}
             disabled={total <= perPage}
-            className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors ${
-              total <= perPage
+            className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors ${total <= perPage
                 ? "border-slate-200 text-slate-300 cursor-not-allowed"
-                : "border-blue-500 text-blue-500 hover:bg-blue-50"
-            }`}
+                : "border-blue-600 text-blue-600 hover:bg-blue-50"
+              }`}
           >
             <ChevronRight className="w-9 h-9" />
           </button>
@@ -117,11 +115,10 @@ export default function MultiDayToursOurMultiDayTours() {
             <button
               key={f}
               onClick={() => onFilter(f)}
-              className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
-                activeFilter === f
+              className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${activeFilter === f
                   ? "bg-blue-600 text-white border-blue-600"
                   : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
-              }`}
+                }`}
             >
               {f}
             </button>

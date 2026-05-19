@@ -24,13 +24,13 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
 
   return (
     <section className="relative w-full h-[80vh]">      <div className="absolute inset-0">
-        <img
-          src={trip?.images?.[0] || "/details.png"}
-          alt={trip?.title || "Scenic Ireland coastline"}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-slate-900/40" />
-      </div>
+      <img
+        src={trip?.images?.[0] || "/details.png"}
+        alt={trip?.title || "Scenic Ireland coastline"}
+        className="w-full h-full object-cover"
+      />
+      <div className="absolute inset-0 bg-slate-900/40" />
+    </div>
       <div className="relative z-10 container mx-auto px-5 flex items-center justify-center pt-30">
         <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-5 md:p-8">
           {/* Title & Subtitle */}
@@ -46,7 +46,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
           {/* Controls */}
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <label className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12">
-              <MapPin className="w-4 h-4 text-blue-500" />
+              <MapPin className="w-4 h-4 text-blue-600" />
               <Input
                 type="text"
                 defaultValue={trip?.from || ""}
@@ -55,7 +55,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
               />
             </label>
             <label className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12">
-              <Flag className="w-4 h-4 text-blue-500" />
+              <Flag className="w-4 h-4 text-blue-600" />
               <Input
                 type="text"
                 defaultValue={trip?.to || ""}
@@ -74,7 +74,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
                       !date && "text-slate-500"
                     )}
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                    <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                     {date ? (
                       <span>
                         {format(date, "PPP")}{" "}

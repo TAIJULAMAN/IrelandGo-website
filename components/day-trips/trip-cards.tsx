@@ -55,7 +55,7 @@ export default function TripCards() {
         {showSlider && (
           <button
             onClick={goToPrevious}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors shrink-0"
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors shrink-0"
             aria-label="Previous day trips"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -69,7 +69,7 @@ export default function TripCards() {
         {showSlider && (
           <button
             onClick={goToNext}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors shrink-0"
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors shrink-0"
             aria-label="Next day trips"
           >
             <ChevronRight className="w-6 h-6" />
@@ -99,9 +99,8 @@ export default function TripCards() {
               <Link
                 key={trip.id || idx}
                 href={`/day-trips/day-trip-details/${trip.id}`}
-                className={`group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-100 h-full flex flex-col ${
-                  showSlider && idx === 2 ? "hidden lg:flex" : ""
-                } ${showSlider && idx === 1 ? "hidden md:flex" : ""}`}
+                className={`group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-100 h-full flex flex-col ${showSlider && idx === 2 ? "hidden lg:flex" : ""
+                  } ${showSlider && idx === 1 ? "hidden md:flex" : ""}`}
               >
                 <div className="relative h-48 md:h-56 overflow-hidden bg-gray-200">
                   <img
@@ -140,14 +139,14 @@ export default function TripCards() {
             <div className="flex md:hidden items-center justify-center gap-4 mt-8">
               <button
                 onClick={goToPrevious}
-                className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+                className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
                 aria-label="Previous day trips"
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
                 onClick={goToNext}
-                className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+                className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
                 aria-label="Next day trips"
               >
                 <ChevronRight className="w-6 h-6" />

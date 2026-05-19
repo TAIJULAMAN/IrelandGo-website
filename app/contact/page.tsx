@@ -47,14 +47,14 @@ export default function Contact() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <main className="flex-1 relative text-white overflow-hidden px-5 sm:px-6 md:px-8 pt-10 md:pt-48 pb-10">
+    <div className="min-h-screen bg-gray-50 flex flex-col pt-24 pb-16">
+      <main className="flex-1 relative text-white overflow-hidden px-5 sm:px-6 md:px-8 ">
         <section className="container mx-auto px-5 sm:px-6 md:px-8 mb-16">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-2xl md:text-5xl font-bold text-black mb-3 md:mb-4 text-balance leading-tight px-4">
+            <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-3 md:mb-4 text-balance leading-tight px-4">
               Get in Touch
             </h1>
-            <p className="text-base md:text-lg text-black mb-6 md:mb-8 px-4">
+            <p className="text-base md:text-lg mb-6 md:mb-8 px-4 text-gray-900">
               Have questions? We'd love to hear from you. Send us a message and
               we'll respond as soon as possible.
             </p>
@@ -83,7 +83,7 @@ export default function Contact() {
                     value={formData.fullName}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition"
                     placeholder="John Doe"
                   />
                 </div>
@@ -102,7 +102,7 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition"
                     placeholder="john@example.com"
                   />
                 </div>
@@ -120,7 +120,7 @@ export default function Contact() {
                     name="contactNumber"
                     value={formData.contactNumber}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition"
                     placeholder="+353 1 234 5678"
                   />
                 </div>
@@ -139,7 +139,7 @@ export default function Contact() {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition"
                     placeholder="How can we help?"
                   />
                 </div>
@@ -158,7 +158,7 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     rows={5}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 outline-none transition resize-none"
                     placeholder="Tell us more about your inquiry..."
                   />
                 </div>

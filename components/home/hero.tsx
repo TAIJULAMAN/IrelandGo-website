@@ -194,7 +194,7 @@ export function Hero() {
                   <button
                     onClick={() => setTripType("one-way")}
                     className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "one-way"
-                      ? "bg-blue-500 text-white shadow-md"
+                      ? "bg-blue-600 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                   >
@@ -203,7 +203,7 @@ export function Hero() {
                   <button
                     onClick={() => setTripType("return")}
                     className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "return"
-                      ? "bg-blue-500 text-white shadow-md"
+                      ? "bg-blue-600 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                       }`}
                   >
@@ -226,7 +226,7 @@ export function Hero() {
                       <Minus className="h-4 w-4" />
                     </Button>
                     <div className="flex items-center gap-2 px-4">
-                      <Timer className="w-5 h-5 text-blue-500" />
+                      <Timer className="w-5 h-5 text-blue-600" />
                       <span className="font-bold text-lg min-w-[20px] text-center">
                         {duration}
                       </span>
@@ -252,8 +252,8 @@ export function Hero() {
               {/* Location Inputs */}
               <div className={`grid ${activeTab === "transfer" ? "md:grid-cols-2" : "grid-cols-1"} gap-4 mb-5`}>
                 <div className="relative" ref={pickupRef}>
-                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
-                    <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100">
+                    <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0" />
                     <input
                       type="text"
                       placeholder="Pickup Location"
@@ -276,7 +276,7 @@ export function Hero() {
                           className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
                         >
                           <div className="flex items-center gap-3">
-                            <MapPin className="w-4 h-4 text-blue-500 shrink-0" />
+                            <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
                             <div>
                               <div className="text-sm font-medium text-gray-900">
                                 {suggestion.structured_formatting.main_text}
@@ -294,8 +294,8 @@ export function Hero() {
 
                 {activeTab === "transfer" && (
                   <div className="relative" ref={dropoffRef}>
-                    <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
-                      <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                    <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100">
+                      <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0" />
                       <input
                         type="text"
                         placeholder="Dropoff Location"
@@ -318,7 +318,7 @@ export function Hero() {
                             className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
                           >
                             <div className="flex items-center gap-3">
-                              <MapPin className="w-4 h-4 text-blue-500 shrink-0" />
+                              <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
                               <div>
                                 <div className="text-sm font-medium text-gray-900">
                                   {suggestion.structured_formatting.main_text}
@@ -353,7 +353,7 @@ export function Hero() {
                             !date && "text-muted-foreground",
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                           {date ? (
                             <span>
                               {format(date, "PPP")}{" "}
@@ -424,7 +424,7 @@ export function Hero() {
                           className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
                         >
                           <div className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <Users className="w-4 h-4 text-blue-600 flex-shrink-0" />
                             <span className="text-sm">
                               {totalPassengers} Passenger
                               {totalPassengers !== 1 ? "s" : ""}
@@ -512,14 +512,14 @@ export function Hero() {
                               <div className="flex items-center gap-3 text-sm text-gray-600">
                                 <Luggage className="w-4 h-4" />
                                 <span className="flex-1">One checked bag</span>
-                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                                   29 x 21 x 11 inch
                                 </span>
                               </div>
                               <div className="flex items-center gap-3 text-sm text-gray-600">
                                 <Luggage className="w-4 h-4" />
                                 <span className="flex-1">One carry-on bag</span>
-                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                                   22 x 14 x 9 inch
                                 </span>
                               </div>
@@ -544,7 +544,7 @@ export function Hero() {
                           className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
                         >
                           <div className="flex items-center gap-2">
-                            <Luggage className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <Luggage className="w-4 h-4 text-blue-600 flex-shrink-0" />
                             <span className="text-sm">
                               {extraBags} Extra Bag{extraBags !== 1 ? "s" : ""}
                             </span>
@@ -617,7 +617,7 @@ export function Hero() {
                             !returnDate && "text-muted-foreground",
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                           {returnDate ? (
                             <span>
                               {format(returnDate, "PPP")}{" "}

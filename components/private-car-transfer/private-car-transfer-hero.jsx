@@ -290,7 +290,7 @@ export default function PrivateCarTransferHero() {
                 <button
                   onClick={() => setTripType("one-way")}
                   className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "one-way"
-                    ? "bg-blue-500 text-white shadow-md"
+                    ? "bg-blue-600 text-white shadow-md"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                 >
@@ -299,7 +299,7 @@ export default function PrivateCarTransferHero() {
                 <button
                   onClick={() => setTripType("return")}
                   className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "return"
-                    ? "bg-blue-500 text-white shadow-md"
+                    ? "bg-blue-600 text-white shadow-md"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                     }`}
                 >
@@ -311,8 +311,8 @@ export default function PrivateCarTransferHero() {
               <div className="grid md:grid-cols-2 gap-4 mb-5">
                 {/* Pickup Location */}
                 <div className="relative">
-                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
-                    <MapPin className="w-5 h-5 text-blue-500 flex-shrink-0" />
+                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200">
+                    <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0" />
                     <input
                       ref={pickupInputRef}
                       type="text"
@@ -348,7 +348,7 @@ export default function PrivateCarTransferHero() {
                             }`}
                         >
                           <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
                             <div>
                               <div className="text-sm font-medium text-gray-900 text-left">
                                 {suggestion.structured_formatting.main_text}
@@ -366,7 +366,7 @@ export default function PrivateCarTransferHero() {
 
                 {/* Dropoff Location */}
                 <div className="relative">
-                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200">
+                  <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200">
                     <MapPin className="w-5 h-5 text-green-500 flex-shrink-0" />
                     <input
                       ref={dropoffInputRef}
@@ -438,7 +438,7 @@ export default function PrivateCarTransferHero() {
                             !date && "text-muted-foreground",
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                           {date ? (
                             <span>
                               {format(date, "PPP")}{" "}
@@ -508,7 +508,7 @@ export default function PrivateCarTransferHero() {
                           className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
                         >
                           <div className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <Users className="w-4 h-4 text-blue-600 flex-shrink-0" />
                             <span className="text-sm">
                               {totalPassengers} Passenger
                               {totalPassengers !== 1 ? "s" : ""}
@@ -592,14 +592,14 @@ export default function PrivateCarTransferHero() {
                               <div className="flex items-center gap-3 text-sm text-gray-600">
                                 <Luggage className="w-4 h-4" />
                                 <span className="flex-1">One checked bag</span>
-                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                                   29 x 21 x 11 inch
                                 </span>
                               </div>
                               <div className="flex items-center gap-3 text-sm text-gray-600">
                                 <Luggage className="w-4 h-4" />
                                 <span className="flex-1">One carry-on bag</span>
-                                <span className="text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                                <span className="text-xs text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
                                   22 x 14 x 9 inch
                                 </span>
                               </div>
@@ -624,7 +624,7 @@ export default function PrivateCarTransferHero() {
                           className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-gray-700"
                         >
                           <div className="flex items-center gap-2">
-                            <Luggage className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <Luggage className="w-4 h-4 text-blue-600 flex-shrink-0" />
                             <span className="text-sm">
                               {extraBags} Extra Bag{extraBags !== 1 ? "s" : ""}
                             </span>
@@ -697,7 +697,7 @@ export default function PrivateCarTransferHero() {
                             !returnDate && "text-muted-foreground",
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-500 flex-shrink-0" />
+                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                           {returnDate ? (
                             <span>
                               {format(returnDate, "PPP")}{" "}

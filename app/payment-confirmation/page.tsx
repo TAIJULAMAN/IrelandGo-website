@@ -19,12 +19,12 @@ export default function PaymentConfirmationPage() {
   let selectedStops: any[] = [];
   try {
     if (selectedStopsParam) selectedStops = JSON.parse(selectedStopsParam);
-  } catch (e) {}
+  } catch (e) { }
 
   let transferRoute: any = null;
   try {
     if (transferRouteParam) transferRoute = JSON.parse(transferRouteParam);
-  } catch (e) {}
+  } catch (e) { }
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
@@ -56,7 +56,7 @@ export default function PaymentConfirmationPage() {
         year: "numeric",
       });
     }
-  } catch (e) {}
+  } catch (e) { }
 
   const bookingRef = bookingId
     ? `#${bookingId.slice(0, 8).toUpperCase()}`
@@ -163,7 +163,7 @@ export default function PaymentConfirmationPage() {
             </div>
           </div>
           {/* Decorative background circle */}
-          <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-500 rounded-full opacity-20" />
+          <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-600 rounded-full opacity-20" />
         </div>
 
         {/* Action Buttons */}

@@ -119,7 +119,7 @@ export default function Login() {
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
                                             disabled={isLoading}
-                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             placeholder="you@example.com"
                                         />
                                     </div>
@@ -138,7 +138,7 @@ export default function Login() {
                                             name="password"
                                             required
                                             disabled={isLoading}
-                                            className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                            className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             placeholder="Enter your password"
                                         />
                                         <button
@@ -159,7 +159,7 @@ export default function Login() {
                                             type="checkbox"
                                             checked={rememberMe}
                                             onChange={(e) => setRememberMe(e.target.checked)}
-                                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-600 cursor-pointer"
                                         />
                                         <span className="ml-2.5 text-sm text-gray-500 group-hover:text-gray-700 transition-colors">Remember me</span>
                                     </label>

@@ -36,7 +36,7 @@ export default function TransferRoutesHero() {
 						{/* Pickup / Dropoff */}
 						<div className="grid md:grid-cols-2 gap-3">
 							<div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg bg-white">
-								<MapPin className="w-5 h-5 text-blue-500" />
+								<MapPin className="w-5 h-5 text-blue-600" />
 								<input
 									type="text"
 									defaultValue="Shannon Airport"

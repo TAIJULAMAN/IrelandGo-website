@@ -28,7 +28,7 @@ export function PopularDayTrips() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
       </div>
     )
   }
@@ -43,7 +43,7 @@ export function PopularDayTrips() {
           {/* Left arrow */}
           <button
             onClick={() => scroll("left")}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors shrink-0"
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors shrink-0"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-6 h-6" />
@@ -60,7 +60,7 @@ export function PopularDayTrips() {
           {/* Right arrow */}
           <button
             onClick={() => scroll("right")}
-            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors shrink-0"
+            className="hidden md:flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors shrink-0"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-6 h-6" />
@@ -113,14 +113,14 @@ export function PopularDayTrips() {
         <div className="flex md:hidden items-center justify-center gap-4 mt-6">
           <button
             onClick={() => scroll("left")}
-            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
             aria-label="Scroll left"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={() => scroll("right")}
-            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-500 text-blue-500 hover:bg-blue-50 transition-colors"
+            className="flex items-center justify-center w-12 h-12 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors"
             aria-label="Scroll right"
           >
             <ChevronRight className="w-6 h-6" />
