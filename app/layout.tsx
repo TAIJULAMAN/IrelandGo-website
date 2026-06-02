@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/contexts/AuthContext"
 import ReduxProvider from "@/Redux/ReduxProvider"
@@ -9,8 +9,14 @@ import "./globals.css"
 
 import { ClientLayout } from "@/components/layout/client-layout"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif",
+})
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+})
 
 export const metadata: Metadata = {
   title: "Tourenzo",
@@ -51,7 +57,7 @@ export default function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className={`font-sans antialiased`}>
+      <body className={`${jakarta.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}>
         <ReduxProvider>
           <AuthProvider>
             <ClientLayout>{children}</ClientLayout>

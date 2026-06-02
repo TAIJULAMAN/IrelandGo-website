@@ -5,10 +5,27 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FeatureBadges } from "../common/feature-badges";
-import { Header } from "../layout/header";
 import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { cn } from "@/lib/utils";
+
+const isOutOfRange = (desc: string) => {
+  const lower = desc.toLowerCase();
+  if (lower.includes("ireland")) return false;
+  const niTownsAndCounties = [
+    "antrim", "armagh", "down", "fermanagh", "londonderry", "derry", "tyrone",
+    "aughnacloy", "ballycastle", "ballyclare", "ballymena", "ballymoney", "ballynahinch", 
+    "banbridge", "bangor", "belfast", "bushmills", "caledon", "carrickfergus", "castlederg", 
+    "castlewellan", "clogher", "coleraine", "cookstown", "craigavon", "crumlin", 
+    "donaghadee", "downpatrick", "dromore", "dungannon", "enniskillen", "fivemiletown", 
+    "hillsborough", "holywood", "larne", "limavady", "lisburn", "maghera", "magherafelt", 
+    "newcastle", "newry", "newtownabbey", "newtownards", "omagh", "portrush", "portstewart", 
+    "strabane"
+  ];
+  if (niTownsAndCounties.some(town => lower.includes(town))) return false;
+  if (lower.includes("uk") || lower.includes("united kingdom")) return true;
+  return false;
+};
 
 const LIBRARIES: any = ["places"];
 
@@ -29,14 +46,18 @@ export default function Hero() {
   });
 
   const {
-    ready,
-    value,
     suggestions: { status, data },
     setValue,
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
-      componentRestrictions: { country: "ie" },
+      componentRestrictions: { country: ["ie", "gb"] },
+      locationRestriction: {
+        north: 55.5,
+        south: 51.3,
+        east: -5.3,
+        west: -10.8,
+      }
     },
     debounce: 300,
     defaultValue: location,
@@ -153,13 +174,19 @@ export default function Hero() {
               </Link>
             </div>
 
+            {(status === "ZERO_RESULTS" || (status === "OK" && data.filter(s => !isOutOfRange(s.description)).length === 0)) && location.trim().length > 2 && (
+              <div className="flex text-start justify-start px-6">
+                <p className="text-red-500 text-xs mt-2 font-medium">location is not in our range</p>
+              </div>
+            )}
+
             {/* Autocomplete Dropdown */}
-            {showDropdown && status === "OK" && (
+            {showDropdown && status === "OK" && data.filter(s => !isOutOfRange(s.description)).length > 0 && (
               <div
                 ref={dropdownRef}
                 className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 overflow-hidden text-left"
               >
-                {data.map((suggestion, index) => (
+                {data.filter(s => !isOutOfRange(s.description)).map((suggestion, index) => (
                   <button
                     key={suggestion.place_id}
                     className={cn(

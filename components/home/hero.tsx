@@ -47,6 +47,24 @@ const MapRoute = dynamic(
   },
 );
 
+const isOutOfRange = (desc: string) => {
+  const lower = desc.toLowerCase();
+  if (lower.includes("ireland")) return false;
+  const niTownsAndCounties = [
+    "antrim", "armagh", "down", "fermanagh", "londonderry", "derry", "tyrone",
+    "aughnacloy", "ballycastle", "ballyclare", "ballymena", "ballymoney", "ballynahinch", 
+    "banbridge", "bangor", "belfast", "bushmills", "caledon", "carrickfergus", "castlederg", 
+    "castlewellan", "clogher", "coleraine", "cookstown", "craigavon", "crumlin", 
+    "donaghadee", "downpatrick", "dromore", "dungannon", "enniskillen", "fivemiletown", 
+    "hillsborough", "holywood", "larne", "limavady", "lisburn", "maghera", "magherafelt", 
+    "newcastle", "newry", "newtownabbey", "newtownards", "omagh", "portrush", "portstewart", 
+    "strabane"
+  ];
+  if (niTownsAndCounties.some(town => lower.includes(town))) return false;
+  if (lower.includes("uk") || lower.includes("united kingdom")) return true;
+  return false;
+};
+
 export function Hero() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -84,7 +102,15 @@ export function Hero() {
     clearSuggestions: clearPSuggestions,
   } = usePlacesAutocomplete({
     initOnMount: isLoaded,
-    requestOptions: { componentRestrictions: { country: "ie" } },
+    requestOptions: {
+      componentRestrictions: { country: ["ie", "gb"] },
+      locationRestriction: {
+        north: 55.5,
+        south: 51.3,
+        east: -5.3,
+        west: -10.8,
+      }
+    },
     debounce: 300,
   });
 
@@ -94,7 +120,15 @@ export function Hero() {
     clearSuggestions: clearDSuggestions,
   } = usePlacesAutocomplete({
     initOnMount: isLoaded,
-    requestOptions: { componentRestrictions: { country: "ie" } },
+    requestOptions: {
+      componentRestrictions: { country: ["ie", "gb"] },
+      locationRestriction: {
+        north: 55.5,
+        south: 51.3,
+        east: -5.3,
+        west: -10.8,
+      }
+    },
     debounce: 300,
   });
 
@@ -126,7 +160,6 @@ export function Hero() {
   };
 
   const totalPassengers = adults + children;
-  const totalBags = adults + children + extraBags;
 
   const tabs = [
     { id: "transfer", label: "Transfer" },
@@ -267,9 +300,12 @@ export function Hero() {
                       onFocus={() => setShowPickupDropdown(true)}
                     />
                   </div>
-                  {showPickupDropdown && pStatus === "OK" && (
+                  {(pStatus === "ZERO_RESULTS" || (pStatus === "OK" && pData.filter(s => !isOutOfRange(s.description)).length === 0)) && pickupLocation.trim().length > 2 && (
+                    <p className="text-red-500 text-xs mt-1 px-1">location is not in our range</p>
+                  )}
+                  {showPickupDropdown && pStatus === "OK" && pData.filter(s => !isOutOfRange(s.description)).length > 0 && (
                     <div className="absolute z-50 w-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
-                      {pData.map((suggestion) => (
+                      {pData.filter(s => !isOutOfRange(s.description)).map((suggestion) => (
                         <button
                           key={suggestion.place_id}
                           onClick={() => handlePickupSelect(suggestion.description)}
@@ -309,9 +345,12 @@ export function Hero() {
                         onFocus={() => setShowDropoffDropdown(true)}
                       />
                     </div>
-                    {showDropoffDropdown && dStatus === "OK" && (
+                    {(dStatus === "ZERO_RESULTS" || (dStatus === "OK" && dData.filter(s => !isOutOfRange(s.description)).length === 0)) && dropoffLocation.trim().length > 2 && (
+                      <p className="text-red-500 text-xs mt-1 px-1">location is not in our range</p>
+                    )}
+                    {showDropoffDropdown && dStatus === "OK" && dData.filter(s => !isOutOfRange(s.description)).length > 0 && (
                       <div className="absolute z-50 w-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
-                        {dData.map((suggestion) => (
+                        {dData.filter(s => !isOutOfRange(s.description)).map((suggestion) => (
                           <button
                             key={suggestion.place_id}
                             onClick={() => handleDropoffSelect(suggestion.description)}
@@ -380,7 +419,7 @@ export function Hero() {
                             <div className="flex flex-col gap-1">
                               {Array.from({ length: 48 }).map((_, i) => {
                                 const hour = Math.floor(i / 2);
-                                const minute = (i % 2) * 30;
+                                const minute = (i % 2) * 15;
                                 const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
                                 return (
                                   <Button

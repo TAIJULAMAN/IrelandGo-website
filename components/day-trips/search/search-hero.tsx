@@ -293,7 +293,7 @@ export function SearchHero({ trip }: { trip?: any }) {
                       <div className="flex flex-col gap-1">
                         {Array.from({ length: 48 }).map((_, i) => {
                           const hour = Math.floor(i / 2);
-                          const minute = (i % 2) * 30;
+                          const minute = (i % 2) * 15;
                           const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
                           return (
                             <Button

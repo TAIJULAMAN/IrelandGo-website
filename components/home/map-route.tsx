@@ -51,28 +51,40 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                 ? { lat: dropoff.lat, lng: dropoff.lng }
                 : dropoff.name;
 
-            directionsService.route(
-                {
-                    origin: origin,
-                    destination: destination,
-                    travelMode: google.maps.TravelMode.DRIVING,
-                },
-                (result, status) => {
-                    if (status === google.maps.DirectionsStatus.OK) {
-                        setDirections(result);
-                        if (result?.routes[0]?.legs[0]?.distance?.text) {
-                            setDistance(result.routes[0].legs[0].distance.text);
-                        }
-                    } else {
-                        const suppressedStatuses = ['ZERO_RESULTS', 'NOT_FOUND', 'INVALID_REQUEST', 'REQUEST_DENIED', 'OVER_QUERY_LIMIT'];
-                        if (!suppressedStatuses.includes(status)) {
-                            console.error(`error fetching directions: ${status}`);
-                        }
+            directionsService.route({
+                origin: origin,
+                destination: destination,
+                travelMode: google.maps.TravelMode.DRIVING,
+            })
+            .then((result) => {
+                const leg = result?.routes[0]?.legs[0];
+                if (leg) {
+                    const startLat = leg.start_location.lat();
+                    const startLng = leg.start_location.lng();
+                    const endLat = leg.end_location.lat();
+                    const endLng = leg.end_location.lng();
+                    
+                    const isWithinBounds = (lat: number, lng: number) => {
+                        return lat <= 55.5 && lat >= 51.3 && lng <= -5.3 && lng >= -10.8;
+                    };
+
+                    if (!isWithinBounds(startLat, startLng) || !isWithinBounds(endLat, endLng)) {
                         setDirections(null);
-                        setDistance(null);
+                        setDistance("Out of service area");
+                        return;
+                    }
+
+                    setDirections(result);
+                    if (leg.distance?.text) {
+                        setDistance(leg.distance.text);
                     }
                 }
-            );
+            })
+            .catch((e) => {
+                // Silently catch the MapsRequestError to prevent console spam
+                setDirections(null);
+                setDistance(null);
+            });
         } else {
             setDirections(null);
             setDistance(null);
@@ -151,7 +163,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                     <DirectionsRenderer
                         directions={directions}
                         options={{
-                            suppressMarkers: true, // Disable default A/B markers
+                            suppressMarkers: true,
                             polylineOptions: {
                                 strokeColor: "#3b82f6",
                                 strokeWeight: 5,
