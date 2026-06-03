@@ -44,7 +44,6 @@ export default function Step3Details() {
   const [childSeat, setChildSeat] = useState(false);
   const [wheelchair, setWheelchair] = useState(false);
 
-  // Close prefix dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (phonePrefixRef.current && !phonePrefixRef.current.contains(e.target as Node)) {

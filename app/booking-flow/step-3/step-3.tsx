@@ -348,7 +348,7 @@ export default function Step3() {
 
   let transportPrice = 0;
   let vehicleName = "Vehicle";
-  let basePriceSumForStops = 20; // Default fallback
+  let basePriceSumForStops = 20;
 
   if (vehicleId && vehicles.length > 0) {
     const ids = vehicleId.split("+");
@@ -372,7 +372,7 @@ export default function Step3() {
 
   const calculateStopPrice = (stop: any, durationMinutes: number) => {
     const stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
-    const baseHourPrice = Math.round(basePriceSumForStops + (stopDistance * 1.2));
+    const baseHourPrice = Math.round(basePriceSumForStops + (stopDistance * 1.7));
 
     const extraMinutes = durationMinutes - 60;
     if (extraMinutes <= 0) {
