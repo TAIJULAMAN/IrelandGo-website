@@ -111,7 +111,6 @@ export default function Step2() {
   useEffect(() => {
     let isMounted = true;
     if (isLoaded && pickupParam && dropoffParam && serviceType !== "DAY_TRIP") {
-      // If we don't have coords OR we don't have distanceKm, we must run DirectionsService
       if (!coords || !distanceKm) {
         const directionsService = new google.maps.DirectionsService();
 
@@ -129,12 +128,10 @@ export default function Step2() {
               if (status === google.maps.DirectionsStatus.OK && result) {
                 const leg = result.routes[0].legs[0];
 
-                // Only set distanceKm if it wasn't provided by transferRoute
                 if (!transferRoute?.distanceKm) {
                   setDistanceKm(Math.round((leg.distance?.value || 0) / 1000));
                 }
 
-                // Always capture coordinates if missing, required for step 3
                 if (!coords) {
                   setCoords({
                     fromLat: leg.start_location.lat(),
@@ -144,11 +141,9 @@ export default function Step2() {
                   });
                 }
               }
-              // Silently ignore NOT_FOUND / ZERO_RESULTS — not a fatal error
             }
           );
         } catch (_e) {
-          // Suppress uncaught MapsRequestError from the SDK
         }
       }
     }
@@ -167,12 +162,9 @@ export default function Step2() {
   ) => {
     if (!vehicles || vehicles.length === 0) return [];
 
-    // 1. Try 1 vehicle
     let options = vehicles
       .filter((v: any) => v.seatCount >= passengers && v.luggage >= bags)
       .map((v: any) => [v]);
-
-    // 2. Try 2 vehicles if no single vehicle works
     if (options.length === 0) {
       for (let i = 0; i < vehicles.length; i++) {
         for (let j = i; j < vehicles.length; j++) {
@@ -187,8 +179,6 @@ export default function Step2() {
         }
       }
     }
-
-    // 3. Try 3 vehicles if 2 vehicles don't work
     if (options.length === 0) {
       for (let i = 0; i < vehicles.length; i++) {
         for (let j = i; j < vehicles.length; j++) {
@@ -256,10 +246,10 @@ export default function Step2() {
 
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col pt-20">
-      <div className="flex-1 py-6 sm:py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex-1 py-5 sm:py-10  px-5 lg:px-10">
 
         {/* Step progress */}
-        <div className="mb-6 sm:mb-10">
+        <div className="mb-6 sm:mb-10 max-w-7xl w-full mx-auto">
           <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-600">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold shrink-0">
@@ -322,7 +312,6 @@ export default function Step2() {
                 Available Vehicles ({vehicleOptions.length})
               </p>
             </div>
-
             <div className="flex items-center gap-2">
               <div className="bg-blue-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center shadow-sm">
                 {tripType === "round-trip" || tripType === "return" ? "Round trip" : "One way"}
@@ -540,7 +529,7 @@ export default function Step2() {
                       const matches = durationParam.match(/\d+/g);
                       if (matches) hours = Math.max(...matches.map(Number));
                     }
-                    if (hours < 2) hours = 2; // Pricing starts at 2 hours
+                    if (hours < 2) hours = 2;
 
                     pricePerCar = option.vehicles.reduce(
                       (sum: number, vehicle: any) => {
@@ -587,7 +576,6 @@ export default function Step2() {
                           hr6Add = 65;
                           hr7PlusAdd = 65;
                         } else {
-                          // Default fallback
                           basePrice = 285;
                           hr3Add = 20;
                           hr4Add = 30;
@@ -609,13 +597,10 @@ export default function Step2() {
                       0,
                     );
                   } else {
-                    // Distance-based pricing table
                     pricePerCar = option.vehicles.reduce(
                       (sum: number, vehicle: any) => {
                         const name = (vehicle.name || "").toLowerCase();
                         const km = distanceKm || 0;
-
-                        // Determine vehicle type
                         let isLSedan =
                           name.includes("luxury sedan") ||
                           name.includes("l sedan") ||
@@ -626,8 +611,6 @@ export default function Step2() {
                             name.includes("mvp") ||
                             name.includes("minivan"));
                         let isVan = !isLSedan && !isMPV && name.includes("van");
-
-                        // Pricing bands: [maxKm, rate, base]
                         type Band = [number, number, number];
                         const sedanBands: Band[] = [
                           [25, 1.8, 50],
@@ -693,15 +676,6 @@ export default function Step2() {
                           setSelectedPrice(totalPrice);
                         }}
                       >
-                        {/* Selected Badge */}
-                        {selectedVehicle === option.id && (
-                          <div className="absolute top-3 right-3 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 z-10">
-                            <Check className="h-3 w-3" />
-                            Selected
-                          </div>
-                        )}
-
-                        {/* Vehicle Image */}
                         {option.vehicles.length === 1 ? (
                           <div className="mb-5 h-32 sm:h-36 flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-3 relative">
                             <img
@@ -796,11 +770,10 @@ export default function Step2() {
         {/* Next button */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 px-4 w-full">
           <Button
-            asChild
-
-            className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+            onClick={() => router.back()}
+            className="w-full sm:w-auto text-white bg-blue-600 px-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
           >
-            <Link href="/booking-flow/step-1">Back</Link>
+            Back
           </Button>
           <Button
             asChild

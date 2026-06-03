@@ -130,11 +130,11 @@ function SingleStoppageModal({
 
         <div className="p-4 border-t flex items-center justify-between gap-4 bg-white">
           <div className="flex items-center gap-3 bg-gray-50 p-1.5 rounded-full border border-gray-200">
-            <button onClick={() => setDurationMinutes((p: number) => Math.max(30, p - 30))} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
+            <button onClick={() => setDurationMinutes((p: number) => Math.max(15, p - 15))} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
               <Minus className="h-4 w-4" />
             </button>
             <span className="font-semibold w-8 text-center text-sm">{formatDuration(durationMinutes)}</span>
-            <button onClick={() => setDurationMinutes((p: number) => p + 30)} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
+            <button onClick={() => setDurationMinutes((p: number) => p + 15)} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
               <Plus className="h-4 w-4" />
             </button>
           </div>
@@ -670,7 +670,7 @@ export default function Step3() {
 
             {/* Bottom navigation – inline below stops */}
             <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-2">
-              <Button
+              {/* <Button
                 asChild
                 variant="ghost"
                 className="text-blue-600 font-semibold hover:text-blue-700 hover:bg-blue-50 text-sm sm:text-base px-3 py-2 h-auto rounded-xl"
@@ -678,11 +678,19 @@ export default function Step3() {
                 <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>
                   ← Back
                 </Link>
+              </Button> */}
+              {/* Select Button */}
+              <Button
+                asChild
+
+                className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+              >
+                <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>Back</Link>
               </Button>
 
               <Button
                 asChild
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-full px-6 sm:px-8 py-2.5 sm:py-3 h-auto shadow-md hover:shadow-lg transition-all text-sm sm:text-base"
+                className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
               >
                 <Link
                   href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(

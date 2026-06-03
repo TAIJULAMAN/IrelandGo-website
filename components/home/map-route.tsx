@@ -40,7 +40,13 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     }, [])
 
     useEffect(() => {
-        if (isLoaded && pickup?.name && dropoff?.name && pickup.name.length > 5 && dropoff.name.length > 5) {
+        if (!isLoaded || !pickup?.name || !dropoff?.name || pickup.name.length <= 5 || dropoff.name.length <= 5) {
+            setDirections(null);
+            setDistance(null);
+            return;
+        }
+
+        const timer = setTimeout(() => {
             const directionsService = new google.maps.DirectionsService();
 
             const origin = (pickup.lat !== undefined && pickup.lng !== undefined)
@@ -85,10 +91,9 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                 setDirections(null);
                 setDistance(null);
             });
-        } else {
-            setDirections(null);
-            setDistance(null);
-        }
+        }, 1500);
+
+        return () => clearTimeout(timer);
     }, [isLoaded, pickup?.name, pickup?.lat, pickup?.lng, dropoff?.name, dropoff?.lat, dropoff?.lng]);
 
     useEffect(() => {
