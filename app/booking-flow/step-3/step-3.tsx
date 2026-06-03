@@ -30,6 +30,7 @@ function SingleStoppageModal({
   const { data, isFetching } = useGetSingleStoppageQuery(stopId, { skip: !stopId });
   const stopData = data?.data?.data || data?.data || baseStop;
 
+
   const [durationMinutes, setDurationMinutes] = useState(existingStop ? existingStop.duration : (stopData?.duration || 120));
   const [imgIndex, setImgIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
@@ -414,14 +415,17 @@ export default function Step3() {
     };
   });
 
-  const customStopsInSelected = selectedStops.filter((s: any) => s.isCustom);
-  const stops = [...apiStops, ...customStopsInSelected];
-
   const sortedStops = [...apiStops].sort((a, b) =>
     (b.totalRatings || b.user_ratings_total || b.rating || 0) - (a.totalRatings || a.user_ratings_total || a.rating || 0)
   );
   const mostPopularId = sortedStops[0]?.id;
   const recommendedId = sortedStops[1]?.id;
+
+  const customStopsInSelected = selectedStops.filter((s: any) => s.isCustom);
+  const stops = [...apiStops, ...customStopsInSelected].sort((a: any, b: any) => {
+    const rank = (id: string) => id === mostPopularId ? 0 : id === recommendedId ? 1 : 2;
+    return rank(a.id) - rank(b.id);
+  });
 
   const toggleStop = (stop: any) => {
     if (selectedStops.find((s) => s.id === stop.id)) {
@@ -543,18 +547,26 @@ export default function Step3() {
                           style={{ minHeight: '100px' }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent sm:from-black/80 sm:via-black/20" />
-                        {(stop.id === mostPopularId || stop.id === recommendedId) && (
-                          <div className="absolute top-2 left-2 flex items-center bg-white/95 backdrop-blur-sm shadow-sm rounded-md px-1.5 py-0.5 gap-0.5 sm:top-3 sm:left-3 sm:px-2 sm:py-1 sm:gap-1">
-                            <span className="text-yellow-500 text-[9px] sm:text-[10px]">★</span>
-                            <span className="text-[9px] sm:text-[10px] font-bold text-gray-800 uppercase tracking-wide">
-                              {stop.id === mostPopularId ? "Popular" : "Pick"}
+                        {stop.id === mostPopularId && (
+                          <div className="absolute top-2 left-2 flex items-center bg-yellow-400 shadow-sm rounded-md px-1.5 py-0.5 gap-0.5 sm:top-3 sm:left-3 sm:px-2 sm:py-1 sm:gap-1">
+                            <span className="text-white text-[9px] sm:text-[10px]">★</span>
+                            <span className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wide">
+                              Most popular
+                            </span>
+                          </div>
+                        )}
+                        {stop.id === recommendedId && (
+                          <div className="absolute top-2 left-2 flex items-center bg-blue-600 shadow-sm rounded-md px-1.5 py-0.5 gap-0.5 sm:top-3 sm:left-3 sm:px-2 sm:py-1 sm:gap-1">
+                            <span className="text-white text-[9px] sm:text-[10px]">👍</span>
+                            <span className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wide">
+                              Recommended
                             </span>
                           </div>
                         )}
                         {/* Name and Address only visible on sm+ inside image */}
                         <div className="hidden sm:flex absolute bottom-3 left-4 right-4 flex-col text-white">
                           <h3 className="text-lg font-bold leading-snug drop-shadow-md">
-                            {stop.name}
+                            {stop.googleName || stop.name}
                           </h3>
                           {stop.address && (
                             <span className="text-[11px] font-medium opacity-90 flex items-center gap-1 mt-0.5 drop-shadow-sm">
@@ -630,8 +642,8 @@ export default function Step3() {
                   <div className="flex items-center border border-gray-200 rounded-lg bg-white h-10 sm:h-11 overflow-hidden shrink-0">
                     <button
                       type="button"
-                      onClick={() => setCustomStopDuration(prev => Math.max(30, prev - 30))}
-                      disabled={customStopDuration <= 30}
+                      onClick={() => setCustomStopDuration(prev => Math.max(15, prev - 15))}
+                      disabled={customStopDuration <= 15}
                       className="h-full px-3 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-transparent transition-colors flex items-center justify-center border-r border-gray-100"
                     >
                       <Minus className="h-4 w-4" />
@@ -641,7 +653,7 @@ export default function Step3() {
                     </span>
                     <button
                       type="button"
-                      onClick={() => setCustomStopDuration(prev => Math.min(240, prev + 30))}
+                      onClick={() => setCustomStopDuration(prev => Math.min(240, prev + 15))}
                       disabled={customStopDuration >= 240}
                       className="h-full px-3 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:hover:bg-transparent transition-colors flex items-center justify-center border-l border-gray-100"
                     >
@@ -670,16 +682,6 @@ export default function Step3() {
 
             {/* Bottom navigation – inline below stops */}
             <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-2">
-              {/* <Button
-                asChild
-                variant="ghost"
-                className="text-blue-600 font-semibold hover:text-blue-700 hover:bg-blue-50 text-sm sm:text-base px-3 py-2 h-auto rounded-xl"
-              >
-                <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>
-                  ← Back
-                </Link>
-              </Button> */}
-              {/* Select Button */}
               <Button
                 asChild
 
@@ -703,7 +705,6 @@ export default function Step3() {
             </div>
           </div>
 
-          {/* Itinerary card – hidden on mobile, shown on lg+ */}
           <div className="hidden lg:block">
             <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col gap-6 sticky top-24">
               <div className="flex items-center justify-between">
@@ -767,7 +768,7 @@ export default function Step3() {
                           </div>
                           <div className="flex-1 min-w-0 pr-6">
                             <h4 className="text-xs sm:text-sm font-bold text-gray-900 truncate">
-                              {stop.name}
+                              {stop.name === "Brú na Bóinne" ? "Newgrange" : stop.name}
                             </h4>
                             {stop.address && (
                               <p className="text-[10px] text-gray-400 font-medium flex items-center gap-0.5 truncate mt-0.5">
