@@ -145,7 +145,36 @@ export default function ByTheHourHero() {
     }
   };
 
-  const isFormValid = pickupLocation.trim() !== "" && date !== undefined && time !== "";
+  const isTimeDisabled = (selectedDate: Date | undefined, timeStr: string) => {
+    if (!selectedDate) return false;
+    const isToday = selectedDate.toDateString() === new Date().toDateString();
+    if (!isToday) return false;
+
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(hours, minutes, 0, 0);
+
+    const minDateTime = new Date();
+    minDateTime.setHours(minDateTime.getHours() + 3);
+
+    return selectedDateTime.getTime() < minDateTime.getTime();
+  };
+
+  useEffect(() => {
+    if (date && isTimeDisabled(date, time)) {
+      for (let i = 0; i < 96; i++) {
+        const hour = Math.floor(i / 4);
+        const minute = (i % 4) * 15;
+        const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+        if (!isTimeDisabled(date, timeString)) {
+          setTime(timeString);
+          break;
+        }
+      }
+    }
+  }, [date]);
+
+  const isFormValid = pickupLocation.trim() !== "" && date !== undefined && time !== "" && !isTimeDisabled(date, time);
 
   return (
     <>
@@ -298,9 +327,11 @@ export default function ByTheHourHero() {
                                   const hour = Math.floor(i / 4);
                                   const minute = (i % 4) * 15;
                                   const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                                  const isDisabled = isTimeDisabled(date, timeString);
                                   return (
                                     <Button
                                       key={timeString}
+                                      disabled={isDisabled}
                                       variant={
                                         time === timeString ? "default" : "ghost"
                                       }
@@ -309,10 +340,13 @@ export default function ByTheHourHero() {
                                         time === timeString
                                           ? "bg-blue-600 hover:bg-blue-700"
                                           : "hover:bg-blue-50",
+                                        isDisabled && "opacity-30 cursor-not-allowed"
                                       )}
                                       onClick={() => {
-                                        setTime(timeString);
-                                        setIsCalendarOpen(false);
+                                        if (!isDisabled) {
+                                          setTime(timeString);
+                                          setIsCalendarOpen(false);
+                                        }
                                       }}
                                     >
                                       {timeString}
