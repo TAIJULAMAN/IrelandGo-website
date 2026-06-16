@@ -179,6 +179,34 @@ export function Hero() {
     }
   };
 
+  const isFormValid = (() => {
+    if (activeTab === "transfer") {
+      return (
+        pickupLocation.trim() !== "" &&
+        dropoffLocation.trim() !== "" &&
+        date !== undefined &&
+        time !== "" &&
+        (tripType === "return" ? returnDate !== undefined && returnTime !== "" : true)
+      );
+    }
+    if (activeTab === "hourly") {
+      return (
+        pickupLocation.trim() !== "" &&
+        date !== undefined &&
+        time !== ""
+      );
+    }
+    if (activeTab === "day-trips") {
+      return (
+        pickupLocation.trim() !== "" &&
+        dropoffLocation.trim() !== "" &&
+        date !== undefined &&
+        time !== ""
+      );
+    }
+    return true;
+  })();
+
   return (
     <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
       <div className="absolute inset-0 z-0">
@@ -713,30 +741,38 @@ export function Hero() {
                   </div>
                 </div>
               )}
-              <Link
-                href={{
-                  pathname: activeTab === "day-trips" ? "/day-trips" : "/booking-flow/step-2",
-                  query: {
-                    serviceType: activeTab === "transfer" ? "TRANSFER" : activeTab === "hourly" ? "BY_THE_HOUR" : "DAY_TRIP",
-                    tripType: activeTab === "transfer" ? tripType : "one-way",
-                    pickup: pickupLocation,
-                    dropoff: dropoffLocation,
-                    date: date ? date.toISOString() : "",
-                    time,
-                    duration: duration.toString(),
-                    returnDate: returnDate ? returnDate.toISOString() : "",
-                    returnTime,
-                    adults: adults.toString(),
-                    children: children.toString(),
-                    extraBags: extraBags.toString(),
-                  },
-                }}
-              >
-                <Button className="w-full h-10 py-3" variant="outline">
+              {isFormValid ? (
+                <Link
+                  href={{
+                    pathname: activeTab === "day-trips" ? "/day-trips" : "/booking-flow/step-2",
+                    query: {
+                      serviceType: activeTab === "transfer" ? "TRANSFER" : activeTab === "hourly" ? "BY_THE_HOUR" : "DAY_TRIP",
+                      tripType: activeTab === "transfer" ? tripType : "one-way",
+                      pickup: pickupLocation,
+                      dropoff: dropoffLocation,
+                      date: date ? date.toISOString() : "",
+                      time,
+                      duration: duration.toString(),
+                      returnDate: returnDate ? returnDate.toISOString() : "",
+                      returnTime,
+                      adults: adults.toString(),
+                      children: children.toString(),
+                      extraBags: extraBags.toString(),
+                    },
+                  }}
+                  className="w-full"
+                >
+                  <Button className="w-full h-10 py-3" variant="outline">
+                    <Search className="w-5 h-5 mr-2" />
+                    {activeTab === "day-trips" ? "Explore Day Trips" : "Find a Ride"}
+                  </Button>
+                </Link>
+              ) : (
+                <Button className="w-full h-10 py-3" variant="outline" disabled>
                   <Search className="w-5 h-5 mr-2" />
                   {activeTab === "day-trips" ? "Explore Day Trips" : "Find a Ride"}
                 </Button>
-              </Link>
+              )}
             </div>
             <div className="rounded-lg overflow-hidden shadow-lg w-[450px] h-[340px] hidden lg:block shrink-0">
               <MapRoute

@@ -145,6 +145,8 @@ export default function ByTheHourHero() {
     }
   };
 
+  const isFormValid = pickupLocation.trim() !== "" && date !== undefined && time !== "";
+
   return (
     <>
       <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
@@ -566,26 +568,32 @@ export default function ByTheHourHero() {
                     </div>
                   </div>
                 </div>
-                <Link
-                  href={{
-                    pathname: "/booking-flow/step-2",
-                    query: {
-                      serviceType: "BY_THE_HOUR",
-                      pickup: pickupLocation,
-                      dropoff: pickupLocation,
-                      date: date ? date.toISOString() : "",
-                      time,
-                      duration,
-                      adults: adults.toString(),
-                      children: children.toString(),
-                      extraBags: extraBags.toString(),
-                    },
-                  }}
-                >
-                  <button className="w-full bg-blue-600 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
+                {isFormValid ? (
+                  <Link
+                    href={{
+                      pathname: "/booking-flow/step-2",
+                      query: {
+                        serviceType: "BY_THE_HOUR",
+                        pickup: pickupLocation,
+                        dropoff: pickupLocation,
+                        date: date ? date.toISOString() : "",
+                        time,
+                        duration,
+                        adults: adults.toString(),
+                        children: children.toString(),
+                        extraBags: extraBags.toString(),
+                      },
+                    }}
+                  >
+                    <button className="w-full bg-blue-600 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
+                      Search Available Rides →
+                    </button>
+                  </Link>
+                ) : (
+                  <button className="w-full bg-blue-600/50 text-white/70 py-4 rounded-lg font-medium cursor-not-allowed" disabled>
                     Search Available Rides →
                   </button>
-                </Link>
+                )}
               </div>
             </div>
 

@@ -248,6 +248,13 @@ export default function PrivateCarTransferHero() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const isFormValid =
+    pickupLocation.trim() !== "" &&
+    dropoffLocation.trim() !== "" &&
+    date !== undefined &&
+    time !== "" &&
+    (tripType === "return" ? returnDate !== undefined && returnTime !== "" : true);
+
   // Get display location for hero title
   const displayLocation = pickupLocation || "Dublin";
 
@@ -755,14 +762,22 @@ export default function PrivateCarTransferHero() {
                 </div>
               )}
 
-              <Link
-                href={`/booking-flow/step-2?serviceType=PRIVATE_TRANSFER&pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&tripType=${tripType}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
-              >
-                <Button className="w-full h-10 py-3" variant="outline">
+              {isFormValid ? (
+                <Link
+                  href={`/booking-flow/step-2?serviceType=PRIVATE_TRANSFER&pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&tripType=${tripType}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
+                  className="w-full"
+                >
+                  <Button className="w-full h-10 py-3" variant="outline">
+                    <Search className="w-5 h-5 mr-2" />
+                    Find a Ride
+                  </Button>
+                </Link>
+              ) : (
+                <Button className="w-full h-10 py-3" variant="outline" disabled>
                   <Search className="w-5 h-5 mr-2" />
                   Find a Ride
                 </Button>
-              </Link>
+              )}
             </div>
             <div className="rounded-xl overflow-hidden shadow-lg w-full lg:w-[450px] h-[340px] hidden lg:block">
               <MapRoute
