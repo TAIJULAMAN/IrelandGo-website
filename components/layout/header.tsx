@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi";
 import { logout as reduxLogout } from "@/Redux/Slice/authSlice";
 import { useRouter } from "next/navigation";
+import { decodeAuthToken } from "@/utils/decode-access-token";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -18,8 +19,27 @@ export function Header() {
 
   const token = useAppSelector((state) => state.auth.token);
   console.log("token", token);
-  const isAuthenticated = !!token;
+
+  let isExpired = false;
+  if (token) {
+    try {
+      const decoded = decodeAuthToken<any>(token);
+      if (decoded && decoded.exp) {
+        isExpired = decoded.exp * 1000 < Date.now();
+      }
+    } catch (e) {
+      isExpired = true;
+    }
+  }
+
+  const isAuthenticated = !!token && !isExpired;
   console.log("isAuthenticated", isAuthenticated);
+
+  useEffect(() => {
+    if (token && isExpired) {
+      dispatch(reduxLogout());
+    }
+  }, [token, isExpired, dispatch]);
 
   const { data: profileData } = useGetProfileQuery(undefined, {
     skip: !isAuthenticated,
