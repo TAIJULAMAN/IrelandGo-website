@@ -244,12 +244,67 @@ export default function TransferSearchHero() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const isTimeDisabled = (selectedDate, timeStr) => {
+    if (!selectedDate) return false;
+    const isToday = selectedDate.toDateString() === new Date().toDateString();
+    if (!isToday) return false;
+
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(hours, minutes, 0, 0);
+
+    const minDateTime = new Date();
+    minDateTime.setHours(minDateTime.getHours() + 3);
+
+    return selectedDateTime.getTime() < minDateTime.getTime();
+  };
+
+  const isReturnTimeDisabled = (returnTimeStr) => {
+    if (!returnDate || !date) return false;
+    const isSameDay = returnDate.toDateString() === date.toDateString();
+    if (!isSameDay) return false;
+
+    const [pValHour, pValMin] = time.split(":").map(Number);
+    const [rValHour, rValMin] = returnTimeStr.split(":").map(Number);
+
+    return (rValHour < pValHour) || (rValHour === pValHour && rValMin <= pValMin);
+  };
+
+  useEffect(() => {
+    if (date && isTimeDisabled(date, time)) {
+      for (let i = 0; i < 96; i++) {
+        const hour = Math.floor(i / 4);
+        const minute = (i % 4) * 15;
+        const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+        if (!isTimeDisabled(date, timeString)) {
+          setTime(timeString);
+          break;
+        }
+      }
+    }
+  }, [date]);
+
+  useEffect(() => {
+    if (returnDate && isReturnTimeDisabled(returnTime)) {
+      for (let i = 0; i < 96; i++) {
+        const hour = Math.floor(i / 4);
+        const minute = (i % 4) * 15;
+        const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+        if (!isReturnTimeDisabled(timeString)) {
+          setReturnTime(timeString);
+          break;
+        }
+      }
+    }
+  }, [returnDate, date, time]);
+
   const isFormValid =
     pickupLocation.trim() !== "" &&
     dropoffLocation.trim() !== "" &&
     date !== undefined &&
     time !== "" &&
-    (tripType === "return" ? returnDate !== undefined && returnTime !== "" : true);
+    !isTimeDisabled(date, time) &&
+    (tripType === "return" ? returnDate !== undefined && returnTime !== "" && !isReturnTimeDisabled(returnTime) : true);
 
   return (
     <>
@@ -465,9 +520,11 @@ export default function TransferSearchHero() {
                                 const hour = Math.floor(i / 4);
                                 const minute = (i % 4) * 15;
                                 const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                                const isDisabled = isTimeDisabled(date, timeString);
                                 return (
                                   <Button
                                     key={timeString}
+                                    disabled={isDisabled}
                                     variant={
                                       time === timeString ? "default" : "ghost"
                                     }
@@ -476,10 +533,13 @@ export default function TransferSearchHero() {
                                       time === timeString
                                         ? "bg-blue-600 hover:bg-blue-700"
                                         : "hover:bg-blue-50",
+                                      isDisabled && "opacity-30 cursor-not-allowed"
                                     )}
                                     onClick={() => {
-                                      setTime(timeString);
-                                      setIsCalendarOpen(false);
+                                      if (!isDisabled) {
+                                        setTime(timeString);
+                                        setIsCalendarOpen(false);
+                                      }
                                     }}
                                   >
                                     {timeString}
@@ -724,19 +784,24 @@ export default function TransferSearchHero() {
                                 const hour = Math.floor(i / 4);
                                 const minute = (i % 4) * 15;
                                 const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                                const isDisabled = isReturnTimeDisabled(timeString);
                                 return (
                                   <Button
                                     key={timeString}
+                                    disabled={isDisabled}
                                     variant={returnTime === timeString ? "default" : "ghost"}
                                     className={cn(
                                       "justify-center h-8 text-sm",
                                       returnTime === timeString
                                         ? "bg-blue-600 hover:bg-blue-700"
                                         : "hover:bg-blue-50",
+                                      isDisabled && "opacity-30 cursor-not-allowed"
                                     )}
                                     onClick={() => {
-                                      setReturnTime(timeString);
-                                      setIsReturnCalendarOpen(false);
+                                      if (!isDisabled) {
+                                        setReturnTime(timeString);
+                                        setIsReturnCalendarOpen(false);
+                                      }
                                     }}
                                   >
                                     {timeString}
