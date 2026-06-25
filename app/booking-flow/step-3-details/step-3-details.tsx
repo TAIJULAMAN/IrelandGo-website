@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { X, CheckCircle2, ChevronDown } from "lucide-react";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
@@ -10,12 +10,18 @@ import {
   useCreateBookingUsingServiceIdMutation,
   useCreateBookingWithoutIdMutation
 } from "@/Redux/features/booking/bookingApi";
+// @ts-expect-error: countries-api has no type declarations
+import countries from "countries-api";
+import { useAppDispatch } from "@/Redux/hooks";
+import { setUser } from "@/Redux/Slice/authSlice";
+
+
 
 export default function Step3Details() {
   const [showModal, setShowModal] = useState(false);
   const [bookingId, setBookingId] = useState("");
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const pickupParam = searchParams.get("pickup") || "";
   const dropoffParam = searchParams.get("dropoff") || "";
@@ -30,7 +36,6 @@ export default function Step3Details() {
   const serviceTypeParam = searchParams.get("serviceType") || "TRANSFER";
   const tripType = searchParams.get("tripType") || "one-way";
   const tripId = searchParams.get("id");
-
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -54,28 +59,14 @@ export default function Step3Details() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const COUNTRY_CODES = [
-    { code: "+353", iso: "ie", label: "IE" },
-    { code: "+44", iso: "gb", label: "GB" },
-    { code: "+1", iso: "us", label: "US" },
-    { code: "+49", iso: "de", label: "DE" },
-    { code: "+33", iso: "fr", label: "FR" },
-    { code: "+34", iso: "es", label: "ES" },
-    { code: "+39", iso: "it", label: "IT" },
-    { code: "+31", iso: "nl", label: "NL" },
-    { code: "+48", iso: "pl", label: "PL" },
-    { code: "+91", iso: "in", label: "IN" },
-    { code: "+86", iso: "cn", label: "CN" },
-    { code: "+81", iso: "jp", label: "JP" },
-    { code: "+82", iso: "kr", label: "KR" },
-    { code: "+61", iso: "au", label: "AU" },
-    { code: "+55", iso: "br", label: "BR" },
-    { code: "+52", iso: "mx", label: "MX" },
-    { code: "+27", iso: "za", label: "ZA" },
-    { code: "+971", iso: "ae", label: "AE" },
-    { code: "+966", iso: "sa", label: "SA" },
-    { code: "+7", iso: "ru", label: "RU" },
-  ];
+  const COUNTRY_CODES: { code: string; iso: string; label: string }[] = countries.findAll().data
+    .filter((c: any) => c.callingCode && c.callingCode.length > 0)
+    .map((c: any) => ({
+      code: "+" + c.callingCode[0],
+      iso: c.cca2.toLowerCase(),
+      label: c.cca2,
+    }))
+    .sort((a: any, b: any) => a.label.localeCompare(b.label));
 
   const validateEmail = (val: string) => {
     if (!val) return "Email is required";
@@ -83,22 +74,18 @@ export default function Step3Details() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return "Please enter a valid email address";
     return "";
   };
-
   const validatePhone = (val: string) => {
     if (!val) return "Phone number is required";
     if (!/^\d{6,15}$/.test(val.replace(/\s/g, ""))) return "Enter a valid phone number (digits only, 6–15 digits)";
     return "";
   };
-
   const isFormValid = firstName && lastName && !validateEmail(email) && !validatePhone(phone);
-
   let transferRoute: any = null;
   if (transferRouteParam) {
     try {
       transferRoute = JSON.parse(transferRouteParam);
     } catch (e) { }
   }
-
   let selectedStops: any[] = [];
   if (selectedStopsParam) {
     try {
@@ -108,7 +95,6 @@ export default function Step3Details() {
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
-
   const carPriceParam = searchParams.get("carPrice");
   let transportPrice = 0;
   let basePriceSum = 0;
@@ -135,14 +121,12 @@ export default function Step3Details() {
   }
 
   if (carPriceParam) {
-    // If the exact price is passed from step 2, use it
     transportPrice = parseFloat(carPriceParam);
   } else {
     const extraBagsCost = extraBags * 10;
     transportPrice = Math.round(basePriceSum + pricePerKmSum * distanceKm) + extraBagsCost;
   }
 
-  // Double transport cost for return trips
   const isReturn = tripType === "return";
   if (isReturn) {
     transportPrice = transportPrice * 2;
@@ -152,6 +136,7 @@ export default function Step3Details() {
     (total: number, stop: any) => total + stop.price,
     0,
   );
+
   const totalPrice = transportPrice + stopsCost;
 
   let formattedDate = dateParam;
@@ -218,11 +203,17 @@ export default function Step3Details() {
       basePrice: basePriceSum,
       vehiclePrice: transportPrice,
       stoppagePrice: stopsCost,
-      returnPrice: 0, // Currently no return flow supported natively here
+      returnPrice: 0,
       totalPrice: totalPrice,
       isReturn: false,
       bookingVehicles,
       bookingStoppages,
+      guestInfo: {
+        firstName: firstName || "John",
+        lastName: lastName || "Doe",
+        email: email || "john@example.com",
+        phoneNumber: phone ? `${phonePrefix}${phone}` : "+123456789",
+      },
     };
 
     console.log("Sending booking request with body:", body);
@@ -239,6 +230,25 @@ export default function Step3Details() {
       }
       const id = res?.data?.id || res?.data?._id || "";
       if (id) setBookingId(id);
+      
+      const accessToken = res?.data?.accessToken;
+      const user = res?.data?.user;
+      
+      console.log("=== BOOKING RESPONSE ===", res);
+      console.log("Extracted accessToken:", accessToken);
+      console.log("Extracted user:", user);
+
+      if (accessToken && user) {
+        console.log("Saving token and user to Redux and localStorage...");
+        // Store in Redux (which also sets 'token' and 'user' in localStorage)
+        dispatch(setUser({ user, token: accessToken, refreshToken: "" }));
+        // Specifically set 'accessToken' for auth.service.ts which uses this key
+        localStorage.setItem("accessToken", accessToken);
+        console.log("Saved token:", localStorage.getItem("token"));
+      } else {
+        console.log("WARNING: accessToken or user is missing from response!");
+      }
+
       setShowModal(true);
     } catch (e: any) {
       console.error("Booking failed. Full error:", JSON.stringify(e, null, 2));
@@ -252,7 +262,6 @@ export default function Step3Details() {
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col pt-20">
       <div className="flex-1 py-10 sm:py-12 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Step progress */}
         <div className="mb-8 sm:mb-10">
           <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-600">
             <div className="flex items-center gap-2">
@@ -295,8 +304,6 @@ export default function Step3Details() {
             </div>
           </div>
         </div>
-
-        {/* Heading */}
         <div className="mb-6 sm:mb-8 mt-2 sm:mt-4 flex justify-between items-end">
           <div>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-700 mb-2">
@@ -308,7 +315,6 @@ export default function Step3Details() {
             </p>
           </div>
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           <div className="lg:col-span-2">
             {/* Passenger details card */}
@@ -602,7 +608,6 @@ export default function Step3Details() {
             </div>
           </div>
         </div>
-
       </div>
       {/* Tour status modal (Success Booking placeholder for now) */}
       {showModal && (

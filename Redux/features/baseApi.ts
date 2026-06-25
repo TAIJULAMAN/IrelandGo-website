@@ -16,11 +16,15 @@ export const baseApi = createApi({
       let token = state?.auth?.token;
 
       if (!token && typeof window !== "undefined") {
-        token = localStorage.getItem("token");
+        token = localStorage.getItem("token") || localStorage.getItem("accessToken");
       }
 
       if (token) {
-        headers.set("Authorization", `${token}`);
+        const authValue = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+        console.log("==> baseApi attaching header:", authValue);
+        headers.set("Authorization", authValue);
+      } else {
+        console.log("==> baseApi WARNING: No token found in Redux or localStorage!");
       }
       return headers;
     },

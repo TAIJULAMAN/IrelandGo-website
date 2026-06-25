@@ -179,6 +179,96 @@ export function Hero() {
     }
   };
 
+  const isTimeDisabled = (selectedDate: Date | undefined, timeStr: string) => {
+    if (!selectedDate) return false;
+    const isToday = selectedDate.toDateString() === new Date().toDateString();
+    if (!isToday) return false;
+
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(hours, minutes, 0, 0);
+
+    const minDateTime = new Date();
+    minDateTime.setHours(minDateTime.getHours() + 3);
+
+    return selectedDateTime.getTime() < minDateTime.getTime();
+  };
+
+  const isReturnTimeDisabled = (returnTimeStr: string) => {
+    if (!returnDate || !date) return false;
+    const isSameDay = returnDate.toDateString() === date.toDateString();
+    if (!isSameDay) return false;
+
+    const [pValHour, pValMin] = time.split(":").map(Number);
+    const [rValHour, rValMin] = returnTimeStr.split(":").map(Number);
+
+    return (rValHour < pValHour) || (rValHour === pValHour && rValMin <= pValMin);
+  };
+
+  useEffect(() => {
+    if (date && isTimeDisabled(date, time)) {
+      for (let i = 0; i < 96; i++) {
+        const hour = Math.floor(i / 4);
+        const minute = (i % 4) * 15;
+        const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+        if (!isTimeDisabled(date, timeString)) {
+          setTime(timeString);
+          break;
+        }
+      }
+    }
+  }, [date]);
+
+  useEffect(() => {
+    if (returnDate && isReturnTimeDisabled(returnTime)) {
+      for (let i = 0; i < 96; i++) {
+        const hour = Math.floor(i / 4);
+        const minute = (i % 4) * 15;
+        const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+        if (!isReturnTimeDisabled(timeString)) {
+          setReturnTime(timeString);
+          break;
+        }
+      }
+    }
+  }, [returnDate, date, time]);
+
+  const isFormValid = (() => {
+    const isToday = date && date.toDateString() === new Date().toDateString();
+    if (isToday && time && isTimeDisabled(date, time)) {
+      return false;
+    }
+    if (activeTab === "transfer" && tripType === "return" && returnTime && isReturnTimeDisabled(returnTime)) {
+      return false;
+    }
+
+    if (activeTab === "transfer") {
+      return (
+        pickupLocation.trim() !== "" &&
+        dropoffLocation.trim() !== "" &&
+        date !== undefined &&
+        time !== "" &&
+        (tripType === "return" ? returnDate !== undefined && returnTime !== "" : true)
+      );
+    }
+    if (activeTab === "hourly") {
+      return (
+        pickupLocation.trim() !== "" &&
+        date !== undefined &&
+        time !== ""
+      );
+    }
+    if (activeTab === "day-trips") {
+      return (
+        pickupLocation.trim() !== "" &&
+        dropoffLocation.trim() !== "" &&
+        date !== undefined &&
+        time !== ""
+      );
+    }
+    return true;
+  })();
+
   return (
     <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
       <div className="absolute inset-0 z-0">
@@ -417,13 +507,15 @@ export function Hero() {
                           </div>
                           <div className="h-[300px] w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
                             <div className="flex flex-col gap-1">
-                              {Array.from({ length: 48 }).map((_, i) => {
-                                const hour = Math.floor(i / 2);
-                                const minute = (i % 2) * 15;
+                              {Array.from({ length: 96 }).map((_, i) => {
+                                const hour = Math.floor(i / 4);
+                                const minute = (i % 4) * 15;
                                 const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                                const isDisabled = isTimeDisabled(date, timeString);
                                 return (
                                   <Button
                                     key={timeString}
+                                    disabled={isDisabled}
                                     variant={
                                       time === timeString ? "default" : "ghost"
                                     }
@@ -432,10 +524,13 @@ export function Hero() {
                                       time === timeString
                                         ? "bg-blue-600 hover:bg-blue-700"
                                         : "hover:bg-blue-50",
+                                      isDisabled && "opacity-30 cursor-not-allowed"
                                     )}
                                     onClick={() => {
-                                      setTime(timeString);
-                                      setIsCalendarOpen(false);
+                                      if (!isDisabled) {
+                                        setTime(timeString);
+                                        setIsCalendarOpen(false);
+                                      }
                                     }}
                                   >
                                     {timeString}
@@ -680,13 +775,15 @@ export function Hero() {
                           </div>
                           <div className="h-[300px] w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
                             <div className="flex flex-col gap-1">
-                              {Array.from({ length: 48 }).map((_, i) => {
-                                const hour = Math.floor(i / 2);
-                                const minute = (i % 2) * 30;
+                              {Array.from({ length: 96 }).map((_, i) => {
+                                const hour = Math.floor(i / 4);
+                                const minute = (i % 4) * 15;
                                 const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                                const isDisabled = isReturnTimeDisabled(timeString);
                                 return (
                                   <Button
                                     key={timeString}
+                                    disabled={isDisabled}
                                     variant={
                                       returnTime === timeString ? "default" : "ghost"
                                     }
@@ -695,10 +792,13 @@ export function Hero() {
                                       returnTime === timeString
                                         ? "bg-blue-600 hover:bg-blue-700"
                                         : "hover:bg-blue-50",
+                                      isDisabled && "opacity-30 cursor-not-allowed"
                                     )}
                                     onClick={() => {
-                                      setReturnTime(timeString);
-                                      setIsReturnCalendarOpen(false);
+                                      if (!isDisabled) {
+                                        setReturnTime(timeString);
+                                        setIsReturnCalendarOpen(false);
+                                      }
                                     }}
                                   >
                                     {timeString}
@@ -713,30 +813,38 @@ export function Hero() {
                   </div>
                 </div>
               )}
-              <Link
-                href={{
-                  pathname: activeTab === "day-trips" ? "/day-trips" : "/booking-flow/step-2",
-                  query: {
-                    serviceType: activeTab === "transfer" ? "TRANSFER" : activeTab === "hourly" ? "BY_THE_HOUR" : "DAY_TRIP",
-                    tripType: activeTab === "transfer" ? tripType : "one-way",
-                    pickup: pickupLocation,
-                    dropoff: dropoffLocation,
-                    date: date ? date.toISOString() : "",
-                    time,
-                    duration: duration.toString(),
-                    returnDate: returnDate ? returnDate.toISOString() : "",
-                    returnTime,
-                    adults: adults.toString(),
-                    children: children.toString(),
-                    extraBags: extraBags.toString(),
-                  },
-                }}
-              >
-                <Button className="w-full h-10 py-3" variant="outline">
+              {isFormValid ? (
+                <Link
+                  href={{
+                    pathname: activeTab === "day-trips" ? "/day-trips" : "/booking-flow/step-2",
+                    query: {
+                      serviceType: activeTab === "transfer" ? "TRANSFER" : activeTab === "hourly" ? "BY_THE_HOUR" : "DAY_TRIP",
+                      tripType: activeTab === "transfer" ? tripType : "one-way",
+                      pickup: pickupLocation,
+                      dropoff: dropoffLocation,
+                      date: date ? date.toISOString() : "",
+                      time,
+                      duration: duration.toString(),
+                      returnDate: returnDate ? returnDate.toISOString() : "",
+                      returnTime,
+                      adults: adults.toString(),
+                      children: children.toString(),
+                      extraBags: extraBags.toString(),
+                    },
+                  }}
+                  className="w-full"
+                >
+                  <Button className="w-full h-10 py-3" variant="outline">
+                    <Search className="w-5 h-5 mr-2" />
+                    {activeTab === "day-trips" ? "Explore Day Trips" : "Find a Ride"}
+                  </Button>
+                </Link>
+              ) : (
+                <Button className="w-full h-10 py-3" variant="outline" disabled>
                   <Search className="w-5 h-5 mr-2" />
                   {activeTab === "day-trips" ? "Explore Day Trips" : "Find a Ride"}
                 </Button>
-              </Link>
+              )}
             </div>
             <div className="rounded-lg overflow-hidden shadow-lg w-[450px] h-[340px] hidden lg:block shrink-0">
               <MapRoute

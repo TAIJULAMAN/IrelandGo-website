@@ -254,6 +254,15 @@ export default function PaymentStep() {
                 <Button
                   onClick={async () => {
                     setPayError("");
+                    
+                    // --- DEBUGGING LOGS ---
+                    console.log("=== PAYMENT CLICKED ===");
+                    console.log("Token in localStorage:", localStorage.getItem("token"));
+                    console.log("AccessToken in localStorage:", localStorage.getItem("accessToken"));
+                    console.log("Booking ID:", bookingId);
+                    console.log("Total Price:", totalPrice);
+                    // -----------------------
+
                     try {
                       const res = await payment({
                         bookingId,

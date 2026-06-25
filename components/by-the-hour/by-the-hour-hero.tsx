@@ -145,6 +145,37 @@ export default function ByTheHourHero() {
     }
   };
 
+  const isTimeDisabled = (selectedDate: Date | undefined, timeStr: string) => {
+    if (!selectedDate) return false;
+    const isToday = selectedDate.toDateString() === new Date().toDateString();
+    if (!isToday) return false;
+
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(hours, minutes, 0, 0);
+
+    const minDateTime = new Date();
+    minDateTime.setHours(minDateTime.getHours() + 3);
+
+    return selectedDateTime.getTime() < minDateTime.getTime();
+  };
+
+  useEffect(() => {
+    if (date && isTimeDisabled(date, time)) {
+      for (let i = 0; i < 96; i++) {
+        const hour = Math.floor(i / 4);
+        const minute = (i % 4) * 15;
+        const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+        if (!isTimeDisabled(date, timeString)) {
+          setTime(timeString);
+          break;
+        }
+      }
+    }
+  }, [date]);
+
+  const isFormValid = pickupLocation.trim() !== "" && date !== undefined && time !== "" && !isTimeDisabled(date, time);
+
   return (
     <>
       <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
@@ -292,13 +323,15 @@ export default function ByTheHourHero() {
                             </div>
                             <div className="h-[300px] w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
                               <div className="flex flex-col gap-1">
-                                {Array.from({ length: 48 }).map((_, i) => {
-                                  const hour = Math.floor(i / 2);
-                                  const minute = (i % 2) * 15;
+                                {Array.from({ length: 96 }).map((_, i) => {
+                                  const hour = Math.floor(i / 4);
+                                  const minute = (i % 4) * 15;
                                   const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                                  const isDisabled = isTimeDisabled(date, timeString);
                                   return (
                                     <Button
                                       key={timeString}
+                                      disabled={isDisabled}
                                       variant={
                                         time === timeString ? "default" : "ghost"
                                       }
@@ -307,10 +340,13 @@ export default function ByTheHourHero() {
                                         time === timeString
                                           ? "bg-blue-600 hover:bg-blue-700"
                                           : "hover:bg-blue-50",
+                                        isDisabled && "opacity-30 cursor-not-allowed"
                                       )}
                                       onClick={() => {
-                                        setTime(timeString);
-                                        setIsCalendarOpen(false);
+                                        if (!isDisabled) {
+                                          setTime(timeString);
+                                          setIsCalendarOpen(false);
+                                        }
                                       }}
                                     >
                                       {timeString}
@@ -566,26 +602,32 @@ export default function ByTheHourHero() {
                     </div>
                   </div>
                 </div>
-                <Link
-                  href={{
-                    pathname: "/booking-flow/step-2",
-                    query: {
-                      serviceType: "BY_THE_HOUR",
-                      pickup: pickupLocation,
-                      dropoff: pickupLocation,
-                      date: date ? date.toISOString() : "",
-                      time,
-                      duration,
-                      adults: adults.toString(),
-                      children: children.toString(),
-                      extraBags: extraBags.toString(),
-                    },
-                  }}
-                >
-                  <button className="w-full bg-blue-600 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
+                {isFormValid ? (
+                  <Link
+                    href={{
+                      pathname: "/booking-flow/step-2",
+                      query: {
+                        serviceType: "BY_THE_HOUR",
+                        pickup: pickupLocation,
+                        dropoff: pickupLocation,
+                        date: date ? date.toISOString() : "",
+                        time,
+                        duration,
+                        adults: adults.toString(),
+                        children: children.toString(),
+                        extraBags: extraBags.toString(),
+                      },
+                    }}
+                  >
+                    <button className="w-full bg-blue-600 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
+                      Search Available Rides →
+                    </button>
+                  </Link>
+                ) : (
+                  <button className="w-full bg-blue-600/50 text-white/70 py-4 rounded-lg font-medium cursor-not-allowed" disabled>
                     Search Available Rides →
                   </button>
-                </Link>
+                )}
               </div>
             </div>
 

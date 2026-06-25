@@ -139,6 +139,37 @@ export function SearchHero({ trip }: { trip?: any }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const isTimeDisabled = (selectedDate: Date | undefined, timeStr: string) => {
+    if (!selectedDate) return false;
+    const isToday = selectedDate.toDateString() === new Date().toDateString();
+    if (!isToday) return false;
+
+    const [hours, minutes] = timeStr.split(":").map(Number);
+    const selectedDateTime = new Date(selectedDate);
+    selectedDateTime.setHours(hours, minutes, 0, 0);
+
+    const minDateTime = new Date();
+    minDateTime.setHours(minDateTime.getHours() + 3);
+
+    return selectedDateTime.getTime() < minDateTime.getTime();
+  };
+
+  useEffect(() => {
+    if (date && isTimeDisabled(date, time)) {
+      for (let i = 0; i < 96; i++) {
+        const hour = Math.floor(i / 4);
+        const minute = (i % 4) * 15;
+        const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+        if (!isTimeDisabled(date, timeString)) {
+          setTime(timeString);
+          break;
+        }
+      }
+    }
+  }, [date]);
+
+  const isFormValid = pickupLocation.trim() !== "" && dropoffLocation.trim() !== "" && date !== undefined && time !== "" && !isTimeDisabled(date, time);
+
   return (
     <section className="relative w-full h-[80vh] flex flex-col">      {/* Background image */}
       <div className="absolute inset-0 z-0">
@@ -291,23 +322,28 @@ export function SearchHero({ trip }: { trip?: any }) {
                     </div>
                     <div className="h-[300px] w-[110px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-slate-200">
                       <div className="flex flex-col gap-1">
-                        {Array.from({ length: 48 }).map((_, i) => {
-                          const hour = Math.floor(i / 2);
-                          const minute = (i % 2) * 15;
+                        {Array.from({ length: 96 }).map((_, i) => {
+                          const hour = Math.floor(i / 4);
+                          const minute = (i % 4) * 15;
                           const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                          const isDisabled = isTimeDisabled(date, timeString);
                           return (
                             <Button
                               key={timeString}
+                              disabled={isDisabled}
                               variant={time === timeString ? "default" : "ghost"}
                               className={cn(
                                 "justify-center h-8 text-sm",
                                 time === timeString
                                   ? "bg-blue-600 hover:bg-blue-700 text-white"
-                                  : "hover:bg-blue-50 text-slate-600"
+                                  : "hover:bg-blue-50 text-slate-600",
+                                isDisabled && "opacity-30 cursor-not-allowed"
                               )}
                               onClick={() => {
-                                setTime(timeString);
-                                setIsCalendarOpen(false);
+                                if (!isDisabled) {
+                                  setTime(timeString);
+                                  setIsCalendarOpen(false);
+                                }
                               }}
                             >
                               {timeString}
@@ -323,28 +359,35 @@ export function SearchHero({ trip }: { trip?: any }) {
           </div>
 
           {/* CTA */}
-          <div className="mt-5 flex justify-center">
-            <Link
-              href={{
-                pathname: "/booking-flow/step-2",
-                query: {
-                  serviceType: "DAY_TRIP",
-                  id: trip?.id,
-                  pickup: pickupLocation || "Dublin",
-                  dropoff: dropoffLocation || "Galway",
-                  date: date ? date.toISOString() : "",
-                  time,
-                  adults: adults.toString(),
-                  children: children.toString(),
-                  extraBags: extraBags.toString(),
-                },
-              }}
-            >
-              <button className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-200 transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto">
+          <div className="mt-5 flex justify-center w-full sm:w-auto">
+            {isFormValid ? (
+              <Link
+                href={{
+                  pathname: "/booking-flow/step-2",
+                  query: {
+                    serviceType: "DAY_TRIP",
+                    id: trip?.id,
+                    pickup: pickupLocation || "Dublin",
+                    dropoff: dropoffLocation || "Galway",
+                    date: date ? date.toISOString() : "",
+                    time,
+                    adults: adults.toString(),
+                    children: children.toString(),
+                    extraBags: extraBags.toString(),
+                  },
+                }}
+              >
+                <button className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-200 transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto">
+                  <Search className="w-4 h-4 mr-2" />
+                  Find Your Trip
+                </button>
+              </Link>
+            ) : (
+              <button className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-blue-600/50 text-white/70 font-bold shadow-none cursor-not-allowed w-full sm:w-auto" disabled>
                 <Search className="w-4 h-4 mr-2" />
                 Find Your Trip
               </button>
-            </Link>
+            )}
           </div>
         </div>
       </div>
