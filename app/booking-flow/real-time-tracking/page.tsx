@@ -15,7 +15,7 @@ export default function RealTimeTracking() {
         </div>
 
         {/* Top booking info bar */}
-        <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5 md:p-6 flex flex-col gap-4">
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-5 md:p-6 flex flex-col gap-4">
           <div className="grid gap-4 md:grid-cols-5 text-xs sm:text-sm text-gray-700">
             <div>
               <p className="text-[11px] sm:text-xs uppercase tracking-wide text-gray-500 mb-1">
@@ -80,7 +80,7 @@ export default function RealTimeTracking() {
         {/* Middle content: map + side cards */}
         <div className="grid gap-6 lg:grid-cols-3 items-start">
           {/* Map / route card */}
-          <div className="lg:col-span-2 bg-white rounded-2xl shadow-md p-4 sm:p-5 md:p-6">
+          <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-4 sm:p-5 md:p-6">
             <div className="text-[11px] sm:text-xs text-gray-500 mb-3 flex items-center justify-between">
               <div>
                 <p className="font-medium text-gray-700">Current Location</p>
@@ -88,7 +88,7 @@ export default function RealTimeTracking() {
               </div>
             </div>
 
-            <div className="relative h-64 sm:h-72 rounded-2xl bg-blue-50 overflow-hidden">
+            <div className="relative h-64 sm:h-72 rounded-lg bg-blue-50 overflow-hidden">
               <div className="absolute left-6 top-1/2 -translate-y-1/2 text-[11px] text-gray-600">
                 Pickup
               </div>
@@ -125,7 +125,7 @@ export default function RealTimeTracking() {
               </svg>
 
               {/* ETA bubble */}
-              <div className="absolute left-1/2 bottom-5 -translate-x-1/2 bg-white rounded-xl shadow-md px-3 py-2 flex flex-col sm:flex-row sm:items-center gap-2 text-[11px] sm:text-xs text-gray-700">
+              <div className="absolute left-1/2 bottom-5 -translate-x-1/2 bg-white rounded-lg shadow-md px-3 py-2 flex flex-col sm:flex-row sm:items-center gap-2 text-[11px] sm:text-xs text-gray-700">
                 <div className="flex items-center gap-1">
                   <Clock className="h-3.5 w-3.5 text-blue-600" />
                   <span className="font-medium">ETA 12 min</span>
@@ -141,7 +141,7 @@ export default function RealTimeTracking() {
           {/* Right side: driver & status */}
           <div className="space-y-4">
             {/* Driver & vehicle details */}
-            <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5">
+            <div className="bg-white rounded-lg shadow-md p-4 sm:p-5">
               <h2 className="text-sm sm:text-base font-semibold text-gray-900 mb-3">
                 Driver & Vehicle Details
               </h2>
@@ -160,7 +160,7 @@ export default function RealTimeTracking() {
             </div>
 
             {/* Trip status updates */}
-            <div className="bg-white rounded-2xl shadow-md p-4 sm:p-5">
+            <div className="bg-white rounded-lg shadow-md p-4 sm:p-5">
               <h2 className="text-sm sm:text-base font-semibold text-gray-900 mb-3">
                 Trip Status Updates
               </h2>

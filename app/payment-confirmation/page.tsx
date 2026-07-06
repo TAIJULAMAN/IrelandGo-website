@@ -84,7 +84,7 @@ export default function PaymentConfirmationPage() {
           </span>
         </div>
         {/* What's Next */}
-        <div className="bg-white rounded-2xl shadow-sm p-6 sm:p-8 print:hidden">
+        <div className="bg-white rounded-lg shadow-sm p-6 sm:p-8 print:hidden">
           <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-600 text-white text-xs">
               ?
@@ -126,7 +126,7 @@ export default function PaymentConfirmationPage() {
         </div>
 
         {/* Need Help */}
-        <div className="bg-blue-600 rounded-2xl p-6 sm:p-8 text-white relative overflow-hidden print:hidden">
+        <div className="bg-blue-600 rounded-lg p-6 sm:p-8 text-white relative overflow-hidden print:hidden">
           <div className="relative z-10">
             <h3 className="text-lg font-bold mb-2">Need assistance?</h3>
             <p className="text-sm text-blue-100 mb-6 max-w-md">
@@ -137,7 +137,7 @@ export default function PaymentConfirmationPage() {
               <Button
                 asChild
                 variant="secondary"
-                className="bg-white text-blue-600 hover:bg-blue-50 font-semibold rounded-xl"
+                className="bg-white text-blue-600 hover:bg-blue-50 font-semibold rounded-lg"
               >
                 <Link href="/contact">Contact Support</Link>
               </Button>
@@ -170,13 +170,13 @@ export default function PaymentConfirmationPage() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 print:hidden">
           <Button
             asChild
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-8 h-12 shadow-lg shadow-blue-200 transition-all hover:-translate-y-0.5"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-8 h-12 shadow-lg shadow-blue-200 transition-all hover:-translate-y-0.5"
           >
             <Link href="/">Return to Home</Link>
           </Button>
           <Button
             asChild
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-8 h-12 shadow-lg shadow-blue-200 transition-all hover:-translate-y-0.5"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-8 h-12 shadow-lg shadow-blue-200 transition-all hover:-translate-y-0.5"
           >
             <Link href="/user/bookings">View My Bookings</Link>
           </Button>

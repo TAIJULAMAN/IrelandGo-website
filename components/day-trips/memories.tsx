@@ -71,7 +71,7 @@ export default function Memories() {
     }, [api]);
 
     return (
-        <div className="container mx-auto px-5 bg-gray-50 py-16">
+        <div className="max-w-7xl mx-auto px-5 bg-gray-50 py-16">
             <div className="">
                 <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
                     Create Unforgettable Memories
@@ -85,7 +85,7 @@ export default function Memories() {
                         <CarouselContent className="-ml-4">
                             {memories.map((memory, index) => (
                                 <CarouselItem key={index} className="pl-4 basis-3/4 sm:basis-1/2 lg:basis-1/4">
-                                    <div className="relative h-80 rounded-2xl overflow-hidden group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow">
+                                    <div className="relative h-80 rounded-lg overflow-hidden group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow">
                                         <img
                                             src={memory.image}
                                             alt={memory.alt}

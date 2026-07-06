@@ -68,7 +68,7 @@ export default function DashboardLayout({
         </SheetContent>
       </Sheet>
 
-      {/* Main Container */}
+      {/* Main max-w-7xl */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Main Header */}
         <MainHeader setIsMobileMenuOpen={setIsMobileMenuOpen} user={user} />
@@ -95,7 +95,7 @@ export default function DashboardLayout({
           </div>
           <div className="p-6 flex flex-col sm:flex-row-reverse gap-3 bg-white">
             <Button
-              className="px-8 h-12 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl shadow-lg shadow-red-100 transition-all flex-1"
+              className="px-8 h-12 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-lg shadow-red-100 transition-all flex-1"
               onClick={handleLogout}
             >
               Yes, Log Out
@@ -103,7 +103,7 @@ export default function DashboardLayout({
             <Button
               variant="outline"
               onClick={() => setIsLogoutDialogOpen(false)}
-              className="px-8 h-12 font-bold rounded-xl border-gray-200 flex-1"
+              className="px-8 h-12 font-bold rounded-lg border-gray-200 flex-1"
             >
               Stay Logged In
             </Button>

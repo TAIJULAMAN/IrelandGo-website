@@ -194,12 +194,12 @@ export function SearchHero({ trip }: { trip?: any }) {
           </p>
         </div>
 
-        <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-5 md:p-8">
+        <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-lg shadow-xl border border-white/50 p-5 md:p-8">
           {/* Controls */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {/* Pickup Location */}
             <div className="relative">
-              <label className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12 hover:border-blue-400 transition">
+              <label className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12 hover:border-blue-400 transition">
                 <MapPin className="w-4 h-4 text-blue-600" />
                 <Input
                   ref={pickupInputRef}
@@ -219,7 +219,7 @@ export function SearchHero({ trip }: { trip?: any }) {
               </label>
 
               {showPickupDropdown && pickupStatus === "OK" && (
-                <div ref={pickupDropdownRef} className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto">
+                <div ref={pickupDropdownRef} className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto">
                   {pickupData.map((suggestion, index) => (
                     <button
                       key={suggestion.place_id}
@@ -244,7 +244,7 @@ export function SearchHero({ trip }: { trip?: any }) {
 
             {/* Dropoff Location */}
             <div className="relative">
-              <label className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12 hover:border-blue-400 transition">
+              <label className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12 hover:border-blue-400 transition">
                 <Flag className="w-4 h-4 text-blue-600" />
                 <Input
                   ref={dropoffInputRef}
@@ -264,7 +264,7 @@ export function SearchHero({ trip }: { trip?: any }) {
               </label>
 
               {showDropoffDropdown && dropoffStatus === "OK" && (
-                <div ref={dropoffDropdownRef} className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto">
+                <div ref={dropoffDropdownRef} className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto">
                   {dropoffData.map((suggestion, index) => (
                     <button
                       key={suggestion.place_id}
@@ -288,7 +288,7 @@ export function SearchHero({ trip }: { trip?: any }) {
             </div>
 
             {/* Date & Time Picker */}
-            <div className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12">
+            <div className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12">
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                   <Button
@@ -377,13 +377,13 @@ export function SearchHero({ trip }: { trip?: any }) {
                   },
                 }}
               >
-                <button className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-200 transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto">
+                <button className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-200 transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto">
                   <Search className="w-4 h-4 mr-2" />
                   Find Your Trip
                 </button>
               </Link>
             ) : (
-              <button className="inline-flex items-center justify-center px-8 py-3 rounded-xl bg-blue-600/50 text-white/70 font-bold shadow-none cursor-not-allowed w-full sm:w-auto" disabled>
+              <button className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-blue-600/50 text-white/70 font-bold shadow-none cursor-not-allowed w-full sm:w-auto" disabled>
                 <Search className="w-4 h-4 mr-2" />
                 Find Your Trip
               </button>

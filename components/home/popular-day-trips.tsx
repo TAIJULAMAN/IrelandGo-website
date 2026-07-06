@@ -37,7 +37,7 @@ export function PopularDayTrips() {
 
   return (
     <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 sm:py-12 md:py-14 lg:py-16 xl:py-18 bg-gray-50">
-      <div className="container mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Header row with arrows */}
         <div className="flex flex-col md:flex-row items-center justify-center md:justify-between mb-8 md:mb-12 gap-4">
           {/* Left arrow */}
@@ -75,7 +75,7 @@ export function PopularDayTrips() {
           {trips.map((trip: any, idx: number) => (
             <div
               key={trip.id || idx}
-              className="rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-white flex flex-col hover:shadow-md transition-shadow duration-300 snap-start shrink-0 w-[85vw] sm:w-[340px] lg:w-[360px]"
+              className="rounded-lg overflow-hidden shadow-sm border border-gray-100 bg-white flex flex-col hover:shadow-md transition-shadow duration-300 snap-start shrink-0 w-[85vw] sm:w-[340px] lg:w-[360px]"
             >
               <div className="relative h-48 md:h-56 w-full bg-gray-200">
                 <img
@@ -101,7 +101,7 @@ export function PopularDayTrips() {
                   <span className="text-xs text-gray-400">per person</span>
                 </div>
 
-                <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 md:py-5 rounded-xl mt-auto text-sm md:text-base shadow-blue-200 shadow-lg">
+                <Button asChild className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 md:py-5 rounded-lg mt-auto text-sm md:text-base shadow-blue-200 shadow-lg">
                   <Link href={`/day-trips/day-trip-details/${trip.id}`}>View Details</Link>
                 </Button>
               </div>

@@ -30,7 +30,7 @@ export function NewsLetter() {
 
   return (
     <section className="">
-      <div className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-16">
+      <div className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center max-w-7xl mx-auto py-10 md:py-16">
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 text-gray-900 leading-tight">
             Stay updated with <span className="text-blue-600">Ireland&apos;s best</span> travel deals
@@ -48,12 +48,12 @@ export function NewsLetter() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
-                className="flex-1 px-4 md:px-6 py-4 md:py-6 text-sm md:text-base lg:text-lg rounded-xl border-gray-300 focus:border-blue-600 focus:ring-blue-600 disabled:opacity-60"
+                className="flex-1 px-4 md:px-6 py-4 md:py-6 text-sm md:text-base lg:text-lg rounded-lg border-gray-300 focus:border-blue-600 focus:ring-blue-600 disabled:opacity-60"
               />
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-4 md:py-6 text-sm md:text-base lg:text-lg rounded-xl whitespace-nowrap disabled:opacity-70"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-4 md:py-6 text-sm md:text-base lg:text-lg rounded-lg whitespace-nowrap disabled:opacity-70"
               >
                 {isLoading ? (
                   <>

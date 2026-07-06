@@ -41,7 +41,7 @@ export default function TransferJourneyDetails() {
   useEffect(() => {
     if (isLoaded && pickupParam && dropoffParam && !transferRoute?.distanceKm) {
       const directionsService = new google.maps.DirectionsService();
-      
+
       directionsService.route(
         {
           origin: pickupParam,
@@ -53,7 +53,7 @@ export default function TransferJourneyDetails() {
             const leg = result.routes[0].legs[0];
             const distKm = Math.round((leg.distance?.value || 0) / 1000);
             const durationMins = Math.round((leg.duration?.value || 0) / 60);
-            
+
             setDistance(distKm);
             setDuration(durationMins);
             setEstimatedPrice(Math.round(distKm * 0.40 + 20)); // Base price + per km
@@ -103,7 +103,7 @@ export default function TransferJourneyDetails() {
 
             <div className="space-y-6">
               {/* Origin */}
-              <div className="flex items-start gap-4 p-4 rounded-2xl bg-gradient-to-r from-blue-50 to-blue-100/50 border border-blue-200">
+              <div className="flex items-start gap-4 p-4 rounded-lg bg-gradient-to-r from-blue-50 to-blue-100/50 border border-blue-200">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white text-base font-bold shadow-lg">
                   A
                 </div>
@@ -127,7 +127,7 @@ export default function TransferJourneyDetails() {
               </div>
 
               {/* Destination */}
-              <div className="flex items-start gap-4 p-4 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-100/50 border border-green-200">
+              <div className="flex items-start gap-4 p-4 rounded-lg bg-gradient-to-r from-green-50 to-emerald-100/50 border border-green-200">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600 text-white text-base font-bold shadow-lg">
                   B
                 </div>
@@ -147,7 +147,7 @@ export default function TransferJourneyDetails() {
 
             {/* Metrics row */}
             <div className="mt-8 grid grid-cols-3 gap-4 pt-6 border-t-2 border-gray-100">
-              <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100/30 hover:shadow-md transition-shadow">
+              <div className="flex flex-col items-center gap-2 p-4 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100/30 hover:shadow-md transition-shadow">
                 <div className="p-2 rounded-full bg-blue-600">
                   <Clock className="h-5 w-5 text-white" />
                 </div>
@@ -158,7 +158,7 @@ export default function TransferJourneyDetails() {
                   {formatDuration(duration) || "N/A"}
                 </p>
               </div>
-              <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100/30 hover:shadow-md transition-shadow">
+              <div className="flex flex-col items-center gap-2 p-4 rounded-lg bg-gradient-to-br from-purple-50 to-purple-100/30 hover:shadow-md transition-shadow">
                 <div className="p-2 rounded-full bg-purple-600">
                   <Route className="h-5 w-5 text-white" />
                 </div>
@@ -169,7 +169,7 @@ export default function TransferJourneyDetails() {
                   {distance ? `${distance} km` : "N/A"}
                 </p>
               </div>
-              <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-100/30 hover:shadow-md transition-shadow">
+              <div className="flex flex-col items-center gap-2 p-4 rounded-lg bg-gradient-to-br from-green-50 to-emerald-100/30 hover:shadow-md transition-shadow">
                 <div className="p-2 rounded-full bg-emerald-600">
                   <Euro className="h-5 w-5 text-white" />
                 </div>

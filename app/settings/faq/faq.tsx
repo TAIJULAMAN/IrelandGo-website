@@ -35,7 +35,7 @@ export default function FAQ() {
                         {[0, 1].map((col) => (
                             <div key={col} className="space-y-6">
                                 {[1, 2, 3].map((i) => (
-                                    <div key={i} className="bg-white rounded-2xl shadow-sm ring-1 ring-black/5 p-6 animate-pulse">
+                                    <div key={i} className="bg-white rounded-lg shadow-sm ring-1 ring-black/5 p-6 animate-pulse">
                                         <div className="h-5 bg-gray-200 rounded w-3/4" />
                                     </div>
                                 ))}
@@ -62,7 +62,7 @@ export default function FAQ() {
                             <AccordionItem
                                 key={item.id}
                                 value={`item-col1-${idx}`}
-                                className="bg-white rounded-2xl shadow-sm border-none ring-1 ring-black/5"
+                                className="bg-white rounded-lg shadow-sm border-none ring-1 ring-black/5"
                             >
                                 <AccordionTrigger className="px-6 py-5 hover:no-underline hover:text-blue-600 transition-colors">
                                     <span className="font-bold text-left text-lg">
@@ -81,7 +81,7 @@ export default function FAQ() {
                             <AccordionItem
                                 key={item.id}
                                 value={`item-col2-${idx}`}
-                                className="bg-white rounded-2xl shadow-sm border-none ring-1 ring-black/5"
+                                className="bg-white rounded-lg shadow-sm border-none ring-1 ring-black/5"
                             >
                                 <AccordionTrigger className="px-6 py-5 hover:no-underline hover:text-blue-600 transition-colors">
                                     <span className="font-bold text-left text-lg">

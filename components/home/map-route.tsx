@@ -62,35 +62,35 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                 destination: destination,
                 travelMode: google.maps.TravelMode.DRIVING,
             })
-            .then((result) => {
-                const leg = result?.routes[0]?.legs[0];
-                if (leg) {
-                    const startLat = leg.start_location.lat();
-                    const startLng = leg.start_location.lng();
-                    const endLat = leg.end_location.lat();
-                    const endLng = leg.end_location.lng();
-                    
-                    const isWithinBounds = (lat: number, lng: number) => {
-                        return lat <= 55.5 && lat >= 51.3 && lng <= -5.3 && lng >= -10.8;
-                    };
+                .then((result) => {
+                    const leg = result?.routes[0]?.legs[0];
+                    if (leg) {
+                        const startLat = leg.start_location.lat();
+                        const startLng = leg.start_location.lng();
+                        const endLat = leg.end_location.lat();
+                        const endLng = leg.end_location.lng();
 
-                    if (!isWithinBounds(startLat, startLng) || !isWithinBounds(endLat, endLng)) {
-                        setDirections(null);
-                        setDistance("Out of service area");
-                        return;
-                    }
+                        const isWithinBounds = (lat: number, lng: number) => {
+                            return lat <= 55.5 && lat >= 51.3 && lng <= -5.3 && lng >= -10.8;
+                        };
 
-                    setDirections(result);
-                    if (leg.distance?.text) {
-                        setDistance(leg.distance.text);
+                        if (!isWithinBounds(startLat, startLng) || !isWithinBounds(endLat, endLng)) {
+                            setDirections(null);
+                            setDistance("Out of service area");
+                            return;
+                        }
+
+                        setDirections(result);
+                        if (leg.distance?.text) {
+                            setDistance(leg.distance.text);
+                        }
                     }
-                }
-            })
-            .catch((e) => {
-                // Silently catch the MapsRequestError to prevent console spam
-                setDirections(null);
-                setDistance(null);
-            });
+                })
+                .catch((e) => {
+                    // Silently catch the MapsRequestError to prevent console spam
+                    setDirections(null);
+                    setDistance(null);
+                });
         }, 1500);
 
         return () => clearTimeout(timer);
@@ -121,7 +121,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
 
     if (!isLoaded) {
         return (
-            <div className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center" style={{ minHeight: '340px' }}>
+            <div className="w-full h-full bg-gray-100 rounded-lg flex items-center justify-center">
                 <p className="text-gray-500">Loading map...</p>
             </div>
         )
@@ -150,7 +150,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     const dropoffPos = getDropoffPos();
 
     return (
-        <div className="relative w-full h-full rounded-xl overflow-hidden bg-gray-200" style={{ minHeight: '340px' }}>
+        <div className="relative w-full h-full rounded-lg overflow-hidden bg-gray-200">
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
@@ -192,13 +192,15 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
                 )}
             </GoogleMap>
 
-            {distance && (
-                <div className="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-lg shadow-md z-[1000]">
-                    <p className="text-sm font-medium text-gray-700">
-                        Distance: <span className="text-blue-600">{distance}</span>
-                    </p>
-                </div>
-            )}
-        </div>
+            {
+                distance && (
+                    <div className="absolute bottom-4 left-4 bg-white px-4 py-2 rounded-lg shadow-md z-[1000]">
+                        <p className="text-sm font-medium text-gray-700">
+                            Distance: <span className="text-blue-600">{distance}</span>
+                        </p>
+                    </div>
+                )
+            }
+        </div >
     )
 }

@@ -62,8 +62,8 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
       />
       <div className="absolute inset-0 bg-slate-900/40" />
     </div>
-      <div className="relative z-10 container mx-auto px-5 flex items-center justify-center pt-30">
-        <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-2xl shadow-xl border border-white/50 p-5 md:p-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-5 flex items-center justify-center pt-30">
+        <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-lg shadow-xl border border-white/50 p-5 md:p-8">
           {/* Title & Subtitle */}
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-3 text-center">
             {trip?.title}
@@ -76,7 +76,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
 
           {/* Controls */}
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            <label className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12">
+            <label className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12">
               <MapPin className="w-4 h-4 text-blue-600" />
               <Input
                 type="text"
@@ -85,7 +85,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
                 className="border-0 bg-transparent h-10 px-0 text-sm placeholder:text-slate-500 focus-visible:ring-0 focus-visible:border-0 shadow-none"
               />
             </label>
-            <label className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12">
+            <label className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12">
               <Flag className="w-4 h-4 text-blue-600" />
               <Input
                 type="text"
@@ -95,7 +95,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
               />
             </label>
             {/* Date Picker */}
-            <div className="flex items-center gap-3 bg-white rounded-xl border border-slate-200 px-4 h-12">
+            <div className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12">
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                   <Button

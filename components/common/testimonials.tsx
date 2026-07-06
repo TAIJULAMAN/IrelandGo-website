@@ -71,7 +71,7 @@ export function Testimonials() {
   if (isLoading) {
     return (
       <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-20 bg-gray-50">
-        <div className="container mx-auto">
+        <div className="max-w-7xl mx-auto">
           <SectionHeader
             title="What Our Customers Say"
             subtitle="Testimonials"
@@ -82,7 +82,7 @@ export function Testimonials() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 animate-pulse ${i > 1 ? "hidden md:block" : ""} ${i > 2 ? "hidden lg:block" : ""}`}
+                className={`bg-white rounded-lg p-5 md:p-8 shadow-sm border border-gray-100 animate-pulse ${i > 1 ? "hidden md:block" : ""} ${i > 2 ? "hidden lg:block" : ""}`}
               >
                 <div className="flex gap-1 mb-6">
                   {[...Array(5)].map((_, j) => (
@@ -116,7 +116,7 @@ export function Testimonials() {
 
   return (
     <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-20 bg-gray-50">
-      <div className="container mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4">
           {showSlider && (
             <button
@@ -153,7 +153,7 @@ export function Testimonials() {
           {visibleReviews.map((review, idx) => (
             <div
               key={review.id}
-              className={`bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-gray-100 h-full flex flex-col ${showSlider && idx === 1 ? "hidden md:flex" : ""} ${showSlider && idx === 2 ? "hidden lg:flex" : ""}`}
+              className={`bg-white rounded-lg p-5 md:p-8 shadow-sm border border-gray-100 h-full flex flex-col ${showSlider && idx === 1 ? "hidden md:flex" : ""} ${showSlider && idx === 2 ? "hidden lg:flex" : ""}`}
             >
               <div className="flex items-center justify-between mb-4 md:mb-6">
                 <div className="flex gap-1">

@@ -28,7 +28,7 @@ export default function MultiDayToursDetailsHero({ tour }: { tour?: any }) {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 container mx-auto px-6 h-full flex flex-col items-center justify-center mt-12">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 h-full flex flex-col items-center justify-center mt-12">
           <div className="w-full max-w-4xl text-center">
             {/* Title */}
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-4 drop-shadow-md">

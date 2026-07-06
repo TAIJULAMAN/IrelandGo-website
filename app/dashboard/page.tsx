@@ -149,7 +149,7 @@ export default function Dashboard() {
           ? Array.from({ length: isAgent ? 4 : 3 }).map((_, i) => (
             <div
               key={i}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
+              className="bg-white rounded-lg shadow-sm border border-gray-100 p-5"
             >
               <div className="flex items-center gap-4">
                 <Skeleton className="w-12 h-12 rounded-full" />
@@ -163,7 +163,7 @@ export default function Dashboard() {
           : metrics.map((metric) => (
             <div
               key={metric.id}
-              className="bg-white rounded-xl shadow-sm border border-gray-100 p-5"
+              className="bg-white rounded-lg shadow-sm border border-gray-100 p-5"
             >
               <div className="flex items-center gap-4">
                 <div
@@ -196,7 +196,7 @@ export default function Dashboard() {
       </div>
 
       {/* Recent Bookings Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-5 border-b border-gray-100 flex items-center justify-between">
           <h2 className="text-xl font-bold text-gray-900">Recent Bookings</h2>
           <Link

@@ -25,7 +25,7 @@ export default function UserPaymentMethodsPage() {
       {/* Main Content */}
       <div className="flex flex-col gap-6 px-6 pt-6 max-w-5xl">
         {/* Banner */}
-        <div className="bg-[#F4F8FA] border border-[#E5EDF4] rounded-xl p-5">
+        <div className="bg-[#F4F8FA] border border-[#E5EDF4] rounded-lg p-5">
           <h2 className="text-blue-600 font-medium text-[15px] mb-1">
             Setup Payout Method
           </h2>
@@ -35,7 +35,7 @@ export default function UserPaymentMethodsPage() {
         </div>
 
         {/* Stripe Card */}
-        <div className="rounded-xl bg-white border border-[#E5E7EB] shadow-sm">
+        <div className="rounded-lg bg-white border border-[#E5E7EB] shadow-sm">
           <div className="p-6">
             {/* Card Header section */}
             <div className="flex items-center gap-4 mb-20">

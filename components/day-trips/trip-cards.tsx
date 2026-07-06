@@ -51,7 +51,7 @@ export default function TripCards() {
 
   return (
     <div className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-16 bg-gray-50">
-      <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4 container mx-auto">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4 max-w-7xl mx-auto">
         {showSlider && (
           <button
             onClick={goToPrevious}
@@ -77,7 +77,7 @@ export default function TripCards() {
         )}
       </div>
 
-      <div className="flex justify-center gap-3 mb-12 flex-wrap container mx-auto">
+      <div className="flex justify-center gap-3 mb-12 flex-wrap max-w-7xl mx-auto">
         {cities.map((city) => (
           <button
             key={city}
@@ -93,13 +93,13 @@ export default function TripCards() {
       </div>
 
       {filteredTrips.length > 0 ? (
-        <div className="container mx-auto">
+        <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleTrips.map((trip: any, idx: number) => (
               <Link
                 key={trip.id || idx}
                 href={`/day-trips/day-trip-details/${trip.id}`}
-                className={`group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-100 h-full flex flex-col ${showSlider && idx === 2 ? "hidden lg:flex" : ""
+                className={`group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-100 h-full flex flex-col ${showSlider && idx === 2 ? "hidden lg:flex" : ""
                   } ${showSlider && idx === 1 ? "hidden md:flex" : ""}`}
               >
                 <div className="relative h-48 md:h-56 overflow-hidden bg-gray-200">
@@ -126,7 +126,7 @@ export default function TripCards() {
                     <span className="text-xl font-bold text-blue-600">€{trip.price}</span>
                     <span className="text-xs text-gray-400">per person</span>
                   </div>
-                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition shadow-md hover:shadow-lg">
+                  <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition shadow-md hover:shadow-lg">
                     View Details
                   </button>
                 </div>
@@ -155,7 +155,7 @@ export default function TripCards() {
           )}
         </div>
       ) : (
-        <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-gray-300 mx-auto max-w-2xl">
+        <div className="text-center py-20 bg-white rounded-lg border border-dashed border-gray-300 mx-auto max-w-2xl">
           <p className="text-gray-500 text-lg">No day trips found for {selectedCity}.</p>
         </div>
       )}

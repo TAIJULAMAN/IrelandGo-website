@@ -11,9 +11,7 @@ import { SectionHeader } from "../ui/section-header"
 export function PrivateTransfers() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const { data: response, isLoading, isError } = useGetPrivateTransfersQuery({})
-  // console.log(response, "response")
   const transfers = response?.data || []
-  // console.log(transfers, "transfers")
 
   const goToPrevious = () => {
     if (transfers.length === 0) return
@@ -52,7 +50,7 @@ export function PrivateTransfers() {
 
   return (
     <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 sm:py-12 md:py-14 lg:py-16 xl:py-18 bg-gray-50">
-      <div className="container mx-auto">
+      <div className="max-w-7xl 2xl:max-w-7xl mx-auto px-5 sm:px-6 md:px-8">
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4">
           {showSlider && (
             <button
@@ -87,7 +85,7 @@ export function PrivateTransfers() {
           {visibleTransfers.map((transfer: any, idx: number) => (
             <div
               key={transfer.id || idx}
-              className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow ${showSlider && idx === 2 ? 'hidden lg:block' : ''
+              className={`bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow ${showSlider && idx === 2 ? 'hidden lg:block' : ''
                 } ${showSlider && idx === 1 ? 'hidden md:block' : ''}`}
             >
               <div className="relative h-48 md:h-56 overflow-hidden bg-gray-200">
@@ -112,7 +110,7 @@ export function PrivateTransfers() {
 
                 <Button
                   asChild
-                  className="w-full bg-blue-600 hover:bg-blue-600 text-white font-semibold py-4 md:py-6 rounded-xl mt-auto text-sm md:text-lg shadow-blue-200 shadow-lg"
+                  className="w-full bg-blue-600 hover:bg-blue-600 text-white font-semibold py-4 md:py-6 rounded-lg mt-auto text-sm md:text-lg shadow-blue-200 shadow-lg"
                 >
                   <Link href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transfer.from)}&dropoff=${encodeURIComponent(transfer.to)}&transferRoute=${encodeURIComponent(JSON.stringify(transfer))}`}>Book Now</Link>
                 </Button>

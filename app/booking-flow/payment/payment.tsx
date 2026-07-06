@@ -139,7 +139,7 @@ export default function PaymentStep() {
         <div className="grid gap-6 lg:gap-8 lg:grid-cols-3 items-start">
           {/* Booking summary */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 md:p-7">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5 sm:p-6 md:p-7">
               <h2 className="text-sm sm:text-base font-semibold text-gray-900 mb-4 pb-3 border-b border-gray-100">
                 Booking Summary
               </h2>
@@ -242,7 +242,7 @@ export default function PaymentStep() {
 
           {/* Payment method */}
           <div>
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 flex flex-col gap-4">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5 sm:p-6 flex flex-col gap-4">
               <h2 className="text-sm sm:text-base font-semibold text-gray-900">
                 Payment Method
               </h2>

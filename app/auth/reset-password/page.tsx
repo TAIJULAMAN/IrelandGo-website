@@ -32,11 +32,11 @@ export default function ResetPassword() {
     return (
         <div className="min-h-screen bg-gray-50">
             <main className="pt-24 pb-16 md:pt-28 md:pb-20">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-5xl mx-auto">
                         <div className="bg-white p-6 sm:p-8 lg:p-10 xl:p-12">
                             <div className="text-center lg:text-left mb-7">
-                                <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center mx-auto lg:mx-0 mb-4">
+                                <div className="w-14 h-14 bg-purple-50 rounded-lg flex items-center justify-center mx-auto lg:mx-0 mb-4">
                                     <Lock className="w-7 h-7 text-purple-600" />
                                 </div>
                                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1.5">
@@ -62,7 +62,7 @@ export default function ResetPassword() {
                                             required
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
-                                            className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
+                                            className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                             placeholder="Create a strong password"
                                         />
                                         <button
@@ -107,7 +107,7 @@ export default function ResetPassword() {
                                             id="confirmPassword"
                                             name="confirmPassword"
                                             required
-                                            className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
+                                            className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                             placeholder="Confirm your new password"
                                         />
                                         <button
@@ -121,7 +121,7 @@ export default function ResetPassword() {
                                 </div>
 
                                 {/* Password Requirements */}
-                                <div className="bg-gray-50/70 rounded-xl p-4 space-y-2 border border-gray-100">
+                                <div className="bg-gray-50/70 rounded-lg p-4 space-y-2 border border-gray-100">
                                     <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-2.5">Password Requirements</p>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         {[
@@ -142,7 +142,7 @@ export default function ResetPassword() {
 
                                 {/* Submit */}
                                 <Link href="/auth/login">
-                                    <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] group mt-2">
+                                    <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-lg shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] group mt-2">
                                         Reset Password
                                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
                                     </Button>

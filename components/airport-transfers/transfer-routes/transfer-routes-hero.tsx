@@ -17,7 +17,7 @@ export default function TransferRoutesHero() {
 				/>
 
 			</div>
-			<div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 				{/* Hero Text */}
 				<div className="text-center mb-10 pt-10">
 					<h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
@@ -31,7 +31,7 @@ export default function TransferRoutesHero() {
 				</div>
 
 				{/* Booking Card */}
-				<div className="bg-white rounded-2xl shadow-2xl p-5 md:p-6 flex flex-col md:flex-row gap-5 max-w-5xl mx-auto">
+				<div className="bg-white rounded-lg shadow-2xl p-5 md:p-6 flex flex-col md:flex-row gap-5 max-w-5xl mx-auto">
 					<div className="flex-1 flex flex-col gap-5 space-y-5">
 						{/* Pickup / Dropoff */}
 						<div className="grid md:grid-cols-2 gap-3">
@@ -96,7 +96,7 @@ export default function TransferRoutesHero() {
 						</Button>
 
 					</div>
-					<div className="hidden md:block w-[320px] lg:w-[360px] rounded-xl overflow-hidden shadow-lg bg-gray-200">
+					<div className="hidden md:block w-[320px] lg:w-[360px] rounded-lg overflow-hidden shadow-lg bg-gray-200">
 						<Image
 							src="/map2.png"
 							alt="Transfer route map"

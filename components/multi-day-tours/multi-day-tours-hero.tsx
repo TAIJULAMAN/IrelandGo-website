@@ -8,7 +8,7 @@ export default function MultiDayToursHero() {
     <>      <section className="relative min-h-screen text-white overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
-          src="/about.avif"
+          src="/AllCustomeImage/Tours.jpg"
           alt="Touring the Irish landscape"
           className="w-full h-full object-cover animate-in zoom-in-105 duration-1000 ease-out"
         />
@@ -38,7 +38,7 @@ export default function MultiDayToursHero() {
           ].map((stat, idx) => (
             <div
               key={idx}
-              className="group flex flex-col items-center justify-center p-5 rounded-2xl bg-black/1 backdrop-blur-md border border-white/20 transition-all hover:-translate-y-1 shadow-lg"
+              className="group flex flex-col items-center justify-center p-5 rounded-lg bg-black/1 backdrop-blur-md border border-white/20 transition-all hover:-translate-y-1 shadow-lg"
             >
               <stat.icon className="w-6 h-6 text-green-400 mb-3 opacity-90 group-hover:scale-110 group-hover:opacity-100 transition-all" />
               <span className="text-2xl sm:text-3xl font-black text-white mb-1 tracking-tight drop-shadow-md">

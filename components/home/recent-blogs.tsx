@@ -33,7 +33,7 @@ export function RecentBlogs() {
   if (isLoading) {
     return (
       <section className="py-16 md:py-24 bg-gray-50">
-        <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
+        <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-4">
             <SectionHeader
               title="Latest from our Blog"
@@ -45,9 +45,8 @@ export function RecentBlogs() {
             {[1, 2, 3].map((i, idx) => (
               <div
                 key={i}
-                className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse ${
-                  idx === 2 ? "block md:hidden lg:block" : ""
-                }`}
+                className={`bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 animate-pulse ${idx === 2 ? "block md:hidden lg:block" : ""
+                  }`}
               >
                 <div className="h-60 bg-gray-200" />
                 <div className="p-6 space-y-3">
@@ -69,7 +68,7 @@ export function RecentBlogs() {
 
   return (
     <section className="py-16 md:py-24 bg-gray-50">
-      <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
+      <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-4">
           <SectionHeader
             title="Explore Ireland's Best Destinations"
@@ -92,7 +91,7 @@ export function RecentBlogs() {
               href={`/blog/${blog.id}`}
               className={`group ${idx === 2 ? "block md:hidden lg:block" : ""}`}
             >
-              <article className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
+              <article className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
                 <div className="relative overflow-hidden h-60">
                   <Image
                     src={blog.image?.[0] || "/placeholder.jpg"}

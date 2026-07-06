@@ -84,7 +84,7 @@ export default function Login() {
     return (
         <div className="min-h-screen bg-gray-50">
             <main className="pt-24 pb-16 md:pt-28 md:pb-20">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-5xl mx-auto">
                         <div className="bg-white p-6 sm:p-8 lg:p-10 xl:p-12">
                             <div className="text-center lg:text-left mb-7">
@@ -98,7 +98,7 @@ export default function Login() {
 
                             <form className="space-y-4" onSubmit={handleSubmit}>
                                 {error && (
-                                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+                                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
                                         <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
                                         </svg>
@@ -121,7 +121,7 @@ export default function Login() {
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
                                             disabled={isLoading}
-                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             placeholder="you@example.com"
                                         />
                                     </div>
@@ -140,7 +140,7 @@ export default function Login() {
                                             name="password"
                                             required
                                             disabled={isLoading}
-                                            className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
+                                            className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm disabled:bg-gray-100 disabled:cursor-not-allowed"
                                             placeholder="Enter your password"
                                         />
                                         <button
@@ -175,7 +175,7 @@ export default function Login() {
                                 <Button
                                     type="submit"
                                     disabled={isLoading}
-                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed group"
+                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-lg shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed group"
                                 >
                                     {isLoading ? (
                                         <>

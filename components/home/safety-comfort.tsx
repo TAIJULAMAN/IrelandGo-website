@@ -28,7 +28,7 @@ export function SafetyComfort() {
 
   return (
     <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-16 bg-gray-50">
-      <div className="container mx-auto grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
         <div className="space-y-4 md:space-y-8">
           <SectionHeader
             title="Safety & Comfort"
@@ -40,7 +40,7 @@ export function SafetyComfort() {
             return (
               <div key={idx} className="flex gap-3 md:gap-5">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                     <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
                   </div>
                 </div>
@@ -53,7 +53,7 @@ export function SafetyComfort() {
           })}
         </div>
 
-        <div className="relative h-64 md:h-[500px] w-full rounded-2xl overflow-hidden shadow-lg">
+        <div className="relative h-64 md:h-[500px] w-full rounded-lg overflow-hidden shadow-lg">
           <Image
             src="/safe.png"
             alt="Safety and Comfort"

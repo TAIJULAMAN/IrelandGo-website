@@ -49,13 +49,13 @@ export default function BlogListingPage() {
             </div>
           </div>
         </section>
-        <main className="flex-grow container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-12 md:py-10 mt-16 md:mt-24 relative z-10">
+        <main className="flex-grow max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-12 md:py-10 mt-16 md:mt-24 relative z-10">
           {isLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse"
+                  className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 animate-pulse"
                 >
                   <div className="h-60 bg-gray-200" />
                   <div className="p-6 space-y-3">
@@ -78,7 +78,7 @@ export default function BlogListingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {blogs.map((blog) => (
                 <Link key={blog.id} href={`/blog/${blog.id}`} className="group">
-                  <article className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
+                  <article className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 h-full flex flex-col">
                     <div className="relative overflow-hidden h-60 bg-gray-100">
                       <Image
                         src={blog.image?.[0] || "/placeholder.jpg"}

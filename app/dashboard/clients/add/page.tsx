@@ -36,7 +36,7 @@ export default function AddClientPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         try {
             await addClient({ data: formData }).unwrap();
             toast.success("Client created successfully");
@@ -51,7 +51,7 @@ export default function AddClientPage() {
     };
 
     return (
-        <div className="flex flex-col gap-5 pb-5 container mx-auto max-w-4xl">
+        <div className="flex flex-col gap-5 pb-5 max-w-7xl mx-auto max-w-4xl">
             {/* Header */}
             <PageHeader
                 title="Add New Client"

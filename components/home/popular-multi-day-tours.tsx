@@ -46,7 +46,7 @@ export function PopularMultiDayTours() {
 
   return (
     <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-16">
-      <div className="container mx-auto">
+      <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-8 md:mb-12 gap-4">
           {showSlider && (
             <button
@@ -81,7 +81,7 @@ export function PopularMultiDayTours() {
           {visibleTours.map((tour: any, idx: number) => (
             <div
               key={tour.id || idx}
-              className={`bg-white rounded-2xl overflow-hidden shadow-md ring-1 ring-slate-200 h-full flex flex-col hover:shadow-lg transition-shadow duration-300 ${showSlider && idx === 2 ? "hidden lg:flex" : ""
+              className={`bg-white rounded-lg overflow-hidden shadow-md ring-1 ring-slate-200 h-full flex flex-col hover:shadow-lg transition-shadow duration-300 ${showSlider && idx === 2 ? "hidden lg:flex" : ""
                 } ${showSlider && idx === 1 ? "hidden md:flex" : ""}`}
             >
               <div className="relative h-44">

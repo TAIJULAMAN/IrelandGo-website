@@ -14,13 +14,13 @@ interface BookingDetailsInputsProps {
   setIsCalendarOpen: (open: boolean) => void;
   today: Date;
   isTimeDisabled: (date: Date | undefined, time: string) => boolean;
-  
+
   adults: number;
   setAdults: (val: number) => void;
   children: number;
   setChildren: (val: number) => void;
   totalPassengers: number;
-  
+
   extraBags: number;
   setExtraBags: (val: number) => void;
 }
@@ -152,7 +152,7 @@ export function BookingDetailsInputs({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                      className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                       onClick={() => setAdults(Math.max(1, adults - 1))}
                       disabled={adults <= 1}
                     >
@@ -162,7 +162,7 @@ export function BookingDetailsInputs({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                      className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                       onClick={() => setAdults(adults + 1)}
                     >
                       <Plus className="h-3 w-3" />
@@ -178,7 +178,7 @@ export function BookingDetailsInputs({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                      className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                       onClick={() => setChildren(Math.max(0, children - 1))}
                       disabled={children <= 0}
                     >
@@ -188,7 +188,7 @@ export function BookingDetailsInputs({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                      className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                       onClick={() => setChildren(children + 1)}
                     >
                       <Plus className="h-3 w-3" />
@@ -261,7 +261,7 @@ export function BookingDetailsInputs({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                      className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                       onClick={() => setExtraBags(Math.max(0, extraBags - 1))}
                       disabled={extraBags <= 0}
                     >
@@ -271,7 +271,7 @@ export function BookingDetailsInputs({
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                      className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                       onClick={() => setExtraBags(extraBags + 1)}
                     >
                       <Plus className="h-3 w-3" />

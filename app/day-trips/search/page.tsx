@@ -10,7 +10,7 @@ export default function DayTripSearchPage() {
   return (
     <main className="bg-gray-50 min-h-screen">
       <SearchHero />
-      <div className="container mx-auto py-12">
+      <div className="max-w-7xl mx-auto py-12">
       </div>
       <Testimonials />
       <FAQ />    </main>

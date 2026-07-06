@@ -82,8 +82,8 @@ export default function MultiDayToursOurMultiDayTours() {
             onClick={onPrev}
             disabled={total <= perPage}
             className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors ${total <= perPage
-                ? "border-slate-200 text-slate-300 cursor-not-allowed"
-                : "border-blue-600 text-blue-600 hover:bg-blue-50"
+              ? "border-slate-200 text-slate-300 cursor-not-allowed"
+              : "border-blue-600 text-blue-600 hover:bg-blue-50"
               }`}
           >
             <ChevronLeft className="w-9 h-9" />
@@ -101,8 +101,8 @@ export default function MultiDayToursOurMultiDayTours() {
             onClick={onNext}
             disabled={total <= perPage}
             className={`flex items-center justify-center w-12 h-12 rounded-full border-2 transition-colors ${total <= perPage
-                ? "border-slate-200 text-slate-300 cursor-not-allowed"
-                : "border-blue-600 text-blue-600 hover:bg-blue-50"
+              ? "border-slate-200 text-slate-300 cursor-not-allowed"
+              : "border-blue-600 text-blue-600 hover:bg-blue-50"
               }`}
           >
             <ChevronRight className="w-9 h-9" />
@@ -116,8 +116,8 @@ export default function MultiDayToursOurMultiDayTours() {
               key={f}
               onClick={() => onFilter(f)}
               className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${activeFilter === f
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
+                ? "bg-blue-600 text-white border-blue-600"
+                : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"
                 }`}
             >
               {f}
@@ -144,7 +144,7 @@ export default function MultiDayToursOurMultiDayTours() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {pagedTours.map((t: any) => (
               <Link key={t.id} href={`/multi-day-tours/${t.id}`}>
-                <div className="bg-white rounded-2xl overflow-hidden shadow-md ring-1 ring-slate-200 h-full flex flex-col hover:shadow-lg transition-shadow">
+                <div className="bg-white rounded-lg overflow-hidden shadow-md ring-1 ring-slate-200 h-full flex flex-col hover:shadow-lg transition-shadow">
                   <div className="relative h-44">
                     <img
                       src={

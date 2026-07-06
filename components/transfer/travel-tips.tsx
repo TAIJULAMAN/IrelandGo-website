@@ -7,27 +7,27 @@ export default function TravelTips() {
 	const transferRouteParam = searchParams.get("transferRoute");
 	const pickupParam = searchParams.get("pickup") || "Dublin";
 	const dropoffParam = searchParams.get("dropoff") || "Galway";
-  
+
 	let transferRoute = null;
 	try {
-	  if (transferRouteParam) {
-		transferRoute = JSON.parse(transferRouteParam);
-	  }
+		if (transferRouteParam) {
+			transferRoute = JSON.parse(transferRouteParam);
+		}
 	} catch (e) {
-	  console.error("Failed to parse transfer route", e);
+		console.error("Failed to parse transfer route", e);
 	}
 
 	return (
 		<section className="bg-gray-50 py-10 sm:py-14">
-			<div className="container mx-auto px-4 sm:px-6 lg:px-0 text-gray-900">
+			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-0 text-gray-900">
 				<h2 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3">
 					From {transferRoute?.from || pickupParam} to {transferRoute?.to || dropoffParam} : Travel Tips
 				</h2>
-				
+
 				{transferRoute?.description ? (
-					<div 
+					<div
 						className="prose prose-sm sm:prose-base text-gray-700 max-w-none"
-						dangerouslySetInnerHTML={{ __html: transferRoute.description }} 
+						dangerouslySetInnerHTML={{ __html: transferRoute.description }}
 					/>
 				) : (
 					<>

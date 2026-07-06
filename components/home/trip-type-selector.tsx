@@ -51,7 +51,7 @@ export function TripTypeSelector({
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10 hover:bg-white shadow-sm rounded-md"
+            className="h-10 w-10 hover:bg-white shadow-sm rounded-lg"
             onClick={() => setDuration(Math.max(2, duration - 1))}
             disabled={duration <= 2}
           >
@@ -66,7 +66,7 @@ export function TripTypeSelector({
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10 hover:bg-white shadow-sm rounded-md"
+            className="h-10 w-10 hover:bg-white shadow-sm rounded-lg"
             onClick={() => setDuration(Math.min(24, duration + 1))}
           >
             <Plus className="h-4 w-4" />

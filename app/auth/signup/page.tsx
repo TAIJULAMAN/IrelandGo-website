@@ -49,7 +49,7 @@ export default function Signup() {
     return (
         <div className="min-h-screen bg-gray-50">
             <main className="pt-24 pb-16 md:pt-28 md:pb-20">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="max-w-5xl mx-auto">
                         <div className="bg-white p-6 sm:p-8 lg:p-10 xl:p-12">
                             <div className="text-center lg:text-left mb-7">
@@ -75,7 +75,7 @@ export default function Signup() {
                                                 id="name"
                                                 name="name"
                                                 required
-                                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
+                                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                                 placeholder="John Doe"
                                             />
                                         </div>
@@ -91,7 +91,7 @@ export default function Signup() {
                                                 id="phone"
                                                 name="phone"
                                                 required
-                                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
+                                                className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                                 placeholder="+353 1 234 5678"
                                             />
                                         </div>
@@ -110,7 +110,7 @@ export default function Signup() {
                                             id="email"
                                             name="email"
                                             required
-                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
+                                            className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                             placeholder="you@example.com"
                                         />
                                     </div>
@@ -125,7 +125,7 @@ export default function Signup() {
                                         <button
                                             type="button"
                                             onClick={() => setRole("USER")}
-                                            className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-xl font-medium transition-all text-sm ${role === "USER"
+                                            className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-lg font-medium transition-all text-sm ${role === "USER"
                                                 ? "border-blue-600 bg-blue-50 text-blue-700 shadow-sm shadow-blue-600/10"
                                                 : "border-gray-200 bg-gray-50/50 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
                                                 }`}
@@ -145,7 +145,7 @@ export default function Signup() {
                                         <button
                                             type="button"
                                             onClick={() => setRole("AGENT")}
-                                            className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-xl font-medium transition-all text-sm ${role === "AGENT"
+                                            className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-lg font-medium transition-all text-sm ${role === "AGENT"
                                                 ? "border-blue-600 bg-blue-50 text-blue-700 shadow-sm shadow-blue-600/10"
                                                 : "border-gray-200 bg-gray-50/50 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
                                                 }`}
@@ -178,7 +178,7 @@ export default function Signup() {
                                                 id="password"
                                                 name="password"
                                                 required
-                                                className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
+                                                className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                                 placeholder="Strong password"
                                             />
                                             <button
@@ -201,7 +201,7 @@ export default function Signup() {
                                                 id="confirmPassword"
                                                 name="confirmPassword"
                                                 required
-                                                className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-xl bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
+                                                className="w-full pl-10 pr-11 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                                 placeholder="Re-enter password"
                                             />
                                             <button
@@ -238,7 +238,7 @@ export default function Signup() {
                                 {/* Submit */}
                                 <Button
                                     disabled={isLoading}
-                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] group disabled:opacity-70 disabled:cursor-not-allowed"
+                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-lg shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] group disabled:opacity-70 disabled:cursor-not-allowed"
                                 >
                                     {isLoading ? "Creating Account..." : "Create Account"}
                                     {!isLoading && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />}

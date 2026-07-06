@@ -19,7 +19,7 @@ export default function PaymentCancelPage() {
   let selectedStops: any[] = [];
   try {
     if (selectedStopsParam) selectedStops = JSON.parse(selectedStopsParam);
-  } catch (e) {}
+  } catch (e) { }
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
@@ -58,7 +58,7 @@ export default function PaymentCancelPage() {
         </p>
 
         {/* Common issues alert */}
-        <div className="w-full flex items-start gap-3 bg-blue-50 rounded-xl p-4 mb-8 text-left">
+        <div className="w-full flex items-start gap-3 bg-blue-50 rounded-lg p-4 mb-8 text-left">
           <AlertCircle className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-semibold text-blue-900 mb-1">
@@ -76,7 +76,7 @@ export default function PaymentCancelPage() {
         <div className="flex flex-col sm:flex-row gap-4 w-full">
           <Button
             asChild
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 h-auto rounded-xl shadow-lg shadow-blue-100"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 h-auto rounded-lg shadow-lg shadow-blue-100"
           >
             <Link href={`/booking-flow/payment?${searchParams.toString()}`}>
               Try Payment Again
@@ -84,7 +84,7 @@ export default function PaymentCancelPage() {
           </Button>
           <Button
             asChild
-            className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 h-auto rounded-xl shadow-lg shadow-red-100"
+            className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 h-auto rounded-lg shadow-lg shadow-red-100"
           >
             <Link href="/" className="flex items-center justify-center gap-2">
               <ArrowLeft className="h-4 w-4" />

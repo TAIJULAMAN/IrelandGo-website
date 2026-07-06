@@ -330,7 +330,7 @@ export default function Step2() {
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
-                  className="w-[calc(100vw-32px)] sm:w-[500px] md:w-[600px] p-4 sm:p-6 shadow-xl rounded-2xl max-h-[90vh] overflow-y-auto"
+                  className="w-[calc(100vw-32px)] sm:w-[500px] md:w-[600px] p-4 sm:p-6 shadow-xl rounded-lg max-h-[90vh] overflow-y-auto"
                   align="end"
                 >
                   <div className="flex flex-col md:flex-row gap-6">
@@ -667,7 +667,7 @@ export default function Step2() {
                       onClick={() => setSelectedVehicle(option.id)}
                     >
                       <div
-                        className={`bg-white rounded-2xl shadow-lg p-5 flex flex-col hover:shadow-2xl transition-all duration-300 cursor-pointer h-full border-2 ${selectedVehicle === option.id
+                        className={`bg-white rounded-lg shadow-lg p-5 flex flex-col hover:shadow-2xl transition-all duration-300 cursor-pointer h-full border-2 ${selectedVehicle === option.id
                           ? "border-blue-600 ring-4 ring-blue-100"
                           : "border-transparent hover:border-blue-300"
                           }`}
@@ -677,7 +677,7 @@ export default function Step2() {
                         }}
                       >
                         {option.vehicles.length === 1 ? (
-                          <div className="mb-5 h-32 sm:h-36 flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-3 relative">
+                          <div className="mb-5 h-32 sm:h-36 flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 rounded-lg p-3 relative">
                             <img
                               src={option.vehicles[0].image[0]}
                               alt={option.vehicles[0].name}
@@ -685,7 +685,7 @@ export default function Step2() {
                             />
                           </div>
                         ) : (
-                          <div className="mb-5 flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-3 relative h-auto min-h-[8rem]">
+                          <div className="mb-5 flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 rounded-lg p-3 relative h-auto min-h-[8rem]">
                             {option.vehicles.map((v: any, index: number) => (
                               <div
                                 key={index}

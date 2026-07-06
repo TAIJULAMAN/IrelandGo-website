@@ -49,7 +49,7 @@ export default function ByTheHourEnglishSpeakingDriver() {
           {cities.map((c) => (
             <div
               key={c.name}
-              className="bg-white rounded-2xl overflow-hidden shadow-md ring-1 ring-black/5"
+              className="bg-white rounded-lg overflow-hidden shadow-md ring-1 ring-black/5"
             >
               <div className="h-36">
                 <img

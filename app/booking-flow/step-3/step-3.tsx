@@ -57,7 +57,7 @@ function SingleStoppageModal({
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center md:items-center justify-center bg-black/60 backdrop-blur-sm md:p-5">
-      <div className="bg-white rounded-lg sm:rounded-2xl max-w-sm md:max-w-2xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[70vh] md:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white rounded-lg sm:rounded-lg max-w-sm md:max-w-2xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[70vh] md:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg sm:text-xl font-bold text-gray-900">{stopData?.name || baseStop?.name}</h2>
           <button onClick={onClose} className="p-1.5 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
@@ -73,7 +73,7 @@ function SingleStoppageModal({
           ) : (
             <>
               <div
-                className="relative h-44 sm:h-64 w-full rounded-xl overflow-hidden group"
+                className="relative h-44 sm:h-64 w-full rounded-lg overflow-hidden group"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
@@ -101,7 +101,7 @@ function SingleStoppageModal({
                 )}
               </div>
 
-              <div className="flex flex-wrap gap-2 bg-gray-50 p-3 rounded-xl border border-gray-100">
+              <div className="flex flex-wrap gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
                 <div className="flex-1 min-w-[100px]">
                   <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
                     <Clock className="h-3.5 w-3.5 text-purple-500" /> Suggested time
@@ -531,7 +531,7 @@ export default function Step3() {
                     <div
                       key={stop.id}
                       onClick={() => toggleStop(stop)}
-                      className={`relative bg-white rounded-2xl overflow-hidden transition-all cursor-pointer border-2
+                      className={`relative bg-white rounded-lg overflow-hidden transition-all cursor-pointer border-2
                         flex flex-row sm:flex-col
                         ${isSelected
                           ? "border-blue-600 ring-2 ring-blue-100 shadow-lg"
@@ -548,7 +548,7 @@ export default function Step3() {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent sm:from-black/80 sm:via-black/20" />
                         {stop.id === mostPopularId && (
-                          <div className="absolute top-2 left-2 flex items-center bg-yellow-400 shadow-sm rounded-md px-1.5 py-0.5 gap-0.5 sm:top-3 sm:left-3 sm:px-2 sm:py-1 sm:gap-1">
+                          <div className="absolute top-2 left-2 flex items-center bg-yellow-400 shadow-sm rounded-lg px-1.5 py-0.5 gap-0.5 sm:top-3 sm:left-3 sm:px-2 sm:py-1 sm:gap-1">
                             <span className="text-white text-[9px] sm:text-[10px]">★</span>
                             <span className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wide">
                               Most popular
@@ -556,7 +556,7 @@ export default function Step3() {
                           </div>
                         )}
                         {stop.id === recommendedId && (
-                          <div className="absolute top-2 left-2 flex items-center bg-blue-600 shadow-sm rounded-md px-1.5 py-0.5 gap-0.5 sm:top-3 sm:left-3 sm:px-2 sm:py-1 sm:gap-1">
+                          <div className="absolute top-2 left-2 flex items-center bg-blue-600 shadow-sm rounded-lg px-1.5 py-0.5 gap-0.5 sm:top-3 sm:left-3 sm:px-2 sm:py-1 sm:gap-1">
                             <span className="text-white text-[9px] sm:text-[10px]">👍</span>
                             <span className="text-[9px] sm:text-[10px] font-bold text-white uppercase tracking-wide">
                               Recommended
@@ -624,7 +624,7 @@ export default function Step3() {
 
             {/* Custom stop entry – shown after the predefined grid */}
             <div className="mt-4 space-y-3">
-              <div className="flex items-start gap-2 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+              <div className="flex items-start gap-2 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3">
                 <Search className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
                 <p className="text-xs sm:text-sm text-blue-700 font-medium">
                   Want a different stop? Add your own custom stop below.
@@ -681,7 +681,7 @@ export default function Step3() {
             </div>
 
             {/* Bottom navigation – inline below stops */}
-            <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-2">
+            <div className="bg-white rounded-lg shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-2">
               <Button
                 asChild
 
@@ -706,7 +706,7 @@ export default function Step3() {
           </div>
 
           <div className="hidden lg:block">
-            <div className="bg-white rounded-2xl shadow-md p-6 flex flex-col gap-6 sticky top-24">
+            <div className="bg-white rounded-lg shadow-md p-6 flex flex-col gap-6 sticky top-24">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-bold text-gray-900">Itinerary</h2>
                 <button className="text-sm font-semibold text-blue-600 hover:text-blue-700">
@@ -715,7 +715,7 @@ export default function Step3() {
               </div>
 
               <div>
-                <div className="inline-flex items-center gap-1.5 bg-gray-100 rounded-md px-2 py-1 mb-4">
+                <div className="inline-flex items-center gap-1.5 bg-gray-100 rounded-lg px-2 py-1 mb-4">
                   <span className="text-xs text-gray-600">📅</span>
                   <span className="text-xs font-semibold text-gray-800">
                     {formattedDate || "Select Date"}
@@ -757,7 +757,7 @@ export default function Step3() {
                       return (
                         <div
                           key={stop.id}
-                          className="relative flex items-center gap-3 bg-white border border-gray-100 rounded-xl p-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all"
+                          className="relative flex items-center gap-3 bg-white border border-gray-100 rounded-lg p-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all"
                         >
                           <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-gray-50 border border-gray-100">
                             <img
@@ -799,21 +799,21 @@ export default function Step3() {
               )}
 
               <div className="flex items-center justify-between border-t border-b border-gray-100 py-4">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-md px-2 py-1">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-lg px-2 py-1">
                   <Users className="h-3.5 w-3.5 text-gray-500" />
                   <span>{adults + children}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-md px-2 py-1">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-lg px-2 py-1">
                   <Briefcase className="h-3.5 w-3.5 text-gray-500" />
                   <span>{adults + children + extraBags}</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-md px-2 py-1">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-lg px-2 py-1">
                   <Car className="h-3.5 w-3.5 text-gray-500" />
                   <span className="truncate max-w-[70px]">
                     {vehicleName}
                   </span>
                 </div>
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-md px-2 py-1">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-50 rounded-lg px-2 py-1">
                   <MapPin className="h-3.5 w-3.5 text-gray-500" />
                   <span>
                     {selectedStops.length} Stop
@@ -843,7 +843,7 @@ export default function Step3() {
                 </span>
               </div>
 
-              <div className="flex items-start gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-3">
+              <div className="flex items-start gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-3">
                 <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
                 <p className="text-xs text-gray-700 font-medium">
                   Free cancellation up to 24 hours before your pickup time.
@@ -854,7 +854,7 @@ export default function Step3() {
         </div>
 
         {/* Mobile price summary bar – visible only below lg */}
-        <div className="lg:hidden mt-4 bg-white rounded-2xl shadow-md border border-gray-100 px-4 py-3 flex items-center justify-between gap-3">
+        <div className="lg:hidden mt-4 bg-white rounded-lg shadow-md border border-gray-100 px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex flex-col">
             <span className="text-xs text-gray-500 font-medium">Total</span>
             <span className="text-xl font-bold text-gray-900">€{totalPrice}</span>
@@ -893,7 +893,7 @@ export default function Step3() {
         }
       `}</style>
       <style>{`
-        .pac-container {
+        .pac-max-w-7xl {
           z-index: 999999 !important;
           border-radius: 12px !important;
           border: 1px solid #e5e7eb !important;

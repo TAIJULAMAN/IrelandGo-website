@@ -97,14 +97,14 @@ export default function UserBookingsPage() {
     },
     ...(isAgent
       ? [
-          {
-            id: 4,
-            label: "Total Earnings",
-            icon: <DollarSign className="h-5 w-5 text-purple-600" />,
-            value: `€${data?.data?.totalEarnings || 0}`,
-            bgColor: "bg-purple-50",
-          },
-        ]
+        {
+          id: 4,
+          label: "Total Earnings",
+          icon: <DollarSign className="h-5 w-5 text-purple-600" />,
+          value: `€${data?.data?.totalEarnings || 0}`,
+          bgColor: "bg-purple-50",
+        },
+      ]
       : []),
   ];
 
@@ -123,9 +123,8 @@ export default function UserBookingsPage() {
 
       {/* Statistics Cards */}
       <div
-        className={`grid grid-cols-1 sm:grid-cols-2 ${
-          isAgent ? "lg:grid-cols-3" : "lg:grid-cols-2"
-        } gap-5`}
+        className={`grid grid-cols-1 sm:grid-cols-2 ${isAgent ? "lg:grid-cols-3" : "lg:grid-cols-2"
+          } gap-5`}
       >
         {stats.map((stat) => (
           <Card
@@ -163,7 +162,7 @@ export default function UserBookingsPage() {
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="flex h-10 w-full sm:w-[180px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="flex h-10 w-full sm:w-[180px] rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <option value="all">All Status</option>
                 <option value="confirmed">Confirmed</option>
@@ -272,13 +271,12 @@ export default function UserBookingsPage() {
                       </TableCell>
                       <TableCell>
                         <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium uppercase ${
-                            booking.status === "CONFIRMED"
+                          className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium uppercase ${booking.status === "CONFIRMED"
                               ? "bg-green-100 text-green-700"
                               : booking.status === "PENDING"
                                 ? "bg-orange-100 text-orange-700"
                                 : "bg-red-100 text-red-700"
-                          }`}
+                            }`}
                         >
                           {booking.status === "CONFIRMED" && (
                             <CheckCircle className="h-3 w-3" />
@@ -288,8 +286,8 @@ export default function UserBookingsPage() {
                           )}
                           {(booking.status === "CANCELLED" ||
                             booking.status === "REJECTED") && (
-                            <XCircle className="h-3 w-3" />
-                          )}
+                              <XCircle className="h-3 w-3" />
+                            )}
                           {booking.status}
                         </span>
                       </TableCell>
@@ -330,13 +328,12 @@ export default function UserBookingsPage() {
               {/* Status Badge */}
               <div className="flex items-center gap-2">
                 <span
-                  className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium uppercase ${
-                    selectedBooking.status === "CONFIRMED"
+                  className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium uppercase ${selectedBooking.status === "CONFIRMED"
                       ? "bg-green-100 text-green-700"
                       : selectedBooking.status === "PENDING"
                         ? "bg-orange-100 text-orange-700"
                         : "bg-red-100 text-red-700"
-                  }`}
+                    }`}
                 >
                   {selectedBooking.status === "CONFIRMED" && (
                     <CheckCircle className="h-4 w-4" />
@@ -346,8 +343,8 @@ export default function UserBookingsPage() {
                   )}
                   {(selectedBooking.status === "CANCELLED" ||
                     selectedBooking.status === "REJECTED") && (
-                    <XCircle className="h-4 w-4" />
-                  )}
+                      <XCircle className="h-4 w-4" />
+                    )}
                   {selectedBooking.status}
                 </span>
               </div>

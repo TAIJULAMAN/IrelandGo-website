@@ -46,7 +46,7 @@ const MapRoute = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center"
+        className="w-full h-full bg-gray-100 rounded-lg flex items-center justify-center"
         style={{ minHeight: "340px" }}
       >
         <p className="text-gray-500">Loading map...</p>
@@ -231,7 +231,7 @@ export function Hero() {
     <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
       <div className="absolute inset-0 z-0">
         <img
-          src="/AllCustomeImage/Transfers.jpg"
+          src="/AllCustomeImage/HomePage.jpg"
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
@@ -248,8 +248,8 @@ export function Hero() {
         </div>
         <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} />
         <div>
-          {/* Booking Form Container */}
-          <div className="flex flex-col lg:flex-row gap-5 container mx-auto bg-white rounded-xl shadow-xl p-4 md:p-5">
+          {/* Booking Form max-w-7xl */}
+          <div className="flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto bg-white/95 backdrop-blur-xl rounded-lg shadow-2xl p-5 md:p-7 border border-white/40">
             <div className="w-full ">
               {/* Conditional Trip Type / Duration Selector */}
               <TripTypeSelector
@@ -397,25 +397,29 @@ export function Hero() {
                       extraBags: extraBags.toString(),
                     },
                   }}
-                  className="w-full"
+                  className="w-full mt-2 block"
                 >
-                  <Button className="w-full h-10 py-3" variant="outline">
+                  <Button className="w-full h-12 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 font-semibold text-lg border-0 rounded-lg">
                     <Search className="w-5 h-5 mr-2" />
                     {activeTab === "day-trips" ? "Explore Day Trips" : "Find a Ride"}
                   </Button>
                 </Link>
               ) : (
-                <Button className="w-full h-10 py-3" variant="outline" disabled>
-                  <Search className="w-5 h-5 mr-2" />
-                  {activeTab === "day-trips" ? "Explore Day Trips" : "Find a Ride"}
-                </Button>
+                <div className="w-full mt-2">
+                  <Button className="w-full h-12 py-3 bg-gray-100 text-gray-400 font-semibold text-lg border-0 rounded-lg cursor-not-allowed transition-all duration-300" variant="outline" disabled>
+                    <Search className="w-5 h-5 mr-2" />
+                    {activeTab === "day-trips" ? "Explore Day Trips" : "Find a Ride"}
+                  </Button>
+                </div>
               )}
             </div>
-            <div className="rounded-lg overflow-hidden shadow-lg w-[450px] h-[340px] hidden lg:block shrink-0">
-              <MapRoute
-                pickup={pickupLocation ? { name: pickupLocation } : undefined}
-                dropoff={activeTab === "transfer" && dropoffLocation ? { name: dropoffLocation } : undefined}
-              />
+            <div className="rounded-lg overflow-hidden border border-gray-100 lg:w-[450px] hidden lg:block shrink-0 relative min-h-[320px] shadow-inner">
+              <div className="absolute inset-0">
+                <MapRoute
+                  pickup={pickupLocation ? { name: pickupLocation } : undefined}
+                  dropoff={activeTab === "transfer" && dropoffLocation ? { name: dropoffLocation } : undefined}
+                />
+              </div>
             </div>
           </div>
           <FeatureBadges />

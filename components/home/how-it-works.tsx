@@ -27,7 +27,7 @@ export function HowItWorks() {
 
   return (
     <section className="py-10 sm:py-14 md:py-16 lg:py-18 xl:py-20 bg-white">
-      <div className="container mx-auto px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16">
         <SectionHeader
           title="Simple 4 Steps to Start Your Journey"
           subtitle="How It Works"
@@ -41,8 +41,8 @@ export function HowItWorks() {
             const Icon = step.icon;
             return (
               <div key={idx} className="relative group">
-                <div className="flex flex-col items-center text-center p-6 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 bg-white lg:bg-transparent">
-                  <div className="w-20 h-20 rounded-2xl bg-white border-2 border-blue-100 shadow-lg shadow-blue-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10">
+                <div className="flex flex-col items-center text-center p-6 rounded-lg transition-all duration-300 hover:bg-white hover:shadow-xl border border-transparent hover:border-gray-100 bg-white lg:bg-transparent">
+                  <div className="w-20 h-20 rounded-lg bg-white border-2 border-blue-100 shadow-lg shadow-blue-100 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10">
                     <Icon className="w-8 h-8 text-blue-600" />
                     <div className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-white border-4 border-blue-50 flex items-center justify-center font-bold text-blue-600 text-sm shadow-sm">
                       {idx + 1}

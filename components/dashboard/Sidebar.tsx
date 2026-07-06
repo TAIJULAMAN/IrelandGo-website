@@ -123,8 +123,8 @@ export function Sidebar({
           const isRoot = link.href === basePath;
           const isActive = isRoot
             ? pathname === basePath ||
-              pathname === `${basePath}/user` ||
-              pathname === `${basePath}/agent`
+            pathname === `${basePath}/user` ||
+            pathname === `${basePath}/agent`
             : pathname === link.href || pathname.startsWith(`${link.href}/`);
 
           return (
@@ -132,11 +132,10 @@ export function Sidebar({
               key={link.href}
               href={link.href}
               onClick={() => setIsMobileMenuOpen?.(false)}
-              className={`flex items-center justify-between px-3.5 py-3 rounded-xl text-sm transition-all duration-200 ${
-                isActive
-                  ? "bg-blue-50 text-blue-700 font-bold border-l-4 border-blue-600 shadow-sm shadow-blue-50/50 translate-x-1"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-              }`}
+              className={`flex items-center justify-between px-3.5 py-3 rounded-lg text-sm transition-all duration-200 ${isActive
+                ? "bg-blue-50 text-blue-700 font-bold border-l-4 border-blue-600 shadow-sm shadow-blue-50/50 translate-x-1"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                }`}
             >
               <div className="flex items-center gap-3.5">
                 <span
@@ -154,9 +153,9 @@ export function Sidebar({
 
       {/* Footer / Logout */}
       <div className="p-4 mt-auto">
-        <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 space-y-3">
+        <div className="p-4 bg-gray-50 rounded-lg border border-gray-100 space-y-3">
           <button
-            className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl bg-white hover:bg-red-50 text-red-600 font-bold text-xs border border-gray-200 hover:border-red-100 transition-all active:scale-[0.98] shadow-sm"
+            className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-lg bg-white hover:bg-red-50 text-red-600 font-bold text-xs border border-gray-200 hover:border-red-100 transition-all active:scale-[0.98] shadow-sm"
             onClick={() => setIsLogoutDialogOpen(true)}
           >
             <LogOut className="h-4 w-4" />

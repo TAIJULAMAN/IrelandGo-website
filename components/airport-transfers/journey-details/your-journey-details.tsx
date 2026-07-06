@@ -22,7 +22,7 @@ export default function YourJourneyDetails() {
 
         <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-stretch">
           {/* Left: Route information card */}
-          <div className="flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 md:p-7 space-y-5">
+          <div className="flex-1 bg-white rounded-lg shadow-sm border border-gray-100 p-5 sm:p-6 md:p-7 space-y-5">
             <h3 className="text-xl font-semibold text-gray-900 mb-5">
               Route Information
             </h3>
@@ -108,7 +108,7 @@ export default function YourJourneyDetails() {
               </div>
             </div>
             <div className="mt-6 sm:mt-8">
-              <Button className="w-full h-11 sm:h-12 bg-blue-600 text-white flex items-center justify-center gap-2 rounded-full sm:rounded-xl">
+              <Button className="w-full h-11 sm:h-12 bg-blue-600 text-white flex items-center justify-center gap-2 rounded-full sm:rounded-lg">
                 <Search className="h-4 w-4" />
                 <span>Find a Ride</span>
               </Button>

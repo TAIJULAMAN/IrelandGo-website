@@ -68,7 +68,7 @@ export function LocationInputs({
           <p className="text-red-500 text-xs mt-1 px-1">location is not in our range</p>
         )}
         {showPickupDropdown && pStatus === "OK" && pData.filter(s => !isOutOfRange(s.description)).length > 0 && (
-          <div className="absolute z-50 w-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
+          <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden">
             {pData.filter(s => !isOutOfRange(s.description)).map((suggestion) => (
               <button
                 key={suggestion.place_id}
@@ -113,7 +113,7 @@ export function LocationInputs({
             <p className="text-red-500 text-xs mt-1 px-1">location is not in our range</p>
           )}
           {showDropoffDropdown && dStatus === "OK" && dData.filter(s => !isOutOfRange(s.description)).length > 0 && (
-            <div className="absolute z-50 w-full mt-1 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden">
+            <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden">
               {dData.filter(s => !isOutOfRange(s.description)).map((suggestion) => (
                 <button
                   key={suggestion.place_id}

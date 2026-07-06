@@ -23,7 +23,7 @@ export function MainHeader({ setIsMobileMenuOpen, user }: DashboardHeaderProps) 
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="md:hidden hover:bg-blue-50 rounded-xl"
+                    className="md:hidden hover:bg-blue-50 rounded-lg"
                     onClick={() => setIsMobileMenuOpen(true)}
                 >
                     <Menu className="h-8 w-8 font-bold text-blue-600" />
@@ -36,7 +36,7 @@ export function MainHeader({ setIsMobileMenuOpen, user }: DashboardHeaderProps) 
 
             {/* Actions & User Profile */}
             <div className="flex items-center gap-2">
-                <Button asChild variant="ghost" size="icon" className="w-10 h-10 rounded-2xl bg-blue-50 hover:bg-blue-100 relative group transition-all duration-300 shadow-sm border border-blue-100">
+                <Button asChild variant="ghost" size="icon" className="w-10 h-10 rounded-lg bg-blue-50 hover:bg-blue-100 relative group transition-all duration-300 shadow-sm border border-blue-100">
                     <Link href="/dashboard/notifications">
                         <Bell className="w-8 h-8 text-blue-600 transition-transform duration-300 group-hover:rotate-12" />
                         {unreadCount > 0 && (
@@ -51,7 +51,7 @@ export function MainHeader({ setIsMobileMenuOpen, user }: DashboardHeaderProps) 
                 </Button>
 
                 <div className="flex items-center gap-3 pl-2 border-l border-gray-100">
-                    <div className="relative w-10 h-10 rounded-xl overflow-hidden border border-gray-100 shadow-sm flex-shrink-0 bg-gray-50">
+                    <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-gray-100 shadow-sm flex-shrink-0 bg-gray-50">
                         <Image
                             src={user?.profileImage || "/avatar.png"}
                             alt={user?.fullName || "User"}

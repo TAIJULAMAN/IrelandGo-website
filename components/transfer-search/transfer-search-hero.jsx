@@ -41,7 +41,7 @@ const MapRoute = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="w-full h-full bg-gray-100 rounded-xl flex items-center justify-center"
+        className="w-full h-full bg-gray-100 rounded-lg flex items-center justify-center"
         style={{ minHeight: "340px" }}
       >
         <p className="text-gray-500">Loading map...</p>
@@ -334,7 +334,7 @@ export default function TransferSearchHero() {
           </div>
 
           {/* Booking Card */}
-          <div className="flex gap-5 container mx-auto bg-white rounded-xl shadow-xl p-5">
+          <div className="flex gap-5 max-w-7xl mx-auto bg-white rounded-lg shadow-xl p-5">
             <div className="w-full ">
               {/* Tabs */}
               <div className="flex gap-2 mb-5">
@@ -386,7 +386,7 @@ export default function TransferSearchHero() {
                   {showPickupDropdown && pickupStatus === "OK" && (
                     <div
                       ref={pickupDropdownRef}
-                      className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto z-50"
+                      className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto z-50"
                     >
                       {pickupData.map((suggestion, index) => (
                         <button
@@ -443,7 +443,7 @@ export default function TransferSearchHero() {
                   {showDropoffDropdown && dropoffStatus === "OK" && (
                     <div
                       ref={dropoffDropdownRef}
-                      className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-y-auto z-50"
+                      className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-y-auto z-50"
                     >
                       {dropoffData.map((suggestion, index) => (
                         <button
@@ -589,7 +589,7 @@ export default function TransferSearchHero() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                 onClick={() => setAdults(Math.max(1, adults - 1))}
                                 disabled={adults <= 1}
                               >
@@ -601,7 +601,7 @@ export default function TransferSearchHero() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                 onClick={() => setAdults(adults + 1)}
                               >
                                 <Plus className="h-3 w-3" />
@@ -621,7 +621,7 @@ export default function TransferSearchHero() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                 onClick={() =>
                                   setChildren(Math.max(0, children - 1))
                                 }
@@ -635,7 +635,7 @@ export default function TransferSearchHero() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                 onClick={() => setChildren(children + 1)}
                               >
                                 <Plus className="h-3 w-3" />
@@ -713,7 +713,7 @@ export default function TransferSearchHero() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                 onClick={() =>
                                   setExtraBags(Math.max(0, extraBags - 1))
                                 }
@@ -727,7 +727,7 @@ export default function TransferSearchHero() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                 onClick={() => setExtraBags(extraBags + 1)}
                               >
                                 <Plus className="h-3 w-3" />
@@ -834,7 +834,7 @@ export default function TransferSearchHero() {
                 </Button>
               )}
             </div>
-            <div className="rounded-xl overflow-hidden shadow-lg w-full lg:w-[450px] h-[340px] hidden lg:block">
+            <div className="rounded-lg overflow-hidden shadow-lg w-full lg:w-[450px] h-[340px] hidden lg:block">
               <MapRoute
                 pickup={pickupLocation ? { name: pickupLocation } : undefined}
                 dropoff={dropoffLocation ? { name: dropoffLocation } : undefined}

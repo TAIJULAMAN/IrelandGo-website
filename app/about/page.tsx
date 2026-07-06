@@ -9,7 +9,7 @@ export default function About() {
           backgroundImage: 'url("/about.avif")',
         }}
       >
-        <div className="container pt-10 md:pt-32 pb-10 md:pb-20 mx-auto px-5 sm:px-5 md:px-10  flex flex-col items-center justify-center text-center gap-5 md:gap-8 ">
+        <div className="max-w-7xl pt-10 md:pt-32 pb-10 md:pb-20 mx-auto px-5 sm:px-5 md:px-10  flex flex-col items-center justify-center text-center gap-5 md:gap-8 ">
           <div className="space-y-2 max-w-4xl mx-auto">
             <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
               About Tourenzo
@@ -62,8 +62,8 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="container mx-auto px-5 sm:px-6 md:px-8 -mt-16 md:-mt-24 relative z-10 mb-16">
-        <div className="max-w-6xl mx-auto bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12">
+      <section className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8 -mt-16 md:-mt-24 relative z-10 mb-16">
+        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-xl border border-gray-100 p-8 md:p-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
           <div className="space-y-4 text-gray-700 leading-relaxed">
             <p>
@@ -89,13 +89,13 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="container mx-auto px-5 sm:px-6 md:px-8 py-8 mb-16">
+      <section className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8 py-8 mb-16">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">
             Our Values
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-8 text-center group">
+            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-8 text-center group">
               <div className="w-16 h-16 bg-blue-50 group-hover:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-300">
                 <span className="text-3xl group-hover:text-white transition-colors duration-300">
                   <ShieldCheckIcon className="w-8 h-8" />
@@ -111,7 +111,7 @@ export default function About() {
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-8 text-center group">
+            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-8 text-center group">
               <div className="w-16 h-16 bg-blue-50 group-hover:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-300">
                 <span className="text-3xl group-hover:text-white transition-colors duration-300">
                   <StarIcon className="w-8 h-8" />
@@ -126,7 +126,7 @@ export default function About() {
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-8 text-center group">
+            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-8 text-center group">
               <div className="w-16 h-16 bg-blue-50 group-hover:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-300">
                 <span className="text-3xl group-hover:text-white transition-colors duration-300">
                   <HeartIcon className="w-8 h-8" />
@@ -144,7 +144,7 @@ export default function About() {
         </div>
       </section>
       <section className="bg-white py-20 border-t border-gray-100">
-        <div className="container mx-auto px-5 sm:px-6 md:px-8">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -156,7 +156,7 @@ export default function About() {
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-blue-100 transition-colors">
+              <div className="bg-gray-50 rounded-lg p-8 border border-gray-100 hover:border-blue-100 transition-colors">
                 <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
                   <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">
                     1
@@ -168,7 +168,7 @@ export default function About() {
                   about Irish history and culture.
                 </p>
               </div>
-              <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-blue-100 transition-colors">
+              <div className="bg-gray-50 rounded-lg p-8 border border-gray-100 hover:border-blue-100 transition-colors">
                 <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
                   <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">
                     2
@@ -180,7 +180,7 @@ export default function About() {
                   equipped with all amenities.
                 </p>
               </div>
-              <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-blue-100 transition-colors">
+              <div className="bg-gray-50 rounded-lg p-8 border border-gray-100 hover:border-blue-100 transition-colors">
                 <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
                   <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">
                     3
@@ -192,7 +192,7 @@ export default function About() {
                   instant confirmation.
                 </p>
               </div>
-              <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:border-blue-100 transition-colors">
+              <div className="bg-gray-50 rounded-lg p-8 border border-gray-100 hover:border-blue-100 transition-colors">
                 <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
                   <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">
                     4

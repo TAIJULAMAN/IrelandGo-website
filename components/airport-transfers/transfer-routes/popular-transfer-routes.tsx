@@ -74,7 +74,7 @@ export default function PopularTransferRoutes() {
                 return (
                   <div
                     key={transferRoute.id}
-                    className="bg-[#f7f9fc] rounded-2xl overflow-hidden shadow-sm flex flex-col"
+                    className="bg-[#f7f9fc] rounded-lg overflow-hidden shadow-sm flex flex-col"
                   >
                     <div className="h-40 w-full overflow-hidden">
                       <img
@@ -117,7 +117,7 @@ export default function PopularTransferRoutes() {
                         <Link
                           href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transferRoute.from)}&dropoff=${encodeURIComponent(transferRoute.to)}&transferRoute=${encodeURIComponent(JSON.stringify(transferRoute))}`}
                         >
-                          <button className="w-full rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2">
+                          <button className="w-full rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2">
                             Book Now
                           </button>
                         </Link>

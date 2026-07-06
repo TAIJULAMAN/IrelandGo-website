@@ -36,12 +36,12 @@ const isOutOfRange = (desc: string) => {
   if (lower.includes("ireland")) return false;
   const niTownsAndCounties = [
     "antrim", "armagh", "down", "fermanagh", "londonderry", "derry", "tyrone",
-    "aughnacloy", "ballycastle", "ballyclare", "ballymena", "ballymoney", "ballynahinch", 
-    "banbridge", "bangor", "belfast", "bushmills", "caledon", "carrickfergus", "castlederg", 
-    "castlewellan", "clogher", "coleraine", "cookstown", "craigavon", "crumlin", 
-    "donaghadee", "downpatrick", "dromore", "dungannon", "enniskillen", "fivemiletown", 
-    "hillsborough", "holywood", "larne", "limavady", "lisburn", "maghera", "magherafelt", 
-    "newcastle", "newry", "newtownabbey", "newtownards", "omagh", "portrush", "portstewart", 
+    "aughnacloy", "ballycastle", "ballyclare", "ballymena", "ballymoney", "ballynahinch",
+    "banbridge", "bangor", "belfast", "bushmills", "caledon", "carrickfergus", "castlederg",
+    "castlewellan", "clogher", "coleraine", "cookstown", "craigavon", "crumlin",
+    "donaghadee", "downpatrick", "dromore", "dungannon", "enniskillen", "fivemiletown",
+    "hillsborough", "holywood", "larne", "limavady", "lisburn", "maghera", "magherafelt",
+    "newcastle", "newry", "newtownabbey", "newtownards", "omagh", "portrush", "portstewart",
     "strabane"
   ];
   if (niTownsAndCounties.some(town => lower.includes(town))) return false;
@@ -186,7 +186,7 @@ export default function ByTheHourHero() {
 
             {/* Search Bar */}
             <div className="max-w-6xl mx-auto px-5 mb-10 relative z-10">
-              <div className="bg-white rounded-2xl shadow-2xl p-8">
+              <div className="bg-white rounded-lg shadow-2xl p-8">
                 <div className="grid grid-cols-1 gap-6 mb-6">
                   <div>
                     <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
@@ -223,7 +223,7 @@ export default function ByTheHourHero() {
                       {showDropdown && status === "OK" && data.filter(s => !isOutOfRange(s.description)).length > 0 && (
                         <div
                           ref={dropdownRef}
-                          className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-80 overflow-y-auto z-50"
+                          className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-y-auto z-50"
                         >
                           {data.filter(s => !isOutOfRange(s.description)).map((suggestion, index) => (
                             <button
@@ -421,7 +421,7 @@ export default function ByTheHourHero() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                   onClick={() =>
                                     setAdults(Math.max(1, adults - 1))
                                   }
@@ -435,7 +435,7 @@ export default function ByTheHourHero() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                   onClick={() => setAdults(adults + 1)}
                                 >
                                   <Plus className="h-3 w-3" />
@@ -455,7 +455,7 @@ export default function ByTheHourHero() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                   onClick={() =>
                                     setChildren(Math.max(0, children - 1))
                                   }
@@ -469,7 +469,7 @@ export default function ByTheHourHero() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                   onClick={() => setChildren(children + 1)}
                                 >
                                   <Plus className="h-3 w-3" />
@@ -547,7 +547,7 @@ export default function ByTheHourHero() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                   onClick={() =>
                                     setExtraBags(Math.max(0, extraBags - 1))
                                   }
@@ -561,7 +561,7 @@ export default function ByTheHourHero() {
                                 <Button
                                   variant="ghost"
                                   size="icon"
-                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-md"
+                                  className="h-8 w-8 hover:bg-white shadow-sm rounded-lg"
                                   onClick={() => setExtraBags(extraBags + 1)}
                                 >
                                   <Plus className="h-3 w-3" />

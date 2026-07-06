@@ -38,7 +38,7 @@ export default function AirportTransfersWhyChoose() {
 					{benefits.map((benefit) => (
 						<div
 							key={benefit.title}
-							className="group bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-black/5"
+							className="group bg-white rounded-lg p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-black/5"
 						>
 							<div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-600 transition-colors duration-300">
 								<benefit.icon className="w-8 h-8 text-blue-600 group-hover:text-white transition-colors duration-300" />

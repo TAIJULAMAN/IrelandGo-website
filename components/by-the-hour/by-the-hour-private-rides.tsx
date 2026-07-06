@@ -12,7 +12,7 @@ export default function ByTheHourPrivateRides() {
       <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
         {/* Left */}
         <div className="w-full">
-          <div className="relative rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/5">
+          <div className="relative rounded-lg overflow-hidden shadow-xl ring-1 ring-black/5">
             <img
               src="/attractions/6.webp"
               alt="Private ride arrival"
@@ -68,7 +68,7 @@ export default function ByTheHourPrivateRides() {
 //       <div className="max-w-7xl mx-auto px-5 grid md:grid-cols-2 gap-12 items-center">
 //         {/* Left: Media from Pexels (using img to avoid external domain config issues for now) */}
 //         <div className="w-full relative group">
-//           <div className="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5 aspect-video md:aspect-[4/3]">
+//           <div className="relative rounded-lg overflow-hidden shadow-2xl ring-1 ring-black/5 aspect-video md:aspect-[4/3]">
 //             <img
 //               src="https://images.pexels.com/photos/17090014/pexels-photo-17090014.jpeg?auto=compress&cs=tinysrgb&w=1200"
 //               alt="Private ride arrival"

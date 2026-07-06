@@ -318,7 +318,7 @@ export default function Step3Details() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           <div className="lg:col-span-2">
             {/* Passenger details card */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 md:p-8 mb-6 sm:mb-8">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5 sm:p-6 md:p-8 mb-6 sm:mb-8">
               {/* Contact information */}
               <div className="mb-6 sm:mb-7">
                 <h2 className="text-sm sm:text-base font-semibold text-gray-900 mb-4">
@@ -405,7 +405,7 @@ export default function Step3Details() {
 
                       {/* Dropdown list */}
                       {phonePrefixOpen && (
-                        <div className="absolute top-full left-0 mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-xl overflow-y-auto max-h-56 min-w-[160px]">
+                        <div className="absolute top-full left-0 mt-1 z-50 bg-white border border-gray-200 rounded-lg shadow-xl overflow-y-auto max-h-56 min-w-[160px]">
                           {COUNTRY_CODES.map(c => (
                             <button
                               key={c.code + c.label}
@@ -467,7 +467,7 @@ export default function Step3Details() {
                   Additional Services
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <label className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-600">
+                  <label className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-600">
                     <input
                       type="checkbox"
                       checked={childSeat}
@@ -476,7 +476,7 @@ export default function Step3Details() {
                     />
                     <span>Child Seat Required</span>
                   </label>
-                  <label className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-600">
+                  <label className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-3 text-xs sm:text-sm text-gray-700 cursor-pointer hover:border-blue-600">
                     <input
                       type="checkbox"
                       checked={wheelchair}
@@ -490,7 +490,7 @@ export default function Step3Details() {
             </div>
 
             {/* Bottom navigation – inline below the form card, matching card width */}
-            <div className="bg-white rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-4">
+            <div className="bg-white rounded-lg shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-4">
               <Button
                 asChild
                 variant="ghost"
@@ -514,7 +514,7 @@ export default function Step3Details() {
 
           <div className="lg:col-span-1">
             {/* Booking summary */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 sticky top-24">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-5 sm:p-6 sticky top-24">
               <h2 className="text-sm sm:text-base font-bold text-gray-900 mb-4 pb-4 border-b border-gray-100">
                 Booking Summary
               </h2>
@@ -599,7 +599,7 @@ export default function Step3Details() {
                 </div>
               </div>
 
-              <div className="mt-6 flex items-start gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-3">
+              <div className="mt-6 flex items-start gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-3">
                 <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
                 <p className="text-xs text-gray-700 font-medium">
                   Free cancellation up to 24 hours before your pickup time.
@@ -612,7 +612,7 @@ export default function Step3Details() {
       {/* Tour status modal (Success Booking placeholder for now) */}
       {showModal && (
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
-          <div className="relative w-full max-w-md rounded-2xl bg-white shadow-xl p-6 sm:p-7">
+          <div className="relative w-full max-w-md rounded-lg bg-white shadow-xl p-6 sm:p-7">
             <button
               type="button"
               onClick={() => setShowModal(false)}
@@ -630,7 +630,7 @@ export default function Step3Details() {
               receive an email confirmation shortly.
             </p>
 
-            <div className="rounded-2xl bg-gray-50 px-4 py-4 mb-5 border border-gray-100">
+            <div className="rounded-lg bg-gray-50 px-4 py-4 mb-5 border border-gray-100">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-gray-500">Booking Reference</span>
                 <span className="text-sm font-bold text-gray-900">

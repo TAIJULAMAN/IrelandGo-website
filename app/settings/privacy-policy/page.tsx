@@ -17,7 +17,7 @@ export default function PrivacyPolicy() {
 
     return (
         <div className="min-h-screen bg-gray-50 pt-10 md:pt-32 pb-16 flex justify-center">
-            <main className="container mx-auto px-5 sm:px-5 md:px-8 lg:px-10">
+            <main className="max-w-7xl mx-auto px-5 sm:px-5 md:px-8 lg:px-10">
                 <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-3 md:mb-4 text-balance leading-tight">
                     Privacy Policy
                 </h1>
@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
                 {isLoading ? (
                     <div className="animate-pulse">
                         <div className="h-4 bg-gray-200 rounded w-48 mb-8" />
-                        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 space-y-4">
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 space-y-4">
                             <div className="h-4 bg-gray-200 rounded w-full" />
                             <div className="h-4 bg-gray-200 rounded w-5/6" />
                             <div className="h-4 bg-gray-200 rounded w-full" />
@@ -40,7 +40,7 @@ export default function PrivacyPolicy() {
                             Last updated: {formatDate(privacy.updatedAt)}
                         </p>
 
-                        <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8">
+                        <div className="bg-white rounded-lg p-4 sm:p-6 md:p-8">
                             <div
                                 className="prose prose-sm sm:prose-base md:prose-lg prose-gray max-w-none
                                     prose-headings:font-semibold prose-headings:text-gray-900

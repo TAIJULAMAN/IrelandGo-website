@@ -29,7 +29,7 @@ export default function BlogDetailPage() {
     return (
       <div className="min-h-screen flex flex-col bg-white">
         <main className="flex-grow pt-24 sm:pt-28 md:pt-32 pb-16">
-          <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 animate-pulse">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 animate-pulse">
             {/* Breadcrumb skeleton */}
             <div className="max-w-4xl mx-auto mb-6">
               <div className="h-4 bg-gray-200 rounded w-48" />
@@ -40,7 +40,7 @@ export default function BlogDetailPage() {
               <div className="h-10 bg-gray-200 rounded w-2/3" />
             </div>
             {/* Image skeleton */}
-            <div className="max-w-5xl mx-auto rounded-2xl bg-gray-200 aspect-[16/10] sm:aspect-[16/9] mb-10" />
+            <div className="max-w-5xl mx-auto rounded-lg bg-gray-200 aspect-[16/10] sm:aspect-[16/9] mb-10" />
             {/* Content skeleton */}
             <div className="max-w-3xl mx-auto space-y-4">
               <div className="h-4 bg-gray-200 rounded w-full" />
@@ -78,7 +78,7 @@ export default function BlogDetailPage() {
       <main className="flex-grow pt-24 sm:pt-28 md:pt-32 pb-16">
         <article>
           {/* Breadcrumb */}
-          <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
             <div className="mb-5">
               <nav className="flex items-center gap-2 text-sm text-gray-500">
                 <Link
@@ -103,7 +103,7 @@ export default function BlogDetailPage() {
           </div>
 
           {/* Title */}
-          <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
             <div className="mb-5">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
                 {blog.title}
@@ -123,9 +123,9 @@ export default function BlogDetailPage() {
 
           {/* Hero Image - wider than content */}
           {blog.image?.[0] && (
-            <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 mb-10">
+            <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 mb-10">
               <div className="">
-                <div className="relative rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[16/9] shadow-md">
+                <div className="relative rounded-lg overflow-hidden aspect-[16/10] sm:aspect-[16/9] shadow-md">
                   <Image
                     src={blog.image[0]}
                     alt={blog.title}
@@ -139,7 +139,7 @@ export default function BlogDetailPage() {
           )}
 
           {/* Content area */}
-          <div className="container mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
+          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
             <div className="max-w-3xl mx-auto">
               {/* Main content */}
               <div
@@ -147,7 +147,7 @@ export default function BlogDetailPage() {
                                 prose-headings:font-bold prose-headings:text-gray-900
                                 prose-p:text-gray-700 prose-p:leading-relaxed
                                 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-                                prose-img:rounded-xl prose-img:shadow-sm
+                                prose-img:rounded-lg prose-img:shadow-sm
                             "
               >
                 <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
@@ -164,7 +164,7 @@ export default function BlogDetailPage() {
                     {blog.image.slice(1).map((img: string, idx: number) => (
                       <div
                         key={idx}
-                        className="relative rounded-xl overflow-hidden aspect-[4/3] shadow-sm"
+                        className="relative rounded-lg overflow-hidden aspect-[4/3] shadow-sm"
                       >
                         <Image
                           src={img}

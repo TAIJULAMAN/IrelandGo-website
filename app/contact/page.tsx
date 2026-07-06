@@ -49,7 +49,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col pt-24 pb-16">
       <main className="flex-1 relative text-white overflow-hidden px-5 sm:px-6 md:px-8 ">
-        <section className="container mx-auto px-5 sm:px-6 md:px-8 mb-16">
+        <section className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8 mb-16">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-3 md:mb-4 text-balance leading-tight px-4">
               Get in Touch
@@ -60,10 +60,10 @@ export default function Contact() {
             </p>
           </div>
         </section>
-        <div className="container mx-auto px-5 sm:px-6 md:px-8">
+        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8">
           <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
             {/* Contact Form */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Send us a Message
               </h2>
@@ -180,7 +180,7 @@ export default function Contact() {
 
             {/* Contact Information */}
             <div className="space-y-6">
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+              <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
                   Contact Information
                 </h2>
@@ -250,7 +250,7 @@ export default function Contact() {
               </div>
 
               {/* Quick Links */}
-              <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl shadow-sm p-8 text-white">
+              <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg shadow-sm p-8 text-white">
                 <h3 className="text-xl font-bold mb-4">
                   Need Immediate Assistance?
                 </h3>

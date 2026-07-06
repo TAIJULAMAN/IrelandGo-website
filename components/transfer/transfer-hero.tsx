@@ -110,7 +110,7 @@ export default function TransfersHero() {
     <section className="relative min-h-screen text-white overflow-hidden">
       <div className="absolute inset-0 z-0">
         <img
-          src="/transfer.png"
+          src="/AllCustomeImage/Transfers.jpg"
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
@@ -132,7 +132,7 @@ export default function TransfersHero() {
         <div className="w-full max-w-5xl bg-white rounded-lg shadow-2xl px-4 sm:px-6 py-5 sm:py-6 flex flex-col gap-3 text-left">
           <div className="flex flex-col sm:flex-row items-stretch gap-3">
             <div className="relative flex-1">
-              <div className="flex items-center border border-gray-200 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 bg-white focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200 transition-all">
+              <div className="flex items-center border border-gray-200 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 bg-white focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200 transition-all">
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 flex-shrink-0" />
                 <input
                   ref={inputRef}
@@ -156,7 +156,7 @@ export default function TransfersHero() {
               {showDropdown && status === "OK" && (
                 <div
                   ref={dropdownRef}
-                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-80 overflow-y-auto z-50"
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-y-auto z-50"
                 >
                   {/* Google Places Results */}
                   {data.map((suggestion, index) => (
@@ -185,7 +185,7 @@ export default function TransfersHero() {
 
             <button
               onClick={() => handleSearch()}
-              className="inline-flex items-center justify-center px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold whitespace-nowrap shadow-md transition-colors"
+              className="inline-flex items-center justify-center px-5 sm:px-7 py-2.5 sm:py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold whitespace-nowrap shadow-md transition-colors"
             >
               <Search className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               <span>Find Transfers</span>

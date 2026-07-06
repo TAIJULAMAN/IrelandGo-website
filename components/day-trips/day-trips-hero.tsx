@@ -15,12 +15,12 @@ const isOutOfRange = (desc: string) => {
   if (lower.includes("ireland")) return false;
   const niTownsAndCounties = [
     "antrim", "armagh", "down", "fermanagh", "londonderry", "derry", "tyrone",
-    "aughnacloy", "ballycastle", "ballyclare", "ballymena", "ballymoney", "ballynahinch", 
-    "banbridge", "bangor", "belfast", "bushmills", "caledon", "carrickfergus", "castlederg", 
-    "castlewellan", "clogher", "coleraine", "cookstown", "craigavon", "crumlin", 
-    "donaghadee", "downpatrick", "dromore", "dungannon", "enniskillen", "fivemiletown", 
-    "hillsborough", "holywood", "larne", "limavady", "lisburn", "maghera", "magherafelt", 
-    "newcastle", "newry", "newtownabbey", "newtownards", "omagh", "portrush", "portstewart", 
+    "aughnacloy", "ballycastle", "ballyclare", "ballymena", "ballymoney", "ballynahinch",
+    "banbridge", "bangor", "belfast", "bushmills", "caledon", "carrickfergus", "castlederg",
+    "castlewellan", "clogher", "coleraine", "cookstown", "craigavon", "crumlin",
+    "donaghadee", "downpatrick", "dromore", "dungannon", "enniskillen", "fivemiletown",
+    "hillsborough", "holywood", "larne", "limavady", "lisburn", "maghera", "magherafelt",
+    "newcastle", "newry", "newtownabbey", "newtownards", "omagh", "portrush", "portstewart",
     "strabane"
   ];
   if (niTownsAndCounties.some(town => lower.includes(town))) return false;
@@ -165,7 +165,7 @@ export default function Hero() {
             {showDropdown && status === "OK" && data.filter(s => !isOutOfRange(s.description)).length > 0 && (
               <div
                 ref={dropdownRef}
-                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-2xl shadow-2xl z-50 overflow-hidden text-left"
+                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 overflow-hidden text-left"
               >
                 {data.filter(s => !isOutOfRange(s.description)).map((suggestion, index) => (
                   <button

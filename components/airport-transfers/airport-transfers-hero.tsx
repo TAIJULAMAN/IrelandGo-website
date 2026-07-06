@@ -35,12 +35,12 @@ export default function AirportTransfersHero() {
     <section className="relative min-h-screen text-white overflow-hidden">
       <div className="absolute inset-0 -z-10">
         <img
-          src="/ShannonAirport.webp"
+          src="/AllCustomeImage/AirportTransfers.jpg"
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="container mx-auto px-5 md:px-0 pt-10 flex flex-col items-center text-center gap-5 md:gap-10">
+      <div className="max-w-7xl mx-auto px-5 md:px-0 pt-10 flex flex-col items-center text-center gap-5 md:gap-10">
         <div className="space-y-3 sm:space-y-4 mt-6 sm:mt-8">
           <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight text-white px-2">
             Reliable Airport Transfers Across
@@ -60,7 +60,7 @@ export default function AirportTransfersHero() {
           {/* Top row: input + button */}
           <div className="flex flex-col sm:flex-row items-stretch gap-3">
             <div className="relative flex-1">
-              <div className="flex items-center border border-gray-200 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 bg-white focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200 transition-all">
+              <div className="flex items-center border border-gray-200 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 bg-white focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200 transition-all">
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
                 <input
                   ref={inputRef}
@@ -77,7 +77,7 @@ export default function AirportTransfersHero() {
 
             <button
               onClick={() => handleSearch()}
-              className="inline-flex items-center justify-center px-5 sm:px-7 py-2.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold whitespace-nowrap shadow-md transition-colors"
+              className="inline-flex items-center justify-center px-5 sm:px-7 py-2.5 sm:py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold whitespace-nowrap shadow-md transition-colors"
             >
               <Search className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
               <span>Find Airport Transfers</span>

@@ -48,7 +48,7 @@ export default function MultiDayToursJourneyBegins() {
 
         {/* Right image */}
         <div>
-          <div className="rounded-2xl overflow-hidden shadow-xl ring-1 ring-black/5">
+          <div className="rounded-lg overflow-hidden shadow-xl ring-1 ring-black/5">
             <img
               src="/confidence.png"
               alt="Professional driver"

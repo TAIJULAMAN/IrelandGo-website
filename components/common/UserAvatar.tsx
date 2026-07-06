@@ -74,7 +74,7 @@ export function UserAvatar() {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 animate-in fade-in zoom-in duration-200 origin-top-right">
+                <div className="absolute right-0 mt-3 w-64 bg-white rounded-lg shadow-2xl border border-gray-100 py-2 z-50 animate-in fade-in zoom-in duration-200 origin-top-right">
                     <div className="px-5 py-4 border-b border-gray-50 bg-gray-50/50 rounded-t-2xl mb-1">
                         <p className="text-sm font-extrabold text-gray-900">{user?.fullName}</p>
                         <p className="text-xs text-gray-500 truncate">{user?.email}</p>

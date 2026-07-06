@@ -80,7 +80,7 @@ export function Header() {
           : "py-3 border-b border-gray-100"
           }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-5 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between">
             {/* Left side: Logo + Links */}
             <div className="flex items-center gap-8 xl:gap-12">
@@ -230,7 +230,7 @@ export function Header() {
             <div className="mt-auto pt-6 border-t border-gray-100">
               {isAuthenticated && user ? (
                 <div className="space-y-5">
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100">
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
                     {user?.profileImage ? (
                       <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
                         <Image
@@ -290,7 +290,7 @@ export function Header() {
                   className="block w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Button className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-200 rounded-xl transition-all active:scale-[0.98]">
+                  <Button className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-200 rounded-lg transition-all active:scale-[0.98]">
                     Login / Sign Up
                   </Button>
                 </Link>
