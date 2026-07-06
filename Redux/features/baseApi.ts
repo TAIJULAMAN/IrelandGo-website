@@ -20,7 +20,7 @@ export const baseApi = createApi({
       }
 
       if (token) {
-        const authValue = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
+        const authValue = token.startsWith("Bearer ") ? token : ` ${token}`;
         console.log("==> baseApi attaching header:", authValue);
         headers.set("Authorization", authValue);
       } else {

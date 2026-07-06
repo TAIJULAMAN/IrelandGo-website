@@ -216,7 +216,7 @@ export default function Step3Details() {
       },
     };
 
-    console.log("Sending booking request with body:", body);
+    // console.log("Sending booking request with body:", body);
 
     try {
       let res;
@@ -230,30 +230,30 @@ export default function Step3Details() {
       }
       const id = res?.data?.id || res?.data?._id || "";
       if (id) setBookingId(id);
-      
+
       const accessToken = res?.data?.accessToken;
       const user = res?.data?.user;
-      
-      console.log("=== BOOKING RESPONSE ===", res);
-      console.log("Extracted accessToken:", accessToken);
-      console.log("Extracted user:", user);
+
+      // console.log("=== BOOKING RESPONSE ===", res);
+      // console.log("Extracted accessToken:", accessToken);
+      // console.log("Extracted user:", user);
 
       if (accessToken && user) {
-        console.log("Saving token and user to Redux and localStorage...");
+        // console.log("Saving token and user to Redux and localStorage...");
         // Store in Redux (which also sets 'token' and 'user' in localStorage)
-        dispatch(setUser({ user, token: accessToken, refreshToken: "" }));
+        dispatch(setUser({ user, accessToken: accessToken, refreshToken: "" }));
         // Specifically set 'accessToken' for auth.service.ts which uses this key
         localStorage.setItem("accessToken", accessToken);
-        console.log("Saved token:", localStorage.getItem("token"));
+        // console.log("Saved token:", localStorage.getItem("token"));
       } else {
-        console.log("WARNING: accessToken or user is missing from response!");
+        // console.log("WARNING: accessToken or user is missing from response!");
       }
 
       setShowModal(true);
     } catch (e: any) {
-      console.error("Booking failed. Full error:", JSON.stringify(e, null, 2));
-      console.error("Error status:", e?.status);
-      console.error("Error data (detailed):", JSON.stringify(e?.data, null, 2));
+      // console.error("Booking failed. Full error:", JSON.stringify(e, null, 2));
+      // console.error("Error status:", e?.status);
+      // console.error("Error data (detailed):", JSON.stringify(e?.data, null, 2));
       const errorMessage = e?.data?.message || e?.message || "Unknown error";
       alert(`Failed to process booking: ${errorMessage}`);
     }

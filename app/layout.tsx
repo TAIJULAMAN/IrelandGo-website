@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Playfair_Display, Plus_Jakarta_Sans } from "next/font/google"
+import { Plus_Jakarta_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { AuthProvider } from "@/contexts/AuthContext"
 import ReduxProvider from "@/Redux/ReduxProvider"
@@ -9,10 +9,7 @@ import "./globals.css"
 
 import { ClientLayout } from "@/components/layout/client-layout"
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-serif",
-})
+
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -57,7 +54,7 @@ export default function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className={`${jakarta.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground`}>
+      <body className={`${jakarta.variable} font-sans antialiased bg-background text-foreground`}>
         <ReduxProvider>
           <AuthProvider>
             <ClientLayout>{children}</ClientLayout>

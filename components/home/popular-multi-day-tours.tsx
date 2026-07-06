@@ -11,7 +11,7 @@ export function PopularMultiDayTours() {
   const { data: response, isLoading, isError } = useGetPopularMultiDayToursQuery({})
 
   const tours = response?.data || []
-  console.log("response of multi day tours", tours)
+  // console.log("response of multi day tours", tours)
 
   const goToPrevious = () => {
     if (tours.length === 0) return

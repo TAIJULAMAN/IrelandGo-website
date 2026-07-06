@@ -36,7 +36,6 @@ export default function Login() {
         const emailValue = formData.get("email") as string;
         const password = formData.get("password") as string;
 
-        // Handle Remember Me
         if (rememberMe) {
             setToLocalStorage("rememberedEmail", emailValue);
         } else {
@@ -46,33 +45,36 @@ export default function Login() {
         try {
             const response = await logIn({ email: emailValue, password }).unwrap();
 
-            console.log("Login Response:", response);
+            // console.log("Login Response:", response);
 
             if (response?.success) {
-                const { accessToken, refreshToken } = response?.data;
+                const { accessToken, refreshToken, user: responseUser } = response?.data;
                 const decodedUser = decodeAuthToken<any>(accessToken);
-                console.log("Decoded User:", decodedUser);
+                // console.log("Decoded User:", decodedUser);
 
                 if (decodedUser) {
+                    document.cookie = `accessToken=${accessToken}; path=/; max-age=86400; SameSite=Lax`;
+                    document.cookie = `refreshToken=${refreshToken}; path=/; max-age=604800; SameSite=Lax`;
+
                     dispatch(setUser({
                         user: {
                             ...decodedUser,
-                            ...response?.data?.user
+                            ...responseUser
                         },
-                        token: accessToken,
+                        accessToken,
                         refreshToken: refreshToken
                     }));
 
-                    toast.success("Logged in successfully");
+                    toast.success(response?.message || "Logged in successfully");
 
-                    router.push("/dashboard");
+                    router.push("/");
                 }
             } else {
                 setError(response?.message || "Login failed");
                 toast.error(response?.message || "Login failed");
             }
         } catch (err: any) {
-            console.error("Login error:", err);
+            // console.error("Login error:", err);
             const errorMessage = err?.data?.message || err?.message || "An unexpected error occurred";
             setError(errorMessage);
             toast.error(errorMessage);
@@ -209,6 +211,7 @@ export default function Login() {
                         </div>
                     </div>
                 </div>
-            </main>        </div>
+            </main>
+        </div>
     );
 }

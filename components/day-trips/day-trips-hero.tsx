@@ -8,6 +8,7 @@ import { FeatureBadges } from "../common/feature-badges";
 import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { cn } from "@/lib/utils";
+import { HeroTabs } from "../common/hero-tabs";
 
 const isOutOfRange = (desc: string) => {
   const lower = desc.toLowerCase();
@@ -64,17 +65,13 @@ export default function Hero() {
     initOnMount: isLoaded,
   });
 
-  const tabs = [
-    { id: "transfer", label: "Transfer", href: "/" },
-    { id: "hourly", label: "By the hour", href: "/by-the-hour" },
-    { id: "day-trips", label: "Day trips", href: "/day-trips" },
-  ];
-
-  const handleTabClick = (tab: (typeof tabs)[0]) => {
-    if (tab.href) {
-      router.push(tab.href);
+  const handleTabClick = (id: string) => {
+    if (id === "transfer") {
+      router.push("/");
+    } else if (id === "hourly") {
+      router.push("/by-the-hour");
     } else {
-      setActiveTab(tab.id);
+      setActiveTab(id);
     }
   };
 
@@ -129,23 +126,7 @@ export default function Hero() {
             Discover over 100+ day trips and private tours with local drivers.
           </p>
 
-          {/* Tabs */}
-          <div className="flex justify-center mb-10">
-            <div className="inline-flex gap-0 bg-white/10 backdrop-blur-sm rounded-full p-1 border-2 border-white">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => handleTabClick(tab)}
-                  className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
-                    ? "bg-white text-gray-900 shadow-md"
-                    : "bg-transparent text-white hover:bg-white/10"
-                    }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-center mb-10 overflow-x-auto scrollbar-hide scroll-smooth" />
 
           {/* Search Bar */}
           <div className="max-w-2xl mx-auto mb-10 relative">

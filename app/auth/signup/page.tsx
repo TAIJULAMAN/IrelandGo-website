@@ -4,27 +4,46 @@ import { Button } from "@/components/ui/button";
 import { Mail, Lock, User, Phone, Eye, EyeOff, Shield, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useSignUpMutation } from "@/Redux/features/auth/authApi";
 
 export default function Signup() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [role, setRole] = useState("user");
-    const { signup } = useAuth();
+    const [role, setRole] = useState("USER");
+    const router = useRouter();
+    const [signupMutation, { isLoading }] = useSignUpMutation();
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
+        const password = formData.get("password") as string;
+        const confirmPassword = formData.get("confirmPassword") as string;
+        // console.log(password, confirmPassword, "password and confirm password");
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
+        }
 
         const userData = {
-            name: formData.get("name") as string,
+            fullName: formData.get("name") as string,
             email: formData.get("email") as string,
-            phone: formData.get("phone") as string,
-            password: formData.get("password") as string,
-            role: role as "user" | "agent",
+            contactNumber: formData.get("phone") as string,
+            password: password,
+            role: role,
         };
+        // console.log(userData, "data of aman")
 
-        signup(userData);
+        try {
+            const res = await signupMutation(userData).unwrap();
+            if (res.success) {
+                toast.success(res.message || "User created successfully");
+                router.push("/auth/login");
+            }
+        } catch (error: any) {
+            toast.error(error?.data?.message || "Something went wrong during signup");
+        }
     };
 
     return (
@@ -105,8 +124,8 @@ export default function Signup() {
                                     <div className="grid grid-cols-2 gap-3">
                                         <button
                                             type="button"
-                                            onClick={() => setRole("user")}
-                                            className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-xl font-medium transition-all text-sm ${role === "user"
+                                            onClick={() => setRole("USER")}
+                                            className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-xl font-medium transition-all text-sm ${role === "USER"
                                                 ? "border-blue-600 bg-blue-50 text-blue-700 shadow-sm shadow-blue-600/10"
                                                 : "border-gray-200 bg-gray-50/50 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
                                                 }`}
@@ -115,7 +134,7 @@ export default function Signup() {
                                                 <User className="w-4 h-4" />
                                                 Traveler
                                             </span>
-                                            {role === "user" && (
+                                            {role === "USER" && (
                                                 <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
                                                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -125,8 +144,8 @@ export default function Signup() {
                                         </button>
                                         <button
                                             type="button"
-                                            onClick={() => setRole("agent")}
-                                            className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-xl font-medium transition-all text-sm ${role === "agent"
+                                            onClick={() => setRole("AGENT")}
+                                            className={`relative px-4 py-2.5 sm:py-3 border-2 rounded-xl font-medium transition-all text-sm ${role === "AGENT"
                                                 ? "border-blue-600 bg-blue-50 text-blue-700 shadow-sm shadow-blue-600/10"
                                                 : "border-gray-200 bg-gray-50/50 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
                                                 }`}
@@ -135,7 +154,7 @@ export default function Signup() {
                                                 <Shield className="w-4 h-4" />
                                                 Agent
                                             </span>
-                                            {role === "agent" && (
+                                            {role === "AGENT" && (
                                                 <span className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
                                                     <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -217,9 +236,12 @@ export default function Signup() {
                                 </div>
 
                                 {/* Submit */}
-                                <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] group">
-                                    Create Account
-                                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                                <Button
+                                    disabled={isLoading}
+                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] group disabled:opacity-70 disabled:cursor-not-allowed"
+                                >
+                                    {isLoading ? "Creating Account..." : "Create Account"}
+                                    {!isLoading && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />}
                                 </Button>
                             </form>
 
@@ -243,6 +265,6 @@ export default function Signup() {
                         </div>
                     </div>
                 </div>
-            </main>        </div>
+            </main></div>
     );
 }

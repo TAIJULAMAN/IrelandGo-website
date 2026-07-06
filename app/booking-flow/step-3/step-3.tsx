@@ -278,7 +278,7 @@ export default function Step3() {
         longitude: customStopLng,
       }).unwrap();
 
-      console.log("Custom stoppage added successfully:", response);
+      // console.log("Custom stoppage added successfully:", response);
 
       const addedStoppage = response?.data?.searchableStoppage?.[0] || response?.data || response;
       const stoppageId = addedStoppage?.id || addedStoppage?._id || `added-${Date.now()}`;
@@ -321,10 +321,10 @@ export default function Step3() {
 
 
 
-  console.log("Stoppages Page Coordinates:", { fromLat, fromLng, toLat, toLng });
+  // console.log("Stoppages Page Coordinates:", { fromLat, fromLng, toLat, toLng });
 
   const [searchPopularStops, { data: popularStopsResponse, isLoading, error }] = useSearchPopularStopsMutation();
-  console.log("popularStopsResponse", popularStopsResponse)
+  // console.log("popularStopsResponse", popularStopsResponse)
 
   useEffect(() => {
     if (pickupParam && dropoffParam && fromLat && fromLng && toLat && toLng) {

@@ -10,6 +10,10 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { HeroTabs } from "../common/hero-tabs";
+import { isTimeDisabled } from "@/utils/timeValidation";
 import { useState, useRef, useEffect } from "react";
 import { useJsApiLoader } from "@react-google-maps/api";
 import usePlacesAutocomplete from "use-places-autocomplete";
@@ -25,8 +29,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+
 
 const isOutOfRange = (desc: string) => {
   const lower = desc.toLowerCase();
@@ -47,7 +50,7 @@ const isOutOfRange = (desc: string) => {
 };
 
 export default function ByTheHourHero() {
-  const [activeTab, setActiveTab] = useState("by-the-hour");
+  const [activeTab, setActiveTab] = useState("hourly");
   const router = useRouter();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [time, setTime] = useState("09:00");
@@ -132,33 +135,17 @@ export default function ByTheHourHero() {
   };
 
   const totalPassengers = adults + children;
-  const tabs = [
-    { id: "transfer", label: "Transfer", href: "/" },
-    { id: "by-the-hour", label: "By the hour", href: "/by-the-hour" },
-    { id: "day-trips", label: "Day trips", href: "/day-trips" },
-  ];
-  const handleTabClick = (tab: (typeof tabs)[0]) => {
-    if (tab.href) {
-      router.push(tab.href);
+  const handleTabClick = (id: string) => {
+    if (id === "transfer") {
+      router.push("/");
+    } else if (id === "day-trips") {
+      router.push("/day-trips");
     } else {
-      setActiveTab(tab.id);
+      setActiveTab(id);
     }
   };
 
-  const isTimeDisabled = (selectedDate: Date | undefined, timeStr: string) => {
-    if (!selectedDate) return false;
-    const isToday = selectedDate.toDateString() === new Date().toDateString();
-    if (!isToday) return false;
 
-    const [hours, minutes] = timeStr.split(":").map(Number);
-    const selectedDateTime = new Date(selectedDate);
-    selectedDateTime.setHours(hours, minutes, 0, 0);
-
-    const minDateTime = new Date();
-    minDateTime.setHours(minDateTime.getHours() + 3);
-
-    return selectedDateTime.getTime() < minDateTime.getTime();
-  };
 
   useEffect(() => {
     if (date && isTimeDisabled(date, time)) {
@@ -195,22 +182,7 @@ export default function ByTheHourHero() {
               Discover over 100+ day trips and private tours with local drivers.
             </p>
 
-            <div className="flex justify-center mb-10">
-              <div className="inline-flex gap-0 bg-white/10 backdrop-blur-sm rounded-full p-1 border-2 border-white">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleTabClick(tab)}
-                    className={`px-6 py-2.5 rounded-full font-medium text-sm transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === tab.id
-                      ? "bg-white text-gray-900 shadow-md"
-                      : "bg-transparent text-white hover:bg-white/10"
-                      }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-center mb-10 overflow-x-auto scrollbar-hide scroll-smooth" />
 
             {/* Search Bar */}
             <div className="max-w-6xl mx-auto px-5 mb-10 relative z-10">

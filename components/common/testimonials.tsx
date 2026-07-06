@@ -26,7 +26,7 @@ interface Review {
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data, isLoading } = useGetAllReviewQuery(undefined);
-  console.log("review data", data);
+  // console.log("review data", data);
 
   const reviews: Review[] = data?.data || [];
 
@@ -41,7 +41,6 @@ export function Testimonials() {
   };
 
   const showSlider = reviews.length >= 3;
-  // Get up to 3 visible testimonials based on current index
   const getVisibleReviews = () => {
     if (reviews.length === 0) return [];
     if (!showSlider) return reviews;
@@ -63,16 +62,12 @@ export function Testimonials() {
       .toUpperCase()
       .slice(0, 2);
   };
-
-  // Format date
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
       month: "short",
       year: "numeric",
     });
   };
-
-  // Loading skeleton
   if (isLoading) {
     return (
       <section className="px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-20 bg-gray-50">

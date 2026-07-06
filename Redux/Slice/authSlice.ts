@@ -24,15 +24,15 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<{ user: User; token: string; refreshToken: string }>) => {
-      const { user, token, refreshToken } = action.payload;
+    setUser: (state, action: PayloadAction<{ user: User; accessToken: string; refreshToken: string }>) => {
+      const { user, accessToken, refreshToken } = action.payload;
 
       state.user = user;
-      state.token = token;
+      state.token = accessToken;
       state.refreshToken = refreshToken;
 
       if (typeof window !== "undefined") {
-        if (token) localStorage.setItem("token", token);
+        if (accessToken) localStorage.setItem("token", accessToken);
         if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
         if (user) localStorage.setItem("user", JSON.stringify(user));
       }

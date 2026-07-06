@@ -11,9 +11,9 @@ import { SectionHeader } from "../ui/section-header"
 export function PrivateTransfers() {
   const [currentIndex, setCurrentIndex] = useState(0)
   const { data: response, isLoading, isError } = useGetPrivateTransfersQuery({})
-  console.log(response, "response")
+  // console.log(response, "response")
   const transfers = response?.data || []
-  console.log(transfers, "transfers")
+  // console.log(transfers, "transfers")
 
   const goToPrevious = () => {
     if (transfers.length === 0) return

@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { UserAvatar } from "@/components/common/UserAvatar";
-import { Menu, X, ChevronRight, LayoutDashboard, LogOut } from "lucide-react";
+import { Menu, X, ChevronRight, LayoutDashboard, LogOut, ChevronDown, MessageCircle, User } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi";
 import { logout as reduxLogout } from "@/Redux/Slice/authSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { decodeAuthToken } from "@/utils/decode-access-token";
 
 export function Header() {
@@ -16,9 +16,10 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const pathname = usePathname();
 
   const token = useAppSelector((state) => state.auth.token);
-  console.log("token", token);
+  console.log("token of aman", token);
 
   let isExpired = false;
   if (token) {
@@ -33,7 +34,7 @@ export function Header() {
   }
 
   const isAuthenticated = !!token && !isExpired;
-  console.log("isAuthenticated", isAuthenticated);
+  // console.log("isAuthenticated", isAuthenticated);
 
   useEffect(() => {
     if (token && isExpired) {
@@ -41,9 +42,15 @@ export function Header() {
     }
   }, [token, isExpired, dispatch]);
 
-  const { data: profileData } = useGetProfileQuery(undefined, {
+  const { data: profileData, isError } = useGetProfileQuery(undefined, {
     skip: !isAuthenticated,
   });
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(reduxLogout());
+    }
+  }, [isError, dispatch]);
 
   const user = profileData?.data;
 
@@ -68,70 +75,87 @@ export function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-999 transition-all duration-300 ${isScrolled
-          ? "py-5 sm:py-5 md:py-5 lg:py-6 xl:py-6 backdrop-blur-md bg-white/95"
-          : "py-5 sm:py-5 md:py-5 lg:py-6 xl:py-6 bg-transparent text-white"
+        className={`fixed top-0 left-0 right-0 z-[999] transition-all duration-300 ${isScrolled
+          ? "py-3 bg-white border-b border-blue-500/10"
+          : "py-3 border-b border-gray-100"
           }`}
       >
-        {/* Desktop navigation */}
-        <nav className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:flex gap-5 xl:gap-10 text-xs sm:text-sm md:text-sm lg:text-base z-10">
-          <Link
-            href="/transfer"
-            className="text-blue-600 font-semibold"
-          >
-            Transfers
-          </Link>
-          <Link
-            href="/multi-day-tours"
-            className="text-blue-600 font-semibold"
-          >
-            Tours
-          </Link>
-          <Link
-            href="/contact"
-            className="text-blue-600 font-semibold"
-          >
-            Contact
-          </Link>
-          <Link
-            href="/blog"
-            className="text-blue-600 hover:text-blue-600 transition font-bold duration-200"
-          >
-            Blog
-          </Link>
-        </nav>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-5 lg:px-8">
           <div className="flex items-center justify-between">
-            <Link href="/">
-              <div className="flex items-center gap-2">
-                <Image src="/logo.png" alt="Logo" width={40} height={40} />
-                <span className="text-xl font-bold text-blue-600">Tourenzo</span>
-              </div>
-            </Link>
-            <button
-              className="lg:hidden ml-auto text-blue-600 focus:outline-none p-1.5 rounded-lg"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              aria-label="Toggle navigation"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-            <div className="hidden lg:flex md:flex xl:flex items-center gap-5">
-              <Link
-                href="/auth/login"
-                className="text-blue-600 font-medium transition-colors text-sm xl:text-base"
-              >
-                Travel Agents & B2B
+            {/* Left side: Logo + Links */}
+            <div className="flex items-center gap-8 xl:gap-12">
+              <Link href="/">
+                <div className="flex items-center gap-2">
+                  <Image src="/logo.png" alt="Logo" width={40} height={40} />
+                  <span className="text-2xl font-black text-gray-900 tracking-tight">Tourenzo</span>
+                </div>
               </Link>
-              {isAuthenticated ? (
-                <UserAvatar />
-              ) : (
-                <Link href="/auth/login">
-                  <Button className="bg-blue-600 text-white px-5 xl:px-6 py-2 rounded-md text-sm md:text-base">
-                    Login
-                  </Button>
+
+              {/* Desktop navigation */}
+              <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-lg font-bold text-gray-800">
+                <Link
+                  href="/transfer"
+                  className={`flex items-center gap-1 transition-colors ${pathname === "/transfer" ? "text-blue-600" : "hover:text-blue-600"}`}
+                >
+                  Transfers
                 </Link>
-              )}
+                <Link
+                  href="/multi-day-tours"
+                  className={`flex items-center gap-1 transition-colors ${pathname === "/multi-day-tours" ? "text-blue-600" : "hover:text-blue-600"}`}
+                >
+                  Tours
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className={`flex items-center gap-1 transition-colors ${pathname === "/auth/signup" ? "text-blue-600" : "hover:text-blue-600"}`}
+                >
+                  Travel Agent
+                </Link>
+                <Link
+                  href="/airport-transfers"
+                  className={`transition-colors ${pathname === "/airport-transfers" ? "text-blue-600" : "hover:text-blue-600"}`}
+                >
+                  Airport Transfer
+                </Link>
+              </nav>
+            </div>
+
+            {/* Right Side: Phone + Login + Mobile Toggle */}
+            <div className="flex items-center gap-4 xl:gap-6">
+
+              {/* Phone Block */}
+              <div className="hidden xl:flex items-center gap-3 border-r border-gray-200 pr-6">
+                <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100">
+                  <MessageCircle className="w-5 h-5 text-gray-700" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Need Help?</span>
+                  <span className="text-sm font-black text-gray-900">+353 85 809 0960</span>
+                </div>
+              </div>
+
+              {/* Auth / Login */}
+              <div className="hidden lg:flex items-center">
+                {isAuthenticated ? (
+                  <UserAvatar />
+                ) : (
+                  <Link href="/auth/login">
+                    <Button className="bg-blue-500 hover:bg-blue-600 text-white  px-6 py-5 rounded-lg font-bold text-lg shadow-md flex items-center gap-2 transition-all hover:scale-105">
+                      <User className="w-4 h-4" />
+                      Login
+                    </Button>
+                  </Link>
+                )}
+              </div>
+
+              {/* Mobile Toggle */}
+              <button
+                className="lg:hidden ml-auto focus:outline-none p-1.5 rounded-lg text-gray-900"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Toggle navigation"
+              >
+                <Menu className="w-6 h-6" />
+              </button>
             </div>
           </div>
         </div>
@@ -185,27 +209,19 @@ export function Header() {
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </Link>
               <Link
-                href="/contact"
+                href="/auth/signup"
                 className="flex items-center justify-between p-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <span>Contact</span>
+                <span>Travel Agent</span>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </Link>
               <Link
-                href="/blog"
+                href="/airport-transfers"
                 className="flex items-center justify-between p-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <span>Blog</span>
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </Link>
-              <Link
-                href="/auth/login"
-                className="flex items-center justify-between p-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <span>Travel agents & B2B</span>
+                <span>Airport Transfer</span>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </Link>
             </div>
