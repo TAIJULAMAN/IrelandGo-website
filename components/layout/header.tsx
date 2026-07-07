@@ -80,7 +80,7 @@ export function Header() {
           : "py-3 border-b border-gray-100"
           }`}
       >
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
+        <div className="max-w-7xl mx-auto px-5">
           <div className="flex items-center justify-between">
             {/* Left side: Logo + Links */}
             <div className="flex items-center gap-8 xl:gap-12">

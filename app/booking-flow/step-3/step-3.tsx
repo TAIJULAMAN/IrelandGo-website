@@ -18,6 +18,19 @@ function formatDuration(minutes: number) {
   return `${m}m`;
 }
 
+function getDistanceInKm(lat1: number, lon1: number, lat2: number, lon2: number) {
+  if (!lat1 || !lon1 || !lat2 || !lon2) return 0;
+  const R = 6371; // Radius of the earth in km
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 function SingleStoppageModal({
   stopId,
   onClose,
@@ -53,7 +66,7 @@ function SingleStoppageModal({
   if (!stopId) return null;
 
   const images = Array.isArray(stopData?.image) ? stopData.image : [stopData?.image].filter(Boolean);
-  if (images.length === 0) images.push("/placeholder.png");
+  if (images.length === 0) images.push("/placeholder.jpg");
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center md:items-center justify-center bg-black/60 backdrop-blur-sm md:p-5">
@@ -145,22 +158,22 @@ function SingleStoppageModal({
               <Button
                 onClick={() => { onRemove(baseStop); onClose(); }}
                 variant="outline"
-                className="flex-1 bg-blue-600 text-white"
+                className="flex-1 bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:text-white"
               >
                 Remove
               </Button>
               {isDurationChanged && (
                 <Button
                   onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }}
-                  className="flex-1 bg-blue-600 text-white"
+                  className="flex-1 bg-blue-600 text-white hover:bg-blue-700"
                 >
-                  Update
+                  €{calculatePrice(baseStop, durationMinutes)} - Update
                 </Button>
               )}
             </div>
           ) : (
             <Button onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-              Add
+              €{calculatePrice(baseStop, durationMinutes)} - Add
             </Button>
           )}
         </div>
@@ -213,14 +226,54 @@ export default function Step3() {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const router = useRouter();
 
+  const getExtraDistanceForCustomStop = (stopLat: number | null, stopLng: number | null) => {
+    if (!stopLat || !stopLng || !fromLat || !fromLng || !toLat || !toLng) return 0;
+    const fLat = parseFloat(fromLat.toString());
+    const fLng = parseFloat(fromLng.toString());
+    const tLat = parseFloat(toLat.toString());
+    const tLng = parseFloat(toLng.toString());
+    const originalDist = getDistanceInKm(fLat, fLng, tLat, tLng);
+    const newDist = getDistanceInKm(fLat, fLng, stopLat, stopLng) + getDistanceInKm(stopLat, stopLng, tLat, tLng);
+    const extraDist = Math.max(0, newDist - originalDist);
+    return extraDist * 1.3;
+  };
+
+  const customStopEstimatedDistance = getExtraDistanceForCustomStop(customStopLat, customStopLng);
+
   const [addExtraStoppages] = useAddExtraStoppagesMutation();
+  const [baseRideDurationMins, setBaseRideDurationMins] = useState<number | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isLoaded && pickupParam && dropoffParam) {
+      const directionsService = new window.google.maps.DirectionsService();
+      directionsService.route(
+        {
+          origin: pickupParam,
+          destination: dropoffParam,
+          travelMode: window.google.maps.TravelMode.DRIVING,
+          region: "ie",
+        },
+        (result, status) => {
+          if (isMounted && status === window.google.maps.DirectionsStatus.OK && result) {
+            const leg = result.routes[0].legs[0];
+            const durationSecs = leg.duration?.value || 0;
+            setBaseRideDurationMins(Math.round(durationSecs / 60));
+          }
+        }
+      );
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [isLoaded, pickupParam, dropoffParam]);
 
   useEffect(() => {
     if (isLoaded && inputRef.current) {
       const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
         componentRestrictions: { country: "ie" },
         fields: ["name", "geometry", "formatted_address"],
-        types: ["establishment"], // Prefer actual places/establishments over addresses/geocodes
+        types: ["establishment"],
       });
 
       if (fromLat && fromLng && toLat && toLng) {
@@ -290,7 +343,7 @@ export default function Step3() {
         id: stoppageId,
         name: stoppageName,
         duration: customStopDuration,
-        price: calculateStopPrice({ roadDistance: 0 }, customStopDuration),
+        price: calculateStopPrice({ roadDistance: customStopEstimatedDistance }, customStopDuration),
         image: stoppageImage,
         address: stoppageAddress,
         isCustom: true,
@@ -343,7 +396,6 @@ export default function Step3() {
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
-
   const carPriceParam = searchParams.get("carPrice");
 
   let transportPrice = 0;
@@ -372,7 +424,7 @@ export default function Step3() {
 
   const calculateStopPrice = (stop: any, durationMinutes: number) => {
     const stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
-    const baseHourPrice = Math.round(basePriceSumForStops + (stopDistance * 1.7));
+    const baseHourPrice = Math.round(basePriceSumForStops + (stopDistance * 1.45));
 
     const extraMinutes = durationMinutes - 60;
     if (extraMinutes <= 0) {
@@ -383,7 +435,9 @@ export default function Step3() {
     const remainingMinutes = extraMinutes % 60;
 
     let extraCost = extraHours * 50;
-    if (remainingMinutes > 0) {
+    if (remainingMinutes >= 45) {
+      extraCost += 50;
+    } else if (remainingMinutes > 0) {
       extraCost += 30;
     }
 
@@ -391,14 +445,20 @@ export default function Step3() {
   };
 
   const getStopImageUrl = (stop: any) => {
-    if (stop.image && stop.image.length > 0) {
-      return stop.image[0];
+    let imgUrl = null;
+    if (stop.image && Array.isArray(stop.image)) {
+      const validImages = stop.image.filter((img: any) => img && typeof img === "string" && img.startsWith("http"));
+      if (validImages.length > 0) {
+        imgUrl = validImages[0];
+      }
     }
+    if (imgUrl) return imgUrl;
+
     if (stop.latitude && stop.longitude) {
       const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
       return `https://maps.googleapis.com/maps/api/staticmap?center=${stop.latitude},${stop.longitude}&zoom=15&size=500x300&markers=color:blue%7C${stop.latitude},${stop.longitude}&key=${apiKey}`;
     }
-    return "/placeholder.png";
+    return "/placeholder.jpg";
   };
 
   const stopsData = popularStopsResponse?.data?.searchableStoppage || [];
@@ -456,6 +516,23 @@ export default function Step3() {
     }
   }
 
+
+  let dropoffTimeStr = "TBD";
+  if (timeParam) {
+    const totalStopsDuration = selectedStops.reduce((sum, stop) => sum + (stop.duration || 60), 0);
+    const totalDuration = (baseRideDurationMins || Math.round(distanceKm * 1.2)) + totalStopsDuration;
+    if (totalDuration > 0) {
+      const parts = timeParam.split(":");
+      if (parts.length >= 2) {
+        let dateObj = new Date();
+        dateObj.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+        dateObj.setMinutes(dateObj.getMinutes() + totalDuration);
+        const newHours = dateObj.getHours().toString().padStart(2, "0");
+        const newMinutes = dateObj.getMinutes().toString().padStart(2, "0");
+        dropoffTimeStr = `${newHours}:${newMinutes}`;
+      }
+    }
+  }
 
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col pt-20">
@@ -538,13 +615,17 @@ export default function Step3() {
                           : "border-transparent shadow-md hover:border-blue-300 hover:shadow-lg"
                         }`}
                     >
-                      {/* Image – full width on sm+, fixed left column on mobile */}
-                      <div className="relative w-28 shrink-0 sm:w-full h-auto sm:h-44">
+                      {/* Image – full width on sm+, fixed size on mobile */}
+                      <div className="relative w-32 shrink-0 sm:w-full h-32 sm:h-44">
                         <img
-                          src={getStopImageUrl(stop)}
+                          src={stop?.image?.[0] ?? getStopImageUrl(stop)}
                           alt={stop.name}
                           className="w-full h-full object-cover"
-                          style={{ minHeight: '100px' }}
+                          onError={(e) => {
+                            if (!e.currentTarget.src.includes("/placeholder.jpg")) {
+                              e.currentTarget.src = "/placeholder.jpg";
+                            }
+                          }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent sm:from-black/80 sm:via-black/20" />
                         {stop.id === mostPopularId && (
@@ -663,7 +744,7 @@ export default function Step3() {
 
                   <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg h-10 sm:h-11 px-3 shrink-0 select-none">
                     <span className="text-sm font-bold text-gray-800">
-                      €{calculateStopPrice({ roadDistance: 0 }, customStopDuration)}
+                      €{calculateStopPrice({ roadDistance: customStopEstimatedDistance }, customStopDuration)}
                     </span>
                   </div>
 
@@ -681,7 +762,7 @@ export default function Step3() {
             </div>
 
             {/* Bottom navigation – inline below stops */}
-            <div className="bg-white rounded-lg shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-2">
+            <div className="bg-white rounded-lg shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex flex-col md:flex-row gap-2 items-center justify-between border border-gray-100 mt-2">
               <Button
                 asChild
 
@@ -689,7 +770,6 @@ export default function Step3() {
               >
                 <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>Back</Link>
               </Button>
-
               <Button
                 asChild
                 className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
@@ -741,7 +821,7 @@ export default function Step3() {
                         {dropoffParam || "Dropoff Location"}
                       </p>
                       <p className="text-xs text-gray-500 font-medium whitespace-nowrap ml-2">
-                        TBD
+                        {dropoffTimeStr}
                       </p>
                     </div>
                   </div>
