@@ -165,41 +165,45 @@ export default function ByTheHourHero() {
 
   return (
     <>
-      <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
+      <section className="relative overflow-hidden min-h-[90vh] flex flex-col justify-center py-16 pt-24 md:pt-28">
         <div className="absolute inset-0 z-0">
           <img
-            src="/by-the-hour.jpg"
+            src="/AllCustomeImage/ByTheWay.jpg"
             alt="Irish landscape"
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="relative z-10">
-          <div className="max-w-7xl mx-auto px-5 py-16 text-center">
-            <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
-              Book a Private Driver by the Hour – Travel Your Way
-            </h1>
-            <p className="text-base md:text-lg text-white mb-6 md:mb-8 px-4">
-              Discover over 100+ day trips and private tours with local drivers.
-            </p>
+        <div className="absolute inset-0 " />
+        <div className="relative z-10 w-full">
+          <div className="max-w-7xl mx-auto px-5 mt-4 md:mt-6 py-8 text-center flex flex-col items-center">
+            <div className="space-y-2 max-w-4xl mb-6">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-2xl">
+                Book a Private Driver <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">by the Hour</span>
+                <br className="hidden sm:block" /> – Travel Your Way
+              </h1>
+              <p className="text-base sm:text-lg text-blue-50 px-4 font-medium drop-shadow-md leading-relaxed">
+                Discover over 100+ day trips and private tours with local drivers.
+              </p>
+            </div>
 
-            <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-center mb-10 overflow-x-auto scrollbar-hide scroll-smooth" />
+            <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-center mb-6 overflow-x-auto scrollbar-hide scroll-smooth w-full" />
 
             {/* Search Bar */}
-            <div className="max-w-6xl mx-auto px-5 mb-10 relative z-10">
-              <div className="bg-white rounded-lg shadow-2xl p-8">
-                <div className="grid grid-cols-1 gap-6 mb-6">
+            <div className="max-w-6xl mx-auto mb-4 relative w-full text-left">
+              <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/20 p-4 sm:p-6 transform transition-all hover:-translate-y-1">
+                <div className="grid grid-cols-1 gap-4 mb-4">
                   <div>
-                    <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    <label className="text-start text-sm font-semibold text-gray-800 mb-2 block">
                       Pickup Location
                     </label>
                     <div className="relative">
-                      <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200">
-                        <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                      <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:border-blue-500 transition-all bg-white/80 h-[52px] focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20">
+                        <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0 ml-1" />
                         <input
                           ref={inputRef}
                           type="text"
                           placeholder="Select pickup location"
-                          className="w-full bg-transparent outline-none text-sm text-gray-700 placeholder:text-gray-400"
+                          className="w-full bg-transparent outline-none text-base font-medium text-gray-800 placeholder:text-gray-400"
                           value={pickupLocation}
                           onChange={(e) => {
                             const val = e.target.value;
@@ -254,13 +258,13 @@ export default function ByTheHourHero() {
                 </div>
 
                 {/* Date, Time, Passengers, Luggage */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                   {/* Date & Time */}
                   <div>
-                    <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    <label className="text-start text-sm font-semibold text-gray-800 mb-2 block">
                       Date & Time
                     </label>
-                    <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                    <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:border-blue-500 transition-all bg-white/80 h-[52px] focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20">
                       <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                         <PopoverTrigger asChild>
                           <Button
@@ -282,9 +286,9 @@ export default function ByTheHourHero() {
                             )}
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <div className="flex">
-                            <div className="border-r">
+                        <PopoverContent className="w-auto p-0 max-w-[calc(100vw-2rem)]" align="start">
+                          <div className="flex flex-col sm:flex-row">
+                            <div className="border-b sm:border-b-0 sm:border-r">
                               <Calendar
                                 mode="single"
                                 selected={date}
@@ -293,8 +297,8 @@ export default function ByTheHourHero() {
                                 initialFocus
                               />
                             </div>
-                            <div className="h-[300px] w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
-                              <div className="flex flex-col gap-1">
+                            <div className="h-[150px] sm:h-[300px] w-full sm:w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
+                              <div className="grid grid-cols-3 sm:flex sm:flex-col gap-1">
                                 {Array.from({ length: 96 }).map((_, i) => {
                                   const hour = Math.floor(i / 4);
                                   const minute = (i % 4) * 15;
@@ -335,10 +339,10 @@ export default function ByTheHourHero() {
 
                   {/* Duration */}
                   <div>
-                    <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    <label className="text-start text-sm font-semibold text-gray-800 mb-2 block">
                       Duration
                     </label>
-                    <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                    <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:border-blue-500 transition-all bg-white/80 h-[52px] focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20">
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
@@ -386,10 +390,10 @@ export default function ByTheHourHero() {
 
                   {/* Passengers */}
                   <div>
-                    <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    <label className="text-start text-sm font-semibold text-gray-800 mb-2 block">
                       Passengers
                     </label>
-                    <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                    <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:border-blue-500 transition-all bg-white/80 h-[52px] focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20">
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
@@ -406,7 +410,7 @@ export default function ByTheHourHero() {
                             <ChevronDown className="w-4 h-4 text-gray-400" />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[300px] p-4" align="start">
+                        <PopoverContent className="w-[calc(100vw-2rem)] sm:w-[300px] p-4" align="start">
                           <div className="space-y-6">
                             <div className="flex justify-between items-center">
                               <div>
@@ -506,10 +510,10 @@ export default function ByTheHourHero() {
 
                   {/* Luggage */}
                   <div>
-                    <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+                    <label className="text-start text-sm font-semibold text-gray-800 mb-2 block">
                       Luggage
                     </label>
-                    <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px]">
+                    <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:border-blue-500 transition-all bg-white/80 h-[52px] focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20">
                       <Popover>
                         <PopoverTrigger asChild>
                           <Button
@@ -525,7 +529,7 @@ export default function ByTheHourHero() {
                             <ChevronDown className="w-4 h-4 text-gray-400" />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[300px] p-4" align="start">
+                        <PopoverContent className="w-[calc(100vw-2rem)] sm:w-[300px] p-4" align="start">
                           <div className="space-y-4">
                             <div>
                               <h4 className="font-semibold text-lg mb-1">
@@ -591,12 +595,12 @@ export default function ByTheHourHero() {
                       },
                     }}
                   >
-                    <button className="w-full bg-blue-600 text-white py-4 rounded-lg font-medium hover:bg-blue-600 transition">
+                    <button className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all active:scale-[0.98]">
                       Search Available Rides →
                     </button>
                   </Link>
                 ) : (
-                  <button className="w-full bg-blue-600/50 text-white/70 py-4 rounded-lg font-medium cursor-not-allowed" disabled>
+                  <button className="w-full bg-blue-600/50 text-white/70 py-4 rounded-xl font-bold text-lg cursor-not-allowed" disabled>
                     Search Available Rides →
                   </button>
                 )}

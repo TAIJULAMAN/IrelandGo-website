@@ -1,7 +1,7 @@
 "use client";
 
 import { Header } from "../layout/header";
-import { Search, MapPin } from "lucide-react";
+import { Search, MapPin, Plane } from "lucide-react";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 
@@ -32,22 +32,26 @@ export default function AirportTransfersHero() {
   ];
 
   return (
-    <section className="relative min-h-screen text-white overflow-hidden">
+    <section className="relative min-h-[100vh] flex items-center justify-center text-white overflow-hidden py-24">
       <div className="absolute inset-0 -z-10">
         <img
           src="/AllCustomeImage/AirportTransfers.jpg"
           alt="Irish landscape"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover "
         />
+        <div className="absolute inset-0 " />
       </div>
-      <div className="max-w-7xl mx-auto px-5 md:px-0 pt-10 flex flex-col items-center text-center gap-5 md:gap-10">
-        <div className="space-y-3 sm:space-y-4 mt-6 sm:mt-8">
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight text-white px-2">
+
+      <div className="max-w-7xl w-full mx-auto px-5 sm:px-6 md:px-8 flex flex-col items-center text-center gap-8 md:gap-12 relative z-10 mt-10">
+
+        {/* Header Text */}
+        <div className="space-y-4 md:space-y-6 max-w-4xl">
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-2xl">
             Reliable Airport Transfers Across
             <br className="hidden sm:block" />
-            <span className="text-white"> Ireland</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200"> Ireland</span>
           </h1>
-          <p className="max-w-5xl mx-auto text-sm sm:text-base md:text-lg text-white/85 px-4">
+          <p className="text-base sm:text-lg md:text-xl text-blue-50 px-4 font-medium drop-shadow-md leading-relaxed">
             Start your Irish adventure with our premium airport transfer
             services. Enjoy comfortable, reliable, and prompt journeys
             connecting you between all major airports and destinations across
@@ -55,43 +59,47 @@ export default function AirportTransfersHero() {
           </p>
         </div>
 
-        {/* Search card */}
-        <div className="w-full max-w-5xl bg-white rounded-lg shadow-2xl px-4 sm:px-6 py-5 sm:py-6 flex flex-col gap-3 text-left">
+        {/* Search card (Glassmorphism) */}
+        <div className="w-full max-w-4xl bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] px-5 sm:px-8 py-6 sm:py-8 flex flex-col gap-6 text-left border border-white/20 transform transition-all hover:-translate-y-1">
           {/* Top row: input + button */}
-          <div className="flex flex-col sm:flex-row items-stretch gap-3">
+          <div className="flex flex-col sm:flex-row items-stretch gap-4">
             <div className="relative flex-1">
-              <div className="flex items-center border border-gray-200 rounded-lg px-3 sm:px-4 py-2.5 sm:py-3 gap-2 sm:gap-3 bg-white focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-200 transition-all">
-                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+              <div className="flex items-center border border-gray-200 rounded-xl px-4 py-3 sm:py-4 gap-3 bg-white/80 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 transition-all">
+                <Plane className="w-5 h-5 text-blue-600 flex-shrink-0" />
                 <input
                   ref={inputRef}
                   type="text"
-                  placeholder="Enter airport name"
-                  className="w-full bg-transparent outline-none text-sm sm:text-base text-gray-800 placeholder:text-gray-400"
+                  placeholder="Enter airport name (e.g. Dublin Airport)"
+                  className="w-full bg-transparent outline-none text-base sm:text-lg text-gray-800 placeholder:text-gray-400 font-medium"
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
                   }}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 />
               </div>
             </div>
 
             <button
               onClick={() => handleSearch()}
-              className="inline-flex items-center justify-center px-5 sm:px-7 py-2.5 sm:py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold whitespace-nowrap shadow-md transition-colors"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white text-base sm:text-lg font-bold whitespace-nowrap shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all transform active:scale-[0.98]"
             >
-              <Search className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-              <span>Find Airport Transfers</span>
+              <Search className="w-5 h-5 mr-2" />
+              <span>Find Transfers</span>
             </button>
           </div>
 
           {/* Bottom row: popular routes */}
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-600 mt-1">
-            <span className="font-medium text-gray-700">Popular airports:</span>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <span className="font-semibold text-gray-800 text-sm sm:text-base mr-2 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-blue-600" />
+              Popular Airports:
+            </span>
             {popularAirports.map((airport, index) => (
               <button
                 key={index}
                 onClick={() => handlePopularRoute(airport)}
-                className="text-blue-600 hover:text-blue-700 hover:underline transition-colors"
+                className="px-4 py-1.5 bg-gray-100 hover:bg-blue-50 text-gray-700 hover:text-blue-700 rounded-full border border-gray-200 hover:border-blue-200 transition-all font-medium text-xs sm:text-sm whitespace-nowrap"
               >
                 {airport}
               </button>
@@ -99,31 +107,31 @@ export default function AirportTransfersHero() {
           </div>
         </div>
 
-        {/* Stats row */}
-        <div className="flex flex-wrap justify-center gap-6 sm:gap-8 md:gap-12 mt-2 sm:mt-4 text-sm sm:text-base px-4">
+        {/* Stats row (Glassmorphism Pilled) */}
+        <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-16 mt-4 sm:mt-8 px-8 sm:px-12 py-5 sm:py-6 bg-black/30 backdrop-blur-md rounded-2xl border border-white/10 shadow-2xl">
           <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-bold text-white">
+            <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white drop-shadow-md">
               50+
             </span>
-            <span className="text-xs sm:text-sm md:text-base text-white/80">
-              Multi-day Tours
+            <span className="text-xs sm:text-sm font-bold text-blue-200 mt-1 uppercase tracking-widest text-center">
+              Routes
             </span>
           </div>
-          <div className="hidden sm:block w-1 h-12 bg-white rounded-full" />
+          <div className="hidden sm:block w-px h-16 bg-gradient-to-b from-transparent via-white/30 to-transparent" />
           <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-bold text-white">
+            <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white drop-shadow-md">
               1000+
             </span>
-            <span className="text-xs sm:text-sm md:text-base text-white/80">
+            <span className="text-xs sm:text-sm font-bold text-blue-200 mt-1 uppercase tracking-widest text-center">
               Happy Travelers
             </span>
           </div>
-          <div className="hidden sm:block w-1 h-12 bg-white rounded-full" />
+          <div className="hidden sm:block w-px h-16 bg-gradient-to-b from-transparent via-white/30 to-transparent" />
           <div className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl font-bold text-white">
+            <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white drop-shadow-md">
               15+
             </span>
-            <span className="text-xs sm:text-sm md:text-base text-white/80">
+            <span className="text-xs sm:text-sm font-bold text-blue-200 mt-1 uppercase tracking-widest text-center">
               Years Experience
             </span>
           </div>

@@ -33,7 +33,7 @@ export function RecentBlogs() {
   if (isLoading) {
     return (
       <section className="py-16 md:py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 ">
           <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-4">
             <SectionHeader
               title="Latest from our Blog"
@@ -67,7 +67,7 @@ export function RecentBlogs() {
   if (blogs.length === 0) return null;
 
   return (
-    <section className="py-16 md:py-24 bg-gray-50">
+    <section className="py-16 md:py-24 bg-gray-50 px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 ">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-4">
           <SectionHeader

@@ -37,7 +37,7 @@ export function WhyChooseUs() {
 
   return (
     <section className="py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 ">
         <SectionHeader
           title="Why Travelers Choose Us"
           subtitle="Our Advantages"

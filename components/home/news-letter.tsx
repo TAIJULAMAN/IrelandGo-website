@@ -30,7 +30,7 @@ export function NewsLetter() {
 
   return (
     <section className="">
-      <div className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center max-w-7xl mx-auto py-10 md:py-16">
+      <div className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-10 md:py-16">
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 text-gray-900 leading-tight">
             Stay updated with <span className="text-blue-600">Ireland&apos;s best</span> travel deals
@@ -71,7 +71,7 @@ export function NewsLetter() {
           </form>
         </div>
 
-        <div className="relative h-64 md:h-96 lg:h-[600px] w-full md:w-auto flex items-center justify-center">
+        <div className="relative h-64 md:h-96 lg:h-[600px] w-full md:w-auto hidden md:flex items-center justify-center">
           <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
             <div className="group relative w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-600 flex items-center justify-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 animate-float">
               <Mail className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-white" />

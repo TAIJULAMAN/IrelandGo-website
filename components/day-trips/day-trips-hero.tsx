@@ -112,93 +112,100 @@ export default function Hero() {
   }, []);
 
   return (
-    <>      <section className="relative overflow-hidden pt-10 md:pt-24 min-h-screen">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url(/day-trips.jpg)" }}
-      />
-      <div className="relative z-10">
-        <div className="max-w-7xl mx-auto px-5 py-16 text-center">
-          <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
-            Explore Ireland's Wonders in One Day
-          </h1>
-          <p className="text-base md:text-lg text-white mb-6 md:mb-8 px-4">
-            Discover over 100+ day trips and private tours with local drivers.
-          </p>
-
-          <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-center mb-10 overflow-x-auto scrollbar-hide scroll-smooth" />
-
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mb-10 relative">
-            <div className="relative">
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Explore from..."
-                value={location}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setLocation(val);
-                  setValue(val);
-                  setShowDropdown(true);
-                  setSelectedIndex(-1);
-                }}
-                onFocus={() => setShowDropdown(true)}
-                onKeyDown={handleKeyDown}
-                className="w-full py-4 px-6 pl-12 pr-32 rounded-full text-gray-800 text-base focus:outline-none shadow-lg bg-white"
-              />
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Link href={`/day-trips/search?pickup=${encodeURIComponent(location)}`}>
-                <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white px-8 py-2.5 rounded-full font-medium transition shadow-md">
-                  Search
-                </button>
-              </Link>
+    <>
+      <section className="relative overflow-hidden min-h-[100vh] flex flex-col justify-center py-24">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url(/AllCustomeImage/DayTour.jpg)" }}
+        />
+        <div className="absolute inset-0 " />
+        <div className="relative z-10 w-full">
+          <div className="max-w-7xl mx-auto px-5 py-8 text-center flex flex-col items-center mt-10">
+            <div className="space-y-4 md:space-y-6 max-w-4xl mb-10">
+              <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-2xl">
+                Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">Ireland's Wonders</span>
+                <br className="hidden sm:block" /> in One Day
+              </h1>
+              <p className="text-base sm:text-lg md:text-xl text-blue-50 px-4 font-medium drop-shadow-md leading-relaxed">
+                Discover over 100+ day trips and private tours with local drivers.
+              </p>
             </div>
 
-            {(status === "ZERO_RESULTS" || (status === "OK" && data.filter(s => !isOutOfRange(s.description)).length === 0)) && location.trim().length > 2 && (
-              <div className="flex text-start justify-start px-6">
-                <p className="text-red-500 text-xs mt-2 font-medium">location is not in our range</p>
-              </div>
-            )}
+            <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-center mb-10 overflow-x-auto scrollbar-hide scroll-smooth w-full" />
 
-            {/* Autocomplete Dropdown */}
-            {showDropdown && status === "OK" && data.filter(s => !isOutOfRange(s.description)).length > 0 && (
-              <div
-                ref={dropdownRef}
-                className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 overflow-hidden text-left"
-              >
-                {data.filter(s => !isOutOfRange(s.description)).map((suggestion, index) => (
-                  <button
-                    key={suggestion.place_id}
-                    className={cn(
-                      "w-full px-5 py-3 hover:bg-blue-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-0",
-                      index === selectedIndex && "bg-blue-50"
-                    )}
-                    onClick={() => {
-                      setLocation(suggestion.description);
-                      setValue(suggestion.description, false);
-                      clearSuggestions();
-                      setShowDropdown(false);
-                    }}
-                  >
-                    <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                    <div>
-                      <div className="text-sm font-semibold text-gray-900">
-                        {suggestion.structured_formatting.main_text}
-                      </div>
-                      <div className="text-xs text-gray-500">
-                        {suggestion.structured_formatting.secondary_text}
-                      </div>
-                    </div>
+            {/* Search Bar */}
+            <div className="w-full max-w-3xl mx-auto mb-10 relative">
+              <div className="relative flex items-center bg-white/95 backdrop-blur-xl rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/20 p-2 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/20 transition-all transform hover:-translate-y-1">
+                <div className="pl-4 sm:pl-6 pr-2">
+                  <Search className="w-5 h-5 text-blue-600" />
+                </div>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Explore from..."
+                  value={location}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setLocation(val);
+                    setValue(val);
+                    setShowDropdown(true);
+                    setSelectedIndex(-1);
+                  }}
+                  onFocus={() => setShowDropdown(true)}
+                  onKeyDown={handleKeyDown}
+                  className="flex-1 py-3 px-2 bg-transparent text-gray-800 text-base sm:text-lg font-medium placeholder:text-gray-400 focus:outline-none w-full"
+                />
+                <Link href={`/day-trips/search?pickup=${encodeURIComponent(location)}`}>
+                  <button className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 sm:px-10 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all active:scale-[0.98] whitespace-nowrap ml-2">
+                    Search
                   </button>
-                ))}
+                </Link>
               </div>
-            )}
+
+              {(status === "ZERO_RESULTS" || (status === "OK" && data.filter(s => !isOutOfRange(s.description)).length === 0)) && location.trim().length > 2 && (
+                <div className="flex text-start justify-start px-6">
+                  <p className="text-red-500 text-xs mt-2 font-medium">location is not in our range</p>
+                </div>
+              )}
+
+              {/* Autocomplete Dropdown */}
+              {showDropdown && status === "OK" && data.filter(s => !isOutOfRange(s.description)).length > 0 && (
+                <div
+                  ref={dropdownRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 overflow-hidden text-left"
+                >
+                  {data.filter(s => !isOutOfRange(s.description)).map((suggestion, index) => (
+                    <button
+                      key={suggestion.place_id}
+                      className={cn(
+                        "w-full px-5 py-3 hover:bg-blue-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-0",
+                        index === selectedIndex && "bg-blue-50"
+                      )}
+                      onClick={() => {
+                        setLocation(suggestion.description);
+                        setValue(suggestion.description, false);
+                        clearSuggestions();
+                        setShowDropdown(false);
+                      }}
+                    >
+                      <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                      <div>
+                        <div className="text-sm font-semibold text-gray-900">
+                          {suggestion.structured_formatting.main_text}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {suggestion.structured_formatting.secondary_text}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+            <FeatureBadges />
           </div>
-          <FeatureBadges />
         </div>
-      </div>
-    </section>
+      </section>
     </>
   );
 }
