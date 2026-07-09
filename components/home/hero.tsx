@@ -3,25 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import {
-  MapPin,
   Calendar as CalendarIcon,
-  Users,
-  Luggage,
-  Plus,
-  Clock,
-  Search,
-  ChevronDown,
-  Minus,
-  Timer,
+  Search
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Header } from "../layout/header";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { isTimeDisabled, isReturnTimeDisabled as checkReturnTimeDisabled } from "@/utils/timeValidation";
 import { validateHeroForm } from "@/utils/validateHeroForm";
-// import { LocationInputs } from "./location-inputs";
-// import { BookingDetailsInputs } from "./booking-details-inputs";
 import { TripTypeSelector } from "./trip-type-selector";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -251,7 +240,6 @@ export function Hero() {
           {/* Booking Form max-w-7xl */}
           <div className="flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto bg-white/95 backdrop-blur-xl rounded-lg shadow-2xl p-5 md:p-7 border border-white/40">
             <div className="w-full ">
-              {/* Conditional Trip Type / Duration Selector */}
               <TripTypeSelector
                 activeTab={activeTab}
                 tripType={tripType}
@@ -259,7 +247,6 @@ export function Hero() {
                 duration={duration}
                 setDuration={setDuration}
               />
-              {/* Location Inputs */}
               <LocationInputs
                 activeTab={activeTab}
                 pickupRef={pickupRef}
@@ -282,7 +269,6 @@ export function Hero() {
                 dData={dData}
                 handleDropoffSelect={handleDropoffSelect}
               />
-              {/* Date, Time, Passengers, Luggage */}
               <BookingDetailsInputs
                 date={date}
                 setDate={setDate}

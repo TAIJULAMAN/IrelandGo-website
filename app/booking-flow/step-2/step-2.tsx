@@ -245,8 +245,14 @@ export default function Step2() {
   );
 
   return (
-    <section className="bg-gray-50 min-h-screen flex flex-col pt-20">
-      <div className="flex-1 py-5 sm:py-10  px-5 lg:px-10">
+    <section className="relative bg-gray-50/50 min-h-screen flex flex-col pt-20 overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
+        <div className="absolute bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
+      </div>
+
+      <div className="flex-1 py-5 sm:py-10 px-5 lg:px-10 relative z-10">
 
         {/* Step progress */}
         <div className="mb-6 sm:mb-10 max-w-7xl w-full mx-auto">
@@ -294,10 +300,10 @@ export default function Step2() {
 
         {/* Heading */}
         <div className="mb-8 sm:mb-10 mt-6 sm:mt-8 text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent mb-3">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 leading-tight">
             Choose Your Perfect Vehicle
           </h1>
-          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Select the vehicle that best suits your journey. All vehicles are
             well-maintained and come with professional drivers.
           </p>
@@ -320,13 +326,13 @@ export default function Step2() {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
-                    className="h-auto py-1.5 px-3 rounded-full flex items-center gap-2 shadow-sm bg-white hover:bg-gray-50 text-gray-800 font-semibold text-sm border-gray-200"
+                    className="h-auto py-1.5 px-3 rounded-full flex items-center gap-2 shadow-sm bg-white/90 backdrop-blur-sm hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 text-gray-800 font-semibold text-sm border-gray-200 transition-all"
                   >
-                    <Users className="w-4 h-4 text-gray-600" />
+                    <Users className="w-4 h-4" />
                     {totalPassengers}
-                    <Luggage className="w-4 h-4 ml-1 text-gray-600" />
+                    <Luggage className="w-4 h-4 ml-1" />
                     {totalBags}
-                    <ChevronDown className="w-4 h-4 text-gray-400" />
+                    <ChevronDown className="w-4 h-4 opacity-70" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent
@@ -502,7 +508,7 @@ export default function Step2() {
 
           <div
             ref={sliderRef}
-            className="vehicle-scroll flex gap-5 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory justify-start md:justify-center px-4"
+            className="vehicle-scroll flex gap-5 overflow-x-auto pt-4 pb-8 -mt-4 scroll-smooth snap-x snap-mandatory justify-start md:justify-center px-4"
           >
             {isLoading ? (
               <div className="w-full text-center py-10 text-gray-500">
@@ -667,8 +673,8 @@ export default function Step2() {
                       onClick={() => setSelectedVehicle(option.id)}
                     >
                       <div
-                        className={`bg-white rounded-lg shadow-lg p-5 flex flex-col hover:shadow-2xl transition-all duration-300 cursor-pointer h-full border-2 ${selectedVehicle === option.id
-                          ? "border-blue-600 ring-4 ring-blue-100"
+                        className={`group bg-white/80 backdrop-blur-md rounded-2xl shadow-sm p-5 flex flex-col hover:shadow-xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full border-2 relative ${selectedVehicle === option.id
+                          ? "border-blue-600 ring-2 ring-blue-100 shadow-md bg-white"
                           : "border-transparent hover:border-blue-300"
                           }`}
                         onClick={() => {
@@ -676,16 +682,18 @@ export default function Step2() {
                           setSelectedPrice(totalPrice);
                         }}
                       >
+                        {/* Subtle inner glow on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl z-0" />
                         {option.vehicles.length === 1 ? (
-                          <div className="mb-5 h-32 sm:h-36 flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 rounded-lg p-3 relative">
+                          <div className="mb-5 h-32 sm:h-36 flex items-center justify-center bg-gradient-to-br from-blue-50/50 to-indigo-50/50 rounded-xl p-3 relative overflow-hidden group-hover:shadow-inner transition-all z-10">
                             <img
                               src={option.vehicles[0].image[0]}
                               alt={option.vehicles[0].name}
-                              className="max-h-full w-auto object-contain drop-shadow-lg"
+                              className="max-h-full w-auto object-contain drop-shadow-lg transform group-hover:scale-105 transition-transform duration-500"
                             />
                           </div>
                         ) : (
-                          <div className="mb-5 flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 rounded-lg p-3 relative h-auto min-h-[8rem]">
+                          <div className="mb-5 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50/50 to-indigo-50/50 rounded-xl p-3 relative h-auto min-h-[8rem] z-10">
                             {option.vehicles.map((v: any, index: number) => (
                               <div
                                 key={index}
@@ -749,9 +757,9 @@ export default function Step2() {
 
                         {/* Select Button */}
                         <button
-                          className={`mt-auto w-full py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 ${selectedVehicle === option.id
-                            ? "bg-blue-600 text-white shadow-md"
-                            : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                          className={`mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 relative z-10 ${selectedVehicle === option.id
+                            ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-lg"
+                            : "bg-blue-50 text-blue-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white hover:shadow-md"
                             }`}
                         >
                           {selectedVehicle === option.id
@@ -768,19 +776,20 @@ export default function Step2() {
         </div>
 
         {/* Next button */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-10 px-4 w-full">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-12 px-4 w-full relative z-10">
           <Button
             onClick={() => router.back()}
-            className="w-full sm:w-auto text-white bg-blue-600 px-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+            variant="outline"
+            className="w-full sm:w-auto text-gray-700 bg-white hover:bg-gray-50 border-gray-200 px-10 py-6 sm:py-7 text-sm sm:text-base font-bold rounded-xl flex items-center justify-center shadow-sm"
           >
             Back
           </Button>
           <Button
             asChild
             disabled={!selectedVehicle}
-            className={`w-full sm:w-auto px-10 sm:px-12 py-2.5 sm:py-3 text-white text-sm sm:text-base font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center ${selectedVehicle
-              ? "bg-blue-600"
-              : "bg-gray-300 cursor-not-allowed"
+            className={`w-full sm:w-auto px-10 sm:px-12 py-6 sm:py-7 text-white text-sm sm:text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center border-none ${selectedVehicle
+              ? "bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95"
+              : "bg-gray-300 cursor-not-allowed opacity-70"
               }`}
           >
             <Link

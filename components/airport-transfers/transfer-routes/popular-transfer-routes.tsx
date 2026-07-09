@@ -17,15 +17,20 @@ export default function PopularTransferRoutes() {
   const transferRoutes = transfersRoutes?.data || [];
 
   return (
-    <section className="bg-white">
+    <section className="relative w-full py-16 md:py-24 bg-gray-50/50 overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
+        <div className="absolute bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
+      </div>
 
-      <div className="w-full px-5 md:px-0 py-10 md:py-16">
+      <div className="w-full px-5 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
-              Popular Transfer Routes From {locationParam}
+          <div className="text-center mb-12 lg:mb-16">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">
+              Popular Transfer Routes From <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{locationParam}</span>
             </h2>
-            <p className="text-sm sm:text-base text-gray-500">
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
               Choose from our most requested destinations.
             </p>
           </div>
@@ -74,24 +79,30 @@ export default function PopularTransferRoutes() {
                 return (
                   <div
                     key={transferRoute.id}
-                    className="bg-[#f7f9fc] rounded-lg overflow-hidden shadow-sm flex flex-col"
+                    className="group bg-white/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-white hover:-translate-y-2 flex flex-col relative h-full"
                   >
-                    <div className="h-40 w-full overflow-hidden">
+                    {/* Subtle Glow Behind Card */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
+                    
+                    <div className="relative h-48 md:h-56 w-full overflow-hidden z-10">
                       <img
                         src={imageUrl}
                         alt={transferRoute.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
                     </div>
-                    <div className="px-4 pt-4 pb-4 flex-1 flex flex-col gap-3">
-                      <div className="flex items-center justify-between">
-                        <h3
-                          className="text-sm sm:text-base font-semibold text-gray-900 line-clamp-1"
-                          title={transferRoute.title}
-                        >
-                          {transferRoute.title}
-                        </h3>
-                        <span className="text-xs sm:text-sm text-gray-500 whitespace-nowrap ml-2">
+                    <div className="p-5 md:p-6 flex-1 flex flex-col gap-3 relative z-10">
+                      <div className="flex flex-col mb-1">
+                        <div className="flex items-start justify-between gap-2 mb-3">
+                          <h3
+                            className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300"
+                            title={transferRoute.title}
+                          >
+                            {transferRoute.title}
+                          </h3>
+                        </div>
+                        <span className="inline-flex items-center text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full self-start">
                           {durationText}
                           {transferRoute.distanceKm
                             ? ` • ${transferRoute.distanceKm} km`
@@ -99,25 +110,26 @@ export default function PopularTransferRoutes() {
                         </span>
                       </div>
                       <p
-                        className="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-2"
+                        className="text-sm text-gray-600 leading-relaxed line-clamp-2 group-hover:text-gray-700 transition-colors"
                         title={plainDescription}
                       >
                         {plainDescription}
                       </p>
 
-                      <div className="mt-auto pt-3">
-                        <div className="flex justify-between items-center mb-3">
-                          <span className="text-xs text-gray-500">
+                      <div className="mt-auto pt-5 border-t border-gray-100">
+                        <div className="flex justify-between items-end mb-5">
+                          <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
                             Starting from
                           </span>
-                          <span className="font-semibold text-blue-600">
+                          <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
                             €{transferRoute.price}
                           </span>
                         </div>
                         <Link
                           href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transferRoute.from)}&dropoff=${encodeURIComponent(transferRoute.to)}&transferRoute=${encodeURIComponent(JSON.stringify(transferRoute))}`}
+                          className="block w-full"
                         >
-                          <button className="w-full rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2">
+                          <button className="w-full rounded-xl bg-blue-50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 text-blue-700 hover:text-white text-sm font-bold py-3.5 transition-all duration-300 shadow-sm hover:shadow-md">
                             Book Now
                           </button>
                         </Link>

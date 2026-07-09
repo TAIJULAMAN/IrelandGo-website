@@ -10,7 +10,7 @@ export default function ByTheHourDedicationSafety() {
     {
       icon: Car,
       title: "Clean, comfortable vehicles",
-      desc: "Modern, well‑maintained fleet with regular safety inspections."
+      desc: "Modern, well-maintained fleet with regular safety inspections."
     },
     {
       icon: Map,
@@ -20,23 +20,36 @@ export default function ByTheHourDedicationSafety() {
   ];
 
   return (
-    <section className="relative w-full py-16 md:py-24 bg-blue-50">
-      <div className="max-w-7xl mx-auto px-5">
-        <h2 className="text-center text-3xl md:text-4xl font-bold text-gray-900 mb-12">
+    <section className="relative w-full py-16 md:py-24 bg-blue-50/30 overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-200/30 blur-3xl opacity-60 mix-blend-multiply" />
+        <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-200/30 blur-3xl opacity-60 mix-blend-multiply" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-5 relative z-10">
+        <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-700 mb-12 lg:mb-16">
           Dedication to Safety
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {safetyFeatures.map(({ icon: Icon, title, desc }) => (
             <div
               key={title}
-              className="group bg-white rounded-lg p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 ring-1 ring-black/5"
+              className="group bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-2 border border-blue-100/50 hover:border-white relative overflow-hidden flex flex-col items-center"
             >
-              <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-600 transition-colors duration-300">
-                <Icon className="w-8 h-8 text-blue-600 group-hover:text-white transition-colors duration-300" />
+              {/* Subtle inner glow on hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
+
+              <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:bg-gradient-to-br group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-500 shadow-sm group-hover:shadow-md group-hover:scale-110 relative z-10 group-hover:-rotate-3">
+                <Icon className="w-8 h-8 text-blue-600 group-hover:text-white transition-colors duration-500" />
               </div>
-              <h3 className="text-center font-bold text-gray-900 text-lg mb-3">{title}</h3>
-              <p className="text-center text-gray-600 leading-relaxed">{desc}</p>
+              <h3 className="text-center font-bold text-gray-900 text-lg mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 relative z-10 leading-tight">
+                {title}
+              </h3>
+              <p className="text-center text-gray-600 leading-relaxed text-sm relative z-10 group-hover:text-gray-700 transition-colors">
+                {desc}
+              </p>
             </div>
           ))}
         </div>

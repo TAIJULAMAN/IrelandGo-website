@@ -1,6 +1,6 @@
 "use client";
 
-import { Play, Check } from "lucide-react";
+import { Check } from "lucide-react";
 
 export default function ByTheHourPrivateRides() {
   const scrollToTop = () => {
@@ -8,120 +8,66 @@ export default function ByTheHourPrivateRides() {
   };
 
   return (
-    <section className="relative w-full py-14 md:py-16 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-10 items-center">
-        {/* Left */}
-        <div className="w-full">
-          <div className="relative rounded-lg overflow-hidden shadow-xl ring-1 ring-black/5">
+    <section className="relative w-full py-16 md:py-24 bg-gray-50/50 overflow-hidden">
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[60%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[60%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-5 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center relative z-10">
+        {/* Left (Image) */}
+        <div className="w-full relative group">
+          {/* Subtle offset backdrop layer */}
+          <div className="absolute -inset-4 bg-gradient-to-tr from-blue-100 to-indigo-50 rounded-[2rem] transform -rotate-2 group-hover:rotate-0 transition-transform duration-500 opacity-70"></div>
+          
+          <div className="relative rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 aspect-video md:aspect-[4/3] bg-white z-10">
             <img
               src="/attractions/6.webp"
               alt="Private ride arrival"
-              className="w-full h-56 sm:h-64 md:h-72 object-cover"
+              className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
             />
+            {/* Dark gradient overlay for a premium cinematic look */}
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/30 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
           </div>
         </div>
 
-        {/* Right */}
-        <div>
-          <h2 className="text-2xl md:text-3xl font-extrabold text-slate-900 leading-snug mb-4">
-            Private Travel, Designed for Your Peace of Mind.
-          </h2>
+        {/* Right (Content) */}
+        <div className="space-y-8">
+          <div>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight mb-4">
+              Private Travel, Designed for Your <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Peace of Mind.</span>
+            </h2>
+            <p className="text-lg text-gray-600 leading-relaxed max-w-lg">
+              Experience the ultimate comfort and privacy with our dedicated chauffeur service across Ireland.
+            </p>
+          </div>
 
-          <ul className="space-y-3 mb-7">
+          <ul className="space-y-5">
             {[
               "Exclusive travel with just you and your companions.",
               "Professional with local Knowledge.",
               "Friendly, English-speaking drivers.",
             ].map((text) => (
-              <li key={text} className="flex items-start gap-3 text-slate-700">
-                <span className="mt-0.5 inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white">
-                  <Check className="w-3.5 h-3.5" />
+              <li key={text} className="flex items-center gap-4 group cursor-default">
+                <span className="flex-shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-600 group-hover:bg-gradient-to-br group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md">
+                  <Check className="w-4 h-4" strokeWidth={3} />
                 </span>
-                <span>{text}</span>
+                <span className="text-lg text-gray-700 font-medium group-hover:text-gray-900 transition-colors">{text}</span>
               </li>
             ))}
           </ul>
-          <button
-            onClick={scrollToTop}
-            className="inline-flex items-center justify-center px-5 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm"
-          >
-            Book Now
-          </button>
+          
+          <div className="pt-2">
+            <button
+              onClick={scrollToTop}
+              className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg shadow-md hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-300"
+            >
+              Book Now
+            </button>
+          </div>
         </div>
       </div>
     </section>
   );
 }
-
-// "use client";
-
-// import { Play, Check } from "lucide-react";
-// import { Button } from "@/components/ui/button";
-
-// export default function ByTheHourPrivateRides() {
-//   const scrollToTop = () => {
-//     window.scrollTo({ top: 0, behavior: 'smooth' });
-//   };
-
-//   return (
-//     <section className="relative w-full py-16 md:py-24 bg-gray-50">
-//       <div className="max-w-7xl mx-auto px-5 grid md:grid-cols-2 gap-12 items-center">
-//         {/* Left: Media from Pexels (using img to avoid external domain config issues for now) */}
-//         <div className="w-full relative group">
-//           <div className="relative rounded-lg overflow-hidden shadow-2xl ring-1 ring-black/5 aspect-video md:aspect-[4/3]">
-//             <img
-//               src="https://images.pexels.com/photos/17090014/pexels-photo-17090014.jpeg?auto=compress&cs=tinysrgb&w=1200"
-//               alt="Private ride arrival"
-//               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-//             />
-//             <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors duration-500" />
-
-//             {/* Play Button */}
-//             <button
-//               aria-label="Play video"
-//               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center w-16 h-16 rounded-full bg-blue-600/90 hover:bg-blue-700 text-white shadow-xl backdrop-blur-sm transition-all hover:scale-110"
-//             >
-//               <Play className="w-7 h-7 ml-1 fill-current" />
-//             </button>
-//           </div>
-//           <p className="text-center text-sm font-medium text-gray-500 mt-4">See how it works</p>
-//         </div>
-
-//         {/* Right: Content */}
-//         <div className="space-y-8">
-//           <div>
-//             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-4">
-//               Enjoy private rides designed for your peace of mind.
-//             </h2>
-//             <p className="text-lg text-gray-600 leading-relaxed">
-//               Experience the ultimate comfort and privacy with our dedicated chauffeur service.
-//             </p>
-//           </div>
-
-//           <ul className="space-y-6">
-//             {[
-//               'Only you and your travel companions',
-//               'Professional local drivers',
-//               'English-speaking chauffeurs',
-//             ].map((text) => (
-//               <li key={text} className="flex items-center gap-4 group">
-//                 <span className="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-//                   <Check className="w-5 h-5" />
-//                 </span>
-//                 <span className="text-lg text-gray-700 font-medium">{text}</span>
-//               </li>
-//             ))}
-//           </ul>
-
-//           <Button
-//             onClick={scrollToTop}
-//             size="lg"
-//             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-all text-base px-8 h-12"
-//           >
-//             Book Now
-//           </Button>
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }

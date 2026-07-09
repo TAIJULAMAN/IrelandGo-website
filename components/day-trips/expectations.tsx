@@ -26,36 +26,43 @@ const items = [
 ];
 
 const images = [
-  "attractions/1.jpg",
-  "attractions/2.webp",
-  "attractions/3.jpg",
-  "attractions/4.jpg",
-  "attractions/5.jpg",
-  "attractions/6.jpg",
+  "/attractions/1.jpg",
+  "/attractions/2.webp",
+  "/attractions/3.jpg",
+  "/attractions/4.jpg",
+  "/attractions/5.jpg",
+  "/attractions/6.webp",
 ];
 
 export default function Expectations() {
   return (
-    <div className="bg-slate-900 text-white py-12 sm:py-16 md:py-20">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+    <div className="relative w-full bg-slate-900 py-16 md:py-24 overflow-hidden z-0">
+      {/* Dark glowing orbs */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[100px] opacity-60" />
+        <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-600/10 blur-[100px] opacity-60" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 md:mb-10 text-center lg:text-left">
-              What to expect on a day trip?
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center lg:text-left text-white leading-tight">
+              What to expect on a{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">day trip?</span>
             </h2>
-            <Accordion type="single" collapsible className="space-y-3">
+            <Accordion type="single" collapsible className="space-y-4">
               {items.map((item, index) => (
                 <AccordionItem
                   key={item.title}
                   value={`item-${index}`}
-                  className="bg-slate-700/50 hover:bg-slate-700 rounded-lg border border-slate-600/50 px-6 data-[state=open]:bg-slate-700"
+                  className="bg-slate-800/40 backdrop-blur-md hover:bg-slate-800/60 rounded-2xl border border-slate-700/50 hover:border-slate-600 px-6 lg:px-8 data-[state=open]:bg-slate-800/80 data-[state=open]:border-slate-500 transition-all duration-300 shadow-sm"
                 >
-                  <AccordionTrigger className="py-4 hover:no-underline">
-                    <span className="font-medium text-base text-left">
+                  <AccordionTrigger className="py-5 hover:no-underline group">
+                    <span className="font-bold text-lg text-left text-slate-200 group-hover:text-blue-400 transition-colors">
                       {item.title}
                     </span>
                   </AccordionTrigger>
-                  <AccordionContent className="pb-4 text-slate-300 text-sm leading-relaxed">
+                  <AccordionContent className="pb-6 text-slate-400 text-base leading-relaxed">
                     {item.content}
                   </AccordionContent>
                 </AccordionItem>
@@ -63,52 +70,63 @@ export default function Expectations() {
             </Accordion>
           </div>
 
-          <div className="rounded-lg p-2 bg-slate-900/20">
-            <div className="grid grid-cols-8 auto-rows-[92px] sm:auto-rows-[104px] md:auto-rows-[112px] gap-3">
-              {/* Top row: two large tiles */}
-              <div className="relative col-span-8 sm:col-span-5 row-span-3 overflow-hidden rounded-lg">
-                <img
-                  src={images[0]}
-                  alt="Irish landscape"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </div>
-              <div className="relative col-span-8 sm:col-span-3 row-span-3 overflow-hidden rounded-lg">
-                <img
-                  src={images[1]}
-                  alt="Coastal view"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </div>
+          <div className="relative group perspective-1000">
+            {/* Ambient shadow glow behind grid */}
+            <div className="absolute -inset-6 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-[3rem] transform rotate-3 group-hover:rotate-0 transition-transform duration-700 -z-10 blur-xl"></div>
 
-              {/* Bottom composition */}
-              <div className="relative col-span-8 sm:col-span-3 row-span-2 overflow-hidden rounded-lg">
-                <img
-                  src={images[2]}
-                  alt="Rock formation"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </div>
-              <div className="relative col-span-8 sm:col-span-2 row-span-2 overflow-hidden rounded-lg">
-                <img
-                  src={images[3]}
-                  alt="Green hills"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </div>
-              <div className="relative col-span-8 sm:col-span-3 row-span-1 overflow-hidden rounded-lg">
-                <img
-                  src={images[4]}
-                  alt="Cliffs"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                />
-              </div>
-              <div className="relative col-span-8 sm:col-span-3 row-span-1 overflow-hidden rounded-lg">
-                <img
-                  src={images[5]}
-                  alt="Scenic road"
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                />
+            <div className="rounded-3xl p-3 sm:p-4 bg-slate-800/30 backdrop-blur-xl border border-slate-700/50 shadow-2xl relative z-10">
+              <div className="grid grid-cols-8 auto-rows-[92px] sm:auto-rows-[104px] md:auto-rows-[112px] gap-3">
+                {/* Top row: two large tiles */}
+                <div className="relative col-span-8 sm:col-span-5 row-span-3 overflow-hidden rounded-2xl group/image">
+                  <img
+                    src={images[0]}
+                    alt="Irish landscape"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
+                </div>
+                <div className="relative col-span-8 sm:col-span-3 row-span-3 overflow-hidden rounded-2xl group/image">
+                  <img
+                    src={images[1]}
+                    alt="Coastal view"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
+                </div>
+
+                {/* Bottom composition */}
+                <div className="relative col-span-8 sm:col-span-3 row-span-2 overflow-hidden rounded-2xl group/image">
+                  <img
+                    src={images[2]}
+                    alt="Rock formation"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
+                </div>
+                <div className="relative col-span-8 sm:col-span-2 row-span-2 overflow-hidden rounded-2xl group/image">
+                  <img
+                    src={images[3]}
+                    alt="Green hills"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
+                </div>
+                <div className="relative col-span-8 sm:col-span-3 row-span-1 overflow-hidden rounded-2xl group/image">
+                  <img
+                    src={images[4]}
+                    alt="Cliffs"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
+                </div>
+                <div className="relative col-span-8 sm:col-span-3 row-span-1 overflow-hidden rounded-2xl group/image">
+                  <img
+                    src={images[5]}
+                    alt="Scenic road"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
+                </div>
               </div>
             </div>
           </div>

@@ -77,7 +77,7 @@ export function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-[999] transition-all duration-300 ${isScrolled
           ? "py-3 bg-white border-b border-blue-500/10"
-          : "py-3 border-b border-gray-100"
+          : "py-3 bg-white border-b border-gray-100"
           }`}
       >
         <div className="max-w-7xl mx-auto px-5">
@@ -92,7 +92,7 @@ export function Header() {
               </Link>
 
               {/* Desktop navigation */}
-              <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-lg font-bold text-gray-800">
+              <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold text-gray-800">
                 <Link
                   href="/transfer"
                   className={`flex items-center gap-1 transition-colors ${pathname === "/transfer" ? "text-blue-600" : "hover:text-blue-600"}`}

@@ -7,37 +7,50 @@ export function WhyChooseUs() {
       icon: UserCheck,
       title: "Expert Local Drivers",
       description: "Our drivers are knowledgeable local guides who share hidden gems and Ireland's rich history with you.",
+      color: "from-blue-400 to-blue-600",
     },
     {
       icon: ShieldCheck,
       title: "Safety First",
       description: "Travel with peace of mind in fully insured, rigorously maintained premium vehicles with vetted professional drivers.",
+      color: "from-blue-500 to-indigo-500",
     },
     {
       icon: Clock,
       title: "Reliable & Punctual",
       description: "We value your time. Count on us for prompt pickups and efficient routes, 24/7, across the country.",
+      color: "from-indigo-400 to-indigo-600",
     },
     {
       icon: Sparkles,
       title: "Luxury Fleet",
       description: "Experience superior comfort in our modern fleet of sedans and vans.",
+      color: "from-indigo-500 to-violet-500",
     },
     {
       icon: Map,
       title: "Custom Itineraries",
       description: "Your trip, your way. We offer fully flexible schedules and route planning tailored to your specific interests.",
+      color: "from-violet-400 to-violet-600",
     },
     {
       icon: HeartHandshake,
       title: "Transparent Pricing",
       description: "No hidden fees or metered surprises. Enjoy fixed, competitive rates for all our premium services.",
+      color: "from-violet-500 to-purple-600",
     },
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-white">
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 ">
+    <section className="relative py-16 md:py-24 bg-white overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div className="absolute top-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-blue-50/50 blur-3xl opacity-70 mix-blend-multiply" />
+        <div className="absolute bottom-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-violet-50/50 blur-3xl opacity-70 mix-blend-multiply" />
+        <div className="absolute top-[40%] left-[30%] w-[40%] h-[40%] rounded-full bg-indigo-50/40 blur-3xl opacity-50 mix-blend-multiply" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 relative z-10">
         <SectionHeader
           title="Why Travelers Choose Us"
           subtitle="Our Advantages"
@@ -45,21 +58,33 @@ export function WhyChooseUs() {
           alignment="center"
         />
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="mt-16 md:mt-20 grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {features.map((feature, idx) => {
             const Icon = feature.icon;
             return (
               <div
                 key={idx}
-                className="group flex flex-col justify-center items-center text-center bg-white p-8 rounded-lg shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300 hover:-translate-y-1"
+                className="group relative flex flex-col items-center text-center p-8 rounded-2xl transition-all duration-500 hover:-translate-y-2 bg-white/60 backdrop-blur-md border border-gray-100 hover:border-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 overflow-hidden"
               >
-                <div className="w-14 h-14 rounded-lg bg-blue-50 group-hover:bg-blue-600 transition-colors duration-300 flex items-center justify-center mb-6">
-                  <Icon className="w-7 h-7 text-blue-600 group-hover:text-white transition-colors duration-300" />
+                {/* Hover Gradient Background */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`} />
+
+                {/* Icon Container */}
+                <div className="relative mb-6">
+                  {/* Outer glow */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-xl blur-lg opacity-20 group-hover:opacity-60 transition-opacity duration-500`} />
+
+                  <div className={`relative w-16 h-16 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center group-hover:border-transparent transition-colors duration-500 z-10`}>
+                    {/* Gradient overlay on hover */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl`} />
+                    <Icon className="relative w-8 h-8 text-blue-600 group-hover:text-white group-hover:scale-110 transition-all duration-500 z-10" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-gray-900 group-hover:to-gray-600 transition-all duration-300">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
                   {feature.description}
                 </p>
               </div>

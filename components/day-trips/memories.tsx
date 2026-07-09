@@ -5,8 +5,6 @@ import {
     Carousel,
     CarouselContent,
     CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
 } from "@/components/ui/carousel";
 
 const memories = [
@@ -51,7 +49,6 @@ export default function Memories() {
         stop();
         intervalRef.current = window.setInterval(() => {
             if (!api) return;
-            // If at end, embla with loop enabled wraps automatically
             api.scrollNext();
         }, 2500);
     };
@@ -71,36 +68,46 @@ export default function Memories() {
     }, [api]);
 
     return (
-        <div className="max-w-7xl mx-auto px-5 bg-gray-50 py-16">
-            <div className="">
-                <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
-                    Create Unforgettable Memories
+        <section className="relative w-full py-16 md:py-24 bg-gray-50/50 overflow-hidden">
+            {/* Decorative Background Elements */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+                <div className="absolute top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
+                <div className="absolute bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
+            </div>
+
+            <div className="max-w-7xl mx-auto px-5 lg:px-8 relative z-10">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center text-gray-900 mb-12 lg:mb-16">
+                    Create <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Unforgettable Memories</span>
                 </h2>
-                <div onMouseEnter={stop} onMouseLeave={start}>
+                <div onMouseEnter={stop} onMouseLeave={start} className="relative">
                     <Carousel
                         opts={{ align: "start", loop: true }}
-                        className="w-full"
+                        className="w-full -my-8"
                         setApi={setApi}
                     >
-                        <CarouselContent className="-ml-4">
+                        <CarouselContent className="-ml-4 py-8 px-4">
                             {memories.map((memory, index) => (
-                                <CarouselItem key={index} className="pl-4 basis-3/4 sm:basis-1/2 lg:basis-1/4">
-                                    <div className="relative h-80 rounded-lg overflow-hidden group cursor-pointer shadow-lg hover:shadow-2xl transition-shadow">
+                                <CarouselItem key={index} className="pl-4 basis-[85%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
+                                    <div className="relative h-80 md:h-96 rounded-2xl overflow-hidden group cursor-pointer shadow-md transition-all duration-500 ring-1 ring-black/5 hover:-translate-y-2">
                                         <img
                                             src={memory.image}
                                             alt={memory.alt}
-                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+
+                                        <div className="absolute bottom-0 left-0 right-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                            <p className="text-white font-bold text-lg leading-tight opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                                {memory.alt}
+                                            </p>
+                                        </div>
                                     </div>
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        {/* <CarouselPrevious className="bg-white text-gray-900 hover:bg-gray-100 border border-gray-200 w-10 h-10 -left-12" /> */}
-                        {/* <CarouselNext className="bg-white text-gray-900 hover:bg-gray-100 border border-gray-200 w-10 h-10 -right-12" /> */}
                     </Carousel>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }

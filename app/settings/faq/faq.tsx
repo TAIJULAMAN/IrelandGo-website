@@ -27,7 +27,7 @@ export default function FAQ() {
     if (isLoading) {
         return (
             <div className="bg-gray-50 py-16 md:py-24">
-                <div className="max-w-7xl mx-auto px-5">
+                <div className="max-w-7xl mx-auto px-5 md:px-0">
                     <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
                         Frequently Asked Questions
                     </h2>
@@ -51,7 +51,7 @@ export default function FAQ() {
 
     return (
         <div className="bg-gray-50 py-16 md:py-24">
-            <div className="max-w-7xl mx-auto px-5">
+            <div className="max-w-7xl mx-auto px-5 md:px-0">
                 <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
                     Frequently Asked Questions
                 </h2>
