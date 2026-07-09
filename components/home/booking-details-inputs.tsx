@@ -83,34 +83,42 @@ export function BookingDetailsInputs({
                 </div>
                 <div className="h-[300px] w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
                   <div className="flex flex-col gap-1">
-                    {Array.from({ length: 96 }).map((_, i) => {
-                      const hour = Math.floor(i / 4);
-                      const minute = (i % 4) * 15;
-                      const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-                      const isDisabled = isTimeDisabled(date, timeString);
-                      return (
+                    {(() => {
+                      const availableTimes = Array.from({ length: 96 })
+                        .map((_, i) => {
+                          const hour = Math.floor(i / 4);
+                          const minute = (i % 4) * 15;
+                          return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+                        })
+                        .filter((timeString) => !isTimeDisabled(date, timeString));
+
+                      if (availableTimes.length === 0) {
+                        return (
+                          <div className="text-center p-4 text-sm text-gray-500">
+                            No times available
+                          </div>
+                        );
+                      }
+
+                      return availableTimes.map((timeString) => (
                         <Button
                           key={timeString}
-                          disabled={isDisabled}
                           variant={time === timeString ? "default" : "ghost"}
                           className={cn(
                             "justify-center h-8 text-sm",
                             time === timeString
-                              ? "bg-blue-600 hover:bg-blue-700"
-                              : "hover:bg-blue-50",
-                            isDisabled && "opacity-30 cursor-not-allowed"
+                              ? "bg-blue-600 hover:bg-blue-700 text-white"
+                              : "hover:bg-blue-50 text-gray-700"
                           )}
                           onClick={() => {
-                            if (!isDisabled) {
-                              setTime(timeString);
-                              setIsCalendarOpen(false);
-                            }
+                            setTime(timeString);
+                            setIsCalendarOpen(false);
                           }}
                         >
                           {timeString}
                         </Button>
-                      );
-                    })}
+                      ));
+                    })()}
                   </div>
                 </div>
               </div>
