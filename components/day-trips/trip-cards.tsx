@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Loading from "@/components/common/loading";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useGetAllDayTripsQuery } from "@/Redux/features/dayTrip/dayTripApi";
 
@@ -41,12 +42,7 @@ export default function TripCards() {
   ].filter(Boolean) : filteredTrips;
 
   if (isLoading) {
-    return (
-      <div className="py-24 text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-        <p className="mt-4 text-gray-600">Loading day trips...</p>
-      </div>
-    );
+    return <Loading />
   }
 
   return (

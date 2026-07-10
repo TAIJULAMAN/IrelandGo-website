@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Star, Clock } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useGetAllMultiDayToursQuery } from "@/Redux/features/multi-day-tours/multiDayToursApi";
+import Loading from "@/components/common/loading";
 
 export default function MultiDayToursOurMultiDayTours() {
   const { data: response, isLoading } = useGetAllMultiDayToursQuery(undefined);
@@ -140,11 +141,7 @@ export default function MultiDayToursOurMultiDayTours() {
         </div>
 
         {/* Loading State */}
-        {isLoading && (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          </div>
-        )}
+        {isLoading && <Loading />}
 
         {/* Empty State */}
         {!isLoading && pagedTours.length === 0 && (

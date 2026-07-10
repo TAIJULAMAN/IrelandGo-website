@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Loading from "@/components/common/loading"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Loader2, Clock, Route } from "lucide-react"
 import Image from "next/image"
@@ -37,11 +38,7 @@ export function PrivateTransfers() {
   ].filter(Boolean) : transfers;
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
-      </div>
-    )
+    return <Loading />
   }
 
   if (isError || transfers.length === 0) {

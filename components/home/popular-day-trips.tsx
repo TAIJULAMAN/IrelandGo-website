@@ -4,6 +4,7 @@ import { useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Loader2, Clock, Users } from "lucide-react"
 import Link from "next/link"
+import Loading from "@/components/common/loading"
 import { useGetPopularTripsQuery } from "@/Redux/features/contents/contentsApi"
 import { SectionHeader } from "@/components/ui/section-header"
 
@@ -26,11 +27,7 @@ export function PopularDayTrips() {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
-      </div>
-    )
+    return <Loading />
   }
 
   if (isError || trips.length === 0) return null

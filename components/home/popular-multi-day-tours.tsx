@@ -1,8 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { ChevronLeft, ChevronRight, Loader2, Star, Clock } from "lucide-react"
+import { ChevronLeft, ChevronRight, Star, Clock } from "lucide-react"
 import Link from "next/link"
+import Loading from "@/components/common/loading"
 import { useGetPopularMultiDayToursQuery } from "@/Redux/features/contents/contentsApi"
 import { SectionHeader } from "@/components/ui/section-header"
 
@@ -31,11 +32,7 @@ export function PopularMultiDayTours() {
   ].filter(Boolean) : tours;
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
-      </div>
-    )
+    return <Loading />
   }
 
   if (isError || tours.length === 0) {

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useGetTransfersBasedOnLocationQuery } from "@/Redux/features/transfers/transfersApi";
+import Loading from "@/components/common/loading";
 
 export default function PopularTransferRoutes() {
   const searchParams = useSearchParams();
@@ -36,9 +37,7 @@ export default function PopularTransferRoutes() {
           </div>
 
           {isLoading ? (
-            <div className="flex justify-center items-center py-20">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            </div>
+            <Loading />
           ) : isError ? (
             <div className="text-center text-red-500 py-10">
               Failed to load routes. Please try again.
