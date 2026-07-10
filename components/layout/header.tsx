@@ -82,7 +82,7 @@ export function Header() {
       >
         <div className="max-w-7xl mx-auto px-5">
           <div className="flex items-center justify-between">
-            {/* Left side: Logo + Links */}
+            {/* Left side */}
             <div className="flex items-center gap-8 xl:gap-12">
               <Link href="/">
                 <div className="flex items-center gap-2">
@@ -90,41 +90,41 @@ export function Header() {
                   <span className="text-2xl font-black text-gray-900 tracking-tight">Tourenzo</span>
                 </div>
               </Link>
-
-              {/* Desktop navigation */}
-              <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold text-gray-800">
-                <Link
-                  href="/transfer"
-                  className={`flex items-center gap-1 transition-colors ${pathname === "/transfer" ? "text-blue-600" : "hover:text-blue-600"}`}
-                >
-                  Transfers
-                </Link>
-                <Link
-                  href="/multi-day-tours"
-                  className={`flex items-center gap-1 transition-colors ${pathname === "/multi-day-tours" ? "text-blue-600" : "hover:text-blue-600"}`}
-                >
-                  Tours
-                </Link>
-                <Link
-                  href="/auth/signup"
-                  className={`flex items-center gap-1 transition-colors ${pathname === "/auth/signup" ? "text-blue-600" : "hover:text-blue-600"}`}
-                >
-                  Travel Agent
-                </Link>
-                <Link
-                  href="/airport-transfers"
-                  className={`transition-colors ${pathname === "/airport-transfers" ? "text-blue-600" : "hover:text-blue-600"}`}
-                >
-                  Airport Transfer
-                </Link>
-              </nav>
             </div>
 
-            {/* Right Side: Phone + Login + Mobile Toggle */}
+            {/* Navigations */}
+            <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold text-gray-800">
+              <Link
+                href="/transfer"
+                className={`flex items-center gap-1 transition-colors ${pathname === "/transfer" ? "text-blue-600" : "hover:text-blue-600"}`}
+              >
+                Transfers
+              </Link>
+              <Link
+                href="/multi-day-tours"
+                className={`flex items-center gap-1 transition-colors ${pathname === "/multi-day-tours" ? "text-blue-600" : "hover:text-blue-600"}`}
+              >
+                Tours
+              </Link>
+              <Link
+                href="/auth/signup"
+                className={`flex items-center gap-1 transition-colors ${pathname === "/auth/signup" ? "text-blue-600" : "hover:text-blue-600"}`}
+              >
+                Travel Agent
+              </Link>
+              <Link
+                href="/airport-transfers"
+                className={`transition-colors ${pathname === "/airport-transfers" ? "text-blue-600" : "hover:text-blue-600"}`}
+              >
+                Airport Transfer
+              </Link>
+            </nav>
+
+            {/* Right Side */}
             <div className="flex items-center gap-4 xl:gap-6">
 
               {/* Phone Block */}
-              <a 
+              <a
                 href="https://wa.me/353858090960"
                 target="_blank"
                 rel="noopener noreferrer"
