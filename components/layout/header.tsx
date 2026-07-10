@@ -124,15 +124,20 @@ export function Header() {
             <div className="flex items-center gap-4 xl:gap-6">
 
               {/* Phone Block */}
-              <div className="hidden xl:flex items-center gap-3 border-r border-gray-200 pr-6">
-                <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center border border-gray-100">
-                  <MessageCircle className="w-5 h-5 text-gray-700" />
+              <a 
+                href="https://wa.me/353858090960"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden xl:flex items-center gap-3 border-r border-gray-200 pr-6 hover:opacity-80 transition-opacity"
+              >
+                <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center border border-green-100">
+                  <MessageCircle className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Need Help?</span>
+                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">WhatsApp Us</span>
                   <span className="text-sm font-black text-gray-900">+353 85 809 0960</span>
                 </div>
-              </div>
+              </a>
 
               {/* Auth / Login */}
               <div className="hidden lg:flex items-center">

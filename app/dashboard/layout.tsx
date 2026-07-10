@@ -20,7 +20,6 @@ import {
   SheetContent,
 } from "@/components/ui/sheet"
 import { MainHeader } from "@/components/dashboard/MainHeader"
-import { PageHeader } from "@/components/common/PageHeader"
 
 export default function DashboardLayout({
   children,
@@ -49,8 +48,8 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#FBFBFB]">
-      <aside className="hidden md:block w-[280px] h-full flex-shrink-0">
+    <div className="flex h-screen overflow-hidden bg-slate-50 text-slate-900">
+      <aside className="hidden md:block w-[280px] h-full flex-shrink-0 z-20 shadow-[4px_0_24px_rgba(0,0,0,0.02)] relative">
         <Sidebar
           user={user}
           setIsLogoutDialogOpen={setIsLogoutDialogOpen}
@@ -59,7 +58,7 @@ export default function DashboardLayout({
 
       {/* Mobile Sidebar (Sheet) */}
       <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-        <SheetContent side="left" className="w-[85%] max-w-[320px] p-0 border-none">
+        <SheetContent side="left" className="w-[85%] max-w-[320px] p-0 border-none shadow-2xl">
           <Sidebar
             user={user}
             setIsMobileMenuOpen={setIsMobileMenuOpen}
@@ -68,14 +67,14 @@ export default function DashboardLayout({
         </SheetContent>
       </Sheet>
 
-      {/* Main max-w-7xl */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100/80">
         {/* Main Header */}
         <MainHeader setIsMobileMenuOpen={setIsMobileMenuOpen} user={user} />
 
         {/* Scrollable Content Area */}
-        <main className="flex-1 overflow-y-auto custom-scrollbar bg-gray-50/30">
-          <div className="px-5 py-5 md:px-10">
+        <main className="flex-1 overflow-y-auto custom-scrollbar scroll-smooth">
+          <div className="px-5 py-6 md:px-0 md:py-8 lg:px-0 lg:py-10 max-w-[1600px] mx-auto w-full transition-all duration-300 ease-in-out">
             {children}
           </div>
         </main>

@@ -76,7 +76,6 @@ export default function MultiDayToursOurMultiDayTours() {
 
   return (
     <section className="relative py-16 md:py-24 bg-gray-50/50 overflow-hidden">
-      {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
         <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
@@ -99,9 +98,7 @@ export default function MultiDayToursOurMultiDayTours() {
           </p>
         </div>
 
-        {/* Filters and Navigation */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-10 bg-white/60 backdrop-blur-md p-4 rounded-2xl border border-gray-100 shadow-sm">
-          
           <button
             onClick={onPrev}
             disabled={total <= perPage}
@@ -112,7 +109,6 @@ export default function MultiDayToursOurMultiDayTours() {
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
-
           <div className="flex items-center justify-center gap-2 flex-wrap flex-1">
             {filters.map((f) => (
               <button
