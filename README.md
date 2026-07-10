@@ -1,76 +1,91 @@
-# 🇮🇪 IrelandGo - Premium Travel Booking Platform
-
-A modern, full-featured travel booking platform for exploring Ireland, built with Next.js 16, TypeScript, and Tailwind CSS. IrelandGo offers comprehensive booking solutions for airport transfers, hourly rentals, day trips, and multi-day tours with separate dashboards for travel agents and users.
+<div align="center">
+  <img src="public/logo.svg" alt="IrelandGo Logo" width="200"/>
+  <h1>🇮🇪 IrelandGo - Premium Travel Booking Platform</h1>
+  <p>A modern, full-featured travel booking platform for exploring Ireland, built with Next.js 16, TypeScript, and Tailwind CSS. IrelandGo offers comprehensive booking solutions for airport transfers, hourly rentals, day trips, and multi-day tours with separate dashboards for travel agents and users.</p>
+</div>
 
 ![IrelandGo Banner](public/ireland-hero-bg.jpg)
 
-## ✨ Features
+---
 
-### 🚗 Booking Services
+##  Overview
+IrelandGo redefines travel across the Emerald Isle by offering a seamless and luxurious booking experience. Whether you're an independent traveler organizing a bespoke day trip to the Cliffs of Moher, or a dedicated travel agent managing high-volume bookings for clients, IrelandGo's responsive design and highly optimized architecture ensures everything runs flawlessly.
 
-#### Airport Transfers
-- **Route Planning**: Interactive map-based route selection with OpenStreetMap integration
-- **Journey Details**: Comprehensive trip information with pickup/dropoff locations
-- **Transfer Routes**: Browse popular airport transfer routes across Ireland
-- **Real-time Tracking**: Live tracking of your transfer vehicle
+##  Core Services
 
-#### By the Hour
-- **Flexible Rentals**: Book vehicles by the hour for custom itineraries
-- **Multiple Stops**: Add multiple destinations to your journey
-- **Professional Drivers**: Local drivers with extensive knowledge of Ireland
+<details open>
+<summary><b>1. Airport Transfers</b></summary>
+<br/>
 
-#### Day Trips
-- **1500+ Tours**: Explore Ireland's wonders with curated day trip packages
-- **Scenic Routes**: Visit Cliffs of Moher, Giant's Causeway, and more
-- **Detailed Itineraries**: Complete trip information with timing and highlights
-- **Easy Booking**: Streamlined booking flow from search to confirmation
+![Airport Transfers](public/transfer.png)
+- **Route Planning**: Interactive map-based route selection with OpenStreetMap integration.
+- **Journey Details**: Comprehensive trip information with distinct pickup/dropoff logic.
+- **Transfer Routes**: Browse popular airport transfer routes effortlessly across Ireland.
+- **Real-time Tracking**: Live tracking integration of your designated transfer vehicle.
+</details>
 
-#### Multi-Day Tours
-- **Extended Adventures**: Multi-day tour packages across Ireland
-- **Comprehensive Planning**: Accommodation, transport, and activities included
-- **Customizable**: Tailor tours to your preferences
+<details open>
+<summary><b>2. By the Hour Rentals</b></summary>
+<br/>
 
-### 👤 User Features
-- **Dashboard Overview**: View booking statistics, recent bookings, and activity feed
-- **Booking Management**: Create, view, and manage travel bookings with detailed information
-- **Profile Management**: Update personal information and preferences
-- **Payment Methods**: Securely add and manage payment methods
-- **Saved Trips**: Bookmark favorite destinations and tours
-- **Notifications**: Real-time notifications for bookings, payments, and updates
-- **Support**: Access customer support and help resources
+![By the Hour Rentals](public/by-the-hour.jpg)
+- **Flexible Rentals**: Book vehicles by the hour for completely custom itineraries.
+- **Multiple Stops**: Dynamically add multiple destinations to a single journey.
+- **Professional Drivers**: Rely on local drivers with extensive knowledge of the Irish landscape.
+</details>
 
-### 🎯 Agent Features
-- **Comprehensive Dashboard**: Monitor total bookings, revenue, and commission earnings
-- **Client Management**: View and manage client information, booking history, and contact details
-- **Booking Management**: Create and manage bookings for clients with full CRUD operations
-- **Recent Clients Table**: Quick access to the 5 most recent clients
-- **Activity Feed**: Track recent bookings, payments, and client registrations
-- **Notifications**: Stay updated on new bookings, payments, and client activities
-- **Payment Methods**: Manage payment options for seamless transactions
+<details open>
+<summary><b>3. Day Trips & Multi-Day Tours</b></summary>
+<br/>
 
-### 🔐 Authentication System
-- **User Login/Signup**: Secure authentication for travelers
-- **Agent Login/Signup**: Separate authentication flow for travel agents
-- **Password Recovery**: Forgot password and reset password functionality
-- **Email Verification**: Verification code system for account security
-- **Role-based Access**: Different dashboards and permissions for users and agents
+![Explore Ireland](public/explore%20-Ireland-1.jpg)
+- **Extensive Catalog**: Choose from over 1,500+ curated day trip packages.
+- **Iconic Destinations**: See the Cliffs of Moher, Giant's Causeway, Galway, and more.
+- **Detailed Itineraries**: Full schedule breakdowns with highlight attractions and activities.
+- **Streamlined Booking**: Effortlessly navigate the booking flow from search to final confirmation.
+</details>
 
-## 🛠️ Tech Stack
+---
 
-- **Framework**: [Next.js 16](https://nextjs.org/) (App Router)
+##  Interactive Dashboards
+
+Our custom dashboards separate concerns cleanly between end-users and professional travel agents.
+
+###  User Dashboard
+Your central hub for travel history and account configuration.
+- **Overview**: View your booking statistics, recent trips, and account activity feed.
+- **Management**: Quickly modify active bookings and review past travel details.
+- **Profile & Preferences**: Adjust personal details, saved payment methods, and notification toggles effortlessly.
+
+###  Agent Dashboard
+A powerful suite designed specifically for travel agencies and independent agents to oversee their client base.
+- **Analytics & Revenue**: Monitor total bookings, accumulated revenue, and real-time commission earnings.
+- **Client CRM**: Manage client profiles, view individual booking histories, and maintain contact records.
+- **Direct Booking**: Process and manage bookings directly on behalf of your clients.
+
+---
+
+##  Technology Stack
+
+We've leveraged the cutting-edge of the React ecosystem to deliver a fast, reliable, and highly interactive application.
+
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/) 
 - **Language**: [TypeScript 5](https://www.typescriptlang.org/)
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) with Radix UI primitives
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Maps**: [Leaflet](https://leafletjs.com/) with React Leaflet
-- **Form Handling**: [React Hook Form](https://react-hook-form.com/) with Zod validation
-- **Authentication**: [NextAuth.js v5](https://next-auth.js.org/)
-- **Carousel**: [Embla Carousel](https://www.embla-carousel.com/)
-- **Charts**: [Recharts](https://recharts.org/)
-- **Date Handling**: [date-fns](https://date-fns.org/)
-- **Analytics**: [Vercel Analytics](https://vercel.com/analytics)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) utilizing Radix UI Primitives
+- **Mapping Engine**: [Leaflet](https://leafletjs.com/) with React Leaflet
+- **Forms & Validation**: [React Hook Form](https://react-hook-form.com/) combined with [Zod](https://zod.dev/)
+- **Authentication**: Custom Redux Toolkit (RTK) based authentication system
+- **State Management**: Redux Toolkit & RTK Query
+- **Data Visualization**: [Recharts](https://recharts.org/)
 
-## 📁 Project Structure
+---
+
+##  Project Structure
 
 ```
 IrelandGo-web/
@@ -165,95 +180,58 @@ IrelandGo-web/
 └── package.json                  # Project dependencies
 ```
 
-## 🎨 Key Features Breakdown
+---
 
-### Modern UI/UX Design
-- **Glassmorphism Effects**: Modern frosted glass UI elements
-- **Gradient Backgrounds**: Rich, vibrant color schemes
-- **Smooth Animations**: Micro-interactions for enhanced user experience
-- **Responsive Design**: Mobile-first approach with seamless tablet and desktop views
-- **Dark Mode Support**: Theme switching with next-themes
-- **Premium Aesthetics**: State-of-the-art design patterns
+##  Getting Started
 
-### Interactive Maps
-- **OpenStreetMap Integration**: Interactive route planning with Leaflet
-- **Location Search**: Search Irish settlements and landmarks
-- **Route Visualization**: Visual representation of pickup and dropoff locations
-- **Real-time Updates**: Live tracking of vehicle location
+To get a local copy up and running, follow these simple steps.
 
-### Booking Flow
-- **Multi-step Process**: Guided booking experience
-  1. Service selection (Transfer/Hourly/Day Trip/Multi-day)
-  2. Vehicle selection with detailed information
-  3. Booking details and passenger information
-  4. Payment processing
-  5. Confirmation and tracking
-- **Progress Indicator**: Clear visual feedback on booking progress
-- **Form Validation**: Comprehensive validation with Zod schemas
-- **Secure Payments**: Payment method management
+### Prerequisites
+Make sure you have Node.js and npm installed on your local machine.
+- Node.js (v18.0.0 or higher recommended)
+- npm (v9.0.0 or higher)
 
-### Dashboard Design
-- **Metrics Cards**: Display key statistics with color-coded icons
-- **Professional Tables**: Clean table design with filtering and sorting
-- **Recent Activity**: Timeline view of recent actions
-- **Charts & Analytics**: Visual representation of data with Recharts
+### Installation
 
-## 🎯 Usage
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/TAIJULAMAN/IrelandGo-website.git
+   ```
 
-### For Travelers
+2. **Install dependencies**
+   ```bash
+   cd IrelandGo-website
+   npm install
+   ```
 
-1. **Browse Services**: Explore airport transfers, hourly rentals, day trips, and multi-day tours
-2. **Search & Filter**: Find the perfect trip using the search functionality
-3. **Book Your Trip**: Follow the guided booking flow
-4. **Manage Bookings**: View and manage your bookings in the user dashboard
-5. **Track in Real-time**: Monitor your vehicle location during the trip
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 
-### For Travel Agents
+4. **Open the Application**
+   Navigate to [http://localhost:3000](http://localhost:3000) in your web browser.
 
-1. **Access Agent Dashboard**: Navigate to `/agent`
-2. **View Metrics**: See total bookings, revenue, and commission
-3. **Manage Clients**: Go to `/agent/clients` to view and manage clients
-4. **Create Bookings**: Use the booking management system at `/agent/bookings`
-5. **Check Notifications**: View updates at `/agent/notifications`
+---
 
-## 🗺️ Main Routes
+##  Design Philosophy
 
-### Public Routes
-- `/` - Home page with service overview
-- `/airport-transfers` - Airport transfer booking
-- `/by-the-hour` - Hourly rental service
-- `/day-trips` - Day trip packages
-- `/multi-day-tours` - Multi-day tour packages
-- `/about` - About IrelandGo
-- `/contact` - Contact page
+![Map Interface](public/ireland-map-route-with-pickup-dropoff-markers.jpg)
 
-### Authentication Routes
-- `/auth/login` - User/Agent login
-- `/auth/signup` - User/Agent registration
-- `/auth/forgot-password` - Password recovery
-- `/auth/verify-code` - Email verification
-- `/auth/reset-password` - Password reset
+### Modern Aesthetics
+- **Glassmorphism**: Soft, frosted glass effects for modals and interactive layers.
+- **Gradients**: Deep rich UI gradients for headers and banners reflecting modern premium travel.
+- **Micro-interactions**: Subtle hover scaling and layout animations powered by `tailwindcss-animate`.
 
-### User Routes
-- `/user` - User dashboard
-- `/user/bookings` - View and manage bookings
-- `/user/profile` - Profile management
-- `/user/payment-methods` - Payment methods
-- `/user/saved` - Saved trips
-- `/user/notifications` - Notifications
-- `/user/support` - Customer support
+### Component Modularity
+The codebase is structured to maximize reusability. Dashboards, for instance, are composed of strictly separated atomic components (`ProfileHeaderBanner`, `DashboardMetrics`, `RecentBookingsTable`) acting under orchestrator page components. 
 
-### Agent Routes
-- `/agent` - Agent dashboard
-- `/agent/clients` - Client management
-- `/agent/bookings` - Booking management
-- `/agent/profile` - Agent profile
-- `/agent/payment-methods` - Payment methods
-- `/agent/notifications` - Notifications
+---
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
 
-
-**Made with ❤️ for travelers exploring the beauty of Ireland** 🇮🇪
+<div align="center">
+  <b>Made with ❤️ for travelers exploring the beauty of Ireland 🇮🇪</b>
+</div>
