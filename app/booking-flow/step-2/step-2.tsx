@@ -252,10 +252,10 @@ export default function Step2() {
         <div className="absolute bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
       </div>
 
-      <div className="flex-1 py-5 sm:py-10 px-5 lg:px-10 relative z-10">
+      <div className="flex-1 py-5 sm:py-10 px-5 md:px-0 relative z-10 max-w-7xl w-full mx-auto">
 
         {/* Step progress */}
-        <div className="mb-6 sm:mb-10 max-w-7xl w-full mx-auto">
+        <div className="mb-6 sm:mb-10">
           <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-600">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold shrink-0">
