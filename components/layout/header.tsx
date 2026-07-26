@@ -82,8 +82,8 @@ export function Header() {
             <div className="flex items-center gap-8 xl:gap-12">
               <Link href="/">
                 <div className="flex items-center gap-2">
-                  <Image src="/logo.png" alt="Logo" width={40} height={40} />
-                  <span className="text-2xl font-black text-gray-900 tracking-tight">Tourenzo</span>
+                  <Image src="/Tourenzo.png" alt="Logo" width={140} height={80} />
+                  {/* <span className="text-2xl font-black text-gray-900 tracking-tight">Tourenzo</span> */}
                 </div>
               </Link>
             </div>
@@ -177,10 +177,7 @@ export function Header() {
             <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
               <Link href="/" onClick={() => setIsMenuOpen(false)}>
                 <div className="flex items-center gap-2">
-                  <Image src="/logo.png" alt="Logo" width={32} height={32} />
-                  <span className="text-lg font-bold text-blue-600">
-                    Tourenzo
-                  </span>
+                  <Image src="/Tourenzo.png" alt="Logo" width={140} height={80} />
                 </div>
               </Link>
               <button

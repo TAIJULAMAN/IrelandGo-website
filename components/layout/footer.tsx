@@ -12,7 +12,7 @@ export function Footer({ className = "" }: FooterProps) {
           <div>
             <div className="flex items-center space-x-2 mb-4">
               <img
-                src="/logo.png"
+                src="/Tourenzo.png"
                 alt=""
                 className="w-12 h-12 object-contain"
               />

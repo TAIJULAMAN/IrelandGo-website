@@ -105,7 +105,7 @@ export function Sidebar({
         <Link href="/" className="flex items-center gap-3 group">
           <div className="relative w-10 h-10 transition-transform group-hover:scale-105 duration-300">
             <Image
-              src="/logo.png"
+              src="/Tourenzo.png"
               alt="IrelandGo"
               fill
               className="object-contain"

@@ -23,19 +23,19 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/logo.png",
+        url: "/Tourenzo.png",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/logo.png",
+        url: "/Tourenzo.png",
         media: "(prefers-color-scheme: dark)",
       },
       {
-        url: "/logo.png",
+        url: "/Tourenzo.png",
         type: "image/svg+xml",
       },
     ],
-    apple: "/logo.png",
+    apple: "/Tourenzo.png",
   },
 }
 
