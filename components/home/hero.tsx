@@ -220,7 +220,7 @@ export function Hero() {
     <section className="relative overflow-hidden pt-20 lg:pt-24 pb-10 min-h-screen flex flex-col justify-center">
       <div className="absolute inset-0 z-0">
         <img
-          src="/AllCustomeImage/HomePage.jpg"
+          src="/Images/Home.webp"
           alt="Irish landscape"
           className="w-full h-full object-cover"
         />
@@ -231,7 +231,7 @@ export function Hero() {
           <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
             Comfortable car transfers in Ireland
           </h1>
-          <p className="text-sm md:text-base text-white mb-2 px-4">
+          <p className="text-sm md:text-base text-white mb-2 px-4 font-semibold">
             Book private transfers and day tours with professional drivers.
           </p>
         </div>

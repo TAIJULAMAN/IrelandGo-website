@@ -116,17 +116,17 @@ export default function Hero() {
       <section className="relative overflow-hidden min-h-[100vh] flex flex-col justify-center py-24">
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url(/AllCustomeImage/DayTour.jpg)" }}
+          style={{ backgroundImage: "url(/Images/DayTrip.webp)" }}
         />
         <div className="absolute inset-0 " />
         <div className="relative z-10 w-full">
           <div className="max-w-7xl mx-auto px-5 py-8 text-center flex flex-col items-center mt-10">
             <div className="space-y-4 md:space-y-6 max-w-4xl mb-10">
-              <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-2xl">
-                Explore <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">Ireland's Wonders</span>
+              <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
+                Explore <span className="">Ireland's Wonders</span>
                 <br className="hidden sm:block" /> in One Day
               </h1>
-              <p className="text-base sm:text-lg md:text-xl text-blue-50 px-4 font-medium drop-shadow-md leading-relaxed">
+              <p className="text-sm md:text-base text-white mb-2 px-4 font-semibold">
                 Discover over 100+ day trips and private tours with local drivers.
               </p>
             </div>

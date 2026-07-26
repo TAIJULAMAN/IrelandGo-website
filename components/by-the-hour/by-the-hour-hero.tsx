@@ -168,7 +168,7 @@ export default function ByTheHourHero() {
       <section className="relative overflow-hidden min-h-[90vh] flex flex-col justify-center py-16 pt-24 md:pt-28">
         <div className="absolute inset-0 z-0">
           <img
-            src="/AllCustomeImage/ByTheWay.jpg"
+            src="/Images/ByTheHour.webp"
             alt="Irish landscape"
             className="w-full h-full object-cover"
           />
@@ -177,11 +177,11 @@ export default function ByTheHourHero() {
         <div className="relative z-10 w-full">
           <div className="max-w-7xl mx-auto px-5 mt-4 md:mt-6 py-8 text-center flex flex-col items-center">
             <div className="space-y-2 max-w-4xl mb-6">
-              <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight drop-shadow-2xl">
-                Book a Private Driver <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200">by the Hour</span>
+              <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
+                Book a Private Driver <span className="">by the Hour</span>
                 <br className="hidden sm:block" /> – Travel Your Way
               </h1>
-              <p className="text-base sm:text-lg text-blue-50 px-4 font-medium drop-shadow-md leading-relaxed">
+              <p className="text-sm md:text-base text-white mb-2 px-4 font-semibold">
                 Discover over 100+ day trips and private tours with local drivers.
               </p>
             </div>

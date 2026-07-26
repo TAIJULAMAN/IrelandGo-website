@@ -35,23 +35,22 @@ export default function AirportTransfersHero() {
     <section className="relative min-h-[100vh] flex items-center justify-center text-white overflow-hidden py-24">
       <div className="absolute inset-0 -z-10">
         <img
-          src="/CustomImage/AirportTransfers.jpg"
+          src="/Images/AirportTransfers.webp"
           alt="Irish landscape"
-          className="w-full h-full object-cover "
+          className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 " />
       </div>
-
       <div className="max-w-7xl w-full mx-auto px-5 sm:px-6 md:px-8 flex flex-col items-center text-center gap-8 md:gap-12 relative z-10 mt-10">
 
         {/* Header Text */}
         <div className="space-y-4 md:space-y-6 max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-2xl">
+          <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
             Reliable Airport Transfers Across
             <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-200"> Ireland</span>
+            <span className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4"> Ireland</span>
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-blue-50 px-4 font-medium drop-shadow-md leading-relaxed">
+          <p className="text-sm md:text-base text-white mb-2 px-4 font-semibold">
             Start your Irish adventure with our premium airport transfer
             services. Enjoy comfortable, reliable, and prompt journeys
             connecting you between all major airports and destinations across

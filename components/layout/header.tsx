@@ -76,15 +76,14 @@ export function Header() {
           : "py-3 bg-white border-b border-gray-100"
           }`}
       >
-        <div className="max-w-7xl mx-auto px-5">
+        <div className="max-w-7xl mx-auto px-5 md:px-0">
           <div className="flex items-center justify-between">
             {/* Left side */}
             <div className="flex items-center gap-8 xl:gap-12">
               <Link href="/">
-                <div className="flex items-center gap-2">
-                  <Image src="/Tourenzo.png" alt="Logo" width={140} height={80} />
-                  {/* <span className="text-2xl font-black text-gray-900 tracking-tight">Tourenzo</span> */}
-                </div>
+
+                <Image src="/Tourenzo.png" alt="Logo" width={140} height={80} />
+
               </Link>
             </div>
 
@@ -172,7 +171,7 @@ export function Header() {
           />
 
           {/* Drawer */}
-          <nav className="absolute top-0 left-0 z-50 h-full w-[80%] max-w-[300px] bg-white shadow-2xl flex flex-col p-5 animate-in slide-in-from-left duration-300">
+          <nav className="absolute top-0 left-0 z-50 h-full w-[80%] max-w-[300px] bg-white shadow-2xl flex flex-col py-5 px-5 md:px-0 animate-in slide-in-from-left duration-300">
             {/* Drawer Header */}
             <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
               <Link href="/" onClick={() => setIsMenuOpen(false)}>
