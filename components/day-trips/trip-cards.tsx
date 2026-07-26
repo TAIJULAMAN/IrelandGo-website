@@ -42,7 +42,11 @@ export default function TripCards() {
   ].filter(Boolean) : filteredTrips;
 
   if (isLoading) {
-    return <Loading />
+    return (
+      <div className="relative px-5 md:px-0 py-16 md:py-24 bg-gray-50/50 overflow-hidden">
+        <Loading />
+      </div>
+    )
   }
 
   return (

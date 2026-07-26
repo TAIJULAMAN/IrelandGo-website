@@ -7,19 +7,33 @@ import {
     AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useGetFaqQuery } from "@/Redux/features/settings/faqApi";
+import { usePathname } from "next/navigation";
+import Loading from "@/components/common/loading";
 
 interface Faq {
     id: string
     question: string
     answer: string
+    serviceType?: string
     createdAt: string
     updatedAt: string
 }
 
 export default function FAQ() {
+    const pathname = usePathname();
     const { data, isLoading } = useGetFaqQuery(undefined);
 
-    const faqs: Faq[] = data?.data || [];
+    let faqs: Faq[] = data?.data || [];
+    console.log(faqs)
+
+    if (pathname.includes("/day-trips")) {
+        faqs = faqs.filter(f => f.serviceType === "DAY_TRIP");
+    } else if (pathname.includes("/by-the-hour")) {
+        faqs = faqs.filter(f => f.serviceType === "BY_THE_HOUR");
+    } else if (pathname.includes("/transfer") || pathname.includes("/airport-transfers")) {
+        faqs = faqs.filter(f => f.serviceType === "TRANSFER");
+    }
+
     const half = Math.ceil(faqs.length / 2);
     const col1 = faqs.slice(0, half);
     const col2 = faqs.slice(half);
@@ -27,22 +41,7 @@ export default function FAQ() {
     if (isLoading) {
         return (
             <div className="bg-gray-50 py-16 md:py-24">
-                <div className="max-w-7xl mx-auto px-5 md:px-0">
-                    <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-                        Frequently Asked Questions
-                    </h2>
-                    <div className="grid md:grid-cols-2 gap-6 items-start">
-                        {[0, 1].map((col) => (
-                            <div key={col} className="space-y-6">
-                                {[1, 2, 3].map((i) => (
-                                    <div key={i} className="bg-white rounded-lg shadow-sm ring-1 ring-black/5 p-6 animate-pulse">
-                                        <div className="h-5 bg-gray-200 rounded w-3/4" />
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <Loading />
             </div>
         );
     }

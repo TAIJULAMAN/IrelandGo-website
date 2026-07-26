@@ -5,10 +5,11 @@ import TransfersHero from "@/components/transfer/transfer-hero";
 
 export default function Transfer() {
   return (
-    <div>
+    <>
       <TransfersHero />
       <AirportTransfersWhyChoose />
       <DreamTour />
-      <FAQ />    </div>
+      <FAQ />
+    </>
   );
 }

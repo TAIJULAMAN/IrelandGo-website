@@ -5,6 +5,7 @@ import { useGetAllMultiDayToursQuery } from "@/Redux/features/multi-day-tours/mu
 import MultiDayToursDetailsHero from "@/components/multi-day-tours/multi-day-tours-details/multi-day-tours-details-hero";
 import FAQ from "@/app/settings/faq/faq";
 import { Testimonials } from "@/components/common/testimonials";
+import Loading from "@/components/common/loading";
 
 export default function MultiDayTourDetails({
   params,
@@ -17,8 +18,8 @@ export default function MultiDayTourDetails({
   const tour = tours.find((t: any) => t.id === id);
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-slate-500">
-        Loading tour details...
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading />
       </div>
     );
   }

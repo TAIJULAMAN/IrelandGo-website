@@ -18,6 +18,7 @@ import {
   Eye,
   Loader2,
 } from "lucide-react";
+import Loading from "../common/loading";
 
 interface BookingsTableProps {
   statusFilter: string;
@@ -92,10 +93,7 @@ export function BookingsTable({
 
       <div className="p-0">
         {isLoading ? (
-          <div className="flex justify-center flex-col items-center py-16 gap-4 text-slate-500">
-            <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-            <p className="text-sm font-medium">Loading your bookings...</p>
-          </div>
+          <Loading />
         ) : isError ? (
           <div className="text-center py-16 text-red-500 font-medium">
             Failed to load bookings. Please try again.

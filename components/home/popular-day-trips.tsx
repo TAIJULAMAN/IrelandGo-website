@@ -27,7 +27,11 @@ export function PopularDayTrips() {
   }
 
   if (isLoading) {
-    return <Loading />
+    return (
+      <section className="relative px-5 md:px-0 py-10 md:py-16 bg-gray-50/50 overflow-hidden">
+        <Loading />
+      </section>
+    )
   }
 
   if (isError || trips.length === 0) return null

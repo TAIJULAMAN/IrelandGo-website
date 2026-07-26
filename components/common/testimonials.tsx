@@ -5,6 +5,7 @@ import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { useGetAllReviewQuery } from "@/Redux/features/review/reviewApi";
 import { SectionHeader } from "../ui/section-header";
 import Image from "next/image";
+import Loading from "./loading";
 
 interface Review {
   id: string;
@@ -68,48 +69,7 @@ export function Testimonials() {
   if (isLoading) {
     return (
       <section className="relative px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-16 md:py-24 bg-gray-50/50 overflow-hidden">
-        {/* Decorative Orbs */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-          <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
-          <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
-        </div>
-        <div className="max-w-7xl mx-auto relative z-10">
-          <SectionHeader
-            title="What Our Customers Say"
-            subtitle="Testimonials"
-            description="Trusted by happy travelers worldwide for our premium service and local expertise."
-            alignment="center"
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className={`bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 animate-pulse ${i > 1 ? "hidden md:block" : ""} ${i > 2 ? "hidden lg:block" : ""}`}
-              >
-                <div className="flex gap-1 mb-6">
-                  {[...Array(5)].map((_, j) => (
-                    <div
-                      key={j}
-                      className="w-4 h-4 md:w-5 md:h-5 bg-gray-200 rounded"
-                    />
-                  ))}
-                </div>
-                <div className="space-y-3 mb-8">
-                  <div className="h-4 bg-gray-200 rounded w-full" />
-                  <div className="h-4 bg-gray-200 rounded w-5/6" />
-                  <div className="h-4 bg-gray-200 rounded w-4/6" />
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full" />
-                  <div className="space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-24" />
-                    <div className="h-3 bg-gray-200 rounded w-16" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Loading />
       </section>
     );
   }

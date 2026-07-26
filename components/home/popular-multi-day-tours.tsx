@@ -32,7 +32,11 @@ export function PopularMultiDayTours() {
   ].filter(Boolean) : tours;
 
   if (isLoading) {
-    return <Loading />
+    return (
+      <section className="relative px-5 md:px-0 py-10 md:py-16 bg-white overflow-hidden">
+        <Loading />
+      </section>
+    )
   }
 
   if (isError || tours.length === 0) {

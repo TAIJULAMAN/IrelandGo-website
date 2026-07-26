@@ -1,6 +1,7 @@
 "use client";
 
 import { useGetTermsAndConditionsQuery } from "@/Redux/features/settings/termsApi";
+import Loading from "@/components/common/loading";
 
 export default function TermsOfService() {
     const { data, isLoading } = useGetTermsAndConditionsQuery(undefined);
@@ -23,17 +24,7 @@ export default function TermsOfService() {
                 </h1>
 
                 {isLoading ? (
-                    <div className="animate-pulse">
-                        <div className="h-4 bg-gray-200 rounded w-48 mb-8" />
-                        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 space-y-4">
-                            <div className="h-4 bg-gray-200 rounded w-full" />
-                            <div className="h-4 bg-gray-200 rounded w-5/6" />
-                            <div className="h-4 bg-gray-200 rounded w-full" />
-                            <div className="h-4 bg-gray-200 rounded w-4/6" />
-                            <div className="h-4 bg-gray-200 rounded w-full" />
-                            <div className="h-4 bg-gray-200 rounded w-3/4" />
-                        </div>
-                    </div>
+                    <Loading />
                 ) : terms ? (
                     <>
                         <p className="text-gray-600 mb-8 text-sm sm:text-base">

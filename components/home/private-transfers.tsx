@@ -8,6 +8,7 @@ import { ChevronLeft, ChevronRight, Loader2, Clock, Route } from "lucide-react"
 import Image from "next/image"
 import { useGetPrivateTransfersQuery } from "@/Redux/features/contents/contentsApi"
 import { SectionHeader } from "../ui/section-header"
+import { useRouter } from "next/navigation"
 
 export function PrivateTransfers() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -38,7 +39,11 @@ export function PrivateTransfers() {
   ].filter(Boolean) : transfers;
 
   if (isLoading) {
-    return <Loading />
+    return (
+      <section className="relative px-5 md:px-0 py-10 md:py-16 bg-gray-50/50 overflow-hidden">
+        <Loading />
+      </section>
+    )
   }
 
   if (isError || transfers.length === 0) {

@@ -9,7 +9,7 @@ import { RecentBlogs } from "@/components/home/recent-blogs";
 
 export default function ByTheHour() {
   return (
-    <main>
+    <>
       <ByTheHourHero />
       <ByTheHourService />
       <ByTheHourPrivateRides />
@@ -17,6 +17,7 @@ export default function ByTheHour() {
       <RecentBlogs />
       <Testimonials />
       <ByTheHourFlexibleBooking />
-      <FAQ />    </main>
+      <FAQ />
+    </>
   );
 }
