@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Calendar, ArrowRight } from "lucide-react";
 import { useGetAllBlogsQuery } from "@/Redux/features/blogs/blogsApi";
 import { SectionHeader } from "@/components/ui/section-header";
+import Loading from "../common/loading";
 
 interface Blog {
   id: string;
@@ -32,42 +33,14 @@ export function RecentBlogs() {
   // Loading skeleton
   if (isLoading) {
     return (
-      <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-16 sm:py-20 md:py-24 bg-gray-50/50 overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-4">
-            <SectionHeader
-              title="Latest from our Blog"
-              subtitle="Travel Inspiration"
-              className="mb-0 text-center md:text-left [&_span]:md:text-left [&_h2]:md:text-left"
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {[1, 2, 3].map((i, idx) => (
-              <div
-                key={i}
-                className={`bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 animate-pulse ${idx === 2 ? "block md:hidden lg:block" : ""
-                  }`}
-              >
-                <div className="h-60 bg-gray-200" />
-                <div className="p-6 space-y-4">
-                  <div className="h-3 bg-gray-200 rounded w-24" />
-                  <div className="h-6 bg-gray-200 rounded w-full" />
-                  <div className="h-6 bg-gray-200 rounded w-3/4" />
-                  <div className="h-4 bg-gray-200 rounded w-full mt-4" />
-                  <div className="h-4 bg-gray-200 rounded w-5/6" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Loading />
     );
   }
 
   if (blogs.length === 0) return null;
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-16 sm:py-20 md:py-24 bg-gray-50/50 overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-10 md:py-12 xl:py-12 bg-gray-50/50 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
@@ -75,7 +48,7 @@ export function RecentBlogs() {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-14 gap-6 relative">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-6 md:mb-10 gap-6 relative">
           <div className="flex-1">
             <SectionHeader
               title="Explore Ireland's Best Destinations"
@@ -103,7 +76,7 @@ export function RecentBlogs() {
                 {/* Subtle Glow Behind Card */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-                <div className="relative overflow-hidden h-60 z-10">
+                <div className="relative overflow-hidden h-32 md:h-48 z-10">
                   <Image
                     src={blog.image?.[0] || "/placeholder.jpg"}
                     alt={blog.title}
@@ -111,24 +84,24 @@ export function RecentBlogs() {
                     className="object-cover transform group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-                  
+
                   <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-blue-700 shadow-sm border border-white/20">
                     {blog.category}
                   </div>
                 </div>
 
-                <div className="p-5 md:p-6 flex flex-col flex-grow relative z-10">
-                  <div className="flex items-center gap-1.5 text-xs text-gray-500 font-medium mb-3">
-                    <Calendar className="w-3.5 h-3.5" />
+                <div className="p-3 flex flex-col flex-grow relative z-10">
+                  <div className="flex items-center gap-1 text-xs text-gray-500 font-small mb-3">
+                    <Calendar className="w-3 h-3" />
                     <span>{formatDate(blog.createdAt)}</span>
                   </div>
 
-                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
+                  <h2 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
                     {blog.title}
                   </h2>
 
-                  <p className="text-sm md:text-base text-gray-600 leading-relaxed mb-6 line-clamp-3 flex-grow group-hover:text-gray-700 transition-colors">
-                    {blog.content}
+                  <p className="text-sm text-gray-600 leading-relaxed mb-2 line-clamp-3 group-hover:text-gray-700 transition-colors">
+                    {blog.content?.replace(/<[^>]*>?/gm, "")}
                   </p>
 
                   <div className="mt-auto flex items-center gap-2 text-sm font-bold text-blue-600 group-hover:text-indigo-600 transition-colors pt-5 border-t border-gray-100">

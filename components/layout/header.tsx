@@ -145,7 +145,7 @@ export function Header() {
                   <UserAvatar />
                 ) : (
                   <Link href="/auth/login">
-                    <Button className="bg-blue-500 hover:bg-blue-600 text-white  px-6 py-5 rounded-lg font-bold text-lg shadow-md flex items-center gap-2 transition-all hover:scale-105">
+                    <Button className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 lg:py-4 text-base xl:text-lg xl:py-5 xl:px-6 rounded-lg font-bold shadow-md flex items-center gap-2 transition-all hover:scale-105">
                       <User className="w-4 h-4" />
                       Login
                     </Button>

@@ -33,7 +33,7 @@ export function PopularDayTrips() {
   if (isError || trips.length === 0) return null
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-16 sm:py-20 md:py-24 bg-gray-50/50 overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-10 md:py-12 xl:py-12 bg-gray-50/50 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
@@ -43,7 +43,7 @@ export function PopularDayTrips() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header row with arrows */}
-        <div className="flex flex-col md:flex-row items-center justify-center md:justify-between mb-10 md:mb-14 gap-6 relative">
+        <div className="flex flex-col md:flex-row items-center justify-center md:justify-between mb-6 md:mb-10 gap-6 relative">
           {/* Left arrow */}
           <button
             onClick={() => scroll("left")}
@@ -86,7 +86,7 @@ export function PopularDayTrips() {
               {/* Subtle Glow Behind Card */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-              <div className="relative h-48 md:h-56 w-full bg-gray-200 overflow-hidden z-10">
+              <div className="relative h-40 md:h-48 w-full bg-gray-200 overflow-hidden z-10">
                 <img
                   src={trip.images?.[0] || "/placeholder.svg"}
                   alt={trip.to}
@@ -96,37 +96,39 @@ export function PopularDayTrips() {
               </div>
 
               <div className="p-5 md:p-6 flex flex-col flex-grow relative z-10">
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
+                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
                   {trip.from} to {trip.to}
                 </h3>
 
-                <p className="text-sm md:text-base text-gray-600 mb-5 md:mb-6 line-clamp-3 flex-grow leading-relaxed group-hover:text-gray-700 transition-colors">
+                <p className="text-sm text-gray-600 mb-5 md:mb-6 line-clamp-3 leading-relaxed group-hover:text-gray-700 transition-colors">
                   {trip.description?.replace(/<[^>]*>?/gm, "")}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-3 mb-6">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold shadow-sm border border-blue-100/50">
-                    <Clock className="w-3.5 h-3.5" />
-                    {formatDuration(trip.travelTimeMinutes)}
-                  </span>
-                  {trip.groupType && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold shadow-sm border border-indigo-100/50">
-                      <Users className="w-3.5 h-3.5" />
-                      {trip.groupType}
+                <div className="mt-auto">
+                  <div className="flex flex-wrap items-center gap-3 mb-5 md:mb-6">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold shadow-sm border border-blue-100/50">
+                      <Clock className="w-3.5 h-3.5" />
+                      {formatDuration(trip.travelTimeMinutes)}
                     </span>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between mb-5">
-                  <div>
-                    <span className="text-2xl md:text-3xl font-extrabold text-blue-600">€{trip.price}</span>
-                    <span className="text-xs text-gray-500 font-medium ml-1">per person</span>
+                    {trip.groupType && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold shadow-sm border border-indigo-100/50">
+                        <Users className="w-3.5 h-3.5" />
+                        {trip.groupType}
+                      </span>
+                    )}
                   </div>
-                </div>
 
-                <Button asChild className="w-full rounded-xl text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-6 border-none">
-                  <Link href={`/day-trips/day-trip-details/${trip.id}`}>View Details</Link>
-                </Button>
+                  <div className="flex items-center justify-between mb-5">
+                    <div>
+                      <span className="text-2xl md:text-3xl font-extrabold text-blue-600">€{trip.price}</span>
+                      <span className="text-xs text-gray-500 font-medium ml-1">per person</span>
+                    </div>
+                  </div>
+
+                  <Button asChild className="w-full rounded-xl text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-6 border-none">
+                    <Link href={`/day-trips/day-trip-details/${trip.id}`}>View Details</Link>
+                  </Button>
+                </div>
               </div>
             </div>
           ))}

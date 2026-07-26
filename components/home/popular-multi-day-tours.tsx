@@ -40,7 +40,7 @@ export function PopularMultiDayTours() {
   }
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-16 sm:py-20 md:py-24 bg-white overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-12 md:py-16 xl:py-20 bg-white overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-blue-50/80 blur-3xl mix-blend-multiply" />
@@ -48,7 +48,7 @@ export function PopularMultiDayTours() {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16 gap-6 relative">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-6 md:mb-10 gap-6 relative">
           {showSlider && (
             <button
               onClick={goToPrevious}
@@ -88,7 +88,7 @@ export function PopularMultiDayTours() {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
               
-              <div className="relative h-48 md:h-56 overflow-hidden bg-gray-100 z-10">
+              <div className="relative h-40 md:h-48 overflow-hidden bg-gray-100 z-10">
                 <img
                   src={tour.images?.[0] || "/placeholder.svg"}
                   alt={tour.title}
@@ -112,7 +112,7 @@ export function PopularMultiDayTours() {
                 <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
                   {tour.title}
                 </h3>
-                <p className="text-sm md:text-base text-gray-600 mb-6 line-clamp-3 flex-grow leading-relaxed group-hover:text-gray-700 transition-colors">
+                <p className="text-sm md:text-base text-gray-600 mb-6 line-clamp-3 leading-relaxed group-hover:text-gray-700 transition-colors">
                   {stripHtml(tour.description)}
                 </p>
 

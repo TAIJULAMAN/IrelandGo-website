@@ -30,7 +30,7 @@ export function NewsLetter() {
 
   return (
     <section className="">
-      <div className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center max-w-7xl mx-auto px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-10 md:py-16">
+      <div className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center max-w-7xl mx-auto px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-8 md:py-10 xl:py-16">
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 text-gray-900 leading-tight">
             Stay updated with <span className="text-blue-600">Ireland&apos;s best</span> travel deals

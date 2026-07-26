@@ -42,7 +42,7 @@ export function WhyChooseUs() {
   ];
 
   return (
-    <section className="relative py-16 md:py-24 bg-white overflow-hidden">
+    <section className="relative py-12 md:py-16 xl:py-20 bg-white overflow-hidden">
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-blue-50/50 blur-3xl opacity-70 mix-blend-multiply" />

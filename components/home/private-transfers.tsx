@@ -50,7 +50,7 @@ export function PrivateTransfers() {
   }
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 2xl:px-0 py-16 sm:py-20 md:py-24 bg-white overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 2xl:px-0 py-12 md:py-16 xl:py-20 bg-white overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[5%] -left-[10%] w-[40%] h-[40%] rounded-full bg-blue-50/80 blur-3xl mix-blend-multiply" />
@@ -58,7 +58,7 @@ export function PrivateTransfers() {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16 gap-6 relative">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-6 md:mb-10 gap-6 relative">
           {showSlider && (
             <button
               onClick={goToPrevious}
@@ -98,7 +98,7 @@ export function PrivateTransfers() {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
               
-              <div className="relative h-48 md:h-56 overflow-hidden bg-gray-100 z-10">
+              <div className="relative h-40 md:h-48 overflow-hidden bg-gray-100 z-10">
                 <img
                   src={transfer.images?.[0] || "/placeholder.svg"}
                   alt={`${transfer.from} to ${transfer.to}`}

@@ -34,7 +34,7 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="py-16 sm:py-20 lg:py-28 relative overflow-hidden bg-white">
+    <section className="py-12 md:py-16 xl:py-20 relative overflow-hidden bg-white">
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] rounded-full bg-blue-50/50 blur-3xl opacity-80 mix-blend-multiply" />

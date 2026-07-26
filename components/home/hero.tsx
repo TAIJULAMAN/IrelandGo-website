@@ -217,7 +217,7 @@ export function Hero() {
   });
 
   return (
-    <section className="relative overflow-hidden pt-10 md:pt-20 min-h-screen">
+    <section className="relative overflow-hidden pt-20 lg:pt-24 pb-10 min-h-screen flex flex-col justify-center">
       <div className="absolute inset-0 z-0">
         <img
           src="/AllCustomeImage/HomePage.jpg"
@@ -225,20 +225,24 @@ export function Hero() {
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="max-w-7xl 2xl:max-w-8xl mx-auto px-5 sm:px-6 md:px-8 py-16 relative z-10">
+      <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 md:px-8 pb-8 pt-0 relative z-10">
         {/* Hero Text */}
-        <div className="text-center mb-5 md:mb-10 pt-10">
-          <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
+        <div className="text-center mb-4 pt-0">
+          <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
             Comfortable car transfers in Ireland
           </h1>
-          <p className="text-base md:text-lg text-white mb-6 md:mb-8 px-4">
+          <p className="text-sm md:text-base text-white mb-2 px-4">
             Book private transfers and day tours with professional drivers.
           </p>
         </div>
-        <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} />
+        <HeroTabs
+          activeTab={activeTab}
+          onTabChange={handleTabClick}
+          className="flex justify-center mb-4 overflow-x-auto scrollbar-hide scroll-smooth"
+        />
         <div>
-          {/* Booking Form max-w-7xl */}
-          <div className="flex flex-col lg:flex-row gap-6 max-w-7xl mx-auto bg-white/95 backdrop-blur-xl rounded-lg shadow-2xl p-5 md:p-7 border border-white/40">
+          {/* Booking Form */}
+          <div className="flex flex-col lg:flex-row gap-5 max-w-7xl 2xl:max-w-8xl mx-auto bg-white/95 backdrop-blur-xl rounded-lg shadow-2xl p-4 md:p-5 border border-white/40">
             <div className="w-full ">
               <TripTypeSelector
                 activeTab={activeTab}
@@ -405,7 +409,7 @@ export function Hero() {
                 </div>
               )}
             </div>
-            <div className="rounded-lg overflow-hidden border border-gray-100 lg:w-[450px] hidden lg:block shrink-0 relative min-h-[320px] shadow-inner">
+            <div className="rounded-lg overflow-hidden border border-gray-100 lg:w-[320px] xl:w-[450px] 2xl:w-[500px] hidden lg:block shrink-0 relative min-h-[280px] shadow-inner">
               <div className="absolute inset-0">
                 <MapRoute
                   pickup={pickupLocation ? { name: pickupLocation } : undefined}
