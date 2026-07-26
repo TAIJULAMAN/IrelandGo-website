@@ -3,15 +3,16 @@
 import { Button } from "@/components/ui/button";
 import { Mail, Lock, User, Phone, Eye, EyeOff, Shield, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useSignUpMutation } from "@/Redux/features/auth/authApi";
 
-export default function Signup() {
+function SignupContent() {
+    const searchParams = useSearchParams();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [role, setRole] = useState("USER");
+    const [role, setRole] = useState(searchParams.get("role") === "AGENT" ? "AGENT" : "USER");
     const router = useRouter();
     const [signupMutation, { isLoading }] = useSignUpMutation();
 
@@ -20,7 +21,6 @@ export default function Signup() {
         const formData = new FormData(e.currentTarget);
         const password = formData.get("password") as string;
         const confirmPassword = formData.get("confirmPassword") as string;
-        // console.log(password, confirmPassword, "password and confirm password");
         if (password !== confirmPassword) {
             toast.error("Passwords do not match");
             return;
@@ -33,8 +33,6 @@ export default function Signup() {
             password: password,
             role: role,
         };
-        // console.log(userData, "data of aman")
-
         try {
             const res = await signupMutation(userData).unwrap();
             if (res.success) {
@@ -265,6 +263,19 @@ export default function Signup() {
                         </div>
                     </div>
                 </div>
-            </main></div>
+            </main>
+        </div>
+    );
+}
+
+export default function Signup() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        }>
+            <SignupContent />
+        </Suspense>
     );
 }

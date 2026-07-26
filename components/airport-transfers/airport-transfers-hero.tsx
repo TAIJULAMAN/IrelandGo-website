@@ -35,7 +35,7 @@ export default function AirportTransfersHero() {
     <section className="relative min-h-[100vh] flex items-center justify-center text-white overflow-hidden py-24">
       <div className="absolute inset-0 -z-10">
         <img
-          src="/AllCustomeImage/AirportTransfers.jpg"
+          src="/CustomImage/AirportTransfers.jpg"
           alt="Irish landscape"
           className="w-full h-full object-cover "
         />

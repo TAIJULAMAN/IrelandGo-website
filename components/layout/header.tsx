@@ -19,8 +19,6 @@ export function Header() {
   const pathname = usePathname();
 
   const token = useAppSelector((state) => state.auth.token);
-  console.log("token of aman", token);
-
   let isExpired = false;
   if (token) {
     try {
@@ -34,8 +32,6 @@ export function Header() {
   }
 
   const isAuthenticated = !!token && !isExpired;
-  // console.log("isAuthenticated", isAuthenticated);
-
   useEffect(() => {
     if (token && isExpired) {
       dispatch(reduxLogout());
@@ -107,7 +103,7 @@ export function Header() {
                 Tours
               </Link>
               <Link
-                href="/auth/signup"
+                href="/auth/signup?role=AGENT"
                 className={`flex items-center gap-1 transition-colors ${pathname === "/auth/signup" ? "text-blue-600" : "hover:text-blue-600"}`}
               >
                 Travel Agent
@@ -214,7 +210,7 @@ export function Header() {
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </Link>
               <Link
-                href="/auth/signup"
+                href="/auth/signup?role=AGENT"
                 className="flex items-center justify-between p-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition"
                 onClick={() => setIsMenuOpen(false)}
               >
