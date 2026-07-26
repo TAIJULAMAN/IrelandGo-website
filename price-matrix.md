@@ -1,0 +1,88 @@
+# IrelandGo Pricing Matrix
+
+This document outlines the pricing logic and rate bands for all services in the IrelandGo booking system, as derived from the front-end calculation logic.
+
+## 1. Transfers (Distance-Based Pricing)
+Prices are calculated based on the total distance in kilometers (km) for the trip. The formula used is:
+**Price = Base Fee + (Rate per Km × Distance in Km)**
+
+The rates depend on the vehicle type and the distance bracket:
+
+### Sedan
+| Distance Bracket (km) | Rate per Km (€) | Base Fee (€) |
+|-----------------------|-----------------|--------------|
+| 0 - 25                | 1.80            | 50           |
+| 26 - 50               | 1.80            | 40           |
+| 51 - 100              | 1.80            | 30           |
+| 101 - 150             | 1.80            | 15           |
+| 151+                  | 1.90            | 0            |
+
+### Luxury Sedan (L Sedan)
+| Distance Bracket (km) | Rate per Km (€) | Base Fee (€) |
+|-----------------------|-----------------|--------------|
+| 0 - 25                | 2.10            | 70           |
+| 26 - 50               | 2.10            | 60           |
+| 51 - 100              | 2.10            | 50           |
+| 101 - 150             | 2.10            | 35           |
+| 151+                  | 2.15            | 0            |
+
+### MPV / Minivan
+| Distance Bracket (km) | Rate per Km (€) | Base Fee (€) |
+|-----------------------|-----------------|--------------|
+| 0 - 25                | 2.00            | 65           |
+| 26 - 50               | 2.00            | 55           |
+| 51 - 100              | 2.00            | 45           |
+| 101 - 150             | 2.00            | 30           |
+| 151+                  | 2.10            | 0            |
+
+### Van
+| Distance Bracket (km) | Rate per Km (€) | Base Fee (€) |
+|-----------------------|-----------------|--------------|
+| 0 - 25                | 2.20            | 80           |
+| 26 - 50               | 2.20            | 70           |
+| 51 - 100              | 2.20            | 60           |
+| 101 - 150             | 2.20            | 45           |
+| 151+                  | 2.30            | 0            |
+
+---
+
+## 2. By The Hour Pricing
+Hourly bookings have a base price for the first 2 hours, with incremental additions for each subsequent hour.
+
+| Vehicle Type        | Base (2 hrs) | + 3rd Hr | + 4th Hr | + 5th Hr | + 6th Hr | + 7th+ Hr (per hr) |
+|---------------------|--------------|----------|----------|----------|----------|--------------------|
+| **Sedan**           | €275         | +€15     | +€25     | +€55     | +€55     | +€55               |
+| **Luxury Sedan**    | €290         | +€20     | +€30     | +€60     | +€60     | +€60               |
+| **MPV / Minivan**   | €285         | +€20     | +€30     | +€60     | +€60     | +€60               |
+| **Van**             | €295         | +€25     | +€35     | +€65     | +€65     | +€65               |
+
+---
+
+## 3. Extra Stops (Stoppages)
+When a user adds an extra stop during a transfer, the cost is calculated based on the additional distance and the time spent at the stop.
+
+1. **Base Stop Price (First 60 mins):** 
+   - `Vehicle Base Price (from Database) + (Extra Distance in Km × €1.45)`
+   - *(Note: If no vehicle base price is found, €20 is used as a fallback minimum).*
+
+2. **Extra Time (beyond 60 mins):**
+   - **Full Extra Hour:** +€50 per hour
+   - **Partial Hour (1 to 44 mins):** +€30
+   - **Partial Hour (45 to 59 mins):** +€50
+
+---
+
+## 4. Return Trips (Round Trips)
+For return trips, the total calculated `transportPrice` (Base + Distance) is simply **multiplied by 2**. 
+*(Note: Extra stops added are calculated separately and added to the total).*
+
+---
+
+## 5. Extra Baggage
+- **Cost:** €10 per extra bag.
+- Extra bags take up a passenger seat space capacity, but no additional seat fee is charged beyond the €10 bag fee.
+
+---
+
+## 6. Day Trips & Multi-Day Tours
+- **Fixed Pricing:** Day trips and multi-day tours do not use a dynamic distance matrix on the frontend. Their prices are statically configured and fetched directly from the backend API.

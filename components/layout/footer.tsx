@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 interface FooterProps {
@@ -10,15 +11,15 @@ export function Footer({ className = "" }: FooterProps) {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-10 md:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <img
-                src="/Tourenzo.png"
-                alt=""
-                className="w-12 h-12 object-contain"
-              />
-              <h3 className="text-lg font-semibold">Tourenzo</h3>
-            </div>
-            <p className="text-sm text-gray-300">
+
+            <Image
+              src="/Tourenzo.png"
+              alt="Tourenzo logo"
+              width={140}
+              height={120}
+            />
+
+            <p className="text-sm text-gray-300 mt-5">
               Your trusted travel companion for exploring the beauty of Ireland.
             </p>
           </div>
