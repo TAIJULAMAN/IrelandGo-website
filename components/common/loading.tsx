@@ -61,8 +61,9 @@ export default function Loading() {
             <Image
               src="/vector-car-removebg-preview.png"
               alt="Driving car"
-              fill
-              className="object-contain scale-x-[-1]"
+              width={128}
+              height={64}
+              className="object-contain scale-x-[-1] w-full h-full"
               priority
             />
           </div>

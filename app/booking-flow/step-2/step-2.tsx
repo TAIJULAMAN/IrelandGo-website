@@ -9,7 +9,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import { useGetSingleDayTripQuery } from "@/Redux/features/dayTrip/dayTripApi";
 import { useEffect } from "react";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import {
   Popover,
   PopoverContent,
@@ -17,11 +17,7 @@ import {
 } from "@/components/ui/popover";
 
 export default function Step2() {
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: ["places"] as any
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const router = useRouter();
   const pathname = usePathname();

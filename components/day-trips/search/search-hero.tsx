@@ -9,11 +9,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { useState, useRef, useEffect } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { useSearchParams } from "next/navigation";
 
-const LIBRARIES: any = ["places"];
 
 export function SearchHero({ trip }: { trip?: any }) {
   const searchParams = useSearchParams();
@@ -51,11 +50,7 @@ export function SearchHero({ trip }: { trip?: any }) {
   const pickupDropdownRef = useRef<HTMLDivElement>(null);
   const dropoffDropdownRef = useRef<HTMLDivElement>(null);
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: LIBRARIES,
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const {
     ready: pickupReady,

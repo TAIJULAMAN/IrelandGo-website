@@ -10,14 +10,10 @@ import {
   Navigation,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 
 export default function TransferJourneyDetails() {
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: ["places"] as any
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const searchParams = useSearchParams();
   const transferRouteParam = searchParams.get("transferRoute");

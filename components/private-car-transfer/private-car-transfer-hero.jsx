@@ -27,7 +27,7 @@ import { format } from "date-fns";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
@@ -115,11 +115,7 @@ export default function PrivateCarTransferHero() {
   const pickupDropdownRef = useRef(null);
   const dropoffDropdownRef = useRef(null);
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: ["places"],
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const {
     ready: pickupReady,

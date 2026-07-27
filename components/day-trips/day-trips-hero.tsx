@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FeatureBadges } from "../common/feature-badges";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { cn } from "@/lib/utils";
 import { HeroTabs } from "../common/hero-tabs";
@@ -28,7 +28,6 @@ const isOutOfRange = (desc: string) => {
   return false;
 };
 
-const LIBRARIES: any = ["places"];
 
 export default function Hero() {
   const [activeTab, setActiveTab] = useState("day-trips");
@@ -40,11 +39,7 @@ export default function Hero() {
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: LIBRARIES,
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const {
     suggestions: { status, data },

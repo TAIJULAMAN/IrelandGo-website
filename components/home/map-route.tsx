@@ -1,9 +1,8 @@
 "use client"
 
 import { useEffect, useState, useCallback } from 'react'
-import { GoogleMap, useJsApiLoader, MarkerF, DirectionsRenderer } from '@react-google-maps/api'
-
-const GOOGLE_MAPS_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+import { GoogleMap, MarkerF, DirectionsRenderer } from '@react-google-maps/api'
+import { useGoogleMaps } from '@/hooks/useGoogleMaps'
 
 const containerStyle = {
     width: '100%',
@@ -21,11 +20,7 @@ interface MapRouteProps {
 }
 
 export function MapRoute({ pickup, dropoff }: MapRouteProps) {
-    const { isLoaded } = useJsApiLoader({
-        id: "google-map-script",
-        googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-        libraries: ["places"] as any
-    })
+    const { isLoaded } = useGoogleMaps()
 
     const [map, setMap] = useState<google.maps.Map | null>(null)
     const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null)
@@ -121,7 +116,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
 
     if (!isLoaded) {
         return (
-            <div className="w-full h-full bg-gray-100 rounded-lg flex items-center justify-center">
+            <div className="w-full h-full min-h-[280px] bg-gray-100 rounded-lg flex items-center justify-center">
                 <p className="text-gray-500">Loading map...</p>
             </div>
         )
@@ -150,7 +145,7 @@ export function MapRoute({ pickup, dropoff }: MapRouteProps) {
     const dropoffPos = getDropoffPos();
 
     return (
-        <div className="relative w-full h-full rounded-lg overflow-hidden bg-gray-200">
+        <div className="relative w-full h-full min-h-[280px] rounded-lg overflow-hidden bg-gray-200">
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}

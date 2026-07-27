@@ -15,10 +15,9 @@ import { cn } from "@/lib/utils";
 import { HeroTabs } from "../common/hero-tabs";
 import { isTimeDisabled } from "@/utils/timeValidation";
 import { useState, useRef, useEffect } from "react";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
-const libraries: any = ["places"];
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { FeatureBadges } from "../common/feature-badges";
@@ -69,11 +68,7 @@ export default function ByTheHourHero() {
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries,
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const {
     suggestions: { status, data },

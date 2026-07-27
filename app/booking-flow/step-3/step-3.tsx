@@ -8,7 +8,7 @@ import { useSearchPopularStopsMutation, useGetSingleStoppageQuery, useAddExtraSt
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 
 function formatDuration(minutes: number) {
   const h = Math.floor(minutes / 60);
@@ -209,11 +209,7 @@ export default function Step3() {
   const toLng = searchParams.get("toLng") || transferRoute?.toLng || "";
   const coordsParam = fromLat ? `&fromLat=${fromLat}&fromLng=${fromLng}&toLat=${toLat}&toLng=${toLng}` : "";
 
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries: ["places"] as any
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const [selectedStops, setSelectedStops] = useState<any[]>([]);
   const [selectedModalStopId, setSelectedModalStopId] = useState<string | null>(null);

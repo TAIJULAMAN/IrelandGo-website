@@ -4,6 +4,7 @@ import { useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Loader2, Clock, Users } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import Loading from "@/components/common/loading"
 import { useGetPopularTripsQuery } from "@/Redux/features/contents/contentsApi"
 import { SectionHeader } from "@/components/ui/section-header"
@@ -91,10 +92,12 @@ export function PopularDayTrips() {
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
               <div className="relative h-40 md:h-48 w-full bg-gray-200 overflow-hidden z-10">
-                <img
+                <Image
                   src={trip.images?.[0] || "/placeholder.svg"}
                   alt={trip.to}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover transform group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-80" />
               </div>

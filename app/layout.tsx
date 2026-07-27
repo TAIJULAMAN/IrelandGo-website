@@ -6,6 +6,8 @@ import { AuthProvider } from "@/contexts/AuthContext"
 import ReduxProvider from "@/Redux/ReduxProvider"
 import { Toaster } from "sonner"
 import "./globals.css"
+import "leaflet/dist/leaflet.css"
+import Script from "next/script"
 
 import { ClientLayout } from "@/components/layout/client-layout"
 
@@ -47,11 +49,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link
-          rel="stylesheet"
-          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossOrigin=""
+        <Script
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+          strategy="afterInteractive"
         />
       </head>
       <body className={`${jakarta.variable} font-sans antialiased bg-background text-foreground`}>

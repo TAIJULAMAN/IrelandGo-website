@@ -9,6 +9,7 @@ import {
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import Image from "next/image";
 import { isTimeDisabled, isReturnTimeDisabled as checkReturnTimeDisabled } from "@/utils/timeValidation";
 import { validateHeroForm } from "@/utils/validateHeroForm";
 import { TripTypeSelector } from "./trip-type-selector";
@@ -22,12 +23,10 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { FeatureBadges } from "../common/feature-badges";
 import { HeroTabs } from "../common/hero-tabs";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { LocationInputs } from "./location-inputs";
 import { BookingDetailsInputs } from "./booking-details-inputs";
-
-const libraries: any = ["places"];
 
 const MapRoute = dynamic(
   () => import("./map-route").then((mod) => ({ default: mod.MapRoute })),
@@ -63,11 +62,7 @@ const isOutOfRange = (desc: string) => {
 };
 
 export function Hero() {
-  const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
-    libraries,
-  });
+  const { isLoaded } = useGoogleMaps();
 
   const [activeTab, setActiveTab] = useState("transfer");
   const [tripType, setTripType] = useState("one-way");
@@ -219,10 +214,13 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden pt-20 lg:pt-24 pb-10 min-h-screen flex flex-col justify-center">
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src="/Images/Home.webp"
           alt="Irish landscape"
-          className="w-full h-full object-cover"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
       </div>
       <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 md:px-8 pb-8 pt-0 relative z-10">
