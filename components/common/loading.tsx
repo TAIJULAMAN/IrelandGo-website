@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Loading() {
   return (
-    <div className="w-full min-h-[400px] flex flex-col justify-center items-center gap-8 py-12 px-4 relative overflow-hidden">
+    <div className="w-full min-h-screen flex flex-col justify-center items-center gap-8 py-12 px-4 relative overflow-hidden">
       <style>{`
         @keyframes drive-h {
           0% { left: -30%; }

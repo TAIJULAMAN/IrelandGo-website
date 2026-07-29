@@ -8,7 +8,6 @@ import { WhyChooseUs } from "@/components/home/why-choose-us"
 import { Testimonials } from "@/components/common/testimonials"
 import { NewsLetter } from "@/components/home/news-letter"
 import { RecentBlogs } from "@/components/home/recent-blogs"
-
 export default function Home() {
   return (
     <main className="w-full">

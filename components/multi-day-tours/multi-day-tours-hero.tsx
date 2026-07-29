@@ -7,7 +7,7 @@ export default function MultiDayToursHero() {
           alt="Touring the Irish landscape"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 " />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/10" />
       </div>
 
       <div className="max-w-7xl mx-auto px-5 w-full flex flex-col items-center text-center gap-8 md:gap-12 relative z-10 mt-10">

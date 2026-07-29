@@ -222,6 +222,7 @@ export function Hero() {
           sizes="100vw"
           className="object-cover"
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/10" />
       </div>
       <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 md:px-8 pb-8 pt-0 relative z-10">
         {/* Hero Text */}

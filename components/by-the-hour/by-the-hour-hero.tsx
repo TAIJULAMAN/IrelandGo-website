@@ -167,6 +167,7 @@ export default function ByTheHourHero() {
             alt="Irish landscape"
             className="w-full h-full object-cover"
           />
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/10" />
         </div>
         <div className="absolute inset-0 " />
         <div className="relative z-10 w-full">

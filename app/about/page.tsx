@@ -4,68 +4,73 @@ export default function About() {
   return (
     <>
       <section
-        className="relative text-white flex flex-col min-h-screen bg-cover bg-center bg-no-repeat px-5 md:px-10 pt-10"
+        className="relative text-white flex flex-col justify-center min-h-[40vh] md:min-h-[50vh] lg:min-h-[60vh] bg-cover bg-center bg-no-repeat px-5 md:px-10 py-16 md:py-24"
         style={{
           backgroundImage: 'url("/about.avif")',
         }}
       >
-        <div className="max-w-7xl pt-10 md:pt-32 pb-10 md:pb-20 mx-auto px-5 sm:px-5 md:px-10  flex flex-col items-center justify-center text-center gap-5 md:gap-8 ">
-          <div className="space-y-2 max-w-4xl mx-auto">
-            <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/40" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex flex-col items-center justify-center text-center gap-6 mt-10 md:mt-12">
+          <div className="space-y-4 max-w-4xl mx-auto">
+            <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold mb-4 text-balance leading-tight drop-shadow-sm">
               About Tourenzo
             </h1>
-            <p className="text-base md:text-lg text-white mb-6 md:mb-8 px-4">
+            <p className="text-sm md:text-base text-white max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md">
               Discover the beauty of Ireland with Tourenzo. As your trusted
               travel partner, we provide premium immersive guided tours,
               ensuring every journey across the Emerald Isle is comfortable,
               safe, and unforgettable.
             </p>
           </div>
+        </div>
+      </section>
 
-          {/* Stats */}
-          <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-12 mt-4 sm:mt-6">
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">
-                15+
-              </span>
-              <span className="text-sm text-white/90 font-medium mt-1">
-                Years Experience
-              </span>
-            </div>
-            <div className="hidden sm:block w-1 h-10 bg-white rounded-full opacity-60" />
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">
-                1000+
-              </span>
-              <span className="text-sm text-white/90 font-medium mt-1">
-                Happy Customers
-              </span>
-            </div>
-            <div className="hidden sm:block w-1 h-10 bg-white rounded-full opacity-60" />
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">
-                100+
-              </span>
-              <span className="text-sm text-white/90 font-medium mt-1">
-                Destinations
-              </span>
-            </div>
-            <div className="hidden md:block w-1 h-10 bg-white rounded-full opacity-60" />
-            <div className="flex flex-col items-center">
-              <span className="text-3xl md:text-4xl font-bold text-white drop-shadow-md">
-                24/7
-              </span>
-              <span className="text-sm text-white/90 font-medium mt-1">
-                Support
-              </span>
-            </div>
+      {/* Stats - moved outside the image to minimize image height */}
+      <section className="relative z-20 -mt-8 md:-mt-12 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mb-16">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-10 flex flex-wrap justify-center items-center gap-8 sm:gap-12 md:gap-16">
+          <div className="flex flex-col items-center">
+            <span className="text-3xl md:text-5xl font-black text-blue-600">
+              15+
+            </span>
+            <span className="text-xs md:text-sm text-gray-500 font-bold mt-2 uppercase tracking-wide">
+              Years Experience
+            </span>
+          </div>
+          <div className="hidden sm:block w-px h-12 bg-gray-200" />
+          <div className="flex flex-col items-center">
+            <span className="text-3xl md:text-5xl font-black text-blue-600">
+              1000+
+            </span>
+            <span className="text-xs md:text-sm text-gray-500 font-bold mt-2 uppercase tracking-wide">
+              Happy Customers
+            </span>
+          </div>
+          <div className="hidden md:block w-px h-12 bg-gray-200" />
+          <div className="flex flex-col items-center">
+            <span className="text-3xl md:text-5xl font-black text-blue-600">
+              100+
+            </span>
+            <span className="text-xs md:text-sm text-gray-500 font-bold mt-2 uppercase tracking-wide">
+              Destinations
+            </span>
+          </div>
+          <div className="hidden sm:block w-px h-12 bg-gray-200" />
+          <div className="flex flex-col items-center">
+            <span className="text-3xl md:text-5xl font-black text-blue-600">
+              24/7
+            </span>
+            <span className="text-xs md:text-sm text-gray-500 font-bold mt-2 uppercase tracking-wide">
+              Support
+            </span>
           </div>
         </div>
       </section>
-      <section className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8 -mt-16 md:-mt-24 relative z-10 mb-16">
-        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-xl border border-gray-100 p-8 md:p-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
-          <div className="space-y-4 text-gray-700 leading-relaxed">
+
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mb-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">Our Heritage</span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-8">Our Story</h2>
+          <div className="space-y-6 text-base md:text-lg text-gray-600 leading-relaxed text-left md:text-center">
             <p>
               Founded in 2010, Tourenzo has been connecting travelers with
               Ireland's most beautiful destinations for over 15 years. What
@@ -89,15 +94,19 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8 py-8 mb-16">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-10 text-center">
-            Our Values
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-8 text-center group">
-              <div className="w-16 h-16 bg-blue-50 group-hover:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-300">
-                <span className="text-3xl group-hover:text-white transition-colors duration-300">
+
+      <section className="bg-gray-50 py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="text-center mb-12 md:mb-16">
+            <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">Core Principles</span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
+              Our Values
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+            <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100 p-8 text-center group">
+              <div className="w-16 h-16 bg-blue-50 group-hover:bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-colors duration-300 transform group-hover:-rotate-3">
+                <span className="text-blue-600 group-hover:text-white transition-colors duration-300">
                   <ShieldCheckIcon className="w-8 h-8" />
                 </span>
               </div>
@@ -111,9 +120,9 @@ export default function About() {
               </p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-8 text-center group">
-              <div className="w-16 h-16 bg-blue-50 group-hover:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-300">
-                <span className="text-3xl group-hover:text-white transition-colors duration-300">
+            <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100 p-8 text-center group">
+              <div className="w-16 h-16 bg-blue-50 group-hover:bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-colors duration-300 transform group-hover:rotate-3">
+                <span className="text-blue-600 group-hover:text-white transition-colors duration-300">
                   <StarIcon className="w-8 h-8" />
                 </span>
               </div>
@@ -126,9 +135,9 @@ export default function About() {
               </p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-8 text-center group">
-              <div className="w-16 h-16 bg-blue-50 group-hover:bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-300">
-                <span className="text-3xl group-hover:text-white transition-colors duration-300">
+            <div className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 border border-gray-100 p-8 text-center group">
+              <div className="w-16 h-16 bg-blue-50 group-hover:bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-colors duration-300 transform group-hover:-rotate-3">
+                <span className="text-blue-600 group-hover:text-white transition-colors duration-300">
                   <HeartIcon className="w-8 h-8" />
                 </span>
               </div>
@@ -143,63 +152,68 @@ export default function About() {
           </div>
         </div>
       </section>
-      <section className="bg-white py-20 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+
+      <section className="bg-white py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12 md:mb-16">
+              <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">The Tourenzo Difference</span>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
                 Why Choose Us?
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto font-medium">
                 We go above and beyond to ensure your journey in Ireland is
                 nothing short of exceptional.
               </p>
             </div>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="bg-gray-50 rounded-lg p-8 border border-gray-100 hover:border-blue-100 transition-colors">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">
+            <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
+              <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all duration-300 group">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-4">
+                  <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white text-lg font-black transition-colors duration-300">
                     1
                   </span>
                   Professional Drivers
                 </h3>
-                <p className="text-gray-600 leading-relaxed pl-11">
+                <p className="text-gray-600 leading-relaxed pl-14">
                   All our drivers are experienced, licensed, and knowledgeable
                   about Irish history and culture.
                 </p>
               </div>
-              <div className="bg-gray-50 rounded-lg p-8 border border-gray-100 hover:border-blue-100 transition-colors">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">
+
+              <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all duration-300 group">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-4">
+                  <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white text-lg font-black transition-colors duration-300">
                     2
                   </span>
                   Modern Fleet
                 </h3>
-                <p className="text-gray-600 leading-relaxed pl-11">
+                <p className="text-gray-600 leading-relaxed pl-14">
                   Travel in comfort with our well-maintained, modern vehicles
                   equipped with all amenities.
                 </p>
               </div>
-              <div className="bg-gray-50 rounded-lg p-8 border border-gray-100 hover:border-blue-100 transition-colors">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">
+
+              <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all duration-300 group">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-4">
+                  <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white text-lg font-black transition-colors duration-300">
                     3
                   </span>
                   Flexible Booking
                 </h3>
-                <p className="text-gray-600 leading-relaxed pl-11">
+                <p className="text-gray-600 leading-relaxed pl-14">
                   Easy online booking with flexible cancellation policies and
                   instant confirmation.
                 </p>
               </div>
-              <div className="bg-gray-50 rounded-lg p-8 border border-gray-100 hover:border-blue-100 transition-colors">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-3">
-                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-600 text-white text-sm">
+
+              <div className="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all duration-300 group">
+                <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-4">
+                  <span className="flex items-center justify-center w-10 h-10 rounded-xl bg-blue-100 text-blue-700 group-hover:bg-blue-600 group-hover:text-white text-lg font-black transition-colors duration-300">
                     4
                   </span>
                   Competitive Pricing
                 </h3>
-                <p className="text-gray-600 leading-relaxed pl-11">
+                <p className="text-gray-600 leading-relaxed pl-14">
                   Transparent pricing with no hidden fees. Get the best value
                   for your money.
                 </p>

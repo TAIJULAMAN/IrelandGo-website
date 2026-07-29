@@ -112,7 +112,9 @@ export default function Hero() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url(/Images/DayTrip.webp)" }}
-        />
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/10" />
+        </div>
         <div className="absolute inset-0 " />
         <div className="relative z-10 w-full">
           <div className="max-w-7xl mx-auto px-5 py-8 text-center flex flex-col items-center mt-10">
