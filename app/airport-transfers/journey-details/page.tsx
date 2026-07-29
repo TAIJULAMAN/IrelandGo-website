@@ -5,10 +5,11 @@ import { Testimonials } from "@/components/common/testimonials";
 
 export default function JourneyDetails() {
   return (
-    <div>
+    <>
       <JourneyDetailsHero />
       <YourJourneyDetails />
       <Testimonials />
-      <FAQ />    </div>
+      <FAQ />
+    </>
   );
 }

@@ -4,10 +4,10 @@ import FAQ from "@/app/settings/faq/faq";
 
 export default function TransferRoutes() {
   return (
-    <div>
+    <>
       <TransferRoutesHero />
       <PopularTransferRoutes />
       <FAQ />
-    </div>
+    </>
   );
 }
