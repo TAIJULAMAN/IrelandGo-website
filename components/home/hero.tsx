@@ -212,32 +212,32 @@ export function Hero() {
   });
 
   return (
-    <section className="relative overflow-hidden pt-20 lg:pt-24 pb-10 min-h-screen flex flex-col justify-center">
-      <div className="absolute inset-0 z-0">
+    <section className="relative w-full pt-24 md:pt-28 lg:pt-36 pb-20">
+      <div className="absolute top-0 left-0 w-full h-[57vh] z-0">
         <Image
           src="/Images/Home.webp"
           alt="Irish landscape"
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/10" />
       </div>
-      <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 md:px-8 pb-8 pt-0 relative z-10">
+      <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 md:px-8 relative z-10">
         {/* Hero Text */}
-        <div className="text-center mb-4 pt-0">
-          <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
+        <div className="text-center mb-6 md:mb-8">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-3 text-balance leading-tight px-4 drop-shadow-sm">
             Comfortable car transfers in Ireland
           </h1>
-          <p className="text-sm md:text-base text-white mb-2 px-4 font-semibold">
+          <p className="text-base md:text-lg text-white/90 mb-4 px-4 font-medium drop-shadow-md">
             Book private transfers and day tours with professional drivers.
           </p>
         </div>
         <HeroTabs
           activeTab={activeTab}
           onTabChange={handleTabClick}
-          className="flex justify-center mb-4 overflow-x-auto scrollbar-hide scroll-smooth"
+          className="flex justify-start md:justify-center mb-4 overflow-x-auto scrollbar-hide scroll-smooth w-full pb-2 -mx-4 px-4 md:mx-0 md:px-0"
         />
         <div>
           {/* Booking Form */}

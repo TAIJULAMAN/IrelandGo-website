@@ -51,10 +51,10 @@ export default function Contact() {
       <main className="flex-1 relative text-white overflow-hidden px-5 sm:px-6 md:px-8 ">
         <section className="max-w-7xl mx-auto px-5 sm:px-6 md:px-8 mb-16">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-2xl md:text-5xl font-bold text-gray-900 mb-3 md:mb-4 text-balance leading-tight px-4">
+            <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold mb-3 md:mb-4 text-balance leading-tight px-4 text-gray-900">
               Get in Touch
             </h1>
-            <p className="text-base md:text-lg mb-6 md:mb-8 px-4 text-gray-900">
+            <p className="text-sm md:text-base text-gray-900 mb-6 md:mb-8 px-4">
               Have questions? We'd love to hear from you. Send us a message and
               we'll respond as soon as possible.
             </p>
