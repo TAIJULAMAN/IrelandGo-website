@@ -5,11 +5,11 @@ import { Testimonials } from "@/components/common/testimonials";
 
 export default function AirportTransfers() {
   return (
-    <div>
+    <>
       <AirportTransfersHero />
       <AirportTransfersWhyChoose />
       <Testimonials />
       <FAQ />
-    </div>
+    </>
   );
 }

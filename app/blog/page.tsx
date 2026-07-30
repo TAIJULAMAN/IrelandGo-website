@@ -40,10 +40,10 @@ export default function BlogListingPage() {
           <div className="absolute inset-0 bg-black/40 z-0" />
           <div className="max-w-7xl mx-auto py-10 px-5 md:px-0 flex flex-col items-center justify-center text-center gap-6 md:gap-8 relative z-10">
             <div className="space-y-4 max-w-4xl mx-auto">
-              <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-5">
+              <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold mb-3 md:mb-4 text-balance leading-tight px-5">
                 Explore Ireland with Tourenzo
               </h1>
-              <p className="text-base md:text-lg text-white mb-6 md:mb-8 px-4">
+              <p className="text-sm md:text-base text-whitee mb-6 md:mb-8 px-4">
                 Insider tips, local guides, and inspiring stories to help you plan the perfect journey across the Emerald Isle.
               </p>
             </div>

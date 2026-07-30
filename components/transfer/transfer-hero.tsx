@@ -112,12 +112,12 @@ export default function TransfersHero() {
       </div>
       <div className="max-w-7xl w-full mx-auto px-5 sm:px-6 md:px-8 flex flex-col items-center text-center gap-8 md:gap-12 relative z-10 mt-10">
         <div className="space-y-4 md:space-y-6 max-w-4xl">
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight drop-shadow-2xl">
+          <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-tight tracking-tight drop-shadow-2xl">
             Reliable Private Transfers Across
             <br className="hidden sm:block" />
             <span className=""> Ireland</span>
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-blue-50 px-4 font-medium drop-shadow-md leading-relaxed">
+          <p className="text-sm md:text-base text-white px-4 font-medium drop-shadow-md leading-relaxed">
             Book airport, city-to-city, and private transfers across Ireland
             with ease.
           </p>

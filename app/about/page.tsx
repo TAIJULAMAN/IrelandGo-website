@@ -25,7 +25,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Stats - moved outside the image to minimize image height */}
       <section className="relative z-20 -mt-8 md:-mt-12 max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mb-16">
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 md:p-10 flex flex-wrap justify-center items-center gap-8 sm:gap-12 md:gap-16">
           <div className="flex flex-col items-center">
@@ -68,14 +67,18 @@ export default function About() {
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mb-20">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">Our Heritage</span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-8">Our Story</h2>
+          <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">
+            Our Heritage
+          </span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-8">
+            Our Story
+          </h2>
           <div className="space-y-6 text-base md:text-lg text-gray-600 leading-relaxed text-left md:text-center">
             <p>
               Founded in 2010, Tourenzo has been connecting travelers with
               Ireland's most beautiful destinations for over 15 years. What
-              started as a small family-run business with just two vehicles
-              has grown into one of Ireland's most trusted transfer and tour
+              started as a small family-run business with just two vehicles has
+              grown into one of Ireland's most trusted transfer and tour
               services.
             </p>
             <p>
@@ -85,11 +88,11 @@ export default function About() {
               lasting memories.
             </p>
             <p>
-              Today, we operate a modern fleet of comfortable vehicles and
-              work with a team of experienced, friendly drivers who are as
-              passionate about Ireland as we are. Whether you're traveling for
-              business or pleasure, we're committed to making your journey
-              safe, comfortable, and memorable.
+              Today, we operate a modern fleet of comfortable vehicles and work
+              with a team of experienced, friendly drivers who are as passionate
+              about Ireland as we are. Whether you're traveling for business or
+              pleasure, we're committed to making your journey safe,
+              comfortable, and memorable.
             </p>
           </div>
         </div>
@@ -98,7 +101,9 @@ export default function About() {
       <section className="bg-gray-50 py-16 md:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="text-center mb-12 md:mb-16">
-            <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">Core Principles</span>
+            <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">
+              Core Principles
+            </span>
             <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900">
               Our Values
             </h2>
@@ -114,9 +119,8 @@ export default function About() {
                 Safety First
               </h3>
               <p className="text-gray-600 leading-relaxed">
-                Your safety is our top priority. All our vehicles are
-                regularly maintained and our drivers are fully licensed and
-                insured.
+                Your safety is our top priority. All our vehicles are regularly
+                maintained and our drivers are fully licensed and insured.
               </p>
             </div>
 
@@ -157,7 +161,9 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12 md:mb-16">
-              <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">The Tourenzo Difference</span>
+              <span className="text-blue-600 font-bold tracking-wider uppercase text-sm mb-2 block">
+                The Tourenzo Difference
+              </span>
               <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
                 Why Choose Us?
               </h2>
