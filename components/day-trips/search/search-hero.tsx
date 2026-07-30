@@ -1,9 +1,21 @@
 "use client";
 
-import { MapPin, Flag, Calendar as CalendarIcon, ChevronDown, Plus, Minus, Search } from "lucide-react";
+import {
+  MapPin,
+  Flag,
+  Calendar as CalendarIcon,
+  ChevronDown,
+  Plus,
+  Minus,
+  Search,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { useState, useRef, useEffect } from "react";
@@ -12,7 +24,6 @@ import { cn } from "@/lib/utils";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { useSearchParams } from "next/navigation";
-
 
 export function SearchHero({ trip }: { trip?: any }) {
   const searchParams = useSearchParams();
@@ -30,11 +41,17 @@ export function SearchHero({ trip }: { trip?: any }) {
   const [adults, setAdults] = useState<number>(adultsParam);
   const [children, setChildren] = useState<number>(childrenParam);
   const [extraBags, setExtraBags] = useState<number>(extraBagsParam);
-  const [date, setDate] = useState<Date | undefined>(dateParam ? new Date(dateParam) : undefined);
+  const [date, setDate] = useState<Date | undefined>(
+    dateParam ? new Date(dateParam) : undefined,
+  );
   const [time, setTime] = useState(timeParam);
 
-  const [pickupLocation, setPickupLocation] = useState(pickupParam || trip?.from || "");
-  const [dropoffLocation, setDropoffLocation] = useState(dropoffParam || trip?.to || "");
+  const [pickupLocation, setPickupLocation] = useState(
+    pickupParam || trip?.from || "",
+  );
+  const [dropoffLocation, setDropoffLocation] = useState(
+    dropoffParam || trip?.to || "",
+  );
   const [showPickupDropdown, setShowPickupDropdown] = useState(false);
   const [showDropoffDropdown, setShowDropoffDropdown] = useState(false);
   const [selectedPickupIndex, setSelectedPickupIndex] = useState(-1);
@@ -83,10 +100,12 @@ export function SearchHero({ trip }: { trip?: any }) {
     if (!showPickupDropdown || pickupData.length === 0) return;
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedPickupIndex(prev => (prev < pickupData.length - 1 ? prev + 1 : prev));
+      setSelectedPickupIndex((prev) =>
+        prev < pickupData.length - 1 ? prev + 1 : prev,
+      );
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedPickupIndex(prev => (prev > 0 ? prev - 1 : -1));
+      setSelectedPickupIndex((prev) => (prev > 0 ? prev - 1 : -1));
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (selectedPickupIndex >= 0) {
@@ -104,10 +123,12 @@ export function SearchHero({ trip }: { trip?: any }) {
     if (!showDropoffDropdown || dropoffData.length === 0) return;
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setSelectedDropoffIndex(prev => (prev < dropoffData.length - 1 ? prev + 1 : prev));
+      setSelectedDropoffIndex((prev) =>
+        prev < dropoffData.length - 1 ? prev + 1 : prev,
+      );
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setSelectedDropoffIndex(prev => (prev > 0 ? prev - 1 : -1));
+      setSelectedDropoffIndex((prev) => (prev > 0 ? prev - 1 : -1));
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (selectedDropoffIndex >= 0) {
@@ -123,10 +144,20 @@ export function SearchHero({ trip }: { trip?: any }) {
   // Click outside logic
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (pickupDropdownRef.current && !pickupDropdownRef.current.contains(event.target as Node) && pickupInputRef.current && !pickupInputRef.current.contains(event.target as Node)) {
+      if (
+        pickupDropdownRef.current &&
+        !pickupDropdownRef.current.contains(event.target as Node) &&
+        pickupInputRef.current &&
+        !pickupInputRef.current.contains(event.target as Node)
+      ) {
         setShowPickupDropdown(false);
       }
-      if (dropoffDropdownRef.current && !dropoffDropdownRef.current.contains(event.target as Node) && dropoffInputRef.current && !dropoffInputRef.current.contains(event.target as Node)) {
+      if (
+        dropoffDropdownRef.current &&
+        !dropoffDropdownRef.current.contains(event.target as Node) &&
+        dropoffInputRef.current &&
+        !dropoffInputRef.current.contains(event.target as Node)
+      ) {
         setShowDropoffDropdown(false);
       }
     };
@@ -163,10 +194,17 @@ export function SearchHero({ trip }: { trip?: any }) {
     }
   }, [date]);
 
-  const isFormValid = pickupLocation.trim() !== "" && dropoffLocation.trim() !== "" && date !== undefined && time !== "" && !isTimeDisabled(date, time);
+  const isFormValid =
+    pickupLocation.trim() !== "" &&
+    dropoffLocation.trim() !== "" &&
+    date !== undefined &&
+    time !== "" &&
+    !isTimeDisabled(date, time);
 
   return (
-    <section className="relative w-full h-[80vh] flex flex-col">      {/* Background image */}
+    <section className="relative w-full h-[80vh] flex flex-col">
+      {" "}
+      {/* Background image */}
       <div className="absolute inset-0 z-0">
         <img
           src="/day-trips.jpg"
@@ -175,7 +213,6 @@ export function SearchHero({ trip }: { trip?: any }) {
         />
         <div className="absolute inset-0 bg-slate-900/40" />
       </div>
-
       {/* Content */}
       <div className="relative z-10 flex-grow flex flex-col items-center justify-center px-6 pt-20">
         <div className="text-center max-w-4xl mb-8">
@@ -184,7 +221,8 @@ export function SearchHero({ trip }: { trip?: any }) {
           </h1>
           <p className="text-white/90 text-lg md:text-xl max-w-2xl mx-auto">
             {trip?.description
-              ? trip.description.replace(/<[^>]*>?/gm, "").slice(0, 100) + (trip.description.length > 100 ? "..." : "")
+              ? trip.description.replace(/<[^>]*>?/gm, "").slice(0, 100) +
+                (trip.description.length > 100 ? "..." : "")
               : "Browse our curated collection of private transfers and tours across Ireland's most iconic locations."}
           </p>
         </div>
@@ -214,11 +252,17 @@ export function SearchHero({ trip }: { trip?: any }) {
               </label>
 
               {showPickupDropdown && pickupStatus === "OK" && (
-                <div ref={pickupDropdownRef} className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto">
+                <div
+                  ref={pickupDropdownRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto"
+                >
                   {pickupData.map((suggestion, index) => (
                     <button
                       key={suggestion.place_id}
-                      className={cn("w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center gap-3 border-b border-slate-50 last:border-0", index === selectedPickupIndex && "bg-blue-50")}
+                      className={cn(
+                        "w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center gap-3 border-b border-slate-50 last:border-0",
+                        index === selectedPickupIndex && "bg-blue-50",
+                      )}
                       onClick={() => {
                         setPickupLocation(suggestion.description);
                         setPickupValue(suggestion.description, false);
@@ -228,8 +272,12 @@ export function SearchHero({ trip }: { trip?: any }) {
                     >
                       <MapPin className="w-4 h-4 text-slate-400" />
                       <div>
-                        <div className="text-sm font-medium text-slate-900">{suggestion.structured_formatting.main_text}</div>
-                        <div className="text-xs text-slate-500">{suggestion.structured_formatting.secondary_text}</div>
+                        <div className="text-sm font-medium text-slate-900">
+                          {suggestion.structured_formatting.main_text}
+                        </div>
+                        <div className="text-xs text-slate-500">
+                          {suggestion.structured_formatting.secondary_text}
+                        </div>
                       </div>
                     </button>
                   ))}
@@ -259,11 +307,17 @@ export function SearchHero({ trip }: { trip?: any }) {
               </label>
 
               {showDropoffDropdown && dropoffStatus === "OK" && (
-                <div ref={dropoffDropdownRef} className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto">
+                <div
+                  ref={dropoffDropdownRef}
+                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto"
+                >
                   {dropoffData.map((suggestion, index) => (
                     <button
                       key={suggestion.place_id}
-                      className={cn("w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center gap-3 border-b border-slate-50 last:border-0", index === selectedDropoffIndex && "bg-blue-50")}
+                      className={cn(
+                        "w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors flex items-center gap-3 border-b border-slate-50 last:border-0",
+                        index === selectedDropoffIndex && "bg-blue-50",
+                      )}
                       onClick={() => {
                         setDropoffLocation(suggestion.description);
                         setDropoffValue(suggestion.description, false);
@@ -273,8 +327,12 @@ export function SearchHero({ trip }: { trip?: any }) {
                     >
                       <MapPin className="w-4 h-4 text-slate-400" />
                       <div>
-                        <div className="text-sm font-medium text-slate-900">{suggestion.structured_formatting.main_text}</div>
-                        <div className="text-xs text-slate-500">{suggestion.structured_formatting.secondary_text}</div>
+                        <div className="text-sm font-medium text-slate-900">
+                          {suggestion.structured_formatting.main_text}
+                        </div>
+                        <div className="text-xs text-slate-500">
+                          {suggestion.structured_formatting.secondary_text}
+                        </div>
                       </div>
                     </button>
                   ))}
@@ -289,15 +347,21 @@ export function SearchHero({ trip }: { trip?: any }) {
                   <Button
                     variant={"ghost"}
                     className={cn(
-                      "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-slate-700",
-                      !date && "text-slate-500"
+                      "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-slate-700 text-xs sm:text-sm",
+                      !date && "text-slate-500",
                     )}
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
+                    <CalendarIcon className="mr-1.5 sm:mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                     {date ? (
-                      <span>
-                        {format(date, "PPP")}{" "}
-                        <span className="text-slate-400 mx-1">|</span> {time}
+                      <span className="truncate">
+                        <span className="inline md:hidden lg:inline xl:hidden 2xl:inline">
+                          {format(date, "PPP")}
+                        </span>
+                        <span className="hidden md:inline lg:hidden xl:inline 2xl:hidden">
+                          {format(date, "PP")}
+                        </span>{" "}
+                        <span className="text-slate-400 mx-0.5 sm:mx-1">|</span>{" "}
+                        {time}
                       </span>
                     ) : (
                       <span>Pick a date & time</span>
@@ -324,7 +388,9 @@ export function SearchHero({ trip }: { trip?: any }) {
                               const minute = (i % 4) * 15;
                               return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
                             })
-                            .filter((timeString) => !isTimeDisabled(date, timeString));
+                            .filter(
+                              (timeString) => !isTimeDisabled(date, timeString),
+                            );
 
                           if (availableTimes.length === 0) {
                             return (
@@ -337,12 +403,14 @@ export function SearchHero({ trip }: { trip?: any }) {
                           return availableTimes.map((timeString) => (
                             <Button
                               key={timeString}
-                              variant={time === timeString ? "default" : "ghost"}
+                              variant={
+                                time === timeString ? "default" : "ghost"
+                              }
                               className={cn(
                                 "justify-center h-8 text-sm",
                                 time === timeString
                                   ? "bg-blue-600 hover:bg-blue-700 text-white"
-                                  : "hover:bg-blue-50 text-slate-600"
+                                  : "hover:bg-blue-50 text-slate-600",
                               )}
                               onClick={() => {
                                 setTime(timeString);
@@ -386,7 +454,10 @@ export function SearchHero({ trip }: { trip?: any }) {
                 </button>
               </Link>
             ) : (
-              <button className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-blue-600/50 text-white/70 font-bold shadow-none cursor-not-allowed w-full sm:w-auto" disabled>
+              <button
+                className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-blue-600/50 text-white/70 font-bold shadow-none cursor-not-allowed w-full sm:w-auto"
+                disabled
+              >
                 <Search className="w-4 h-4 mr-2" />
                 Find Your Trip
               </button>

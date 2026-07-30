@@ -18,7 +18,7 @@ export function TripTypeSelector({
 }: TripTypeSelectorProps) {
   if (activeTab === "transfer") {
     return (
-      <div className="flex gap-2 mb-5">
+      <div className="flex gap-2 mb-4">
         <button
           onClick={() => setTripType("one-way")}
           className={`flex-1 py-3 rounded-lg font-semibold text-sm transition-all ${tripType === "one-way"
@@ -43,8 +43,8 @@ export function TripTypeSelector({
 
   if (activeTab === "hourly") {
     return (
-      <div className="mb-5">
-        <label className="text-start text-sm font-medium text-gray-700 mb-2 block">
+      <div className="mb-4">
+        <label className="text-start text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">
           Duration (hours)
         </label>
         <div className="flex items-center gap-3 p-1 bg-gray-50 rounded-lg w-full md:w-fit">

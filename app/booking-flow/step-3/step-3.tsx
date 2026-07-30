@@ -450,8 +450,8 @@ export default function Step3() {
     }
     if (imgUrl) return imgUrl;
 
-    if (stop.latitude && stop.longitude) {
-      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
+    if (stop.latitude && stop.longitude && process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY !== "undefined") {
+      const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
       return `https://maps.googleapis.com/maps/api/staticmap?center=${stop.latitude},${stop.longitude}&zoom=15&size=500x300&markers=color:blue%7C${stop.latitude},${stop.longitude}&key=${apiKey}`;
     }
     return "/placeholder.jpg";

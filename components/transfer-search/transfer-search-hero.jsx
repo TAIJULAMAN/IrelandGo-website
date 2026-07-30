@@ -319,10 +319,10 @@ export default function TransferSearchHero() {
         <div className="max-w-7xl mx-auto px-5 py-16 relative z-10">
           {/* Hero Text */}
           <div className="text-center mb-10 pt-5">
-            <h1 className="text-2xl md:text-5xl font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
+            <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-3 md:mb-4 text-balance leading-tight px-4">
               Search Private Car Transfers
             </h1>
-            <p className="text-base md:text-lg text-white mb-6 md:mb-8 px-4">
+            <p className="text-sm md:text-base text-white mb-6 md:mb-8 px-4">
               Seamless city-to-city and airport transfers across Ireland and beyond.
             </p>
           </div>
@@ -482,15 +482,20 @@ export default function TransferSearchHero() {
                         <Button
                           variant={"ghost"}
                           className={cn(
-                            "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-gray-700",
+                            "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-gray-700 text-xs sm:text-sm",
                             !date && "text-muted-foreground",
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
+                          <CalendarIcon className="mr-1.5 sm:mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                           {date ? (
-                            <span>
-                              {format(date, "PPP")}{" "}
-                              <span className="text-gray-400 mx-1">|</span> {time}
+                            <span className="truncate">
+                              <span className="inline md:hidden lg:inline xl:hidden 2xl:inline">
+                                {format(date, "PPP")}
+                              </span>
+                              <span className="hidden md:inline lg:hidden xl:inline 2xl:hidden">
+                                {format(date, "PP")}
+                              </span>{" "}
+                              <span className="text-gray-400 mx-0.5 sm:mx-1">|</span> {time}
                             </span>
                           ) : (
                             <span>Pick a date</span>
@@ -752,15 +757,20 @@ export default function TransferSearchHero() {
                         <Button
                           variant={"ghost"}
                           className={cn(
-                            "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-gray-700",
+                            "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-gray-700 text-xs sm:text-sm",
                             !returnDate && "text-muted-foreground",
                           )}
                         >
-                          <CalendarIcon className="mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
+                          <CalendarIcon className="mr-1.5 sm:mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
                           {returnDate ? (
-                            <span>
-                              {format(returnDate, "PPP")}{" "}
-                              <span className="text-gray-400 mx-1">|</span> {returnTime}
+                            <span className="truncate">
+                              <span className="inline md:hidden lg:inline xl:hidden 2xl:inline">
+                                {format(returnDate, "PPP")}
+                              </span>
+                              <span className="hidden md:inline lg:hidden xl:inline 2xl:hidden">
+                                {format(returnDate, "PP")}
+                              </span>{" "}
+                              <span className="text-gray-400 mx-0.5 sm:mx-1">|</span> {returnTime}
                             </span>
                           ) : (
                             <span>Pick a return date</span>

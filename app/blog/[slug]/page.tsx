@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useGetSingleBlogQuery } from "@/Redux/features/blogs/blogsApi";
+import Loading from "@/components/common/loading";
 
 export default function BlogDetailPage() {
   const params = useParams();
@@ -26,33 +27,7 @@ export default function BlogDetailPage() {
 
   // Loading state
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col bg-white">
-        <main className="flex-grow pt-24 sm:pt-28 md:pt-32 pb-16">
-          <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 animate-pulse">
-            {/* Breadcrumb skeleton */}
-            <div className="max-w-4xl mx-auto mb-6">
-              <div className="h-4 bg-gray-200 rounded w-48" />
-            </div>
-            {/* Title skeleton */}
-            <div className="max-w-4xl mx-auto mb-8 space-y-3">
-              <div className="h-10 bg-gray-200 rounded w-full" />
-              <div className="h-10 bg-gray-200 rounded w-2/3" />
-            </div>
-            {/* Image skeleton */}
-            <div className="max-w-5xl mx-auto rounded-lg bg-gray-200 aspect-[16/10] sm:aspect-[16/9] mb-10" />
-            {/* Content skeleton */}
-            <div className="max-w-3xl mx-auto space-y-4">
-              <div className="h-4 bg-gray-200 rounded w-full" />
-              <div className="h-4 bg-gray-200 rounded w-full" />
-              <div className="h-4 bg-gray-200 rounded w-5/6" />
-              <div className="h-4 bg-gray-200 rounded w-full" />
-              <div className="h-4 bg-gray-200 rounded w-4/6" />
-            </div>
-          </div>
-        </main>
-      </div>
-    );
+    return <Loading />;
   }
 
   // Error / Not found
@@ -197,6 +172,7 @@ export default function BlogDetailPage() {
             </div>
           </div>
         </article>
-      </main>    </div>
+      </main>{" "}
+    </div>
   );
 }
