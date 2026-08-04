@@ -1,6 +1,5 @@
 "use client";
 
-import { Header } from "../layout/header";
 import { Search, MapPin, Plane } from "lucide-react";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -8,21 +7,9 @@ import { useRouter } from "next/navigation";
 export default function AirportTransfersHero() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSearch = (location?: string) => {
-    const searchLocation = location || searchQuery;
-    if (searchLocation.trim()) {
-      router.push(
-        `/transfer/transfer-search?pickup=${encodeURIComponent(searchLocation)}&serviceType=AIRPORT_TRANSFER`,
-      );
-    }
-  };
-  const handlePopularRoute = (route: string) => {
-    router.push(
-      `/transfer/transfer-search?pickup=${encodeURIComponent(route)}&serviceType=AIRPORT_TRANSFER`,
-    );
-  };
   const popularAirports = [
     "Shannon Airport",
     "Dublin Airport",
@@ -30,6 +17,30 @@ export default function AirportTransfersHero() {
     "Knock Airport",
     "Kerry Airport",
   ];
+
+  const handleSearch = (location?: string) => {
+    const searchLocation = location || searchQuery;
+    if (searchLocation.trim()) {
+      const isEligible = popularAirports.some((loc) =>
+        searchLocation.toLowerCase().includes(loc.toLowerCase())
+      );
+
+      if (!isEligible) {
+        setErrorMsg("Transfers are not available for this location.");
+        return;
+      }
+
+      router.push(
+        `/transfer/transfer-search?pickup=${encodeURIComponent(searchLocation)}&serviceType=AIRPORT_TRANSFER`,
+      );
+    }
+  };
+  const handlePopularRoute = (route: string) => {
+    setErrorMsg("");
+    router.push(
+      `/transfer/transfer-search?pickup=${encodeURIComponent(route)}&serviceType=AIRPORT_TRANSFER`,
+    );
+  };
 
   return (
     <section className="relative min-h-[100vh] flex items-center justify-center text-white overflow-hidden py-24">
@@ -73,6 +84,7 @@ export default function AirportTransfersHero() {
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
+                    setErrorMsg("");
                   }}
                   onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                 />
@@ -87,6 +99,12 @@ export default function AirportTransfersHero() {
               <span>Find Transfers</span>
             </button>
           </div>
+
+          {errorMsg && (
+            <div className="text-red-500 text-sm font-medium bg-red-50 px-4 py-3 rounded-lg border border-red-200">
+              {errorMsg}
+            </div>
+          )}
 
           {/* Bottom row: popular routes */}
           <div className="flex flex-wrap items-center gap-2 sm:gap-3">

@@ -4,29 +4,13 @@ import { Search, MapPin } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { FeatureBadges } from "../common/feature-badges";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { cn } from "@/lib/utils";
 import { HeroTabs } from "../common/hero-tabs";
-
-const isOutOfRange = (desc: string) => {
-  const lower = desc.toLowerCase();
-  if (lower.includes("ireland")) return false;
-  const niTownsAndCounties = [
-    "antrim", "armagh", "down", "fermanagh", "londonderry", "derry", "tyrone",
-    "aughnacloy", "ballycastle", "ballyclare", "ballymena", "ballymoney", "ballynahinch",
-    "banbridge", "bangor", "belfast", "bushmills", "caledon", "carrickfergus", "castlederg",
-    "castlewellan", "clogher", "coleraine", "cookstown", "craigavon", "crumlin",
-    "donaghadee", "downpatrick", "dromore", "dungannon", "enniskillen", "fivemiletown",
-    "hillsborough", "holywood", "larne", "limavady", "lisburn", "maghera", "magherafelt",
-    "newcastle", "newry", "newtownabbey", "newtownards", "omagh", "portrush", "portstewart",
-    "strabane"
-  ];
-  if (niTownsAndCounties.some(town => lower.includes(town))) return false;
-  if (lower.includes("uk") || lower.includes("united kingdom")) return true;
-  return false;
-};
+import { isOutOfRange } from "@/lib/location-utils";
 
 
 export default function Hero() {
@@ -37,7 +21,7 @@ export default function Hero() {
 
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLUListElement>(null);
 
   const { isLoaded } = useGoogleMaps();
 
@@ -59,6 +43,8 @@ export default function Hero() {
     defaultValue: location,
     initOnMount: isLoaded,
   });
+
+  const validSuggestions = data.filter(s => !isOutOfRange(s.description));
 
   const handleTabClick = (id: string) => {
     if (id === "transfer") {
@@ -82,7 +68,7 @@ export default function Hero() {
     } else if (e.key === "Enter") {
       e.preventDefault();
       if (selectedIndex >= 0) {
-        const selected = data[selectedIndex];
+        const selected = validSuggestions[selectedIndex];
         setLocation(selected.description);
         setValue(selected.description, false);
         clearSuggestions();
@@ -109,10 +95,14 @@ export default function Hero() {
   return (
     <>
       <section className="relative overflow-hidden min-h-[100vh] flex flex-col justify-center py-24">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url(/Images/DayTrip.webp)" }}
-        >
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/Images/DayTrip.webp"
+            alt="Irish landscape"
+            fill
+            priority
+            className="object-cover"
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/10" />
         </div>
         <div className="absolute inset-0 " />
@@ -139,6 +129,9 @@ export default function Hero() {
                 <input
                   ref={inputRef}
                   type="text"
+                  role="combobox"
+                  aria-expanded={showDropdown}
+                  aria-controls="location-listbox"
                   placeholder="Explore from..."
                   value={location}
                   onChange={(e) => {
@@ -159,23 +152,27 @@ export default function Hero() {
                 </Link>
               </div>
 
-              {(status === "ZERO_RESULTS" || (status === "OK" && data.filter(s => !isOutOfRange(s.description)).length === 0)) && location.trim().length > 2 && (
+              {(status === "ZERO_RESULTS" || (status === "OK" && validSuggestions.length === 0)) && location.trim().length > 2 && (
                 <div className="flex text-start justify-start px-6">
-                  <p className="text-red-500 text-xs mt-2 font-medium">location is not in our range</p>
+                  <p className="text-red-500 text-xs mt-2 font-medium">This location is outside our current service area.</p>
                 </div>
               )}
 
               {/* Autocomplete Dropdown */}
-              {showDropdown && status === "OK" && data.filter(s => !isOutOfRange(s.description)).length > 0 && (
-                <div
+              {showDropdown && status === "OK" && validSuggestions.length > 0 && (
+                <ul
+                  id="location-listbox"
+                  role="listbox"
                   ref={dropdownRef}
                   className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 overflow-hidden text-left"
                 >
-                  {data.filter(s => !isOutOfRange(s.description)).map((suggestion, index) => (
-                    <button
+                  {validSuggestions.map((suggestion, index) => (
+                    <li
                       key={suggestion.place_id}
+                      role="option"
+                      aria-selected={index === selectedIndex}
                       className={cn(
-                        "w-full px-5 py-3 hover:bg-blue-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-0",
+                        "w-full px-5 py-3 hover:bg-blue-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-0 cursor-pointer",
                         index === selectedIndex && "bg-blue-50"
                       )}
                       onClick={() => {
@@ -194,9 +191,9 @@ export default function Hero() {
                           {suggestion.structured_formatting.secondary_text}
                         </div>
                       </div>
-                    </button>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </div>
             <FeatureBadges />

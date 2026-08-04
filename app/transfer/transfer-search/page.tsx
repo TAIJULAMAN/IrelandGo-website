@@ -6,11 +6,12 @@ import { Suspense } from "react";
 
 export default function TransferSearch() {
     return (
-        <div>
+        <>
             <Suspense fallback={<div className="min-h-screen bg-gray-100" />}>
                 <TransferSearchHero />
             </Suspense>
             <PopularTransferRoutes />
-            <FAQ />        </div>
+            <FAQ />
+        </>
     );
 }

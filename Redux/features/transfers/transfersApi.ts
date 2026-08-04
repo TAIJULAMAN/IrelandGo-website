@@ -9,7 +9,25 @@ const transfersApi = baseApi.injectEndpoints({
       }),
       providesTags: ["transfers"],
     }),
+    getAllPrivateTransferBasedOnLocation: builder.query({
+      query: (params) => ({
+        url: "trip-services/private-transfer/from-location-group",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["transfers"],
+    }),
+    getAllAirportTransferBasedOnLocation: builder.query({
+      query: (params) => ({
+        url: "trip-services/airport-transfer/from-location-group",
+        method: "GET",
+        params,
+      }),
+      providesTags: ["transfers"],
+    }),
   }),
 });
 
-export const { useGetTransfersBasedOnLocationQuery } = transfersApi;
+export const { useGetTransfersBasedOnLocationQuery, useGetAllPrivateTransferBasedOnLocationQuery, useGetAllAirportTransferBasedOnLocationQuery } = transfersApi;
+
+

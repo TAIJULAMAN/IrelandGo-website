@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car, ChevronLeft, ChevronRight, Minus, AlertCircle, Clock, Map, Search } from "lucide-react";
+import { MapPin, CheckCircle2, Loader2, Plus, Pencil, X, Users, Briefcase, Car, ChevronLeft, ChevronRight, Minus, AlertCircle, Clock, Map, Search, CloudCog } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 import { useSearchPopularStopsMutation, useGetSingleStoppageQuery, useAddExtraStoppagesMutation } from "@/Redux/features/stopage/stopageApi";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
@@ -333,6 +334,9 @@ export default function Step3() {
       const stoppageId = addedStoppage?.id || addedStoppage?._id || `added-${Date.now()}`;
       const stoppageName = addedStoppage?.name || addedStoppage?.googleName || trimmed;
       const stoppageImage = addedStoppage?.image || [];
+
+
+      console.log("image", stoppageImage)
       const stoppageAddress = addedStoppage?.address || "";
 
       const customStop = {
@@ -412,8 +416,7 @@ export default function Step3() {
         transportPrice = parseFloat(carPriceParam);
       } else {
         const pricePerKmSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.pricePerKm, 0);
-        const extraBagsCost = extraBags * 10;
-        transportPrice = Math.round(basePriceSum + (pricePerKmSum * distanceKm)) + extraBagsCost;
+        transportPrice = Math.round(basePriceSum + (pricePerKmSum * distanceKm));
       }
     }
   }
@@ -442,12 +445,21 @@ export default function Step3() {
 
   const getStopImageUrl = (stop: any) => {
     let imgUrl = null;
-    if (stop.image && Array.isArray(stop.image)) {
-      const validImages = stop.image.filter((img: any) => img && typeof img === "string" && img.startsWith("http"));
-      if (validImages.length > 0) {
-        imgUrl = validImages[0];
+    if (stop.image) {
+      if (typeof stop.image === "string") {
+        if (stop.image.startsWith("http") || stop.image.startsWith("/")) {
+          imgUrl = stop.image;
+        }
+      } else if (Array.isArray(stop.image) && stop.image.length > 0) {
+        const firstImg = stop.image[0];
+        if (typeof firstImg === "string" && (firstImg.startsWith("http") || firstImg.startsWith("/"))) {
+          imgUrl = firstImg;
+        } else if (firstImg && typeof firstImg === "object" && firstImg.url) {
+          imgUrl = firstImg.url;
+        }
       }
     }
+    
     if (imgUrl) return imgUrl;
 
     if (stop.latitude && stop.longitude && process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY !== "undefined") {
@@ -613,15 +625,12 @@ export default function Step3() {
                     >
                       {/* Image – full width on sm+, fixed size on mobile */}
                       <div className="relative w-32 shrink-0 sm:w-full h-32 sm:h-44">
-                        <img
-                          src={stop?.image?.[0] ?? getStopImageUrl(stop)}
+                        <Image
+                          src={getStopImageUrl(stop)}
                           alt={stop.name}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            if (!e.currentTarget.src.includes("/placeholder.jpg")) {
-                              e.currentTarget.src = "/placeholder.jpg";
-                            }
-                          }}
+                          fill
+                          sizes="(max-width: 640px) 128px, 33vw"
+                          className="object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent sm:from-black/80 sm:via-black/20" />
                         {stop.id === mostPopularId && (
@@ -836,10 +845,12 @@ export default function Step3() {
                           className="relative flex items-center gap-3 bg-white border border-gray-100 rounded-lg p-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.06)] transition-all"
                         >
                           <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-gray-50 border border-gray-100">
-                            <img
+                            <Image
                               src={imageUrl}
                               alt={stop.name}
-                              className="w-full h-full object-cover"
+                              fill
+                              sizes="48px"
+                              className="object-cover"
                             />
                           </div>
                           <div className="flex-1 min-w-0 pr-6">

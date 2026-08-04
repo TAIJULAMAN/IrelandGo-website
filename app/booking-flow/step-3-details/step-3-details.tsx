@@ -123,8 +123,7 @@ export default function Step3Details() {
   if (carPriceParam) {
     transportPrice = parseFloat(carPriceParam);
   } else {
-    const extraBagsCost = extraBags * 10;
-    transportPrice = Math.round(basePriceSum + pricePerKmSum * distanceKm) + extraBagsCost;
+    transportPrice = Math.round(basePriceSum + pricePerKmSum * distanceKm);
   }
 
   const isReturn = tripType === "return";
@@ -490,11 +489,11 @@ export default function Step3Details() {
             </div>
 
             {/* Bottom navigation – inline below the form card, matching card width */}
-            <div className="bg-white rounded-lg shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex items-center justify-between border border-gray-100 mt-4">
+            <div className="bg-white rounded-lg shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-4 sm:p-4 sm:px-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-3 sm:gap-0 border border-gray-100 mt-4">
               <Button
                 asChild
-                variant="ghost"
-                className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+                variant="outline"
+                className="w-full text-white sm:w-auto border-blue-600 hover:bg-blue-50 px-6 sm:px-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
               >
                 <Link href={`/booking-flow/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "step-2" : "step-3"}?${searchParams.toString()}`}>
                   ← Back
@@ -505,7 +504,7 @@ export default function Step3Details() {
                 type="button"
                 onClick={handleBooking}
                 disabled={isLoading || !isFormValid}
-                className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+                className="w-full sm:w-auto text-white bg-blue-600 hover:bg-blue-700 px-6 sm:px-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
               >
                 {isLoading ? "Processing..." : "Complete Booking"}
               </Button>

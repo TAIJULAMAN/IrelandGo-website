@@ -1,21 +1,45 @@
-# Render Blocking CSS Optimization Solution
+# Render-Blocking CSS Solution
 
-## The Problem
-Lighthouse reported render-blocking requests that delay the First Contentful Paint (FCP) and Largest Contentful Paint (LCP). Specifically, the external CSS from `unpkg.com` (`leaflet.css`) was blocking the page's initial render. Every external resource added via a `<link rel="stylesheet">` tag stops the HTML parser until the CSS is downloaded and parsed.
+The Lighthouse warning **"Render-blocking requests"** pointing to a `.css` file like `chunks/[root-of...]__.css` is happening because you are testing your application in **Development Mode** (`npm run dev`).
 
-## The Solution
+## The Short Answer
+**This is a false positive caused by Next.js Development Mode. When you deploy your app to production, Next.js will automatically fix this for you.**
 
-To mitigate render-blocking CSS, we have implemented the following strategies:
+---
 
-1. **Local Bundling of External CSS:**
-   Instead of loading CSS from a third-party CDN like `unpkg.com` which requires an additional DNS lookup, connection, and TLS handshake, we downloaded the `leaflet.css` file and placed it directly in the project (`public/leaflet.css` or importing it into `globals.css`). Next.js can then bundle this CSS with the rest of the application's styles, significantly reducing the critical path network overhead.
+## Why does this happen?
 
-2. **Next.js Built-in CSS Optimization:**
-   By importing CSS files directly in Next.js (e.g., inside `layout.tsx` or `page.tsx`), Next.js automatically optimizes the CSS delivery. It extracts the CSS required for the initial render and injects it, ensuring minimal render-blocking.
+When you run `npm run dev`, Next.js intentionally skips all performance optimizations to make your application compile faster while you code. This means:
+1. CSS isn't minified or split properly.
+2. Huge source maps are attached to the files.
+3. Styles are injected in a way that blocks rendering.
 
-3. **Deferring Non-Critical CSS:**
-   For styles that are not needed immediately for the initial page load, Next.js naturally code-splits CSS. By ensuring external CSS is integrated into the Next.js build pipeline rather than being injected via standard `<link>` tags in the HTML `<head>`, we improve load times.
+When you run Lighthouse against `localhost:3000` in dev mode, Lighthouse assumes this unoptimized, render-blocking CSS is what your users will experience. 
 
-## Steps Taken in This Project
-- We moved away from relying on the `unpkg.com` CDN for Leaflet CSS.
-- We imported styles properly so Next.js handles bundling, effectively eliminating the render-blocking issue from the CDN.
+## The Actual Fix: Test in Production Mode
+
+To get an accurate Lighthouse score and allow Next.js to automatically apply its built-in CSS optimizations (like Critical CSS extraction and minification), you **must** build your app first.
+
+### Step-by-Step Instructions
+
+1. **Stop your development server** (Press `Ctrl + C` in your terminal).
+2. **Build the production version** of your app by running:
+   ```bash
+   npm run build
+   ```
+3. **Start the production server** by running:
+   ```bash
+   npm run start
+   ```
+4. Now, run Lighthouse again on the `http://localhost:3000` URL. 
+
+You will notice that the "Render-blocking CSS" warning will disappear, and your overall performance score will increase dramatically!
+
+## Bonus: You're already using Best Practices
+I checked your `app/layout.tsx` file, and you are already using `next/font/google` for your `Plus_Jakarta_Sans` font. 
+
+```tsx
+import { Plus_Jakarta_Sans } from "next/font/google"
+```
+
+Next.js automatically optimizes this font and prevents it from being a render-blocking request in production. You are already set up perfectly!

@@ -1,11 +1,35 @@
 "use client";
 
-import { Header } from "../layout/header";
 import { Search, MapPin } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
+
+const ELIGIBLE_LOCATIONS = [
+  "Galway", "Dublin", "Killarney", "Cork", "Dingle", "Kilkenny", "Limerick",
+  "Waterford", "Ashford castle", "Kinsale", "Doolin", "Shannon", "Adare",
+  "Tralee", "Ennis", "Clifden", "Donegal", "Westport", "Cliffs of Moher",
+  "Kenmare", "Athlone", "Cashel", "Knock Shrine", "Sligo", "Lahinch", "Cobh",
+  "Blarney", "Rosslare", "Tullamore Dew", "Wexford", "Newgrange",
+  "Bunratty Castle", "Glendalough", "Farranfore", "Howth", "Doonbeg",
+  "Dromoland Castle Hotel", "Trim Castle", "Dundalk", "Spanish Point",
+  "University of Limerick", "Ardmore", "Bunratty", "Kylemore Abbey", "Cong",
+  "Drogheda", "Liscannor", "Malin Head", "Foxford", "Rossaveel", "Bray",
+  "Ballina", "Ballybunion", "Bantry", "Scariff", "Kilkee", "Charleville",
+  "Mallow", "Kildare Village", "Killaloe", "Clonegall", "Enfield",
+  "Dunbrody Famine Ship", "Dalkey", "Miltown Malbay", "Foynes", "Midleton",
+  "Valentia Island", "Newcastle West", "Wicklow", "Kinvara", "Rock of Cashel",
+  "Ballyvaughan", "Blarney Stone", "Tipperary", "Mullagh", "Kildare",
+  "Savoy Hotel Limerick", "Treacys oakwood hotel", "Old Ground Hotel Ennis",
+  "Glenlo Abbey Hotel & Estate", "Carton House, A Fairmont Managed Hotel",
+  "Mount Juliet Estate, Autograph Collection", "Ballyfin Demesne",
+  "Sheen Falls Lodge"
+];
+
+const EXCLUDED_LOCATIONS = [
+  "Shannon Airport", "Dublin Airport", "Cork Airport", "Knock Airport", "Kerry Airport"
+];
 
 export default function TransfersHero() {
   const router = useRouter();
@@ -14,17 +38,20 @@ export default function TransfersHero() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [errorMsg, setErrorMsg] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const requestOptions = useMemo(() => ({
+    componentRestrictions: { country: "ie" }
+  }), []);
 
   const {
     suggestions: { status, data },
     setValue,
     clearSuggestions,
   } = usePlacesAutocomplete({
-    requestOptions: {
-      componentRestrictions: { country: "ie" }, // Restrict to Ireland
-    },
+    requestOptions,
     debounce: 300,
     initOnMount: isLoaded,
   });
@@ -47,8 +74,24 @@ export default function TransfersHero() {
 
   const handleSearch = (location?: string) => {
     const searchLocation = location || searchQuery;
+
+    if (searchLocation.trim()) {
+      const isExcluded = EXCLUDED_LOCATIONS.some((loc) =>
+        searchLocation.toLowerCase().includes(loc.toLowerCase())
+      );
+
+      const isEligible = ELIGIBLE_LOCATIONS.some((loc) =>
+        searchLocation.toLowerCase().includes(loc.toLowerCase())
+      );
+
+      if (isExcluded || !isEligible) {
+        setErrorMsg("Transfers are not available for this location.");
+        return;
+      }
+    }
+
     const query = searchLocation.trim()
-      ? `?pickup=${encodeURIComponent(searchLocation)}`
+      ? `?pickup=${encodeURIComponent(searchLocation.trim())}`
       : "";
     router.push(`/transfer/transfer-search${query}`);
   };
@@ -56,6 +99,7 @@ export default function TransfersHero() {
   const handlePopularRoute = (route: string) => {
     setSearchQuery(route);
     setValue(route, false);
+    setErrorMsg("");
     handleSearch(route);
   };
 
@@ -64,6 +108,7 @@ export default function TransfersHero() {
     setValue(description, false);
     clearSuggestions();
     setShowDropdown(false);
+    setErrorMsg("");
     handleSearch(description);
   };
 
@@ -95,9 +140,7 @@ export default function TransfersHero() {
     "Galway",
     "Limerick",
     "Belfast",
-    "Killarney",
-    "Shannon Airport",
-    "Dublin Airport",
+    "Killarney"
   ];
 
   return (
@@ -124,7 +167,7 @@ export default function TransfersHero() {
         </div>
 
         {/* Search card */}
-        <div className="w-full max-w-4xl bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] px-5 sm:px-8 py-6 sm:py-8 flex flex-col gap-6 text-left border border-white/20 transform transition-all hover:-translate-y-1">
+        <div className="w-full max-w-4xl bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] px-5 sm:px-8 py-6 sm:py-8 flex flex-col gap-6 text-left border border-white/20 transform transition-all hover:-translate-y-1 relative z-20">
           <div className="flex flex-col sm:flex-row items-stretch gap-4">
             <div className="relative flex-1">
               <div className="flex items-center border border-gray-200 rounded-xl px-4 py-3 sm:py-4 gap-3 bg-white/80 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 transition-all">
@@ -141,11 +184,18 @@ export default function TransfersHero() {
                     setValue(val);
                     setShowDropdown(true);
                     setSelectedIndex(-1);
+                    setErrorMsg("");
                   }}
                   onFocus={() => setShowDropdown(true)}
                   onKeyDown={handleKeyDown}
                 />
               </div>
+
+              {errorMsg && (
+                <div className="absolute top-[calc(100%+8px)] left-0 w-full text-red-500 text-sm font-medium bg-red-50/95 backdrop-blur-md px-4 py-3 rounded-lg border border-red-200 shadow-lg z-40">
+                  {errorMsg}
+                </div>
+              )}
 
               {/* Autocomplete Dropdown */}
               {showDropdown && status === "OK" && (
