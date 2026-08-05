@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Image from "next/image";
 
 const items = [
   {
@@ -78,52 +79,64 @@ export default function Expectations() {
               <div className="grid grid-cols-8 auto-rows-[92px] sm:auto-rows-[104px] md:auto-rows-[112px] gap-3">
                 {/* Top row: two large tiles */}
                 <div className="relative col-span-8 sm:col-span-5 row-span-3 overflow-hidden rounded-2xl group/image">
-                  <img
+                  <Image
                     src={images[0]}
                     alt="Irish landscape"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
                 <div className="relative col-span-8 sm:col-span-3 row-span-3 overflow-hidden rounded-2xl group/image">
-                  <img
+                  <Image
                     src={images[1]}
                     alt="Coastal view"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
 
                 {/* Bottom composition */}
                 <div className="relative col-span-8 sm:col-span-3 row-span-2 overflow-hidden rounded-2xl group/image">
-                  <img
+                  <Image
                     src={images[2]}
                     alt="Rock formation"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
                 <div className="relative col-span-8 sm:col-span-2 row-span-2 overflow-hidden rounded-2xl group/image">
-                  <img
+                  <Image
                     src={images[3]}
                     alt="Green hills"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
                 <div className="relative col-span-8 sm:col-span-3 row-span-1 overflow-hidden rounded-2xl group/image">
-                  <img
+                  <Image
                     src={images[4]}
                     alt="Cliffs"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
                 <div className="relative col-span-8 sm:col-span-3 row-span-1 overflow-hidden rounded-2xl group/image">
-                  <img
+                  <Image
                     src={images[5]}
                     alt="Scenic road"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>

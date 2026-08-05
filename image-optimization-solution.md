@@ -1,27 +1,91 @@
 # Image Optimization Solution
 
-## The Problem
-Lighthouse reported that images from Cloudinary are significantly larger than necessary (e.g., 9,023.3 KiB when it could save 9,011.0 KiB). Furthermore, images are loaded with much larger dimensions (4561x2584) than what is displayed on the screen (338x225). This delays the Largest Contentful Paint (LCP) and significantly degrades page performance.
+Based on the Lighthouse performance report, your website is downloading large, unoptimized images (like the local `/attractions/*.jpg` images and external images from Pexels and Cloudinary). This significantly hurts your Largest Contentful Paint (LCP) and perceived page speed.
 
-## The Solution
+To save the estimated **~1.3MB** of data and solve the "Use responsive images" warnings, you should migrate all your `<img>` tags to the Next.js `<Image>` component.
 
-We have optimized the image loading strategy across the application:
+## 1. Configure Next.js for External Images
+Since you are using images from Cloudinary and Pexels, you must explicitly allow Next.js to optimize them. Open your `next.config.js` (or `.ts`/.`mjs`) and add the `remotePatterns`:
 
-1. **Next.js Image Optimization Configuration:**
-   We updated `next.config.mjs` to properly use Next.js's built-in image optimization for Cloudinary. We configured `remotePatterns` to allow Cloudinary domains (`res.cloudinary.com`) and enabled `formats: ["image/avif", "image/webp"]`.
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.pexels.com',
+      },
+    ],
+  },
+};
 
-2. **Transition to `next/image` Component:**
-   In Next.js, always use the `<Image>` component from `next/image` instead of the standard `<img>` tag. The Next.js `<Image>` component will:
-   - Automatically resize images based on the device screen size (responsive sizing).
-   - Serve modern formats like WebP or AVIF if the browser supports them.
-   - Lazy load images by default, saving bandwidth for images outside the viewport.
+export default nextConfig;
+```
 
-3. **Cloudinary Transformation URL Adjustments:**
-   When using direct Cloudinary URLs in `<img>` tags (which should be avoided in favor of `next/image`), you can append Cloudinary transformation parameters to automatically format and compress images.
-   - Use `f_auto` to automatically deliver the best image format (like WebP or AVIF).
-   - Use `q_auto` to automatically adjust the compression quality.
-   - Example: `https://res.cloudinary.com/dgvc0jaao/image/upload/f_auto,q_auto/v1783368960/...jpg`
+## 2. Replace HTML `<img>` with Next.js `<Image>`
 
-## Steps Taken in This Project
-- We configured `next.config.mjs` to accept images from `res.cloudinary.com`.
-- This ensures that if the team uses the `next/image` component for images like `Bunraty Castle` or `Cliffs of Moher`, Next.js will automatically serve WebP/AVIF formats scaled to the appropriate dimensions, drastically reducing the 9MB image to less than 100KB.
+Whenever you use a standard `<img>` tag, the browser downloads the full-resolution original file. The Next.js `<Image>` component automatically generates resized, WebP/AVIF compressed versions on the fly.
+
+### Fixing the Local Attraction Images
+In the file where you render `/attractions/1.jpg`, update it like this:
+
+```tsx
+import Image from "next/image";
+
+// ❌ Before
+<img 
+  src="/attractions/1.jpg" 
+  alt="Attraction" 
+  className="w-full h-full object-cover transition-transform duration-700 group-hover/image:scale-110" 
+/>
+
+// ✅ After
+<div className="relative w-full h-full"> {/* Ensure parent is relative */}
+  <Image 
+    src="/attractions/1.jpg" 
+    alt="Attraction" 
+    fill
+    className="object-cover transition-transform duration-700 group-hover/image:scale-110"
+    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+  />
+</div>
+```
+
+### Fixing the Booking Flow `step-3.tsx` Stops
+
+```tsx
+import Image from "next/image";
+
+// ❌ Before
+<div className="relative w-32 shrink-0 sm:w-full h-32 sm:h-44">
+  <img
+    src={getStopImageUrl(stop)}
+    alt={stop.name}
+    className="w-full h-full object-cover"
+  />
+</div>
+
+// ✅ After
+<div className="relative w-32 shrink-0 sm:w-full h-32 sm:h-44">
+  <Image
+    src={getStopImageUrl(stop)}
+    alt={stop.name}
+    fill
+    className="object-cover"
+    sizes="(max-width: 640px) 128px, 33vw" // 128px on mobile, 33vw on desktop
+  />
+</div>
+```
+
+> [!WARNING]
+> I noticed you reverted my previous fix for `getStopImageUrl` in `step-3.tsx`. If `getStopImageUrl(stop)` or `stop?.image?.[0]` returns an **object** instead of a string URL, the Next.js `<Image>` component will throw a fatal error. Please ensure your `src` is always a valid string!
+
+## 3. Why this works
+- **Format Conversion**: The warning *"Using a modern image format"* is solved because Next.js automatically converts `.jpg` to highly compressed `.webp` or `.avif`.
+- **Responsive Sizing**: The warning *"This image file is larger than it needs to be"* is solved by the `sizes` attribute. It tells Next.js to serve a smaller, 400px wide image to mobile users instead of sending the original 1500px desktop image.
+- **Lazy Loading**: Images below the fold are automatically lazy-loaded.

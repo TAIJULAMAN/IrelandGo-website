@@ -1,6 +1,7 @@
 "use client";
 
 import { Check } from "lucide-react";
+import Image from "next/image";
 
 export default function ByTheHourPrivateRides() {
   const scrollToTop = () => {
@@ -22,10 +23,12 @@ export default function ByTheHourPrivateRides() {
           <div className="absolute -inset-4 bg-gradient-to-tr from-blue-100 to-indigo-50 rounded-[2rem] transform -rotate-2 group-hover:rotate-0 transition-transform duration-500 opacity-70"></div>
           
           <div className="relative rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 aspect-video md:aspect-[4/3] bg-white z-10">
-            <img
+            <Image
               src="/attractions/6.webp"
               alt="Private ride arrival"
-              className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover transform group-hover:scale-110 transition-transform duration-700"
             />
             {/* Dark gradient overlay for a premium cinematic look */}
             <div className="absolute inset-0 bg-gradient-to-t from-gray-900/30 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />

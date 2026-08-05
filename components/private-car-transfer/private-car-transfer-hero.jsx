@@ -316,7 +316,7 @@ export default function PrivateCarTransferHero() {
         {/* Background */}
         <div className="absolute inset-0 z-0">
           <img
-            src={transferRoute?.images?.[0] || "/plane.png"}
+            src={transferRoute?.images?.[0] || "/by-the-hour.jpg"}
             alt="Transfer Background"
             className="w-full h-full object-cover"
           />
@@ -327,7 +327,7 @@ export default function PrivateCarTransferHero() {
         <div className="max-w-7xl mx-auto px-5 py-16 relative z-10">
           {/* Hero Text */}
           <div className="text-center mb-10 pt-5">
-            <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold mb-3 md:mb-4 text-balance leading-tight px-4">
+            <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold mb-3 md:mb-4 text-white text-balance leading-tight px-4">
               Private car transfer from {""}
               {displayLocation}
               <br className="hidden sm:block" />

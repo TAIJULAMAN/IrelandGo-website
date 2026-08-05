@@ -6,11 +6,12 @@ import { Testimonials } from "@/components/common/testimonials";
 
 export default function MultiDayTours() {
   return (
-    <main>
+    <>
       <MultiDayToursHero />
       <MultiDayToursJourneyBegins />
       <MultiDayToursOurMultiDayTours />
       <Testimonials />
-      <FAQ />    </main>
+      <FAQ />
+    </>
   );
 }

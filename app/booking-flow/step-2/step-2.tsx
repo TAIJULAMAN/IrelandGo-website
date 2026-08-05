@@ -469,7 +469,7 @@ export default function Step2() {
                           Need more space?
                         </h4>
                         <p className="text-sm text-gray-800 leading-relaxed font-medium">
-                          Extra bags cost €10 each. They count as a passenger
+                          Extra bags count as a passenger
                           space, but you do not pay any extra seat fee.
                         </p>
                       </div>

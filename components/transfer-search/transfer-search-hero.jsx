@@ -15,7 +15,7 @@ import {
   ChevronDown,
   Minus,
 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -107,6 +107,10 @@ export default function TransferSearchHero() {
 
   const { isLoaded } = useGoogleMaps();
 
+  const requestOptions = useMemo(() => ({
+    componentRestrictions: { country: "ie" }
+  }), []);
+
   const {
     ready: pickupReady,
     value: pickupValue,
@@ -114,9 +118,7 @@ export default function TransferSearchHero() {
     setValue: setPickupValue,
     clearSuggestions: clearPickupSuggestions,
   } = usePlacesAutocomplete({
-    requestOptions: {
-      componentRestrictions: { country: "ie" },
-    },
+    requestOptions,
     debounce: 300,
     defaultValue: pickupLocation,
     initOnMount: isLoaded,
@@ -129,9 +131,7 @@ export default function TransferSearchHero() {
     setValue: setDropoffValue,
     clearSuggestions: clearDropoffSuggestions,
   } = usePlacesAutocomplete({
-    requestOptions: {
-      componentRestrictions: { country: "ie" },
-    },
+    requestOptions,
     debounce: 300,
     defaultValue: dropoffLocation,
     initOnMount: isLoaded,

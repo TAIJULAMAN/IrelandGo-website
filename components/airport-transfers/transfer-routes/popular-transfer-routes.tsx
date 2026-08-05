@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useGetTransfersBasedOnLocationQuery } from "@/Redux/features/transfers/transfersApi";
+import { useGetAllAirportTransferBasedOnLocationQuery } from "@/Redux/features/transfers/transfersApi";
 import Loading from "@/components/common/loading";
 
 export default function PopularTransferRoutes() {
@@ -10,12 +10,51 @@ export default function PopularTransferRoutes() {
   const locationParam = searchParams.get("pickup") || searchParams.get("location");
 
   const {
-    data: transfersRoutes,
+    data: allTransfers,
     isLoading,
     isError,
-  } = useGetTransfersBasedOnLocationQuery(locationParam);
+  } = useGetAllAirportTransferBasedOnLocationQuery({
+    page: 1,
+    limit: 1000,
+  });
 
-  const transferRoutes = transfersRoutes?.data || [];
+  let transferRoutes: any[] = [];
+  if (allTransfers?.data) {
+    transferRoutes = allTransfers.data.flatMap((group: any) => group.trips || []);
+  }
+
+  // 1. Filter out by serviceType as requested
+  transferRoutes = transferRoutes.filter(
+    (t: any) => t.serviceType === "AIRPORT_TRANSFER"
+  );
+
+  const popularRoutes = [
+    "Shannon Airport",
+    "Dublin Airport",
+    "Cork Airport",
+    "Knock Airport",
+    "Kerry Airport",
+  ];
+
+  if (locationParam) {
+    const searchLower = locationParam.toLowerCase();
+
+    const isPopularRouteSearch = popularRoutes.some(
+      (route) => route.toLowerCase() === searchLower
+    );
+
+    // Only use route.from as requested
+    transferRoutes = transferRoutes.filter((route: any) => {
+      const fromLower = route.from?.toLowerCase() || "";
+
+      if (isPopularRouteSearch) {
+        return fromLower === searchLower;
+      } else {
+        const fromMatch = fromLower.includes(searchLower) || searchLower.includes(fromLower);
+        return fromMatch;
+      }
+    });
+  }
 
   return (
     <section className="relative w-full py-16 md:py-24 bg-gray-50/50 overflow-hidden">
@@ -29,7 +68,10 @@ export default function PopularTransferRoutes() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 lg:mb-16">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">
-              Popular Transfer Routes From <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{locationParam}</span>
+              Popular Transfer Routes
+              {locationParam && (
+                <> From <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{locationParam}</span></>
+              )}
             </h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
               Choose from our most requested destinations.
@@ -82,7 +124,7 @@ export default function PopularTransferRoutes() {
                   >
                     {/* Subtle Glow Behind Card */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
-                    
+
                     <div className="relative h-48 md:h-56 w-full overflow-hidden z-10">
                       <img
                         src={imageUrl}
@@ -125,7 +167,7 @@ export default function PopularTransferRoutes() {
                           </span>
                         </div>
                         <Link
-                          href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transferRoute.from)}&dropoff=${encodeURIComponent(transferRoute.to)}&transferRoute=${encodeURIComponent(JSON.stringify(transferRoute))}`}
+                          href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(locationParam || transferRoute.from)}&serviceType=AIRPORT_TRANSFER&transferRoute=${encodeURIComponent(JSON.stringify(transferRoute))}`}
                           className="block w-full"
                         >
                           <button className="w-full rounded-xl bg-blue-50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 text-blue-700 hover:text-white text-sm font-bold py-3.5 transition-all duration-300 shadow-sm hover:shadow-md">

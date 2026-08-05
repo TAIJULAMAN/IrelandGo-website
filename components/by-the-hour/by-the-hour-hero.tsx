@@ -127,7 +127,7 @@ export default function ByTheHourHero() {
   };
 
   const totalPassengers = adults + children;
-  
+
   const handleTabClick = (id: string) => {
     if (id === "transfer") {
       router.push("/");
@@ -162,7 +162,7 @@ export default function ByTheHourHero() {
 
   return (
     <TooltipProvider>
-      <section className="relative overflow-hidden min-h-[90vh] flex flex-col justify-center py-16 pt-24 md:pt-28">
+      <section className="relative overflow-hidden min-h-[100vh] flex flex-col justify-center py-16 pt-24 md:pt-28">
         <div className="absolute inset-0 z-0">
           <img
             src="/Images/ByTheHour.webp"
@@ -643,7 +643,7 @@ export default function ByTheHourHero() {
                       </Button>
                     </Link>
                   ) : (
-                    <Button 
+                    <Button
                       className="w-full h-12 py-3 bg-gray-100 text-gray-400 font-semibold text-lg border-0 rounded-lg cursor-not-allowed transition-all duration-300"
                       disabled
                     >

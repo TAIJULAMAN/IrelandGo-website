@@ -78,11 +78,5 @@ For return trips, the total calculated `transportPrice` (Base + Distance) is sim
 
 ---
 
-## 5. Extra Baggage
-- **Cost:** €10 per extra bag.
-- Extra bags take up a passenger seat space capacity, but no additional seat fee is charged beyond the €10 bag fee.
-
----
-
-## 6. Day Trips & Multi-Day Tours
+## 5. Day Trips & Multi-Day Tours
 - **Fixed Pricing:** Day trips and multi-day tours do not use a dynamic distance matrix on the frontend. Their prices are statically configured and fetched directly from the backend API.
