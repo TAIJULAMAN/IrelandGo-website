@@ -10,10 +10,10 @@ When a user adds a custom stop, the system calculates the extra driving distance
 2. **The Original Route:** It calculates the straight-line distance from `Pickup -> Dropoff`.
 3. **The New Route:** It calculates the straight-line distance from `Pickup -> Extra Stop` plus `Extra Stop -> Dropoff`.
 4. **The Detour:** It subtracts the Original Route distance from the New Route distance to find the extra straight-line detour distance.
-5. **Road Multiplier:** The extra straight-line distance is multiplied by **`1.3`** to estimate realistic road driving conditions.
+5. **Road Multiplier:** The extra straight-line distance is multiplied by **`1.45`** to estimate realistic road driving conditions.
 
 *Formula:*
-`Extra Distance (km) = (New Route - Original Route) × 1.3`
+`Extra Distance (km) = (New Route - Original Route) × 1.45`
 
 ---
 
