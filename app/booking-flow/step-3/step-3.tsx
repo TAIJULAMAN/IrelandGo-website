@@ -400,7 +400,7 @@ export default function Step3() {
 
   let transportPrice = 0;
   let vehicleName = "Vehicle";
-  let basePriceSumForStops = 20;
+  let pricePerKmSumForStops = 0;
 
   if (vehicleId && vehicles.length > 0) {
     const ids = vehicleId.split("+");
@@ -410,20 +410,37 @@ export default function Step3() {
       vehicleName = selectedVehicles.map((v: any) => v.name).join(" + ");
 
       const basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
-      basePriceSumForStops = basePriceSum > 0 ? basePriceSum : 20;
+      
+      const km = distanceKm || 0;
+      pricePerKmSumForStops = selectedVehicles.reduce((sum: number, vehicle: any) => {
+        const name = vehicle.name.toLowerCase();
+        let isLSedan = name.includes("luxury sedan") || name.includes("l sedan") || name.includes("lsedan");
+        let isMPV = !isLSedan && (name.includes("mpv") || name.includes("mvp") || name.includes("minivan"));
+        let isVan = !isLSedan && !isMPV && name.includes("van");
+        
+        type Band = [number, number, number];
+        const sedanBands: Band[] = [[25, 1.8, 50], [50, 1.8, 40], [100, 1.8, 30], [150, 1.8, 15], [Infinity, 1.9, 0]];
+        const mpvBands: Band[] = [[25, 2.0, 65], [50, 2.0, 55], [100, 2.0, 45], [150, 2.0, 30], [Infinity, 2.1, 0]];
+        const vanBands: Band[] = [[25, 2.2, 80], [50, 2.2, 70], [100, 2.2, 60], [150, 2.2, 45], [Infinity, 2.3, 0]];
+        const lSedanBands: Band[] = [[25, 2.1, 70], [50, 2.1, 60], [100, 2.1, 50], [150, 2.1, 35], [Infinity, 2.15, 0]];
+
+        const bands = isLSedan ? lSedanBands : isMPV ? mpvBands : isVan ? vanBands : sedanBands;
+        const [, rate, ] = bands.find(([max]) => km <= max) || bands[bands.length - 1];
+        
+        return sum + rate;
+      }, 0);
 
       if (carPriceParam) {
         transportPrice = parseFloat(carPriceParam);
       } else {
-        const pricePerKmSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.pricePerKm, 0);
-        transportPrice = Math.round(basePriceSum + (pricePerKmSum * distanceKm));
+        transportPrice = Math.round(basePriceSum + (pricePerKmSumForStops * distanceKm));
       }
     }
   }
 
   const calculateStopPrice = (stop: any, durationMinutes: number) => {
     const stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
-    const baseHourPrice = Math.round(basePriceSumForStops + (stopDistance * 1.45));
+    const baseHourPrice = Math.round(50 + (stopDistance * pricePerKmSumForStops));
 
     const extraMinutes = durationMinutes - 60;
     if (extraMinutes <= 0) {
@@ -434,7 +451,7 @@ export default function Step3() {
     const remainingMinutes = extraMinutes % 60;
 
     let extraCost = extraHours * 50;
-    if (remainingMinutes >= 45) {
+    if (remainingMinutes >= 31) {
       extraCost += 50;
     } else if (remainingMinutes > 0) {
       extraCost += 30;
@@ -459,7 +476,7 @@ export default function Step3() {
         }
       }
     }
-    
+
     if (imgUrl) return imgUrl;
 
     if (stop.latitude && stop.longitude && process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY && process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY !== "undefined") {
