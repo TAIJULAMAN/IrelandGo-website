@@ -223,22 +223,53 @@ export default function Step3() {
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
   const router = useRouter();
 
-  const getExtraDistanceForCustomStop = (stopLat: number | null, stopLng: number | null) => {
-    if (!stopLat || !stopLng || !fromLat || !fromLng || !toLat || !toLng) return 0;
-    const fLat = parseFloat(fromLat.toString());
-    const fLng = parseFloat(fromLng.toString());
-    const tLat = parseFloat(toLat.toString());
-    const tLng = parseFloat(toLng.toString());
-    const originalDist = getDistanceInKm(fLat, fLng, tLat, tLng);
-    const newDist = getDistanceInKm(fLat, fLng, stopLat, stopLng) + getDistanceInKm(stopLat, stopLng, tLat, tLng);
-    const extraDist = Math.max(0, newDist - originalDist);
-    return extraDist * 1.3;
-  };
+  const [customStopRoadDistance, setCustomStopRoadDistance] = useState(0);
+  const [popularStopDistances, setPopularStopDistances] = useState<Record<string, number>>({});
+  const [baseRideDurationMins, setBaseRideDurationMins] = useState<number | null>(null);
+  const [baseDistanceKm, setBaseDistanceKm] = useState<number | null>(null);
 
-  const customStopEstimatedDistance = getExtraDistanceForCustomStop(customStopLat, customStopLng);
+  useEffect(() => {
+    let isMounted = true;
+    if (isLoaded && customStopLat && customStopLng && fromLat && fromLng && toLat && toLng) {
+      const directionsService = new window.google.maps.DirectionsService();
+
+      const originLat = parseFloat(fromLat.toString());
+      const originLng = parseFloat(fromLng.toString());
+      const destLat = parseFloat(toLat.toString());
+      const destLng = parseFloat(toLng.toString());
+
+      directionsService.route(
+        {
+          origin: { lat: originLat, lng: originLng },
+          destination: { lat: destLat, lng: destLng },
+          waypoints: [{ location: { lat: customStopLat, lng: customStopLng }, stopover: true }],
+          travelMode: window.google.maps.TravelMode.DRIVING,
+          region: "ie",
+        },
+        (result, status) => {
+          if (isMounted && status === window.google.maps.DirectionsStatus.OK && result) {
+            let totalNewDistanceMeters = 0;
+            result.routes[0].legs.forEach((leg: any) => {
+              totalNewDistanceMeters += leg.distance?.value || 0;
+            });
+            const totalNewDistanceKm = totalNewDistanceMeters / 1000;
+            const actualBaseDistance = baseDistanceKm !== null ? baseDistanceKm : distanceKm;
+            const extraDist = Math.max(0, totalNewDistanceKm - actualBaseDistance);
+            setCustomStopRoadDistance(extraDist);
+          }
+        }
+      );
+    } else {
+      setCustomStopRoadDistance(0);
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [isLoaded, customStopLat, customStopLng, fromLat, fromLng, toLat, toLng, distanceKm, baseDistanceKm]);
+
+  const customStopEstimatedDistance = customStopRoadDistance;
 
   const [addExtraStoppages] = useAddExtraStoppagesMutation();
-  const [baseRideDurationMins, setBaseRideDurationMins] = useState<number | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -255,7 +286,9 @@ export default function Step3() {
           if (isMounted && status === window.google.maps.DirectionsStatus.OK && result) {
             const leg = result.routes[0].legs[0];
             const durationSecs = leg.duration?.value || 0;
+            const distMeters = leg.distance?.value || 0;
             setBaseRideDurationMins(Math.round(durationSecs / 60));
+            setBaseDistanceKm(distMeters / 1000);
           }
         }
       );
@@ -327,9 +360,6 @@ export default function Step3() {
         latitude: customStopLat,
         longitude: customStopLng,
       }).unwrap();
-
-      // console.log("Custom stoppage added successfully:", response);
-
       const addedStoppage = response?.data?.searchableStoppage?.[0] || response?.data || response;
       const stoppageId = addedStoppage?.id || addedStoppage?._id || `added-${Date.now()}`;
       const stoppageName = addedStoppage?.name || addedStoppage?.googleName || trimmed;
@@ -410,14 +440,14 @@ export default function Step3() {
       vehicleName = selectedVehicles.map((v: any) => v.name).join(" + ");
 
       const basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
-      
+
       const km = distanceKm || 0;
       pricePerKmSumForStops = selectedVehicles.reduce((sum: number, vehicle: any) => {
         const name = vehicle.name.toLowerCase();
         let isLSedan = name.includes("luxury sedan") || name.includes("l sedan") || name.includes("lsedan");
         let isMPV = !isLSedan && (name.includes("mpv") || name.includes("mvp") || name.includes("minivan"));
         let isVan = !isLSedan && !isMPV && name.includes("van");
-        
+
         type Band = [number, number, number];
         const sedanBands: Band[] = [[25, 1.8, 50], [50, 1.8, 40], [100, 1.8, 30], [150, 1.8, 15], [Infinity, 1.9, 0]];
         const mpvBands: Band[] = [[25, 2.0, 65], [50, 2.0, 55], [100, 2.0, 45], [150, 2.0, 30], [Infinity, 2.1, 0]];
@@ -425,8 +455,8 @@ export default function Step3() {
         const lSedanBands: Band[] = [[25, 2.1, 70], [50, 2.1, 60], [100, 2.1, 50], [150, 2.1, 35], [Infinity, 2.15, 0]];
 
         const bands = isLSedan ? lSedanBands : isMPV ? mpvBands : isVan ? vanBands : sedanBands;
-        const [, rate, ] = bands.find(([max]) => km <= max) || bands[bands.length - 1];
-        
+        const [, rate,] = bands.find(([max]) => km <= max) || bands[bands.length - 1];
+
         return sum + rate;
       }, 0);
 
@@ -439,7 +469,12 @@ export default function Step3() {
   }
 
   const calculateStopPrice = (stop: any, durationMinutes: number) => {
-    const stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
+    let stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
+    
+    if (stop.id && popularStopDistances[stop.id] !== undefined) {
+      stopDistance = popularStopDistances[stop.id];
+    }
+
     const baseHourPrice = Math.round(50 + (stopDistance * pricePerKmSumForStops));
 
     const extraMinutes = durationMinutes - 60;
@@ -487,6 +522,50 @@ export default function Step3() {
   };
 
   const stopsData = popularStopsResponse?.data?.searchableStoppage || [];
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isLoaded && stopsData.length > 0 && fromLat && fromLng && toLat && toLng) {
+      const directionsService = new window.google.maps.DirectionsService();
+      const originLat = parseFloat(fromLat.toString());
+      const originLng = parseFloat(fromLng.toString());
+      const destLat = parseFloat(toLat.toString());
+      const destLng = parseFloat(toLng.toString());
+
+      stopsData.forEach((stop: any) => {
+        const stopLat = stop.latitude ?? stop.location?.lat;
+        const stopLng = stop.longitude ?? stop.location?.lng;
+        
+        if (stopLat && stopLng && popularStopDistances[stop.id] === undefined) {
+          directionsService.route(
+            {
+              origin: { lat: originLat, lng: originLng },
+              destination: { lat: destLat, lng: destLng },
+              waypoints: [{ location: { lat: stopLat, lng: stopLng }, stopover: true }],
+              travelMode: window.google.maps.TravelMode.DRIVING,
+              region: "ie",
+            },
+            (result, status) => {
+              if (isMounted && status === window.google.maps.DirectionsStatus.OK && result) {
+                let totalNewDistanceMeters = 0;
+                result.routes[0].legs.forEach((leg: any) => {
+                  totalNewDistanceMeters += leg.distance?.value || 0;
+                });
+                const totalNewDistanceKm = totalNewDistanceMeters / 1000;
+                const actualBaseDistance = baseDistanceKm !== null ? baseDistanceKm : distanceKm;
+                const extraDist = Math.max(0, totalNewDistanceKm - actualBaseDistance);
+                setPopularStopDistances(prev => ({ ...prev, [stop.id]: extraDist }));
+              }
+            }
+          );
+        }
+      });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [isLoaded, stopsData, fromLat, fromLng, toLat, toLng, distanceKm, baseDistanceKm]); // excluded popularStopDistances to avoid infinite dependency loops
+
   const apiStops = (Array.isArray(stopsData) ? stopsData : []).map((stop: any) => {
     const duration = stop.duration !== undefined ? stop.duration : 60;
     return {

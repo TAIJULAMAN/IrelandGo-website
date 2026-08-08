@@ -2,30 +2,49 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useGetAllAirportTransferBasedOnLocationQuery } from "@/Redux/features/transfers/transfersApi";
+import {
+  useGetAllAirportTransferBasedOnLocationQuery,
+  useGetAllPrivateTransferBasedOnLocationQuery
+} from "@/Redux/features/transfers/transfersApi";
 import Loading from "@/components/common/loading";
 
 export default function PopularTransferRoutes() {
   const searchParams = useSearchParams();
   const locationParam = searchParams.get("pickup") || searchParams.get("location");
+  const serviceTypeParam = searchParams.get("serviceType") || "AIRPORT_TRANSFER";
 
   const {
-    data: allTransfers,
-    isLoading,
-    isError,
+    data: airportTransfers,
+    isLoading: isAirportLoading,
+    isError: isAirportError,
   } = useGetAllAirportTransferBasedOnLocationQuery({
     page: 1,
     limit: 1000,
-  });
+  }, { skip: serviceTypeParam !== "AIRPORT_TRANSFER" });
+
+  const {
+    data: privateTransfers,
+    isLoading: isPrivateLoading,
+    isError: isPrivateError,
+  } = useGetAllPrivateTransferBasedOnLocationQuery({
+    page: 1,
+    limit: 1000,
+  }, { skip: serviceTypeParam !== "PRIVATE_TRANSFER" });
+
+
+  console.log("privateTransfers of aaaaaaa", privateTransfers);
+
+  const isLoading = isAirportLoading || isPrivateLoading;
+  const isError = isAirportError || isPrivateError;
+  const allTransfers = serviceTypeParam === "AIRPORT_TRANSFER" ? airportTransfers : privateTransfers;
 
   let transferRoutes: any[] = [];
   if (allTransfers?.data) {
     transferRoutes = allTransfers.data.flatMap((group: any) => group.trips || []);
   }
 
-  // 1. Filter out by serviceType as requested
   transferRoutes = transferRoutes.filter(
-    (t: any) => t.serviceType === "AIRPORT_TRANSFER"
+    (t: any) => t.serviceType === serviceTypeParam
   );
 
   const popularRoutes = [
@@ -112,10 +131,14 @@ export default function PopularTransferRoutes() {
                   durationText = "N/A";
                 }
 
-                // Strip HTML tags for a clean description summary
-                const plainDescription = transferRoute.description
+                // Strip HTML tags for a clean description summary and limit to 50 characters
+                const plainDescriptionRaw = transferRoute.description
                   ? transferRoute.description.replace(/<[^>]*>?/gm, "")
                   : "No description available.";
+
+                const plainDescription = plainDescriptionRaw.length > 100
+                  ? plainDescriptionRaw.substring(0, 100) + "..."
+                  : plainDescriptionRaw;
 
                 return (
                   <div
@@ -158,16 +181,8 @@ export default function PopularTransferRoutes() {
                       </p>
 
                       <div className="mt-auto pt-5 border-t border-gray-100">
-                        <div className="flex justify-between items-end mb-5">
-                          <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">
-                            Starting from
-                          </span>
-                          <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                            €{transferRoute.price}
-                          </span>
-                        </div>
                         <Link
-                          href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(locationParam || transferRoute.from)}&serviceType=AIRPORT_TRANSFER&transferRoute=${encodeURIComponent(JSON.stringify(transferRoute))}`}
+                          href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(locationParam || transferRoute.from)}&serviceType=${encodeURIComponent(transferRoute.serviceType)}&transferRoute=${encodeURIComponent(JSON.stringify({ ...transferRoute, description: undefined, images: undefined, includedContent: undefined, excludedContent: undefined }))}`}
                           className="block w-full"
                         >
                           <button className="w-full rounded-xl bg-blue-50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 text-blue-700 hover:text-white text-sm font-bold py-3.5 transition-all duration-300 shadow-sm hover:shadow-md">

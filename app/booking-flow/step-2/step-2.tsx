@@ -138,7 +138,7 @@ export default function Step2() {
               }
             },
           );
-        } catch (_e) {}
+        } catch (_e) { }
       }
     }
     return () => {
@@ -684,11 +684,10 @@ export default function Step2() {
                       onClick={() => setSelectedVehicle(option.id)}
                     >
                       <div
-                        className={`group bg-white/80 backdrop-blur-md rounded-2xl shadow-sm p-5 flex flex-col hover:shadow-xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full border-2 relative ${
-                          selectedVehicle === option.id
-                            ? "border-blue-600 ring-2 ring-blue-100 shadow-md bg-white"
-                            : "border-transparent hover:border-blue-300"
-                        }`}
+                        className={`group bg-white backdrop-blur-md rounded-2xl shadow-sm p-5 flex flex-col hover:shadow-xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full border-2 relative ${selectedVehicle === option.id
+                          ? "border-blue-600 ring-2 ring-blue-100 shadow-md bg-white"
+                          : "border-transparent hover:border-blue-300"
+                          }`}
                         onClick={() => {
                           setSelectedVehicle(option.id);
                           setSelectedPrice(totalPrice);
@@ -697,7 +696,7 @@ export default function Step2() {
                         {/* Subtle inner glow on hover */}
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl z-0" />
                         {option.vehicles.length === 1 ? (
-                          <div className="mb-5 h-32 sm:h-36 flex items-center justify-center bg-gradient-to-br from-blue-50/50 to-indigo-50/50 rounded-xl p-3 relative overflow-hidden group-hover:shadow-inner transition-all z-10">
+                          <div className="mb-5 h-32 sm:h-36 flex items-center justify-center bg-gray-50 rounded-xl p-3 relative overflow-hidden group-hover:shadow-inner transition-all z-10">
                             <img
                               src={option.vehicles[0].image[0]}
                               alt={option.vehicles[0].name}
@@ -741,8 +740,8 @@ export default function Step2() {
                           <div className="text-right whitespace-nowrap">
                             <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
                               {distanceKm ||
-                              serviceType === "BY_THE_HOUR" ||
-                              serviceType === "DAY_TRIP"
+                                serviceType === "BY_THE_HOUR" ||
+                                serviceType === "DAY_TRIP"
                                 ? `€${totalPrice}`
                                 : "TBD"}
                             </p>
@@ -771,11 +770,10 @@ export default function Step2() {
 
                         {/* Select Button */}
                         <button
-                          className={`mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 relative z-10 ${
-                            selectedVehicle === option.id
-                              ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-lg"
-                              : "bg-blue-50 text-blue-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white hover:shadow-md"
-                          }`}
+                          className={`mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 relative z-10 ${selectedVehicle === option.id
+                            ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-lg"
+                            : "bg-blue-50 text-blue-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white hover:shadow-md"
+                            }`}
                         >
                           {selectedVehicle === option.id
                             ? "Selected"
@@ -802,11 +800,10 @@ export default function Step2() {
           <Button
             asChild
             disabled={!selectedVehicle}
-            className={`w-full sm:w-auto px-10 sm:px-12 py-6 sm:py-7 text-white text-sm sm:text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center border-none ${
-              selectedVehicle
-                ? "bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95"
-                : "bg-gray-300 cursor-not-allowed opacity-70"
-            }`}
+            className={`w-full sm:w-auto px-10 sm:px-12 py-6 sm:py-7 text-white text-sm sm:text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center border-none ${selectedVehicle
+              ? "bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95"
+              : "bg-gray-300 cursor-not-allowed opacity-70"
+              }`}
           >
             <Link
               onClick={(e) => {
@@ -818,8 +815,8 @@ export default function Step2() {
               className={!selectedVehicle ? "pointer-events-none" : ""}
             >
               {serviceType === "TRANSFER" ||
-              serviceType === "PRIVATE_TRANSFER" ||
-              serviceType === "AIRPORT_TRANSFER"
+                serviceType === "PRIVATE_TRANSFER" ||
+                serviceType === "AIRPORT_TRANSFER"
                 ? "Next: Add Stops"
                 : "Next: Checkout"}
             </Link>

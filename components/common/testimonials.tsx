@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Quote, AlertCircle } from "lucide-react";
 import { useGetAllReviewQuery } from "@/Redux/features/review/reviewApi";
 import { SectionHeader } from "../ui/section-header";
 import Image from "next/image";
@@ -26,8 +26,39 @@ interface Review {
 
 export function Testimonials() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { data, isLoading } = useGetAllReviewQuery(undefined);
+  const { data, error, isLoading } = useGetAllReviewQuery(undefined);
   const reviews: Review[] = data?.data || [];
+
+  if (error) {
+    return (
+      <section className="relative px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-16 md:py-24 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto relative z-10 mb-12 flex justify-center">
+          <SectionHeader
+            title="What Our Customers Say"
+            subtitle="Testimonials"
+            description="Trusted by happy travelers worldwide for our premium service and local expertise."
+            alignment="center"
+            className="mb-0"
+          />
+        </div>
+        <div className="max-w-2xl mx-auto flex flex-col items-center justify-center p-8 md:p-12 text-center">
+          <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-5">
+            <AlertCircle className="w-8 h-8 text-red-500" />
+          </div>
+          <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">Unable to Load Testimonials</h3>
+          <p className="text-gray-500 mb-8 max-w-md">
+            We're having trouble retrieving the latest reviews from our server right now. This is likely due to an authorization or network issue.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-red-50 hover:bg-red-100 text-red-600 font-semibold rounded-xl transition-colors shadow-sm active:scale-95"
+          >
+            Try Again
+          </button>
+        </div>
+      </section>
+    );
+  }
 
   const goToPrevious = () => {
     if (reviews.length === 0) return;
@@ -65,7 +96,7 @@ export function Testimonials() {
       year: "numeric",
     });
   };
-  
+
   if (isLoading) {
     return (
       <section className="relative px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-16 md:py-24 bg-gray-50/50 overflow-hidden">
