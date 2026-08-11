@@ -155,7 +155,10 @@ export default function Step2() {
   ]);
 
   const { data: vehiclesData, isLoading } = useGetVehiclesQuery({});
-  const vehicles = vehiclesData?.data?.data || [];
+  const baseVehicles = vehiclesData?.data?.data || [];
+  const vehicles = serviceType === "DAY_TRIP" && dayTrip?.vehicles?.length > 0
+    ? dayTrip.vehicles
+    : baseVehicles;
 
   const getVehicleOptions = (
     vehicles: any[],
@@ -540,7 +543,12 @@ export default function Step2() {
                   const extraBagsCost = localExtraBags * 10;
                   let pricePerCar = 0;
 
-                  if (serviceType === "BY_THE_HOUR") {
+                  if (serviceType === "DAY_TRIP") {
+                    pricePerCar = option.vehicles.reduce(
+                      (sum: number, vehicle: any) => sum + (vehicle.price ?? vehicle.basePrice ?? 0),
+                      0
+                    );
+                  } else if (serviceType === "BY_THE_HOUR") {
                     let hours = 0;
                     if (durationParam) {
                       const matches = durationParam.match(/\d+/g);
