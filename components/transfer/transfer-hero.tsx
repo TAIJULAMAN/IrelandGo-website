@@ -1,13 +1,13 @@
 "use client";
 
-import { Search, MapPin } from "lucide-react";
+import { Search, Car, MapPin } from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
 const ELIGIBLE_LOCATIONS = [
-  "Galway", "Dublin", "Killarney", "Cork", "Dingle", "Kilkenny", "Limerick",
+  "Galway", "Dublin", "Killarney", "Cork", "Dingle", "Kilkenny", "Limerick", "Belfast",
   "Waterford", "Ashford castle", "Kinsale", "Doolin", "Shannon", "Adare",
   "Tralee", "Ennis", "Clifden", "Donegal", "Westport", "Cliffs of Moher",
   "Kenmare", "Athlone", "Cashel", "Knock Shrine", "Sligo", "Lahinch", "Cobh",
@@ -91,8 +91,8 @@ export default function TransfersHero() {
     }
 
     const query = searchLocation.trim()
-      ? `?pickup=${encodeURIComponent(searchLocation.trim())}`
-      : "";
+      ? `?pickup=${encodeURIComponent(searchLocation.trim())}&serviceType=PRIVATE_TRANSFER`
+      : "?serviceType=PRIVATE_TRANSFER";
     router.push(`/transfer/transfer-search${query}`);
   };
 
@@ -171,7 +171,7 @@ export default function TransfersHero() {
           <div className="flex flex-col sm:flex-row items-stretch gap-4">
             <div className="relative flex-1">
               <div className="flex items-center border border-gray-200 rounded-xl px-4 py-3 sm:py-4 gap-3 bg-white/80 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 transition-all">
-                <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0" />
+                <Car className="w-5 h-5 text-blue-600 flex-shrink-0" />
                 <input
                   ref={inputRef}
                   type="text"

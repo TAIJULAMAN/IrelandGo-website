@@ -55,7 +55,7 @@ export function PrivateTransfers() {
   }
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 2xl:px-0 py-12 md:py-16 xl:py-20 bg-white overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 2xl:px-0 py-12 md:py-16 xl:py-20 bg-gray-50/50 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[5%] -left-[10%] w-[40%] h-[40%] rounded-full bg-blue-50/80 blur-3xl mix-blend-multiply" />
@@ -102,7 +102,7 @@ export function PrivateTransfers() {
               className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-white transition-all duration-500 hover:-translate-y-2 flex flex-col h-full relative ${showSlider && idx === 2 ? 'hidden lg:flex' : 'flex'} ${showSlider && idx === 1 ? 'hidden md:flex' : 'flex'}`}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
-              
+
               <div className="relative h-40 md:h-48 overflow-hidden bg-gray-100 z-10">
                 <img
                   src={transfer.images?.[0] || "/placeholder.svg"}
@@ -111,7 +111,7 @@ export function PrivateTransfers() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-60" />
               </div>
-              
+
               <div className="p-5 md:p-6 flex flex-col flex-1 relative z-10">
                 <div className="flex items-center justify-between mb-4 gap-2">
                   <span className="font-bold text-gray-900 text-sm md:text-base lg:text-lg truncate max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-none group-hover:text-blue-700 transition-colors" title={transfer.from}>{transfer.from}</span>
@@ -137,7 +137,7 @@ export function PrivateTransfers() {
                     asChild
                     className="w-full rounded-xl text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-6 border-none"
                   >
-                    <Link href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transfer.from)}&dropoff=${encodeURIComponent(transfer.to)}&transferRoute=${encodeURIComponent(JSON.stringify(transfer))}`}>Book Now</Link>
+                    <Link href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transfer.from)}&dropoff=${encodeURIComponent(transfer.to)}&serviceType=${encodeURIComponent(transfer.serviceType || 'PRIVATE_TRANSFER')}&transferRoute=${encodeURIComponent(JSON.stringify({ ...transfer, description: undefined, images: undefined, includedContent: undefined, excludedContent: undefined }))}`}>Book Now</Link>
                   </Button>
                 </div>
               </div>

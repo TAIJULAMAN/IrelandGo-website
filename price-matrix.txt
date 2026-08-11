@@ -61,10 +61,13 @@ Hourly bookings have a base price for the first 2 hours, with incremental additi
 ## 3. Extra Stops (Stoppages)
 When a user adds an extra stop during a transfer, the cost is calculated based on the additional distance and the time spent at the stop.
 
+
+## 3. Extra Stops (Stoppages)
+When a user adds an extra stop during a transfer, the cost is calculated based on the additional distance and the time spent at the stop.
+
 1. **Base Stop Price (First 60 mins):** 
-   - There is no car base price for stops; instead, there is a €50 base fee for the first hour of waiting.
-   - The stop price is calculated as:
-     `stopsPrice = 50 + ((Total distance with stops - total distance without stops) * Rate per Km) + extra time price (if applicable)`
+   - there is no car base price. We have only one price that is price per km.So the stop price is 
+   stopsPrice = Total distance with stops -total distance without stops) + 1h stops price + extra time price(if anyone add extra time) 
 
 2. **Extra Time (beyond 60 mins):**
    - **Full Extra Hour:** +€50 per hour
