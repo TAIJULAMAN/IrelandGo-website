@@ -91,7 +91,7 @@ export function PopularDayTrips() {
               {/* Subtle Glow Behind Card */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-              <div className="relative h-40 md:h-48 w-full bg-gray-200 overflow-hidden z-10">
+              <div className="relative h-40 md:h-48 w-full bg-gray-200 overflow-hidden z-10" style={{ position: "relative" }}>
                 <Image
                   src={trip.images?.[0] || "/placeholder.svg"}
                   alt={trip.to}

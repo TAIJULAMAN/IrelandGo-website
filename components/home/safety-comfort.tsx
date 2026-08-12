@@ -91,7 +91,7 @@ export function SafetyComfort() {
           {/* Decorative Image Background Glow */}
           <div className="absolute -inset-4 bg-gradient-to-br from-blue-100 via-indigo-100 to-violet-100 rounded-[2rem] blur-2xl opacity-60 mix-blend-multiply" />
 
-          <div className="relative h-72 sm:h-96 lg:h-[350px] xl:h-[400px] w-full rounded-[2rem] overflow-hidden shadow-2xl border border-white/60 bg-white group">
+          <div className="relative h-72 sm:h-96 lg:h-[350px] xl:h-[400px] w-full rounded-[2rem] overflow-hidden shadow-2xl border border-white/60 bg-white group" style={{ position: "relative" }}>
             {/* Image */}
             <Image
               src="/safe.png"

@@ -93,7 +93,7 @@ export function PopularMultiDayTours() {
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
               
-              <div className="relative h-40 md:h-48 overflow-hidden bg-gray-100 z-10">
+              <div className="relative h-40 md:h-48 overflow-hidden bg-gray-100 z-10" style={{ position: "relative" }}>
                 <Image
                   src={tour.images?.[0] || "/placeholder.svg"}
                   alt={tour.title}
@@ -124,6 +124,12 @@ export function PopularMultiDayTours() {
                 </p>
 
                 <div className="mt-auto">
+                  <div className="flex items-center justify-between mb-5">
+                    <div>
+                      <span className="text-2xl md:text-3xl font-extrabold text-blue-600">€{tour.price}</span>
+                      <span className="text-xs text-gray-500 font-medium ml-1">per person</span>
+                    </div>
+                  </div>
                   <Link href={`/multi-day-tours/${tour.id}`} className="block w-full">
                     <button className="w-full px-4 py-3.5 rounded-xl text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md border-none">
                       View Details

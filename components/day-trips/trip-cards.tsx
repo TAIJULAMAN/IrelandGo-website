@@ -112,7 +112,7 @@ export default function TripCards() {
                 {/* Subtle Glow Behind Card */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-                <div className="relative h-56 overflow-hidden z-10">
+                <div className="relative h-56 overflow-hidden z-10" style={{ position: "relative" }}>
                   <Image
                     src={trip.images?.[0] || "https://images.pexels.com/photos/3849167/pexels-photo-3849167.jpeg?auto=compress&cs=tinysrgb&w=800"}
                     alt={trip.title}
