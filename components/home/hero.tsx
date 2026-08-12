@@ -23,7 +23,7 @@ export function Hero() {
 
   return (
     <section className="relative w-full pt-24 md:pt-28 lg:pt-36 pb-20">
-      <div className="absolute top-0 left-0 w-full h-[57vh] z-0">
+      <div className="absolute top-0 left-0 w-full h-[57vh] z-0" style={{ position: "absolute" }}>
         <Image
           src="/Images/Home.webp"
           alt="Irish landscape"

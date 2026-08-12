@@ -190,6 +190,12 @@ export default function MultiDayToursOurMultiDayTours() {
                     </p>
                     
                     <div className="mt-auto">
+                      <div className="flex items-center justify-between mb-5">
+                        <div>
+                          <span className="text-2xl md:text-3xl font-extrabold text-blue-600">€{t.price}</span>
+                          <span className="text-xs text-gray-500 font-medium ml-1">per person</span>
+                        </div>
+                      </div>
                       <button className="w-full px-4 py-3 rounded-xl text-sm font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm">
                         View Details
                       </button>
