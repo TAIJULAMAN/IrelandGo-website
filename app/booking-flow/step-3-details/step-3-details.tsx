@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { SuccessModal } from "./success-modal";
 import { Button } from "@/components/ui/button";
 import { X, CheckCircle2, ChevronDown } from "lucide-react";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
@@ -492,8 +493,8 @@ export default function Step3Details() {
             <div className="bg-white rounded-lg shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-4 sm:p-4 sm:px-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-3 sm:gap-0 border border-gray-100 mt-4">
               <Button
                 asChild
-                variant="outline"
-                className="w-full text-white sm:w-auto border-blue-600 hover:bg-blue-50 px-6 sm:px-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+
+                className="w-full sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
               >
                 <Link href={`/booking-flow/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "step-2" : "step-3"}?${searchParams.toString()}`}>
                   ← Back
@@ -502,6 +503,7 @@ export default function Step3Details() {
 
               <Button
                 type="button"
+
                 onClick={handleBooking}
                 disabled={isLoading || !isFormValid}
                 className="w-full sm:w-auto text-white bg-blue-600 hover:bg-blue-700 px-6 sm:px-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
@@ -608,56 +610,19 @@ export default function Step3Details() {
           </div>
         </div>
       </div>
-      {/* Tour status modal (Success Booking placeholder for now) */}
-      {showModal && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/40 px-4">
-          <div className="relative w-full max-w-md rounded-lg bg-white shadow-xl p-6 sm:p-7">
-            <button
-              type="button"
-              onClick={() => setShowModal(false)}
-              className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"
-            >
-              <X className="h-4 w-4" />
-            </button>
-
-            <h2 className="text-lg sm:text-xl font-semibold text-green-600 mb-1 flex items-center gap-2">
-              <CheckCircle2 className="h-6 w-6" />
-              Booking Confirmed!
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-600 mb-6">
-              Your transfer booking has been successfully created. You will
-              receive an email confirmation shortly.
-            </p>
-
-            <div className="rounded-lg bg-gray-50 px-4 py-4 mb-5 border border-gray-100">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-500">Booking Reference</span>
-                <span className="text-sm font-bold text-gray-900">
-                  #
-                  {bookingId || `IG-${Math.floor(1000 + Math.random() * 9000)}`}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Total Amount</span>
-                <span className="text-sm font-bold text-blue-600">
-                  €{totalPrice}
-                </span>
-              </div>
-            </div>
-
-            <Button
-              asChild
-              className="w-full bg-blue-600 text-white text-sm sm:text-base font-medium rounded-lg py-2.5 mt-1"
-            >
-              <Link
-                href={`/booking-flow/payment?${searchParams.toString()}${bookingId ? `&bookingId=${bookingId}` : ""}&firstName=${firstName}&lastName=${lastName}&email=${email}&phone=${phone}&specialRequests=${specialRequests}`}
-              >
-                Proceed to Payment
-              </Link>
-            </Button>
-          </div>
-        </div>
-      )}
+      {/* Tour status modal */}
+      <SuccessModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        bookingId={bookingId}
+        totalPrice={totalPrice}
+        searchParams={searchParams}
+        firstName={firstName}
+        lastName={lastName}
+        email={email}
+        phone={phone}
+        specialRequests={specialRequests}
+      />
     </section>
   );
 }

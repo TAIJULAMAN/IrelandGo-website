@@ -54,76 +54,75 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
   const isFormValid = date !== undefined && time !== "" && !isTimeDisabled(date, time);
 
   return (
-    <section className="relative w-full h-[80vh]">      <div className="absolute inset-0">
-      <img
-        src={trip?.images?.[0] || "/details.png"}
-        alt={trip?.title || "Scenic Ireland coastline"}
-        className="w-full h-full object-cover"
-      />
-      <div className="absolute inset-0 bg-slate-900/40" />
-    </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-5 flex items-center justify-center pt-30">
-        <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-lg shadow-xl border border-white/50 p-5 md:p-8">
+    <section className="relative w-full h-[80vh] py-20">
+      <div className="absolute inset-0 z-0">
+        <img
+          src={trip?.images?.[0] || "/details.png"}
+          alt={trip?.title || "Scenic Ireland coastline"}
+          className="w-full h-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/30" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-5 w-full pt-10 md:pt-16">
+        <div className="text-center mb-6 md:mb-10 max-w-4xl mx-auto">
           {/* Title & Subtitle */}
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-slate-900 mb-3 text-center">
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4 text-balance leading-tight px-4 drop-shadow-md">
             {trip?.title}
           </h1>
-          <p className="text-slate-600 md:text-lg text-center mb-6 line-clamp-2">
-            {trip?.description
-              ? trip.description.replace(/<[^>]*>?/gm, "").slice(0, 100) + (trip.description.replace(/<[^>]*>?/gm, "").length > 100 ? "..." : "")
-              : "Explore gorgeous coastal scenery and charming Irish towns on a private, guided day tour."}
+          <p className="text-base md:text-lg text-white/90 mb-4 px-4 font-medium drop-shadow-md">
+            Explore gorgeous coastal scenery and charming Irish towns on a private, guided day tour.
           </p>
+        </div>
+
+        <div className="w-full max-w-4xl mx-auto bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/50 p-5 md:p-8">
 
           {/* Controls */}
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            <label className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12">
-              <MapPin className="w-4 h-4 text-blue-600" />
+          <div className="mt-2 flex flex-col md:flex-row items-stretch bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            <div className="flex-1 flex items-center gap-3 px-4 h-14 md:h-16 border-b md:border-b-0 md:border-r border-slate-200 hover:bg-slate-50 transition-colors">
+              <MapPin className="w-5 h-5 text-blue-600 shrink-0" />
               <Input
                 type="text"
                 defaultValue={trip?.from || ""}
                 placeholder="Pickup Location"
-                className="border-0 bg-transparent h-10 px-0 text-sm placeholder:text-slate-500 focus-visible:ring-0 focus-visible:border-0 shadow-none"
+                className="border-0 bg-transparent h-full px-0 text-sm md:text-base font-medium placeholder:text-slate-400 focus-visible:ring-0 shadow-none rounded-none"
               />
-            </label>
-            <label className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12">
-              <Flag className="w-4 h-4 text-blue-600" />
+            </div>
+            <div className="flex-1 flex items-center gap-3 px-4 h-14 md:h-16 border-b md:border-b-0 md:border-r border-slate-200 hover:bg-slate-50 transition-colors">
+              <Flag className="w-5 h-5 text-blue-600 shrink-0" />
               <Input
                 type="text"
                 defaultValue={trip?.to || ""}
                 placeholder="Dropoff Location"
-                className="border-0 bg-transparent h-10 px-0 text-sm placeholder:text-slate-500 focus-visible:ring-0 focus-visible:border-0 shadow-none"
+                className="border-0 bg-transparent h-full px-0 text-sm md:text-base font-medium placeholder:text-slate-400 focus-visible:ring-0 shadow-none rounded-none"
               />
-            </label>
+            </div>
             {/* Date Picker */}
-            <div className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12">
+            <div className="flex-1 flex items-center h-14 md:h-16 hover:bg-slate-50 transition-colors">
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant={"ghost"}
                     className={cn(
-                      "w-full justify-start text-left font-normal h-auto p-0 hover:bg-transparent text-slate-700 text-xs sm:text-sm",
-                      !date && "text-slate-500"
+                      "w-full h-full px-4 justify-start text-left font-medium rounded-none hover:bg-transparent text-slate-700 text-sm md:text-base",
+                      !date && "text-slate-400"
                     )}
                   >
-                    <CalendarIcon className="mr-1.5 sm:mr-2 h-4 w-4 text-blue-600 flex-shrink-0" />
+                    <CalendarIcon className="mr-3 h-5 w-5 text-blue-600 flex-shrink-0" />
                     {date ? (
                       <span className="truncate">
-                        <span className="inline md:hidden lg:inline xl:hidden 2xl:inline">
-                          {format(date, "PPP")}
-                        </span>
-                        <span className="hidden md:inline lg:hidden xl:inline 2xl:hidden">
-                          {format(date, "PP")}
-                        </span>{" "}
-                        <span className="text-slate-400 mx-0.5 sm:mx-1">|</span> {time}
+                        <span>{format(date, "MMM d, yyyy")}</span>
+                        <span className="text-slate-300 mx-2">|</span>
+                        <span className="text-slate-900">{time}</span>
                       </span>
                     ) : (
-                      <span>Pick a date & time</span>
+                      <span>Pick date & time</span>
                     )}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <div className="flex">
-                    <div className="border-r border-slate-100">
+                  <div className="flex flex-col sm:flex-row">
+                    <div className="border-b sm:border-b-0 sm:border-r border-slate-100">
                       <Calendar
                         mode="single"
                         selected={date}
@@ -132,8 +131,8 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
                         initialFocus
                       />
                     </div>
-                    <div className="h-[300px] w-[110px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-slate-200">
-                      <div className="flex flex-col gap-1">
+                    <div className="h-[200px] sm:h-[300px] w-full sm:w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-slate-200">
+                      <div className="flex sm:flex-col gap-1 flex-wrap sm:flex-nowrap">
                         {(() => {
                           const availableTimes = Array.from({ length: 96 })
                             .map((_, i) => {
@@ -145,8 +144,8 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
 
                           if (availableTimes.length === 0) {
                             return (
-                              <div className="text-center p-4 text-sm text-slate-500">
-                                No times available
+                              <div className="text-center p-4 text-sm text-slate-500 w-full">
+                                No times
                               </div>
                             );
                           }
@@ -156,7 +155,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
                               key={timeString}
                               variant={time === timeString ? "default" : "ghost"}
                               className={cn(
-                                "justify-center h-8 text-sm",
+                                "justify-center h-9 text-sm flex-1 sm:flex-none min-w-[70px]",
                                 time === timeString
                                   ? "bg-blue-600 hover:bg-blue-700 text-white"
                                   : "hover:bg-blue-50 text-slate-600"
@@ -187,8 +186,8 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
                   query: {
                     serviceType: "DAY_TRIP",
                     id: trip?.id,
-                    pickup: trip?.from || "Dublin",
-                    dropoff: trip?.to || "Galway",
+                    pickup: trip?.from || "",
+                    dropoff: trip?.to || "",
                     date: date ? date.toISOString() : "",
                     time,
                     adults: adults.toString(),

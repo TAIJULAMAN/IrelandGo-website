@@ -8,6 +8,8 @@ interface ValidateHeroFormArgs {
   isReturnTimeDisabled: (t: string) => boolean;
   pickupLocation: string;
   dropoffLocation: string;
+  selectedPickup?: string;
+  selectedDropoff?: string;
   returnDate?: Date;
 }
 
@@ -21,6 +23,8 @@ export const validateHeroForm = ({
   isReturnTimeDisabled,
   pickupLocation,
   dropoffLocation,
+  selectedPickup,
+  selectedDropoff,
   returnDate,
 }: ValidateHeroFormArgs) => {
   const isToday = date && date.toDateString() === new Date().toDateString();
@@ -34,7 +38,9 @@ export const validateHeroForm = ({
   if (activeTab === "transfer") {
     return (
       pickupLocation.trim() !== "" &&
+      pickupLocation === selectedPickup &&
       dropoffLocation.trim() !== "" &&
+      dropoffLocation === selectedDropoff &&
       date !== undefined &&
       time !== "" &&
       (tripType === "return" ? returnDate !== undefined && returnTime !== "" : true)
@@ -43,6 +49,7 @@ export const validateHeroForm = ({
   if (activeTab === "hourly") {
     return (
       pickupLocation.trim() !== "" &&
+      pickupLocation === selectedPickup &&
       date !== undefined &&
       time !== ""
     );
@@ -50,7 +57,9 @@ export const validateHeroForm = ({
   if (activeTab === "day-trips") {
     return (
       pickupLocation.trim() !== "" &&
+      pickupLocation === selectedPickup &&
       dropoffLocation.trim() !== "" &&
+      dropoffLocation === selectedDropoff &&
       date !== undefined &&
       time !== ""
     );

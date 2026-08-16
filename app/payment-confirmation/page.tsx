@@ -63,7 +63,7 @@ export default function PaymentConfirmationPage() {
     : `#IG-${Math.floor(10000 + Math.random() * 90000)}`;
 
   return (
-    <section className="bg-gray-50 min-h-screen flex flex-col">
+    <section className="bg-gray-50 min-h-screen flex flex-col py-20">
       <div className="print:hidden">      </div>
 
       <div className="flex-1 py-10 sm:py-14 max-w-3xl w-full mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
@@ -133,17 +133,18 @@ export default function PaymentConfirmationPage() {
               Our support team is available 24/7 to help you with any questions
               about your booking.
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
               <Button
                 asChild
                 variant="secondary"
-                className="bg-white text-blue-600 hover:bg-blue-50 font-semibold rounded-lg"
+                className="w-full sm:w-auto bg-white text-blue-600 hover:bg-blue-50 font-semibold rounded-lg"
               >
                 <Link href="/contact">Contact Support</Link>
               </Button>
               <Button
                 asChild
-                className="g-white text-blue-600 hover:bg-blue-50 font-semibold rounded-lg"
+                variant="secondary"
+                className="w-full sm:w-auto bg-white text-blue-600 hover:bg-blue-50 font-semibold rounded-lg"
               >
                 <Link href="/">Return to Home</Link>
               </Button>

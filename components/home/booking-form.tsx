@@ -33,6 +33,8 @@ export function BookingForm({ activeTab }: BookingFormProps) {
   const [tripType, setTripType] = useState("one-way");
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
+  const [selectedPickup, setSelectedPickup] = useState("");
+  const [selectedDropoff, setSelectedDropoff] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [time, setTime] = useState("09:00");
   const [duration, setDuration] = useState(2);
@@ -165,6 +167,7 @@ export function BookingForm({ activeTab }: BookingFormProps) {
 
   const handlePickupSelect = (description: string) => {
     setPickupLocation(description);
+    setSelectedPickup(description);
     setPValue(description, false);
     clearPSuggestions();
     setShowPickupDropdown(false);
@@ -172,6 +175,7 @@ export function BookingForm({ activeTab }: BookingFormProps) {
 
   const handleDropoffSelect = (description: string) => {
     setDropoffLocation(description);
+    setSelectedDropoff(description);
     setDValue(description, false);
     clearDSuggestions();
     setShowDropoffDropdown(false);
@@ -245,6 +249,8 @@ export function BookingForm({ activeTab }: BookingFormProps) {
     isReturnTimeDisabled,
     pickupLocation,
     dropoffLocation,
+    selectedPickup,
+    selectedDropoff,
     returnDate,
   });
 

@@ -70,7 +70,7 @@ function SingleStoppageModal({
   if (images.length === 0) images.push("/placeholder.jpg");
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center md:items-center justify-center bg-black/60 backdrop-blur-sm md:p-5">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-5">
       <div className="bg-white rounded-lg sm:rounded-lg max-w-sm md:max-w-2xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[70vh] md:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg sm:text-xl font-bold text-gray-900">{stopData?.name || baseStop?.name}</h2>
@@ -115,20 +115,20 @@ function SingleStoppageModal({
                 )}
               </div>
 
-              <div className="flex flex-wrap gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
-                <div className="flex-1 min-w-[100px]">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                <div>
                   <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
                     <Clock className="h-3.5 w-3.5 text-purple-500" /> Suggested time
                   </div>
                   <div className="font-semibold text-sm">{formatDuration(stopData?.duration || 120)}</div>
                 </div>
-                <div className="flex-1 min-w-[100px] border-l border-gray-200 pl-3">
+                <div className="border-l border-gray-200 pl-3">
                   <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
                     <Map className="h-3.5 w-3.5 text-green-500" /> Attraction type
                   </div>
-                  <div className="font-semibold text-sm">{stopData?.type || stopData?.types?.[0] || "Traveler favorite"}</div>
+                  <div className="font-semibold text-sm truncate">{stopData?.type || stopData?.types?.[0] || "Traveler favorite"}</div>
                 </div>
-                <div className="flex-1 min-w-[100px] border-l border-gray-200 pl-3">
+                <div className="col-span-2 sm:col-span-1 border-t sm:border-t-0 sm:border-l border-gray-200 pt-3 sm:pt-0 sm:pl-3">
                   <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
                     <AlertCircle className="h-3.5 w-3.5 text-yellow-500" /> Entrance
                   </div>
@@ -143,37 +143,37 @@ function SingleStoppageModal({
           )}
         </div>
 
-        <div className="p-4 border-t flex items-center justify-between gap-4 bg-white">
-          <div className="flex items-center gap-3 bg-gray-50 p-1.5 rounded-full border border-gray-200">
+        <div className="p-4 border-t flex flex-col sm:flex-row items-center justify-between gap-4 bg-white">
+          <div className="flex items-center justify-between w-full sm:w-auto gap-3 bg-gray-50 p-1.5 rounded-full border border-gray-200 shrink-0">
             <button onClick={() => setDurationMinutes((p: number) => Math.max(15, p - 15))} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
               <Minus className="h-4 w-4" />
             </button>
-            <span className="font-semibold w-8 text-center text-sm">{formatDuration(durationMinutes)}</span>
+            <span className="font-semibold w-12 text-center text-sm">{formatDuration(durationMinutes)}</span>
             <button onClick={() => setDurationMinutes((p: number) => p + 15)} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
               <Plus className="h-4 w-4" />
             </button>
           </div>
 
           {existingStop ? (
-            <div className="flex flex-1 gap-2">
+            <div className="flex flex-col sm:flex-row w-full flex-1 gap-2">
               <Button
                 onClick={() => { onRemove(baseStop); onClose(); }}
                 variant="outline"
-                className="flex-1 bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:text-white"
+                className="w-full sm:flex-1 bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:text-white"
               >
                 Remove
               </Button>
               {isDurationChanged && (
                 <Button
                   onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }}
-                  className="flex-1 bg-blue-600 text-white hover:bg-blue-700"
+                  className="w-full sm:flex-1 bg-blue-600 text-white hover:bg-blue-700"
                 >
                   €{calculatePrice(baseStop, durationMinutes)} - Update
                 </Button>
               )}
             </div>
           ) : (
-            <Button onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+            <Button onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }} className="w-full sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white">
               €{calculatePrice(baseStop, durationMinutes)} - Add
             </Button>
           )}
@@ -402,12 +402,7 @@ export default function Step3() {
     }
   }, [serviceType, searchParams, router]);
 
-
-
-  // console.log("Stoppages Page Coordinates:", { fromLat, fromLng, toLat, toLng });
-
   const [searchPopularStops, { data: popularStopsResponse, isLoading, error }] = useSearchPopularStopsMutation();
-  // console.log("popularStopsResponse", popularStopsResponse)
 
   useEffect(() => {
     if (pickupParam && dropoffParam && fromLat && fromLng && toLat && toLng) {
@@ -470,7 +465,7 @@ export default function Step3() {
 
   const calculateStopPrice = (stop: any, durationMinutes: number) => {
     let stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
-    
+
     if (stop.id && popularStopDistances[stop.id] !== undefined) {
       stopDistance = popularStopDistances[stop.id];
     }
@@ -535,7 +530,7 @@ export default function Step3() {
       stopsData.forEach((stop: any) => {
         const stopLat = stop.latitude ?? stop.location?.lat;
         const stopLng = stop.longitude ?? stop.location?.lng;
-        
+
         if (stopLat && stopLng && popularStopDistances[stop.id] === undefined) {
           directionsService.route(
             {
@@ -640,9 +635,9 @@ export default function Step3() {
 
   return (
     <section className="bg-gray-50 min-h-screen flex flex-col pt-20">
-      <div className="flex-1 py-6 sm:py-12 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="flex-1 py-10 max-w-7xl w-full mx-auto px-5">
         {/* Step progress */}
-        <div className="mb-6 sm:mb-10">
+        <div className="mb-5">
           <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-600">
             <div className="flex items-center gap-1.5 sm:gap-2">
               <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold shrink-0">
@@ -812,16 +807,16 @@ export default function Step3() {
                   Want a different stop? Add your own custom stop below.
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col lg:flex-row gap-3">
                 <input
                   ref={inputRef}
                   type="text"
                   onKeyDown={(e) => e.key === "Enter" && handleAddCustomStop()}
                   placeholder="Search location to add stop"
-                  className="flex-1 h-10 sm:h-11 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  className="w-full lg:flex-1 h-11 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent"
                 />
-                <div className="flex gap-2 shrink-0 justify-between sm:justify-start">
-                  <div className="flex items-center border border-gray-200 rounded-lg bg-white h-10 sm:h-11 overflow-hidden shrink-0">
+                <div className="grid grid-cols-2 sm:flex sm:flex-nowrap gap-2 shrink-0 w-full lg:w-auto">
+                  <div className="col-span-2 sm:col-span-1 flex items-center border border-gray-200 rounded-lg bg-white h-11 overflow-hidden shrink-0 justify-between">
                     <button
                       type="button"
                       onClick={() => setCustomStopDuration(prev => Math.max(15, prev - 15))}
@@ -843,7 +838,7 @@ export default function Step3() {
                     </button>
                   </div>
 
-                  <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg h-10 sm:h-11 px-3 shrink-0 select-none">
+                  <div className="col-span-1 flex items-center justify-center bg-gray-50 border border-gray-200 rounded-lg h-11 px-3 shrink-0 select-none">
                     <span className="text-sm font-bold text-gray-800">
                       €{calculateStopPrice({ roadDistance: customStopEstimatedDistance }, customStopDuration)}
                     </span>
@@ -853,7 +848,7 @@ export default function Step3() {
                     type="button"
                     onClick={handleAddCustomStop}
                     disabled={!customStopName.trim() || !customStopLat}
-                    className="h-10 sm:h-11 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white text-sm font-semibold rounded-lg transition-colors shrink-0 flex items-center gap-1.5"
+                    className="col-span-1 h-11 px-4 sm:px-6 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white text-sm font-semibold rounded-lg transition-colors shrink-0 flex items-center justify-center gap-1.5 w-full sm:w-auto"
                   >
                     <Plus className="h-4 w-4" />
                     Add
@@ -867,7 +862,7 @@ export default function Step3() {
               <Button
                 asChild
 
-                className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+                className="w-full sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
               >
                 <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>Back</Link>
               </Button>
@@ -888,12 +883,8 @@ export default function Step3() {
 
           <div className="hidden lg:block">
             <div className="bg-white rounded-lg shadow-md p-6 flex flex-col gap-6 sticky top-24">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">Itinerary</h2>
-                <button className="text-sm font-semibold text-blue-600 hover:text-blue-700">
-                  View details
-                </button>
-              </div>
+              <h2 className="text-xl font-bold text-gray-900">Itinerary</h2>
+
 
               <div>
                 <div className="inline-flex items-center gap-1.5 bg-gray-100 rounded-lg px-2 py-1 mb-4">
@@ -1048,9 +1039,7 @@ export default function Step3() {
                 {selectedStops.length} stop{selectedStops.length !== 1 ? "s" : ""} selected
               </span>
             )}
-            <div className="flex items-center gap-1.5 text-xs text-gray-500">
-              <span>🚗 {vehicleName}</span>
-            </div>
+            <p className="truncate max-w-[100px] text-xs text-gray-500">{vehicleName}</p>
           </div>
         </div>
 

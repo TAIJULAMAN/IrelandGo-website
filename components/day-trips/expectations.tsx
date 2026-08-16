@@ -44,7 +44,7 @@ export default function Expectations() {
         <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-600/10 blur-[100px] opacity-60" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 relative z-10">
+      <div className="max-w-7xl mx-auto px-5 md:px-0 lg:px-0 xl:px-0 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center lg:text-left text-white leading-tight">

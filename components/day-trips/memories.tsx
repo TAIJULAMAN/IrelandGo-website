@@ -75,7 +75,7 @@ export default function Memories() {
                 <div className="absolute bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
             </div>
 
-            <div className="max-w-7xl mx-auto px-5 lg:px-8 relative z-10">
+            <div className="max-w-7xl mx-auto px-5 relative z-10">
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-center text-gray-900 mb-12 lg:mb-16">
                     Create <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Unforgettable Memories</span>
                 </h2>

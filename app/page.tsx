@@ -10,7 +10,7 @@ import { NewsLetter } from "@/components/home/news-letter"
 import { RecentBlogs } from "@/components/home/recent-blogs"
 export default function Home() {
   return (
-    <main className="w-full">
+    <main className="w-full py-10">
       <Hero />
       <PrivateTransfers />
       <HowItWorks />

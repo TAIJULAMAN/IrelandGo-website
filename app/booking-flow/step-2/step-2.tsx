@@ -156,8 +156,12 @@ export default function Step2() {
 
   const { data: vehiclesData, isLoading } = useGetVehiclesQuery({});
   const baseVehicles = vehiclesData?.data?.data || [];
-  const vehicles = serviceType === "DAY_TRIP" && dayTrip?.vehicles?.length > 0
-    ? dayTrip.vehicles
+  const vehicles = serviceType === "DAY_TRIP" && dayTrip?.tripServiceVehicles?.length > 0
+    ? dayTrip.tripServiceVehicles.map((tsv: any) => ({
+        ...tsv.vehicle,
+        price: tsv.price,
+        basePrice: tsv.price,
+      }))
     : baseVehicles;
 
   const getVehicleOptions = (
@@ -257,7 +261,7 @@ export default function Step2() {
         <div className="absolute bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
       </div>
 
-      <div className="flex-1 py-5 sm:py-10 px-5 md:px-0 relative z-10 max-w-7xl w-full mx-auto">
+      <div className="flex-1 py-10 px-5 md:px-0 relative z-10 max-w-7xl w-full mx-auto">
         {/* Step progress */}
         <div className="mb-6 sm:mb-10">
           <div className="flex items-center justify-between text-xs sm:text-sm font-medium text-gray-600">
@@ -322,7 +326,7 @@ export default function Step2() {
         </div>
 
         {/* Vehicle slider */}
-        <div className="mb-10">
+        <div className="mb-5">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-6">
             <div className="flex items-center gap-3">
               <div className="h-1 w-12 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full"></div>
@@ -797,7 +801,7 @@ export default function Step2() {
         </div>
 
         {/* Next button */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-8 sm:mt-12 px-4 w-full relative z-10">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full relative z-10">
           <Button
             onClick={() => router.back()}
             variant="outline"
