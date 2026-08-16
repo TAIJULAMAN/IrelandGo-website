@@ -103,17 +103,16 @@ export function Sidebar({
       {/* Branding */}
       <div className="px-6 py-8 flex items-center">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-10 h-10 transition-transform group-hover:scale-105 duration-300">
+          <div className="relative transition-transform group-hover:scale-105 duration-300">
             <Image
+              width={150}
+              height={50}
               src="/Tourenzo.png"
               alt="IrelandGo"
-              fill
+
               className="object-contain"
             />
           </div>
-          <span className="text-2xl font-black bg-gradient-to-r from-blue-700 to-blue-900 bg-clip-text text-transparent tracking-tight">
-            IrelandGo
-          </span>
         </Link>
       </div>
 

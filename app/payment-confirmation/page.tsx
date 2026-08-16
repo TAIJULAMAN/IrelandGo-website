@@ -141,49 +141,16 @@ export default function PaymentConfirmationPage() {
               >
                 <Link href="/contact">Contact Support</Link>
               </Button>
-              <button
-                onClick={() => window.print()}
-                className="flex items-center gap-2 text-sm font-semibold text-white hover:text-blue-100 transition-colors"
+              <Button
+                asChild
+                className="g-white text-blue-600 hover:bg-blue-50 font-semibold rounded-lg"
               >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
-                  />
-                </svg>
-                Print Receipt
-              </button>
+                <Link href="/">Return to Home</Link>
+              </Button>
             </div>
           </div>
-          {/* Decorative background circle */}
-          <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-blue-600 rounded-full opacity-20" />
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 print:hidden">
-          <Button
-            asChild
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-8 h-12 shadow-lg shadow-blue-200 transition-all hover:-translate-y-0.5"
-          >
-            <Link href="/">Return to Home</Link>
-          </Button>
-          <Button
-            asChild
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-8 h-12 shadow-lg shadow-blue-200 transition-all hover:-translate-y-0.5"
-          >
-            <Link href="/user/bookings">View My Bookings</Link>
-          </Button>
         </div>
       </div>
-
-      <div className="print:hidden">      </div>
     </section>
   );
 }

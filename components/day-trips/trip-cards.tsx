@@ -139,8 +139,8 @@ export default function TripCards() {
                 <div className="px-5 md:px-6 pb-5 md:pb-6 relative z-10 mt-auto">
                   <div className="flex items-center justify-between mb-5 pt-5 border-t border-gray-100">
                     <div className="flex flex-col">
-                      <span className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-1">From</span>
-                      <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">€{trip.price}</span>
+                      <p className="text-md font-medium text-gray-600"> Starts from <span className="text-blue-600 font-bold text-xl">€{trip.price ?? (trip.vehicles?.length ? Math.min(...trip.vehicles.map((v: any) => v.price)) : 0)}</span></p>
+
                     </div>
                   </div>
                   <button className="w-full bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white py-3.5 rounded-xl font-bold transition-all duration-300 shadow-sm group-hover:shadow-md">

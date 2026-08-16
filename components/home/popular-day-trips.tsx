@@ -14,6 +14,8 @@ export function PopularDayTrips() {
 
   const { data: response, isLoading, isError } = useGetPopularTripsQuery({})
   const trips = response?.data || []
+  console.log("trip of aaaaaaaaaaaaaaaaaaaaaa", trips);
+
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return
@@ -126,10 +128,7 @@ export function PopularDayTrips() {
                   </div>
 
                   <div className="flex items-center justify-between mb-5">
-                    <div>
-                      <span className="text-2xl md:text-3xl font-extrabold text-blue-600">€{trip.price}</span>
-                      <span className="text-xs text-gray-500 font-medium ml-1">per person</span>
-                    </div>
+                    <p className="text-md font-medium text-gray-600"> Starts from <span className="text-blue-600 font-bold text-xl">€{trip.price ?? (trip.vehicles?.length ? Math.min(...trip.vehicles.map((v: any) => v.price)) : 0)}</span></p>
                   </div>
 
                   <Button asChild className="w-full rounded-xl text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-6 border-none">
