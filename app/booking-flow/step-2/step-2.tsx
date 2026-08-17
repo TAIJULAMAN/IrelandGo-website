@@ -39,6 +39,7 @@ export default function Step2() {
     skip: serviceType !== "DAY_TRIP" || !tripId,
   });
   const dayTrip = dayTripData?.data;
+  console.log("dayTrip of parvez", dayTrip)
 
   const [localAdults, setLocalAdults] = useState(adults);
   const [localChildren, setLocalChildren] = useState(children);
@@ -156,12 +157,12 @@ export default function Step2() {
 
   const { data: vehiclesData, isLoading } = useGetVehiclesQuery({});
   const baseVehicles = vehiclesData?.data?.data || [];
-  const vehicles = serviceType === "DAY_TRIP" && dayTrip?.tripServiceVehicles?.length > 0
-    ? dayTrip.tripServiceVehicles.map((tsv: any) => ({
-        ...tsv.vehicle,
-        price: tsv.price,
-        basePrice: tsv.price,
-      }))
+  const vehicles = serviceType === "DAY_TRIP" && dayTrip?.vehicles?.length > 0
+    ? dayTrip?.vehicles?.map((tsv: any) => ({
+      ...tsv,
+      price: tsv?.price,
+      basePrice: tsv?.price,
+    }))
     : baseVehicles;
 
   const getVehicleOptions = (
