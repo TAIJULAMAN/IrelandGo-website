@@ -24,7 +24,7 @@ export function Footer({ className = "" }: FooterProps) {
             </p>
           </div>
           <div>
-            <h4 className="font-medium mb-4">Services</h4>
+            <h3 className="font-medium mb-4">Services</h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -69,7 +69,7 @@ export function Footer({ className = "" }: FooterProps) {
             </ul>
           </div>
           <div>
-            <h4 className="font-medium mb-4">Support</h4>
+            <h3 className="font-medium mb-4">Support</h3>
             <ul className="space-y-2">
               <li>
                 <Link
@@ -106,7 +106,7 @@ export function Footer({ className = "" }: FooterProps) {
             </ul>
           </div>
           <div>
-            <h4 className="font-medium mb-4">Contact Us</h4>
+            <h3 className="font-medium mb-4">Contact Us</h3>
             <address className="not-italic text-sm text-gray-300 space-y-2">
               <p>225 Cratloe Village,</p>
               <p> Limerick, Ireland.</p>

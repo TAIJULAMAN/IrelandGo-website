@@ -29,6 +29,7 @@ export function Hero() {
           alt="Irish landscape"
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
           className="object-cover object-center"
         />

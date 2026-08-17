@@ -1,6 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
 
 import { SearchHero } from "@/components/day-trips/search/search-hero";
 import FAQ from "@/app/settings/faq/faq";

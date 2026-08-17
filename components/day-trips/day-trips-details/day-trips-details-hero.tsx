@@ -60,6 +60,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
           src={trip?.images?.[0] || "/details.png"}
           alt={trip?.title || "Scenic Ireland coastline"}
           className="w-full h-full object-cover object-center"
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/30" />
       </div>
