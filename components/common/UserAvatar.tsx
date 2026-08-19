@@ -6,14 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi";
-import { logout as reduxLogout } from "@/Redux/Slice/authSlice";
+import { useLogout } from "@/hooks/useLogout";
 import { useRouter } from "next/navigation";
 
 export function UserAvatar() {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
-    const dispatch = useAppDispatch();
     const router = useRouter();
+    const performLogout = useLogout();
 
     const token = useAppSelector((state) => state.auth.token);
     const isAuthenticated = !!token;
@@ -36,9 +36,8 @@ export function UserAvatar() {
     }, []);
 
     const handleLogout = () => {
-        dispatch(reduxLogout());
+        performLogout("/");
         setIsOpen(false);
-        router.push("/");
     };
 
     if (!isAuthenticated || !user) return null;

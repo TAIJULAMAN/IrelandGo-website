@@ -12,6 +12,11 @@ export interface ProfileData {
     status: string;
     createdAt: string;
     updatedAt: string;
+    stripeAccountId?: string;
+    isStripeConnected?: boolean;
+    stripeConnected?: boolean;
+    stripeOnboarded?: boolean;
+    stripeOnboardingCompleted?: boolean;
 }
 
 export interface ProfileResponse {
@@ -26,9 +31,17 @@ const profileApi = baseApi.injectEndpoints({
             query: () => "users/my-profile",
             providesTags: ["profile"],
         }),
-        updateProfile: builder.mutation<ProfileResponse, FormData>({
-            query: (formData) => ({
+        updateProfile: builder.mutation<ProfileResponse, any>({
+            query: (data) => ({
                 url: "users/update",
+                method: "PATCH",
+                body: data,
+            }),
+            invalidatesTags: ["profile"],
+        }),
+        updateProfileImage: builder.mutation<ProfileResponse, FormData>({
+            query: (formData) => ({
+                url: "users/profile-img-update",
                 method: "PATCH",
                 body: formData,
             }),
@@ -40,4 +53,5 @@ const profileApi = baseApi.injectEndpoints({
 export const {
     useGetProfileQuery,
     useUpdateProfileMutation,
+    useUpdateProfileImageMutation,
 } = profileApi;

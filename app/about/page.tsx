@@ -1,6 +1,24 @@
+"use client"
+
 import { HeartIcon, ShieldCheckIcon, StarIcon } from "lucide-react";
 
+import Loading from "@/components/common/loading";
+import { useGetAboutQuery } from "@/Redux/features/settings/aboutApi";
+
 export default function About() {
+  const { data, isLoading } = useGetAboutQuery();
+  const about = data?.data;
+
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return "";
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
   return (
     <>
       <section
@@ -15,12 +33,25 @@ export default function About() {
             <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold mb-4 text-balance leading-tight drop-shadow-sm">
               About Tourenzo
             </h1>
-            <p className="text-sm md:text-base text-white max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-md">
-              Discover the beauty of Ireland with Tourenzo. As your trusted
-              travel partner, we provide premium immersive guided tours,
-              ensuring every journey across the Emerald Isle is comfortable,
-              safe, and unforgettable.
-            </p>
+            {isLoading ? (
+              <Loading />
+            ) : about ? (
+              <>
+                <p className="text-gray-600 mb-8 text-sm sm:text-base">
+                  Last updated: {formatDate(about?.updatedAt)}
+                </p>
+                <div
+                  className="prose prose-sm sm:prose-base md:prose-lg prose-gray max-w-none
+        prose-headings:font-semibold prose-headings:text-gray-900
+        prose-p:text-gray-700 prose-p:leading-relaxed
+        prose-ul:text-gray-700 prose-li:text-gray-700
+        prose-a:text-blue-600 hover:prose-a:underline"
+                  dangerouslySetInnerHTML={{ __html: about?.description }}
+                />
+              </>
+            ) : (
+              <p className="text-gray-500 text-lg">About information not available.</p>
+            )}
           </div>
         </div>
       </section>
@@ -74,26 +105,10 @@ export default function About() {
             Our Story
           </h2>
           <div className="space-y-6 text-base md:text-lg text-gray-600 leading-relaxed text-left md:text-center">
-            <p>
-              Founded in 2010, Tourenzo has been connecting travelers with
-              Ireland's most beautiful destinations for over 15 years. What
-              started as a small family-run business with just two vehicles has
-              grown into one of Ireland's most trusted transfer and tour
-              services.
-            </p>
-            <p>
-              Our passion for Irish culture, history, and hospitality drives
-              everything we do. We believe that every journey should be more
-              than just transportation—it should be an experience that creates
-              lasting memories.
-            </p>
-            <p>
-              Today, we operate a modern fleet of comfortable vehicles and work
-              with a team of experienced, friendly drivers who are as passionate
-              about Ireland as we are. Whether you're traveling for business or
-              pleasure, we're committed to making your journey safe,
-              comfortable, and memorable.
-            </p>
+            <div
+              className="prose prose-sm sm:prose-base md:prose-lg prose-gray max-w-none"
+              dangerouslySetInnerHTML={{ __html: about?.description ?? "" }}
+            />
           </div>
         </div>
       </section>

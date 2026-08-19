@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -16,9 +17,21 @@ import {
   Clock,
   XCircle,
   Eye,
+  FileEdit,
   Loader2,
+  Star,
 } from "lucide-react";
 import Loading from "../common/loading";
+import { useUpdateBookingStatusMutation } from "@/Redux/features/booking/bookingApi";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { ReviewModal } from "./ReviewModal";
 
 interface BookingsTableProps {
   statusFilter: string;
@@ -37,6 +50,35 @@ export function BookingsTable({
   filteredBookings,
   handleViewBooking,
 }: BookingsTableProps) {
+  const [updateBookingStatus, { isLoading: isUpdating }] = useUpdateBookingStatusMutation();
+  const [selectedBooking, setSelectedBooking] = useState<any | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [reviewBooking, setReviewBooking] = useState<any | null>(null);
+  const handleUpdateStatus = async () => {
+    if (!selectedBooking) return;
+    const id = selectedBooking._id || selectedBooking.id;
+    console.log("=== DEBUG BOOKING STATUS UPDATE ===");
+    console.log("selectedBooking object:", selectedBooking);
+    console.log("booking._id:", selectedBooking._id);
+    console.log("booking.id:", selectedBooking.id);
+    console.log("Extracted ID to send:", id);
+    console.log("Selected Status:", selectedStatus);
+
+    try {
+      await updateBookingStatus({
+        id,
+        data: { status: selectedStatus },
+      }).unwrap();
+      toast.success("Booking status updated successfully");
+      setIsEditModalOpen(false);
+    } catch (error: any) {
+      console.error("Update status error response:", error);
+      toast.error(error?.data?.message || "Failed to update booking status");
+    }
+  };
+
   const renderStatusBadge = (status: string) => {
     switch (status?.toUpperCase()) {
       case "CONFIRMED":
@@ -78,15 +120,18 @@ export function BookingsTable({
         </div>
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <select
+            className="bg-white/90 backdrop-blur-sm text-slate-800 py-2.5 px-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-white/50 transition-all border-none appearance-none cursor-pointer"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="flex h-10 w-full sm:w-[180px] rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2 text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all cursor-pointer hover:bg-slate-100/50"
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+            }}
           >
-            <option value="all">All Status</option>
-            <option value="confirmed">Confirmed</option>
-            <option value="pending">Pending</option>
-            <option value="cancelled">Cancelled</option>
-            <option value="completed">Completed</option>
+            <option value="ALL">All Status</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="CONFIRMED">Confirmed</option>
+            <option value="PENDING">Pending</option>
+            <option value="CANCELLED">Cancelled</option>
+            <option value="REFUNDED">Refunded</option>
           </select>
         </div>
       </div>
@@ -189,8 +234,31 @@ export function BookingsTable({
                         onClick={() => handleViewBooking(booking)}
                         className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-xl"
                       >
-                        <Eye className="h-4 w-4 mr-1.5" /> View
+                        <Eye className="h-4 w-4 mr-1.5" />
                       </Button>
+                      <button
+                        className="p-2 hover:bg-orange-50 rounded-lg transition-colors duration-200"
+                        onClick={() => {
+                          setSelectedBooking(booking);
+                          setSelectedStatus(booking.status || "PENDING");
+                          setIsEditModalOpen(true);
+                        }}
+                        title="Edit Status"
+                      >
+                        <FileEdit className="text-orange-600 w-4 h-4" />
+                      </button>
+                      {booking.status?.toUpperCase() === "COMPLETED" && (
+                        <button
+                          className="p-2 hover:bg-yellow-50 rounded-lg transition-colors duration-200 ml-1"
+                          onClick={() => {
+                            setReviewBooking(booking);
+                            setIsReviewModalOpen(true);
+                          }}
+                          title="Give Review"
+                        >
+                          <Star className="text-yellow-500 w-4 h-4" />
+                        </button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -199,6 +267,69 @@ export function BookingsTable({
           </div>
         )}
       </div>
+
+      {/* Edit Booking Status Dialog */}
+      <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+        <DialogContent className="max-w-md bg-white rounded-2xl border-none shadow-2xl p-0 overflow-hidden">
+          <div className="bg-slate-50/50 p-6 border-b border-slate-100/50">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold text-slate-900 tracking-tight">
+                Edit Booking Status
+              </DialogTitle>
+              <DialogDescription className="text-slate-500 font-medium mt-1">
+                Update the status for booking #{selectedBooking?.id ? selectedBooking.id.slice(-6).toUpperCase() : selectedBooking?._id ? selectedBooking._id.slice(-6).toUpperCase() : ""}
+              </DialogDescription>
+            </DialogHeader>
+          </div>
+
+          <div className="p-6 space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+                Select Status
+              </label>
+              <select
+                className="w-full bg-white text-slate-800 py-3 px-4 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all cursor-pointer font-medium text-sm"
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              >
+                <option value="PENDING">Pending</option>
+                <option value="CONFIRMED">Confirmed</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+                <option value="REFUNDED">Refunded</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="bg-slate-50/50 p-6 border-t border-slate-100/50 flex justify-end gap-3">
+            <Button
+              variant="outline"
+              disabled={isUpdating}
+              onClick={() => setIsEditModalOpen(false)}
+              className="rounded-xl font-bold text-slate-600 border-slate-200 hover:bg-slate-100 px-5 py-2.5 h-auto"
+            >
+              Cancel
+            </Button>
+            <Button
+              disabled={isUpdating}
+              onClick={handleUpdateStatus}
+              className="rounded-xl font-bold bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 h-auto flex items-center gap-2"
+            >
+              {isUpdating && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isUpdating ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Review Modal */}
+      {reviewBooking && (
+        <ReviewModal
+          isOpen={isReviewModalOpen}
+          onOpenChange={setIsReviewModalOpen}
+          booking={reviewBooking}
+        />
+      )}
     </div>
   );
 }

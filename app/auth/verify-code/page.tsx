@@ -1,13 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Shield, ArrowLeft, ArrowRight, Clock } from "lucide-react";
+import { Shield, ArrowLeft, ArrowRight, Clock, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useVerifyEmailMutation } from "@/Redux/features/auth/authApi";
+import { toast } from "sonner";
 
 export default function VerifyCode() {
-    const [code, setCode] = useState(["", "", "", "", "", ""]);
+    const [code, setCode] = useState(["", "", "", ""]);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+    const router = useRouter();
+    const [verifyEmail, { isLoading }] = useVerifyEmailMutation();
 
     useEffect(() => {
         inputRefs.current[0]?.focus();
@@ -20,7 +25,7 @@ export default function VerifyCode() {
         newCode[index] = value;
         setCode(newCode);
 
-        if (value && index < 5) {
+        if (value && index < 3) {
             inputRefs.current[index + 1]?.focus();
         }
     };
@@ -33,11 +38,11 @@ export default function VerifyCode() {
 
     const handlePaste = (e: React.ClipboardEvent) => {
         e.preventDefault();
-        const pastedData = e.clipboardData.getData("text").slice(0, 6);
+        const pastedData = e.clipboardData.getData("text").slice(0, 4);
         const newCode = [...code];
 
         for (let i = 0; i < pastedData.length; i++) {
-            if (i < 6) {
+            if (i < 4) {
                 newCode[i] = pastedData[i];
             }
         }
@@ -45,6 +50,27 @@ export default function VerifyCode() {
     };
 
     const isCodeComplete = code.every(digit => digit !== "");
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!isCodeComplete) return;
+
+        const otp = code.join("");
+
+        try {
+            const res = await verifyEmail({ otp }).unwrap();
+            toast.success(res.message || "Email verified successfully.");
+            
+            // Store the resetToken to use in the reset-password step
+            if (res.data?.resetToken) {
+                sessionStorage.setItem("resetToken", res.data.resetToken);
+            }
+            
+            router.push(`/auth/reset-password`);
+        } catch (error: any) {
+            toast.error(error?.data?.message || "Invalid or expired verification code.");
+        }
+    };
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -60,14 +86,11 @@ export default function VerifyCode() {
                                     Verify Your Email
                                 </h1>
                                 <p className="text-gray-500 text-sm sm:text-base">
-                                    We&apos;ve sent a 6-digit verification code to
-                                </p>
-                                <p className="text-blue-600 font-semibold text-sm sm:text-base mt-1">
-                                    your@email.com
+                                    We&apos;ve sent a 6-digit verification code to your email
                                 </p>
                             </div>
 
-                            <form className="space-y-5">
+                            <form onSubmit={handleSubmit} className="space-y-5">
                                 {/* Code Input */}
                                 <div>
                                     <label className="block text-sm font-medium text-gray-700 mb-3 text-center lg:text-left">
@@ -96,18 +119,26 @@ export default function VerifyCode() {
                                 </div>
 
                                 {/* Submit */}
-                                <Link href="/auth/reset-password">
-                                    <Button
-                                        className={`w-full py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-lg transition-all active:scale-[0.98] group mt-1 ${isCodeComplete
-                                            ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30"
-                                            : "bg-gray-100 text-gray-400 cursor-not-allowed"
-                                            }`}
-                                        disabled={!isCodeComplete}
-                                    >
-                                        Verify Code
-                                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
-                                    </Button>
-                                </Link>
+                                <Button
+                                    type="submit"
+                                    className={`w-full py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-lg transition-all active:scale-[0.98] group mt-1 ${isCodeComplete
+                                        ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30"
+                                        : "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                        }`}
+                                    disabled={!isCodeComplete || isLoading}
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                            Verifying...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Verify Code
+                                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                                        </>
+                                    )}
+                                </Button>
                             </form>
 
                             {/* Back link */}

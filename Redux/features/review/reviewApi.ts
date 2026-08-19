@@ -9,8 +9,15 @@ const reviewApi = baseApi.injectEndpoints({
             }),
             providesTags: ["review"],
         }),
-
+        createReview: builder.mutation({
+            query: (data) => ({
+                url: "review/service",
+                method: "POST",
+                body: data,
+            }),
+            invalidatesTags: ["review"],
+        }),
     }),
 });
 
-export const { useGetAllReviewQuery } = reviewApi;
+export const { useGetAllReviewQuery, useCreateReviewMutation } = reviewApi;

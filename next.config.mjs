@@ -24,6 +24,11 @@ const nextConfig = {
         hostname: 'maps.googleapis.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.ibb.co',
+        pathname: '/**',
+      },
     ],
   },
 }

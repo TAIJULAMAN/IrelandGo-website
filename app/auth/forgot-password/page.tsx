@@ -1,10 +1,29 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Mail, ArrowLeft, ArrowRight, Info } from "lucide-react";
+import { Mail, ArrowLeft, ArrowRight, Info, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForgotPasswordMutation } from "@/Redux/features/auth/authApi";
+import { toast } from "sonner";
 
 export default function ForgotPassword() {
+    const [email, setEmail] = useState("");
+    const router = useRouter();
+    const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await forgotPassword({ email }).unwrap();
+            toast.success(res.message || "Verification code sent successfully.");
+            router.push(`/auth/verify-code`); // Or pass email via query if needed
+        } catch (error: any) {
+            toast.error(error?.data?.message || "Failed to send verification code. Please try again.");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-gray-50">
             <main className="pt-24 pb-16 md:pt-28 md:pb-20">
@@ -23,7 +42,7 @@ export default function ForgotPassword() {
                                 </p>
                             </div>
 
-                            <form className="space-y-4">
+                            <form onSubmit={handleSubmit} className="space-y-4">
                                 {/* Email */}
                                 <div>
                                     <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
@@ -36,6 +55,8 @@ export default function ForgotPassword() {
                                             id="email"
                                             name="email"
                                             required
+                                            value={email}
+                                            onChange={(e) => setEmail(e.target.value)}
                                             className="w-full pl-10 pr-4 py-2.5 sm:py-3 border border-gray-200 rounded-lg bg-gray-50/50 focus:bg-white focus:ring-2 focus:ring-blue-600/20 focus:border-blue-600 outline-none transition-all text-sm"
                                             placeholder="you@example.com"
                                         />
@@ -43,12 +64,23 @@ export default function ForgotPassword() {
                                 </div>
 
                                 {/* Submit */}
-                                <Link href="/auth/verify-code">
-                                    <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-lg shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] group mt-2">
-                                        Send Verification Code
-                                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
-                                    </Button>
-                                </Link>
+                                <Button 
+                                    type="submit" 
+                                    disabled={isLoading}
+                                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-5 sm:py-6 text-sm sm:text-base font-semibold rounded-lg shadow-lg shadow-blue-600/25 hover:shadow-blue-700/30 transition-all active:scale-[0.98] group mt-2"
+                                >
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                            Sending...
+                                        </>
+                                    ) : (
+                                        <>
+                                            Send Verification Code
+                                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                                        </>
+                                    )}
+                                </Button>
                             </form>
 
                             {/* Back link */}

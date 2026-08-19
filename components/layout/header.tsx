@@ -7,15 +7,15 @@ import { UserAvatar } from "@/components/common/UserAvatar";
 import { Menu, X, ChevronRight, LayoutDashboard, LogOut, ChevronDown, MessageCircle, User } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi";
-import { logout as reduxLogout } from "@/Redux/Slice/authSlice";
-import { useRouter, usePathname } from "next/navigation";
+import { useLogout } from "@/hooks/useLogout";
+import { usePathname } from "next/navigation";
 import { decodeAuthToken } from "@/utils/decode-access-token";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const router = useRouter();
+  const performLogout = useLogout();
   const pathname = usePathname();
 
   const token = useAppSelector((state) => state.auth.token);
@@ -34,9 +34,9 @@ export function Header() {
   const isAuthenticated = !!token && !isExpired;
   useEffect(() => {
     if (token && isExpired) {
-      dispatch(reduxLogout());
+      performLogout("/");
     }
-  }, [token, isExpired, dispatch]);
+  }, [token, isExpired, performLogout]);
 
   const { data: profileData, isError } = useGetProfileQuery(undefined, {
     skip: !isAuthenticated,
@@ -44,9 +44,9 @@ export function Header() {
 
   useEffect(() => {
     if (isError) {
-      dispatch(reduxLogout());
+      performLogout("/");
     }
-  }, [isError, dispatch]);
+  }, [isError, performLogout]);
 
   const user = profileData?.data;
 
@@ -63,9 +63,8 @@ export function Header() {
   }, []);
 
   const handleLogout = () => {
-    dispatch(reduxLogout());
+    performLogout("/");
     setIsMenuOpen(false);
-    router.push("/");
   };
 
   return (

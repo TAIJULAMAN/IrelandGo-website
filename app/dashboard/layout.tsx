@@ -6,8 +6,7 @@ import { LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useAppDispatch, useAppSelector } from "@/Redux/hooks"
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi"
-import { logout as reduxLogout } from "@/Redux/Slice/authSlice"
-import { toast } from "sonner"
+import { useLogout } from "@/hooks/useLogout"
 import { Sidebar } from "@/components/dashboard/Sidebar"
 import {
   Dialog,
@@ -27,7 +26,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   const router = useRouter()
-  const dispatch = useAppDispatch()
+  const performLogout = useLogout()
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
@@ -41,10 +40,8 @@ export default function DashboardLayout({
   const user = profileData?.data
 
   const handleLogout = () => {
-    dispatch(reduxLogout())
+    performLogout("/auth/login")
     setIsLogoutDialogOpen(false)
-    toast.success("Logged out successfully")
-    router.push("/auth/login")
   }
 
   return (

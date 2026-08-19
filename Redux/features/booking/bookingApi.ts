@@ -18,7 +18,6 @@ export const bookingApi = baseApi.injectEndpoints({
       }),
       providesTags: ["booking"],
     }),
-
     createBookingUsingServiceId: builder.mutation({
       query: ({ serviceId, body }) => ({
         url: `trip-service-booking/${serviceId}`,
@@ -35,6 +34,14 @@ export const bookingApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["booking"],
     }),
+    updateBookingStatus: builder.mutation({
+      query: ({ id, data }) => ({
+        url: `trip-service-booking/update-booking/${id}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["booking"],
+    }),
   }),
 });
 
@@ -43,4 +50,5 @@ export const {
   useGetAllUserBookingsQuery,
   useCreateBookingUsingServiceIdMutation,
   useCreateBookingWithoutIdMutation,
+  useUpdateBookingStatusMutation
 } = bookingApi;

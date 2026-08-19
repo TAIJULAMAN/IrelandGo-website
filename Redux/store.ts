@@ -30,10 +30,22 @@ const persistConfig = {
   blacklist: ["baseApi"],
 };
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   [baseApi.reducerPath]: baseApi.reducer,
   auth: authSlice.reducer,
 });
+
+const rootReducer = (state: any, action: any) => {
+  if (action.type === 'auth/logout') {
+    // Clear only auth and baseApi state, preserving redux-persist metadata
+    state = {
+      ...state,
+      auth: undefined,
+      [baseApi.reducerPath]: undefined,
+    };
+  }
+  return appReducer(state, action);
+};
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

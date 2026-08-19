@@ -1,14 +1,18 @@
 "use client";
 
+import Loading from "@/components/common/loading";
 import { useGetPrivacyQuery } from "@/Redux/features/settings/privacyApi";
 
 export default function PrivacyPolicy() {
     const { data, isLoading } = useGetPrivacyQuery(undefined);
 
-    const privacy = data?.data?.[0];
+    const privacy = data?.data;
 
-    const formatDate = (dateStr: string) => {
-        return new Date(dateStr).toLocaleDateString("en-US", {
+    const formatDate = (dateStr?: string) => {
+        if (!dateStr) return "";
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return "";
+        return date.toLocaleDateString("en-US", {
             month: "long",
             day: "numeric",
             year: "numeric",
@@ -23,21 +27,11 @@ export default function PrivacyPolicy() {
                 </h1>
 
                 {isLoading ? (
-                    <div className="animate-pulse">
-                        <div className="h-4 bg-gray-200 rounded w-48 mb-8" />
-                        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 space-y-4">
-                            <div className="h-4 bg-gray-200 rounded w-full" />
-                            <div className="h-4 bg-gray-200 rounded w-5/6" />
-                            <div className="h-4 bg-gray-200 rounded w-full" />
-                            <div className="h-4 bg-gray-200 rounded w-4/6" />
-                            <div className="h-4 bg-gray-200 rounded w-full" />
-                            <div className="h-4 bg-gray-200 rounded w-3/4" />
-                        </div>
-                    </div>
+                    <Loading />
                 ) : privacy ? (
                     <>
                         <p className="text-gray-600 mb-8 text-sm sm:text-base">
-                            Last updated: {formatDate(privacy.updatedAt)}
+                            Last updated: {formatDate(privacy?.updatedAt)}
                         </p>
 
                         <div className="bg-white rounded-lg p-4 sm:p-6 md:p-8">

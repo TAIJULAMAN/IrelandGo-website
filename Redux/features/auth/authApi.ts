@@ -25,25 +25,31 @@ const authApi = baseApi.injectEndpoints({
     }),
     forgotPassword: builder.mutation({
       query: (data) => ({
-        url: "admin/forgot-password",
+        url: "auth/forgot-password",
         method: "POST",
         body: data,
       }),
     }),
     verifyEmail: builder.mutation({
       query: (data) => ({
-        url: "admin/otp-verify",
+        url: "auth/verify-otp",
         method: "POST",
         body: data,
       }),
     }),
     resetPassword: builder.mutation({
-      query: ({ newPassword, confirmPassword, email }) => ({
-        url: "admin/reset-password",
-        method: "POST",
-        body: { newPassword, confirmPassword, email },
-      }),
-
+      query: (data) => {
+        let token = "";
+        if (typeof window !== "undefined") {
+          token = sessionStorage.getItem("resetToken") || "";
+        }
+        return {
+          url: "auth/reset-password",
+          method: "POST",
+          body: data,
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        };
+      },
       invalidatesTags: ["auth"],
     }),
     changePassword: builder.mutation({

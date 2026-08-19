@@ -1,4 +1,3 @@
-import FAQ from "@/app/settings/faq/faq";
 import MultiDayToursHero from "@/components/multi-day-tours/multi-day-tours-hero";
 import MultiDayToursJourneyBegins from "@/components/multi-day-tours/multi-day-tours-journey-begins";
 import MultiDayToursOurMultiDayTours from "@/components/multi-day-tours/multi-day-tours-our-multi-day-tours";
@@ -11,7 +10,6 @@ export default function MultiDayTours() {
       <MultiDayToursJourneyBegins />
       <MultiDayToursOurMultiDayTours />
       <Testimonials />
-      <FAQ />
     </>
   );
 }

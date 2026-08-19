@@ -5,7 +5,14 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { SuccessModal } from "./success-modal";
 import { Button } from "@/components/ui/button";
-import { X, CheckCircle2, ChevronDown } from "lucide-react";
+import { X, CheckCircle2, ChevronDown, AlertCircle } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
+} from "@/components/ui/dialog";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import {
   useCreateBookingUsingServiceIdMutation,
@@ -20,6 +27,8 @@ import { setUser } from "@/Redux/Slice/authSlice";
 
 export default function Step3Details() {
   const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorModalMessage, setErrorModalMessage] = useState("");
   const [bookingId, setBookingId] = useState("");
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
@@ -255,7 +264,8 @@ export default function Step3Details() {
       // console.error("Error status:", e?.status);
       // console.error("Error data (detailed):", JSON.stringify(e?.data, null, 2));
       const errorMessage = e?.data?.message || e?.message || "Unknown error";
-      alert(`Failed to process booking: ${errorMessage}`);
+      setErrorModalMessage(`Failed to process booking: ${errorMessage}`);
+      setShowErrorModal(true);
     }
   };
 
@@ -623,6 +633,27 @@ export default function Step3Details() {
         phone={phone}
         specialRequests={specialRequests}
       />
+
+      <Dialog open={showErrorModal} onOpenChange={setShowErrorModal}>
+        <DialogContent className="sm:max-w-md border-none shadow-2xl rounded-2xl overflow-hidden p-0">
+          <div className="bg-gradient-to-br from-red-500 to-red-600 p-6 text-white text-center">
+            <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 border border-white/30">
+              <AlertCircle className="w-7 h-7" />
+            </div>
+            <DialogTitle className="text-xl font-bold">Booking Failed</DialogTitle>
+          </div>
+          <div className="p-6 bg-white text-center">
+            <p className="text-slate-600 font-medium leading-relaxed">
+              {errorModalMessage}
+            </p>
+          </div>
+          <div className="p-4 bg-slate-50 flex justify-center border-t border-slate-100">
+            <Button onClick={() => setShowErrorModal(false)} className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg px-8">
+              Understood
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }

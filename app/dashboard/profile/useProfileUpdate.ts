@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import {
   useGetProfileQuery,
   useUpdateProfileMutation,
+  useUpdateProfileImageMutation,
 } from "@/Redux/features/settings/profileApi";
 import { toast } from "sonner";
 
@@ -9,6 +10,7 @@ export function useProfileUpdate() {
   const [activeTab, setActiveTab] = useState<"profile" | "password">("profile");
   const { data: profileRes, isLoading, isError } = useGetProfileQuery();
   const [updateProfile, { isLoading: isUpdating }] = useUpdateProfileMutation();
+  const [updateProfileImage, { isLoading: isUpdatingImage }] = useUpdateProfileImageMutation();
   const profileData = profileRes?.data;
   
   const [formData, setFormData] = useState({
@@ -46,22 +48,24 @@ export function useProfileUpdate() {
   const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formDataToSend = new FormData();
-
-    const bodyData = JSON.stringify({
+    const bodyData = {
       fullName: formData.name,
       country: formData.country,
       contactNumber: formData.phone,
-    });
-
-    formDataToSend.append("data", bodyData);
-
-    if (selectedImage) {
-      formDataToSend.append("profileImage", selectedImage);
-    }
+    };
 
     try {
-      await updateProfile(formDataToSend).unwrap();
+      // 1. Update text profile fields
+      await updateProfile(bodyData).unwrap();
+
+      // 2. Update profile image if selected
+      if (selectedImage) {
+        const formDataToSend = new FormData();
+        formDataToSend.append("profileImage", selectedImage);
+        await updateProfileImage(formDataToSend).unwrap();
+        setSelectedImage(null);
+      }
+
       toast.success("Profile updated successfully!");
       setSelectedImage(null);
     } catch {
@@ -74,7 +78,7 @@ export function useProfileUpdate() {
     setActiveTab,
     isLoading,
     isError,
-    isUpdating,
+    isUpdating: isUpdating || isUpdatingImage,
     profileData,
     formData,
     setFormData,

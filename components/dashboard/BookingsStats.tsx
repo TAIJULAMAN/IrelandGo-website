@@ -29,7 +29,7 @@ export function BookingsStats({ isAgent, data }: BookingsStatsProps) {
           id: 4,
           label: "Total Earnings",
           icon: <DollarSign className="w-6 h-6 text-indigo-600" />,
-          value: `€${data?.data?.totalEarnings || 0}`,
+          value: `€${data?.data?.totalEarnings.toFixed(2) || 0}`,
           bg: "bg-indigo-50/50 border border-indigo-100 text-indigo-600",
           accent: "bg-indigo-500",
         },

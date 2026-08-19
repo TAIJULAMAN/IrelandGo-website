@@ -19,11 +19,11 @@ export const baseApi = createApi({
         token = localStorage.getItem("token") || localStorage.getItem("accessToken");
       }
 
-      if (token) {
+      if (token && !headers.has("Authorization")) {
         const authValue = token.startsWith("Bearer ") ? token : ` ${token}`;
         console.log("==> baseApi attaching header:", authValue);
         headers.set("Authorization", authValue);
-      } else {
+      } else if (!headers.has("Authorization")) {
         console.log("==> baseApi WARNING: No token found in Redux or localStorage!");
       }
       return headers;
@@ -41,6 +41,7 @@ export const baseApi = createApi({
     "contact",
     "privacy",
     "terms",
+    "about",
     "support",
     "payment-methods",
     "multiDayTours",
