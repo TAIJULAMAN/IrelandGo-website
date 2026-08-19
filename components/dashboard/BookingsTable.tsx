@@ -20,6 +20,7 @@ import {
   FileEdit,
   Loader2,
   Star,
+  Banknote,
 } from "lucide-react";
 import Loading from "../common/loading";
 import { useUpdateBookingStatusMutation } from "@/Redux/features/booking/bookingApi";
@@ -257,6 +258,14 @@ export function BookingsTable({
                           title="Give Review"
                         >
                           <Star className="text-yellow-500 w-4 h-4" />
+                        </button>
+                      )}
+                      {booking.status?.toUpperCase() === "CANCELLED" && (
+                        <button
+                          className="p-2 hover:bg-green-50 rounded-lg transition-colors duration-200 ml-1"
+                          title="Refund"
+                        >
+                          <Banknote className="text-green-600 w-4 h-4" />
                         </button>
                       )}
                     </TableCell>

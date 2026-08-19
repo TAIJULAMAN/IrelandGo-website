@@ -49,8 +49,10 @@ export function ReviewModal({
 
     const formData = new FormData();
     const tripServiceId = booking?.tripServiceId?._id || booking?.tripServiceId || booking?._id;
+    const bookingId = booking?.id || booking?._id;
     
-    formData.append("tripServiceId", tripServiceId);
+    if (tripServiceId) formData.append("tripServiceId", tripServiceId);
+    if (bookingId) formData.append("bookingId", bookingId);
     formData.append("rating", rating.toString());
     if (comment) formData.append("comment", comment);
     

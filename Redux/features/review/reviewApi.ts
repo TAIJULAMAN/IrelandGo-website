@@ -11,7 +11,7 @@ const reviewApi = baseApi.injectEndpoints({
         }),
         createReview: builder.mutation({
             query: (data) => ({
-                url: "review/service",
+                url: "reviews/service",
                 method: "POST",
                 body: data,
             }),
