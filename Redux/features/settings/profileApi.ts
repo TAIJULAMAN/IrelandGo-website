@@ -39,19 +39,10 @@ const profileApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["profile"],
         }),
-        updateProfileImage: builder.mutation<ProfileResponse, FormData>({
-            query: (formData) => ({
-                url: "users/profile-img-update",
-                method: "PATCH",
-                body: formData,
-            }),
-            invalidatesTags: ["profile"],
-        }),
     }),
 });
 
 export const {
     useGetProfileQuery,
     useUpdateProfileMutation,
-    useUpdateProfileImageMutation,
 } = profileApi;
