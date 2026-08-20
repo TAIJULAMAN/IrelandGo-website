@@ -31,7 +31,7 @@ export function DashboardMetrics({
     {
       id: 3,
       label: "Revenue",
-      value: `€${dashboardData?.totalEarnings?.value || 0}`,
+      value: `€${dashboardData?.totalEarnings?.value.toFixed(2) || 0}`,
       icon: <DollarSign className="w-6 h-6 text-emerald-600" />,
       bg: "bg-emerald-50/50 border border-emerald-100 text-emerald-600",
       accent: "bg-emerald-500",
@@ -58,7 +58,7 @@ export function DashboardMetrics({
     {
       id: 3,
       label: "Total Spent",
-      value: `€${dashboardData?.totalSpent?.value || 0}`,
+      value: `€${dashboardData?.totalSpent?.value?.toFixed(2) || 0}`,
       icon: <DollarSign className="w-6 h-6 text-emerald-600" />,
       bg: "bg-emerald-50/50 border border-emerald-100 text-emerald-600",
       accent: "bg-emerald-500",
