@@ -27,40 +27,40 @@ export default function ByTheHourEnglishSpeakingDriver() {
   ];
 
   return (
-    <section className="relative w-full py-16 md:py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-5 md:px-0">
+    <section className="relative w-full py-10 md:py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-5 md:px-0">
         {/* Heading */}
 
-        <p className="text-center text-slate-500 mt-2">
+        <p className="text-center text-slate-500 text-xs sm:text-base mt-2">
           Available in 100+ destinations across Ireland
         </p>
 
         {/* Map Card */}
-        <div className="mt-8 rounded-lg overflow-hidden ring-1 ring-black/5 p-5 bg-blue-50">
+        <div className="mt-6 sm:mt-8 rounded-xl sm:rounded-2xl overflow-hidden ring-1 ring-black/5 p-3 sm:p-5 bg-blue-50">
           <img
             src="/ireland.png"
             alt="Ireland map"
-            className="w-full h-56 sm:h-72 md:h-80 object-cover rounded-lg"
+            className="w-full h-44 sm:h-72 md:h-80 object-cover rounded-lg"
           />
         </div>
 
         {/* Cities list */}
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {cities.map((c) => (
             <div
               key={c.name}
-              className="bg-white rounded-lg overflow-hidden shadow-md ring-1 ring-black/5"
+              className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md border border-gray-100 transition-all"
             >
-              <div className="h-36">
+              <div className="h-24 sm:h-36">
                 <img
                   src={c.image}
                   alt={c.name}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-slate-900">{c.name}</h3>
-                <p className="text-slate-600 text-sm">{c.desc}</p>
+              <div className="p-2.5 sm:p-4">
+                <h3 className="font-bold text-xs sm:text-base text-slate-900">{c.name}</h3>
+                <p className="text-slate-600 text-[11px] sm:text-sm line-clamp-1">{c.desc}</p>
               </div>
             </div>
           ))}
@@ -69,3 +69,4 @@ export default function ByTheHourEnglishSpeakingDriver() {
     </section>
   );
 }
+

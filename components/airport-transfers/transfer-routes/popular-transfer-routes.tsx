@@ -76,23 +76,23 @@ export default function PopularTransferRoutes() {
   }
 
   return (
-    <section className="relative w-full py-16 md:py-24 bg-gray-50/50 overflow-hidden">
+    <section className="relative w-full py-10 md:py-16 bg-gray-50/50 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
         <div className="absolute bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-indigo-100/40 blur-3xl opacity-60 mix-blend-multiply" />
       </div>
 
-      <div className="w-full px-5 lg:px-8 relative z-10">
+      <div className="w-full px-4 sm:px-5 lg:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 lg:mb-16">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-2 sm:mb-4">
               Popular Transfer Routes
               {locationParam && (
                 <> From <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{locationParam}</span></>
               )}
             </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
+            <p className="text-sm sm:text-lg text-gray-600 max-w-2xl mx-auto font-medium">
               Choose from our most requested destinations.
             </p>
           </div>
@@ -108,7 +108,7 @@ export default function PopularTransferRoutes() {
               No routes found from this location.
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
               {transferRoutes.map((transferRoute: any) => {
                 const imageUrl =
                   transferRoute.images && transferRoute.images.length > 0
@@ -143,12 +143,12 @@ export default function PopularTransferRoutes() {
                 return (
                   <div
                     key={transferRoute.id}
-                    className="group bg-white/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-white hover:-translate-y-2 flex flex-col relative h-full"
+                    className="group bg-white/80 backdrop-blur-md rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-white hover:-translate-y-2 flex flex-col relative h-full"
                   >
                     {/* Subtle Glow Behind Card */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-                    <div className="relative h-48 md:h-56 w-full overflow-hidden z-10">
+                    <div className="relative h-28 sm:h-48 md:h-56 w-full overflow-hidden z-10">
                       <img
                         src={imageUrl}
                         alt={transferRoute.title}
@@ -156,17 +156,17 @@ export default function PopularTransferRoutes() {
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
                     </div>
-                    <div className="p-5 md:p-6 flex-1 flex flex-col gap-3 relative z-10">
+                    <div className="p-3 sm:p-5 md:p-6 flex-1 flex flex-col gap-2 sm:gap-3 relative z-10">
                       <div className="flex flex-col mb-1">
-                        <div className="flex items-start justify-between gap-2 mb-3">
+                        <div className="flex items-start justify-between gap-2 mb-1.5 sm:mb-3">
                           <h3
-                            className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300"
+                            className="text-xs sm:text-base md:text-lg font-bold text-gray-900 line-clamp-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300"
                             title={transferRoute.title}
                           >
                             {transferRoute.title}
                           </h3>
                         </div>
-                        <span className="inline-flex items-center text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full self-start">
+                        <span className="inline-flex items-center text-[10px] sm:text-xs font-semibold text-blue-700 bg-blue-50 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full self-start">
                           {durationText}
                           {transferRoute.distanceKm
                             ? ` • ${transferRoute.distanceKm} km`
@@ -174,18 +174,18 @@ export default function PopularTransferRoutes() {
                         </span>
                       </div>
                       <p
-                        className="text-sm text-gray-600 leading-relaxed line-clamp-2 group-hover:text-gray-700 transition-colors"
+                        className="text-[11px] sm:text-sm text-gray-600 leading-relaxed line-clamp-2 group-hover:text-gray-700 transition-colors"
                         title={plainDescription}
                       >
                         {plainDescription}
                       </p>
 
-                      <div className="mt-auto pt-5 border-t border-gray-100">
+                      <div className="mt-auto pt-3 sm:pt-5 border-t border-gray-100">
                         <Link
                           href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(locationParam || transferRoute.from)}&serviceType=${encodeURIComponent(transferRoute.serviceType)}&transferRoute=${encodeURIComponent(JSON.stringify({ ...transferRoute, description: undefined, images: undefined, includedContent: undefined, excludedContent: undefined }))}`}
                           className="block w-full"
                         >
-                          <button className="w-full rounded-xl bg-blue-50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 text-blue-700 hover:text-white text-sm font-bold py-3.5 transition-all duration-300 shadow-sm hover:shadow-md">
+                          <button className="w-full rounded-lg sm:rounded-xl bg-blue-50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 text-blue-700 hover:text-white text-xs sm:text-sm font-bold py-2 sm:py-3.5 transition-all duration-300 shadow-sm hover:shadow-md">
                             Book Now
                           </button>
                         </Link>
@@ -199,5 +199,6 @@ export default function PopularTransferRoutes() {
         </div>
       </div>
     </section>
+
   );
 }

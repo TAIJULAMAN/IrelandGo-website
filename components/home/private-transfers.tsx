@@ -1,57 +1,70 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import Loading from "@/components/common/loading"
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, Loader2, Clock, Route } from "lucide-react"
-import Image from "next/image"
-import { useGetPrivateTransfersQuery } from "@/Redux/features/contents/contentsApi"
-import { SectionHeader } from "../ui/section-header"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import Link from "next/link";
+import Loading from "@/components/common/loading";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, Loader2, Clock, Route } from "lucide-react";
+import Image from "next/image";
+import { useGetPrivateTransfersQuery } from "@/Redux/features/contents/contentsApi";
+import { SectionHeader } from "../ui/section-header";
+import { useRouter } from "next/navigation";
 
 export function PrivateTransfers() {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const { data: response, isLoading, isError } = useGetPrivateTransfersQuery({})
-  const transfers = response?.data || []
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const {
+    data: response,
+    isLoading,
+    isError,
+  } = useGetPrivateTransfersQuery({});
+  const transfers = response?.data || [];
 
   const goToPrevious = () => {
-    if (transfers.length === 0) return
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? transfers.length - 1 : prevIndex - 1))
-  }
+    if (transfers.length === 0) return;
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? transfers.length - 1 : prevIndex - 1,
+    );
+  };
   const goToNext = () => {
-    if (transfers.length === 0) return
-    setCurrentIndex((prevIndex) => (prevIndex === transfers.length - 1 ? 0 : prevIndex + 1))
-  }
-
+    if (transfers.length === 0) return;
+    setCurrentIndex((prevIndex) =>
+      prevIndex === transfers.length - 1 ? 0 : prevIndex + 1,
+    );
+  };
 
   const formatDuration = (minutes: number) => {
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`
-  }
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`;
+  };
 
-  const showSlider = transfers.length >= 3;
-  const visibleTransfers = showSlider ? [
-    transfers[currentIndex % transfers.length],
-    transfers[(currentIndex + 1) % transfers.length],
-    transfers[(currentIndex + 2) % transfers.length],
-  ].filter(Boolean) : transfers;
+  const showSlider = transfers.length > 4;
+  const visibleTransfers = showSlider
+    ? [
+        transfers[currentIndex % transfers.length],
+        transfers[(currentIndex + 1) % transfers.length],
+        transfers[(currentIndex + 2) % transfers.length],
+        transfers[(currentIndex + 3) % transfers.length],
+      ].filter(Boolean)
+    : transfers.slice(0, 4);
+
 
   if (isLoading) {
     return (
       <section className="relative px-5 md:px-0 py-10 md:py-16 bg-gray-50/50 overflow-hidden">
         <Loading />
       </section>
-    )
+    );
   }
 
   if (isError || transfers.length === 0) {
     return (
       <div className="flex justify-center items-center py-20">
-        <p className="text-gray-500 font-medium">No private transfers available at the moment.</p>
+        <p className="text-gray-500 font-medium">
+          No private transfers available at the moment.
+        </p>
       </div>
-    )
+    );
   }
 
   return (
@@ -95,15 +108,15 @@ export function PrivateTransfers() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {visibleTransfers.map((transfer: any, idx: number) => (
             <div
               key={transfer.id || idx}
-              className={`group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-white transition-all duration-500 hover:-translate-y-2 flex flex-col h-full relative ${showSlider && idx === 2 ? 'hidden lg:flex' : 'flex'} ${showSlider && idx === 1 ? 'hidden md:flex' : 'flex'}`}
+              className="group bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-white transition-all duration-500 hover:-translate-y-2 flex flex-col h-full relative"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-              <div className="relative h-40 md:h-48 overflow-hidden bg-gray-100 z-10">
+              <div className="relative h-28 sm:h-40 md:h-48 overflow-hidden bg-gray-100 z-10">
                 <img
                   src={transfer.images?.[0] || "/placeholder.svg"}
                   alt={`${transfer.from} to ${transfer.to}`}
@@ -112,22 +125,38 @@ export function PrivateTransfers() {
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-60" />
               </div>
 
-              <div className="p-5 md:p-6 flex flex-col flex-1 relative z-10">
-                <div className="flex items-center justify-between mb-4 gap-2">
-                  <span className="font-bold text-gray-900 text-sm md:text-base lg:text-lg truncate max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-none group-hover:text-blue-700 transition-colors" title={transfer.from}>{transfer.from}</span>
+              <div className="p-3 sm:p-5 md:p-6 flex flex-col flex-1 relative z-10">
+                <div className="flex items-center justify-between mb-2 sm:mb-4 gap-1 sm:gap-2">
+                  <span
+                    className="font-bold text-gray-900 text-xs sm:text-sm md:text-base lg:text-lg truncate max-w-[60px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-none group-hover:text-blue-700 transition-colors"
+                    title={transfer.from}
+                  >
+                    {transfer.from}
+                  </span>
                   <div className="flex items-center shrink-0 opacity-70 group-hover:opacity-100 transition-opacity">
-                    <Image src="/divider.png" alt="to" width={80} height={12} className="w-12 sm:w-16 md:w-20 h-auto" />
+                    <Image
+                      src="/divider.png"
+                      alt="to"
+                      width={80}
+                      height={12}
+                      className="w-8 sm:w-12 md:w-16 h-auto"
+                    />
                   </div>
-                  <span className="font-bold text-gray-900 text-sm md:text-base lg:text-lg truncate max-w-[80px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-none group-hover:text-blue-700 transition-colors" title={transfer.to}>{transfer.to}</span>
+                  <span
+                    className="font-bold text-gray-900 text-xs sm:text-sm md:text-base lg:text-lg truncate max-w-[60px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-none group-hover:text-blue-700 transition-colors"
+                    title={transfer.to}
+                  >
+                    {transfer.to}
+                  </span>
                 </div>
 
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold shadow-sm border border-blue-100/50">
-                    <Clock className="w-3.5 h-3.5" />
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 mb-3 sm:mb-6">
+                  <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-blue-50 text-blue-700 text-[10px] sm:text-xs font-bold shadow-sm border border-blue-100/50">
+                    <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     {formatDuration(transfer.travelTimeMinutes)}
                   </span>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold shadow-sm border border-indigo-100/50">
-                    <Route className="w-3.5 h-3.5" />
+                  <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] sm:text-xs font-bold shadow-sm border border-indigo-100/50">
+                    <Route className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     {transfer.distanceKm} km
                   </span>
                 </div>
@@ -135,15 +164,20 @@ export function PrivateTransfers() {
                 <div className="mt-auto">
                   <Button
                     asChild
-                    className="w-full rounded-xl text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-6 border-none"
+                    className="w-full rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-2 sm:py-4 md:py-6 h-auto border-none"
                   >
-                    <Link href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transfer.from)}&dropoff=${encodeURIComponent(transfer.to)}&serviceType=${encodeURIComponent(transfer.serviceType || 'PRIVATE_TRANSFER')}&transferRoute=${encodeURIComponent(JSON.stringify({ ...transfer, description: undefined, images: undefined, includedContent: undefined, excludedContent: undefined }))}`}>Book Now</Link>
+                    <Link
+                      href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transfer.from)}&dropoff=${encodeURIComponent(transfer.to)}&serviceType=${encodeURIComponent(transfer.serviceType || "PRIVATE_TRANSFER")}&transferRoute=${encodeURIComponent(JSON.stringify({ ...transfer, description: undefined, images: undefined, includedContent: undefined, excludedContent: undefined }))}`}
+                    >
+                      Book Now
+                    </Link>
                   </Button>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
 
         {/* Mobile Navigation Buttons */}
         {showSlider && (
@@ -166,5 +200,5 @@ export function PrivateTransfers() {
         )}
       </div>
     </section>
-  )
+  );
 }

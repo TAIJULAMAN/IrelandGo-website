@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Star, ChevronLeft, ChevronRight, Quote, AlertCircle } from "lucide-react";
+import {
+  Star,
+  ChevronLeft,
+  ChevronRight,
+  Quote,
+  AlertCircle,
+} from "lucide-react";
 import { useGetAllReviewQuery } from "@/Redux/features/review/reviewApi";
 import { SectionHeader } from "../ui/section-header";
 import Image from "next/image";
@@ -45,9 +51,12 @@ export function Testimonials() {
           <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mb-5">
             <AlertCircle className="w-8 h-8 text-red-500" />
           </div>
-          <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">Unable to Load Testimonials</h3>
+          <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+            Unable to Load Testimonials
+          </h3>
           <p className="text-gray-500 mb-8 max-w-md">
-            We're having trouble retrieving the latest reviews from our server right now. This is likely due to an authorization or network issue.
+            We're having trouble retrieving the latest reviews from our server
+            right now. This is likely due to an authorization or network issue.
           </p>
           <button
             onClick={() => window.location.reload()}
@@ -70,16 +79,18 @@ export function Testimonials() {
     setCurrentIndex((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
   };
 
-  const showSlider = reviews.length >= 3;
+  const showSlider = reviews.length > 4;
   const getVisibleReviews = () => {
     if (reviews.length === 0) return [];
-    if (!showSlider) return reviews;
+    if (!showSlider) return reviews.slice(0, 4);
     return [
       reviews[currentIndex % reviews.length],
       reviews[(currentIndex + 1) % reviews.length],
       reviews[(currentIndex + 2) % reviews.length],
-    ];
+      reviews[(currentIndex + 3) % reviews.length],
+    ].filter(Boolean);
   };
+
 
   const visibleReviews = getVisibleReviews();
   const getInitials = (name: string) => {
@@ -149,31 +160,31 @@ export function Testimonials() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 relative">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 relative">
           {visibleReviews.map((review, idx) => (
             <div
-              key={review.id}
-              className={`group bg-white/80 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-xl border border-gray-100 hover:border-white h-full flex flex-col transition-all duration-500 hover:-translate-y-1 overflow-hidden relative ${showSlider && idx === 1 ? "hidden md:flex" : ""} ${showSlider && idx === 2 ? "hidden lg:flex" : ""}`}
+              key={review.id || idx}
+              className="group bg-white/80 backdrop-blur-md rounded-xl sm:rounded-2xl p-3.5 sm:p-6 md:p-8 shadow-sm hover:shadow-xl border border-gray-100 hover:border-white h-full flex flex-col transition-all duration-500 hover:-translate-y-1 overflow-hidden relative"
             >
-              <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500 pointer-events-none">
-                <Quote className="w-16 h-16 text-blue-600" />
+              <div className="absolute top-0 right-0 p-3 sm:p-6 opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500 pointer-events-none">
+                <Quote className="w-8 h-8 sm:w-16 sm:h-16 text-blue-600" />
               </div>
 
-              <div className="flex items-center justify-between mb-6 relative z-10">
-                <div className="flex gap-1.5">
+              <div className="flex items-center justify-between mb-3 sm:mb-6 relative z-10">
+                <div className="flex gap-0.5 sm:gap-1.5">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-4 h-4 md:w-5 md:h-5 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"}`}
+                      className={`w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "fill-gray-200 text-gray-200"}`}
                     />
                   ))}
                 </div>
               </div>
-              <p className="text-sm md:text-base text-gray-600 mb-8 leading-relaxed flex-grow relative z-10 group-hover:text-gray-800 transition-colors duration-300 italic">
+              <p className="text-[11px] sm:text-sm md:text-base text-gray-600 mb-4 sm:mb-8 leading-relaxed flex-grow relative z-10 group-hover:text-gray-800 transition-colors duration-300 italic line-clamp-3 sm:line-clamp-none">
                 &ldquo;{review.comment}&rdquo;
               </p>
-              <div className="flex items-center gap-4 relative z-10">
-                <div className="relative shrink-0 w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md ring-2 ring-white">
+              <div className="flex items-center gap-2 sm:gap-4 relative z-10 mt-auto">
+                <div className="relative shrink-0 w-8 h-8 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-md ring-1 sm:ring-2 ring-white">
                   {review.user?.profileImage ? (
                     <Image
                       src={review.user.profileImage}
@@ -185,11 +196,11 @@ export function Testimonials() {
                     getInitials(review.user?.fullName || "Traveler")
                   )}
                 </div>
-                <div>
-                  <p className="font-bold text-gray-900 text-sm md:text-base group-hover:text-blue-700 transition-colors duration-300">
+                <div className="min-w-0">
+                  <p className="font-bold text-gray-900 text-xs sm:text-sm md:text-base group-hover:text-blue-700 transition-colors duration-300 truncate">
                     {review.user?.fullName || "Traveler"}
                   </p>
-                  <p className="text-xs md:text-sm text-gray-500">
+                  <p className="text-[10px] sm:text-xs text-gray-500">
                     {formatDate(review.createdAt)}
                   </p>
                 </div>
@@ -197,6 +208,7 @@ export function Testimonials() {
             </div>
           ))}
         </div>
+
 
         {/* Mobile Navigation Buttons */}
         {showSlider && (

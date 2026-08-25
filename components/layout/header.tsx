@@ -264,11 +264,12 @@ export function Header() {
                     >
                       <Button
                         variant="outline"
-                        className="w-full justify-start gap-3 h-11 text-sm font-medium border-gray-200"
+                        className="w-full justify-start gap-3 h-11 text-sm font-medium border-gray-200 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                       >
-                        <LayoutDashboard className="w-4 h-4 text-white" />
+                        <LayoutDashboard className="w-4 h-4 text-blue-600" />
                         Dashboard
                       </Button>
+
                     </Link>
                     <Button
                       variant="ghost"

@@ -80,20 +80,19 @@ export function PopularDayTrips() {
           </button>
         </div>
 
-        {/* Horizontal scroll strip */}
-        <div
-          ref={scrollRef}
-          className="flex gap-6 overflow-x-auto pb-8 pt-2 scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden snap-x snap-mandatory"
-        >
-          {trips.map((trip: any, idx: number) => (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          {trips.slice(0, 4).map((trip: any, idx: number) => (
             <div
               key={trip.id || idx}
-              className="group bg-white/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-white transition-all duration-500 hover:-translate-y-2 flex flex-col snap-start shrink-0 w-[85vw] sm:w-[340px] lg:w-[360px] relative"
+              className="group bg-white/80 backdrop-blur-md rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-white transition-all duration-500 hover:-translate-y-2 flex flex-col h-full relative"
             >
               {/* Subtle Glow Behind Card */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-              <div className="relative h-40 md:h-48 w-full bg-gray-200 overflow-hidden z-10" style={{ position: "relative" }}>
+              <div
+                className="relative h-28 sm:h-40 md:h-48 w-full bg-gray-200 overflow-hidden z-10"
+                style={{ position: "relative" }}
+              >
                 <Image
                   src={trip.images?.[0] || "/placeholder.svg"}
                   alt={trip.to}
@@ -104,41 +103,56 @@ export function PopularDayTrips() {
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-80" />
               </div>
 
-              <div className="p-5 md:p-6 flex flex-col flex-grow relative z-10">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
+              <div className="p-3 sm:p-5 md:p-6 flex flex-col flex-grow relative z-10">
+                <h3 className="text-xs sm:text-lg md:text-xl font-bold text-gray-900 mb-1.5 sm:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
                   {trip.from} to {trip.to}
                 </h3>
 
-                <p className="text-sm text-gray-600 mb-5 md:mb-6 line-clamp-3 leading-relaxed group-hover:text-gray-700 transition-colors">
+                <p className="text-[11px] sm:text-sm text-gray-600 mb-2 sm:mb-6 line-clamp-2 sm:line-clamp-3 leading-relaxed group-hover:text-gray-700 transition-colors">
                   {trip.description?.replace(/<[^>]*>?/gm, "")}
                 </p>
 
                 <div className="mt-auto">
-                  <div className="flex flex-wrap items-center gap-3 mb-5 md:mb-6">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold shadow-sm border border-blue-100/50">
-                      <Clock className="w-3.5 h-3.5" />
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 mb-2 sm:mb-6">
+                    <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-blue-50 text-blue-700 text-[10px] sm:text-xs font-bold shadow-sm border border-blue-100/50">
+                      <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       {formatDuration(trip.travelTimeMinutes)}
                     </span>
                     {trip.groupType && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold shadow-sm border border-indigo-100/50">
-                        <Users className="w-3.5 h-3.5" />
+                      <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] sm:text-xs font-bold shadow-sm border border-indigo-100/50">
+                        <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         {trip.groupType}
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between mb-5">
-                    <p className="text-md font-medium text-gray-600"> Starts from <span className="text-blue-600 font-bold text-xl">€{trip.price ?? (trip.vehicles?.length ? Math.min(...trip.vehicles.map((v: any) => v.price)) : 0)}</span></p>
+                  <div className="flex items-center justify-between mb-2 sm:mb-5">
+                    <p className="text-xs sm:text-md font-medium text-gray-600">
+                      Starts from{" "}
+                      <span className="text-blue-600 font-bold text-sm sm:text-xl">
+                        €
+                        {trip.price ??
+                          (trip.vehicles?.length
+                            ? Math.min(...trip.vehicles.map((v: any) => v.price))
+                            : 0)}
+                      </span>
+                    </p>
                   </div>
 
-                  <Button asChild className="w-full rounded-xl text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-6 border-none">
-                    <Link href={`/day-trips/day-trip-details/${trip.id}`}>View Details</Link>
+                  <Button
+                    asChild
+                    className="w-full rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-2 sm:py-4 md:py-6 h-auto border-none"
+                  >
+                    <Link href={`/day-trips/day-trip-details/${trip.id}`}>
+                      View Details
+                    </Link>
                   </Button>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
 
         {/* Mobile arrow buttons */}
         <div className="flex md:hidden items-center justify-center gap-6 mt-8">

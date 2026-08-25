@@ -6,30 +6,34 @@ export function HowItWorks() {
     {
       icon: MapPin,
       title: "Choose Your Service",
-      description: "Select from Private Transfers, By The Hour, or custom Day Trips across Ireland.",
+      description:
+        "Select from Private Transfers, By The Hour, or custom Day Trips across Ireland.",
       color: "from-blue-400 to-blue-600",
-      shadow: "shadow-blue-500/20"
+      shadow: "shadow-blue-500/20",
     },
     {
       icon: CalendarRange,
       title: "Customize Details",
-      description: "Pick your date, time, vehicle type, and add special requirements like child seats.",
+      description:
+        "Pick your date, time, vehicle type, and add special requirements like child seats.",
       color: "from-blue-500 to-indigo-600",
-      shadow: "shadow-indigo-500/20"
+      shadow: "shadow-indigo-500/20",
     },
     {
       icon: CreditCard,
       title: "Secure Booking",
-      description: "Pay securely online with instant confirmation. No hidden fees or surprise charges.",
+      description:
+        "Pay securely online with instant confirmation. No hidden fees or surprise charges.",
       color: "from-indigo-500 to-violet-600",
-      shadow: "shadow-violet-500/20"
+      shadow: "shadow-violet-500/20",
     },
     {
       icon: UserCheck,
       title: "Meet Your Driver",
-      description: "Your professional, English-speaking driver will meet you at the designated pickup point.",
+      description:
+        "Your professional, English-speaking driver will meet you at the designated pickup point.",
       color: "from-violet-500 to-purple-600",
-      shadow: "shadow-purple-500/20"
+      shadow: "shadow-purple-500/20",
     },
   ];
 
@@ -50,8 +54,8 @@ export function HowItWorks() {
           alignment="center"
         />
 
-        <div className="mt-16 sm:mt-24">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 relative">
+        <div className="mt-8 sm:mt-16 md:mt-24">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 relative">
             {/* Connecting Line (Desktop only) */}
             <div className="hidden lg:block absolute top-[3rem] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-blue-100 via-indigo-100 to-violet-100 -z-10" />
 
@@ -66,48 +70,50 @@ export function HowItWorks() {
                 <div key={idx} className="relative group">
                   <div className="flex flex-col items-center text-center">
                     {/* Icon Container */}
-                    <div className="relative mb-8">
+                    <div className="relative mb-3 sm:mb-8">
                       {/* Glow effect behind icon */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${step.color} rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500`} />
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${step.color} rounded-xl sm:rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500`}
+                      />
 
                       {/* Card itself */}
-                      <div className={`relative w-24 h-24 rounded-2xl bg-white/80 backdrop-blur-sm border border-white/60 shadow-xl ${step.shadow} flex items-center justify-center group-hover:-translate-y-2 transition-all duration-500 ease-out`}>
-                        <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
+                      <div
+                        className={`relative w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-xl sm:rounded-2xl bg-white/80 backdrop-blur-sm border border-white/60 shadow-md sm:shadow-xl ${step.shadow} flex items-center justify-center group-hover:-translate-y-2 transition-all duration-500 ease-out`}
+                      >
+                        <div
+                          className={`absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}
+                        />
 
                         {/* Icon */}
                         <div className="relative z-10 text-gray-700 group-hover:text-blue-600 transition-colors duration-500">
-                          <Icon className="w-10 h-10 group-hover:scale-110 transition-transform duration-500 ease-out" />
+                          <Icon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 group-hover:scale-110 transition-transform duration-500 ease-out" />
                         </div>
 
                         {/* Number Badge */}
-                        <div className={`absolute -top-3 -right-3 w-8 h-8 rounded-full bg-gradient-to-br ${step.color} text-white flex items-center justify-center font-bold text-sm shadow-lg ring-4 ring-white group-hover:scale-110 transition-transform duration-500 ease-out`}>
+                        <div
+                          className={`absolute -top-2 -right-2 sm:-top-3 sm:-right-3 w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full bg-gradient-to-br ${step.color} text-white flex items-center justify-center font-bold text-[10px] sm:text-xs md:text-sm shadow-lg ring-2 sm:ring-4 ring-white group-hover:scale-110 transition-transform duration-500 ease-out`}
+                        >
                           {idx + 1}
                         </div>
                       </div>
                     </div>
 
                     {/* Text Content */}
-                    <div className="relative z-10 px-2">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                    <div className="relative z-10 px-1 sm:px-2">
+                      <h3 className="text-xs sm:text-lg md:text-xl font-bold text-gray-900 mb-1 sm:mb-3 group-hover:text-blue-600 transition-colors duration-300">
                         {step.title}
                       </h3>
-                      <p className="text-gray-500 leading-relaxed text-sm md:text-base group-hover:text-gray-600 transition-colors duration-300">
+                      <p className="text-gray-500 leading-relaxed text-[11px] sm:text-sm md:text-base group-hover:text-gray-600 transition-colors duration-300 line-clamp-3 sm:line-clamp-none">
                         {step.description}
                       </p>
                     </div>
                   </div>
-
-                  {/* Mobile connector */}
-                  {idx < steps.length - 1 && (
-                    <div className="md:hidden flex justify-center mt-8 mb-4">
-                      <div className="w-[2px] h-10 bg-gradient-to-b from-blue-100 to-transparent" />
-                    </div>
-                  )}
                 </div>
               );
             })}
           </div>
         </div>
+
       </div>
     </section>
   );
