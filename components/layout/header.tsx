@@ -11,12 +11,31 @@ import { useLogout } from "@/hooks/useLogout";
 import { usePathname } from "next/navigation";
 import { decodeAuthToken } from "@/utils/decode-access-token";
 
+import { useGetWebsiteNavigationRoutesQuery } from "@/Redux/features/navigation/navigationApi";
+
+const defaultWebsiteNavRoutes = [
+  { label: "Transfers", path: "/transfer" },
+  { label: "Tours", path: "/multi-day-tours" },
+  { label: "Travel Agent", path: "/auth/signup?role=AGENT" },
+  { label: "Airport Transfer", path: "/airport-transfers" },
+];
+
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useAppDispatch();
   const performLogout = useLogout();
   const pathname = usePathname();
+
+  // Dynamic Navigation Routes from Backend
+  const { data: navData } = useGetWebsiteNavigationRoutesQuery({
+    targetApp: "WEBSITE",
+    isActive: true,
+  });
+
+  const navRoutes = (navData?.data && navData.data.length > 0)
+    ? navData.data
+    : defaultWebsiteNavRoutes;
 
   const token = useAppSelector((state) => state.auth.token);
   let isExpired = false;
@@ -78,11 +97,9 @@ export function Header() {
         <div className="max-w-7xl mx-auto px-5 md:px-0">
           <div className="flex items-center justify-between">
             {/* Left side */}
-            <div className="flex items-center gap-8 xl:gap-12">
+            <div className="flex items-center gap-8 xl:gap-12 shrink-0">
               <Link href="/">
-
-                <Image src="/Tourenzo.png" alt="Logo" width={140} height={80} />
-
+                <Image src="/Tourenzo.png" alt="Logo" width={140} height={80} className="w-auto h-12 object-contain" />
               </Link>
             </div>
 
@@ -90,32 +107,32 @@ export function Header() {
             <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-bold text-gray-800">
               <Link
                 href="/transfer"
-                className={`flex items-center gap-1 transition-colors ${pathname === "/transfer" ? "text-blue-600" : "hover:text-blue-600"}`}
+                className={`flex items-center gap-1 whitespace-nowrap transition-colors ${pathname === "/transfer" ? "text-blue-600 font-extrabold" : "hover:text-blue-600"}`}
               >
                 Transfers
               </Link>
               <Link
                 href="/multi-day-tours"
-                className={`flex items-center gap-1 transition-colors ${pathname === "/multi-day-tours" ? "text-blue-600" : "hover:text-blue-600"}`}
+                className={`flex items-center gap-1 whitespace-nowrap transition-colors ${pathname === "/multi-day-tours" ? "text-blue-600 font-extrabold" : "hover:text-blue-600"}`}
               >
                 Tours
               </Link>
               <Link
                 href="/auth/signup?role=AGENT"
-                className={`flex items-center gap-1 transition-colors ${pathname === "/auth/signup" ? "text-blue-600" : "hover:text-blue-600"}`}
+                className={`flex items-center gap-1 whitespace-nowrap transition-colors ${pathname === "/auth/signup" ? "text-blue-600 font-extrabold" : "hover:text-blue-600"}`}
               >
                 Travel Agent
               </Link>
               <Link
                 href="/airport-transfers"
-                className={`transition-colors ${pathname === "/airport-transfers" ? "text-blue-600" : "hover:text-blue-600"}`}
+                className={`whitespace-nowrap transition-colors ${pathname === "/airport-transfers" ? "text-blue-600 font-extrabold" : "hover:text-blue-600"}`}
               >
                 Airport Transfer
               </Link>
             </nav>
 
             {/* Right Side */}
-            <div className="flex items-center gap-4 xl:gap-6">
+            <div className="flex items-center gap-4 xl:gap-6 shrink-0">
 
               {/* Phone Block */}
               <a
@@ -221,6 +238,8 @@ export function Header() {
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </Link>
             </div>
+
+
 
             {/* Drawer Footer (Auth) */}
             <div className="mt-auto pt-6 border-t border-gray-100">

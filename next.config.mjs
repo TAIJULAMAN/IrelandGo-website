@@ -1,8 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: false,
+  compress: true,
+  poweredByHeader: false,
   typescript: {
     ignoreBuildErrors: true,
+  },
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -34,3 +39,4 @@ const nextConfig = {
 }
 
 export default nextConfig
+
