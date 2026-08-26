@@ -136,7 +136,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -149,7 +149,10 @@ export default function RootLayout({
           />
         )}
       </head>
-      <body className={`${jakarta.variable} font-sans antialiased bg-background text-foreground`}>
+      <body
+        suppressHydrationWarning
+        className={`${jakarta.variable} font-sans antialiased bg-background text-foreground`}
+      >
         <ReduxProvider>
           <AuthProvider>
             <ClientLayout>{children}</ClientLayout>
@@ -161,6 +164,7 @@ export default function RootLayout({
     </html>
   )
 }
+
 
 
 

@@ -55,9 +55,10 @@ export function SuccessModal({
               Booking Ref
             </span>
             <span className="text-sm font-bold text-gray-900 break-all ml-4 text-right">
-              #{bookingId || `IG-${Math.floor(1000 + Math.random() * 9000)}`}
+              #{bookingId || "IG-PENDING"}
             </span>
           </div>
+
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-500 font-medium">
               Total Amount
