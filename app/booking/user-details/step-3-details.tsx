@@ -506,7 +506,7 @@ export default function Step3Details() {
 
                 className="w-full sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
               >
-                <Link href={`/booking-flow/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "step-2" : "step-3"}?${searchParams.toString()}`}>
+                <Link href={`/booking/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "choose-vehicle" : "add-stops"}?${searchParams.toString()}`}>
                   ← Back
                 </Link>
               </Button>

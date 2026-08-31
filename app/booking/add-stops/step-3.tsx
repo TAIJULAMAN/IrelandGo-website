@@ -398,7 +398,7 @@ export default function Step3() {
 
   useEffect(() => {
     if (serviceType === "DAY_TRIP" || serviceType === "BY_THE_HOUR") {
-      router.replace(`/booking-flow/step-3-details?${searchParams.toString()}`);
+      router.replace(`/booking/user-details?${searchParams.toString()}`);
     }
   }, [serviceType, searchParams, router]);
 
@@ -864,14 +864,14 @@ export default function Step3() {
 
                 className="w-full sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
               >
-                <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>Back</Link>
+                <Link href={`/booking/choose-vehicle?${searchParams.toString()}`}>Back</Link>
               </Button>
               <Button
                 asChild
                 className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
               >
                 <Link
-                  href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
+                  href={`/booking/user-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
                     JSON.stringify(selectedStops.map(s => ({ id: s.id, name: s.name, price: s.price, duration: s.duration })))
                   )}&distanceKm=${distanceKm}${coordsParam}`}
                 >

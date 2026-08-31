@@ -7,6 +7,8 @@ import FAQ from "@/app/settings/faq/faq";
 import { Testimonials } from "@/components/common/testimonials";
 import { useGetSingleDayTripQuery } from "@/Redux/features/dayTrip/dayTripApi";
 
+import Link from "next/link";
+
 export default function DayTripDetails({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const { data: response, isLoading } = useGetSingleDayTripQuery(id);
@@ -30,7 +32,7 @@ export default function DayTripDetails({ params }: { params: Promise<{ id: strin
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Trip Not Found</h2>
           <p className="text-gray-600 mb-6">We couldn't find the day trip you're looking for.</p>
-          <a href="/day-trips" className="text-blue-600 font-semibold hover:underline">Return to Day Trips</a>
+          <Link href="/day-trips" className="text-blue-600 font-semibold hover:underline">Return to Day Trips</Link>
         </div>
       </div>
     );

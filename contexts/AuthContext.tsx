@@ -44,12 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("user", JSON.stringify(userWithoutPassword));
         setUser(userWithoutPassword);
 
-        // Redirect to appropriate dashboard
-        if (userData.role === "agent") {
-            router.push("/agent");
-        } else {
-            router.push("/user");
-        }
+        // Redirect to dashboard
+        router.push("/dashboard");
     };
 
     const login = (email: string, password: string): boolean => {
@@ -69,12 +65,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             localStorage.setItem("user", JSON.stringify(userData));
             setUser(userData);
 
-            // Redirect to appropriate dashboard
-            if (foundUser.role === "agent") {
-                router.push("/agent");
-            } else {
-                router.push("/user");
-            }
+            // Redirect to dashboard
+            router.push("/dashboard");
 
             return true;
         }

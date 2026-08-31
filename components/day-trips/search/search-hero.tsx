@@ -434,7 +434,7 @@ export function SearchHero({ trip }: { trip?: any }) {
             {isFormValid ? (
               <Link
                 href={{
-                  pathname: "/booking-flow/step-2",
+                  pathname: "/booking/choose-vehicle",
                   query: {
                     serviceType: "DAY_TRIP",
                     id: trip?.id,

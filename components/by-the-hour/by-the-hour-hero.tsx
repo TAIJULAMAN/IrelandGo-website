@@ -622,7 +622,7 @@ export default function ByTheHourHero() {
                   {isFormValid ? (
                     <Link
                       href={{
-                        pathname: "/booking-flow/step-2",
+                        pathname: "/booking/choose-vehicle",
                         query: {
                           serviceType: "BY_THE_HOUR",
                           pickup: pickupLocation,

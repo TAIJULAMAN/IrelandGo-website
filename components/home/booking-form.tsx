@@ -320,7 +320,7 @@ export function BookingForm({ activeTab }: BookingFormProps) {
                 pathname:
                   activeTab === "day-trips"
                     ? "/day-trips"
-                    : "/booking-flow/step-2",
+                    : "/booking/choose-vehicle",
                 query: {
                   serviceType:
                     activeTab === "transfer"

@@ -463,7 +463,7 @@ export default function TransferSearchHero() {
               <div className="w-full mt-2">
                 {isFormValid ? (
                   <Link
-                    href={`/booking-flow/step-2?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&tripType=${tripType}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&serviceType=${serviceTypeParam}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
+                    href={`/booking/choose-vehicle?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&tripType=${tripType}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&serviceType=${serviceTypeParam}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
                     className="w-full block"
                   >
                     <Button className="w-full h-12 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 font-semibold text-lg border-0 rounded-lg">
