@@ -20,7 +20,8 @@ interface Blog {
 export function RecentBlogs() {
   const { data, isLoading } = useGetAllBlogsQuery(undefined);
 
-  const blogs: Blog[] = (data?.data?.data || []).slice(0, 3);
+  const blogs: Blog[] = (data?.data?.data || []).slice(0, 4);
+
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
@@ -32,9 +33,7 @@ export function RecentBlogs() {
 
   // Loading skeleton
   if (isLoading) {
-    return (
-      <Loading />
-    );
+    return <Loading />;
   }
 
   if (blogs.length === 0) return null;
@@ -65,18 +64,21 @@ export function RecentBlogs() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {blogs.map((blog, idx) => (
             <Link
-              key={blog.id}
+              key={blog.id || idx}
               href={`/blog/${blog.id}`}
-              className={`group block ${idx === 2 ? "block md:hidden lg:block" : ""}`}
+              className="group block"
             >
-              <article className="bg-white/80 backdrop-blur-md rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-white hover:-translate-y-2 flex flex-col h-full relative">
+              <article className="bg-white/80 backdrop-blur-md rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-white hover:-translate-y-2 flex flex-col h-full relative">
                 {/* Subtle Glow Behind Card */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-                <div className="relative overflow-hidden h-32 md:h-48 z-10" style={{ position: "relative" }}>
+                <div
+                  className="relative overflow-hidden h-28 sm:h-40 md:h-48 z-10"
+                  style={{ position: "relative" }}
+                >
                   <Image
                     src={blog.image?.[0] || "/placeholder.jpg"}
                     alt={blog.title}
@@ -85,29 +87,29 @@ export function RecentBlogs() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900/40 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
-                  <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-blue-700 shadow-sm border border-white/20">
+                  <div className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-white/95 backdrop-blur-md px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold text-blue-700 shadow-sm border border-white/20">
                     {blog.category}
                   </div>
                 </div>
 
-                <div className="p-3 flex flex-col flex-grow relative z-10">
-                  <div className="flex items-center gap-1 text-xs text-gray-500 font-small mb-3">
-                    <Calendar className="w-3 h-3" />
+                <div className="p-2.5 sm:p-4 flex flex-col flex-grow relative z-10">
+                  <div className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-500 font-small mb-1 sm:mb-2">
+                    <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                     <span>{formatDate(blog.createdAt)}</span>
                   </div>
 
-                  <h2 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
+                  <h2 className="text-xs sm:text-lg md:text-xl font-bold text-gray-900 mb-1 sm:mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
                     {blog.title}
                   </h2>
 
-                  <p className="text-sm text-gray-600 leading-relaxed mb-2 line-clamp-3 group-hover:text-gray-700 transition-colors">
+                  <p className="text-[11px] sm:text-sm text-gray-600 leading-relaxed mb-2 line-clamp-2 sm:line-clamp-3 group-hover:text-gray-700 transition-colors">
                     {blog.content?.replace(/<[^>]*>?/gm, "")}
                   </p>
 
-                  <div className="mt-auto flex items-center gap-2 text-sm font-bold text-blue-600 group-hover:text-indigo-600 transition-colors pt-5 border-t border-gray-100">
+                  <div className="mt-auto flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-bold text-blue-600 group-hover:text-indigo-600 transition-colors pt-2 sm:pt-4 border-t border-gray-100">
                     <span>Read Article</span>
                     <svg
-                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -125,6 +127,7 @@ export function RecentBlogs() {
             </Link>
           ))}
         </div>
+
 
         <div className="mt-10 text-center md:hidden">
           <Link

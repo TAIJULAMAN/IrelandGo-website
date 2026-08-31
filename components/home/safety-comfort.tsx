@@ -53,38 +53,47 @@ export function SafetyComfort() {
             subtitle="Our Priority"
             className="mb-6 md:mb-8 text-center lg:text-left [&_span]:lg:text-left [&_h2]:lg:text-left"
           />
-          <div className="space-y-2">
+          <div className="grid grid-cols-2 lg:grid-cols-1 gap-2.5 sm:gap-3">
             {features.map((feature, idx) => {
-              const Icon = feature.icon
+              const Icon = feature.icon;
               return (
                 <div
                   key={idx}
-                  className="group flex gap-3 md:gap-4 p-3 md:p-4 -mx-3 md:-mx-4 rounded-2xl transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-transparent hover:border-gray-100"
+                  className="group flex flex-col sm:flex-row gap-2 sm:gap-4 p-2.5 sm:p-4 rounded-xl sm:rounded-2xl transition-all duration-300 bg-white/60 sm:bg-transparent hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] border border-gray-100/60 hover:border-gray-100"
                 >
-                  <div className="flex-shrink-0 mt-1">
+                  <div className="flex-shrink-0">
                     <div className="relative">
                       {/* Hover Glow */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-xl blur opacity-0 group-hover:opacity-40 transition-opacity duration-300`} />
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-lg sm:rounded-xl blur opacity-0 group-hover:opacity-40 transition-opacity duration-300`}
+                      />
 
                       {/* Icon Container */}
-                      <div className={`relative w-12 h-12 md:w-14 md:h-14 ${feature.bg} group-hover:bg-white rounded-xl flex items-center justify-center transition-colors duration-300 border border-transparent group-hover:border-gray-100 shadow-sm group-hover:shadow-md`}>
-                        <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-                        <Icon className={`w-6 h-6 md:w-7 md:h-7 ${feature.iconColor} group-hover:scale-110 transition-transform duration-300`} />
+                      <div
+                        className={`relative w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 ${feature.bg} group-hover:bg-white rounded-lg sm:rounded-xl flex items-center justify-center transition-colors duration-300 border border-transparent group-hover:border-gray-100 shadow-sm group-hover:shadow-md`}
+                      >
+                        <div
+                          className={`absolute inset-0 rounded-lg sm:rounded-xl bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}
+                        />
+                        <Icon
+                          className={`w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 ${feature.iconColor} group-hover:scale-110 transition-transform duration-300`}
+                        />
                       </div>
                     </div>
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 text-lg md:text-xl mb-1.5 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-gray-900 group-hover:to-gray-600 transition-all duration-300">
+                    <h3 className="font-bold text-gray-900 text-xs sm:text-base md:text-xl mb-1 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-gray-900 group-hover:to-gray-600 transition-all duration-300 line-clamp-2 sm:line-clamp-none">
                       {feature.title}
                     </h3>
-                    <p className="text-sm md:text-base text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">
+                    <p className="text-[10px] sm:text-sm md:text-base text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 line-clamp-2 sm:line-clamp-none">
                       {feature.description}
                     </p>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
+
         </div>
 
         <div className="order-1 lg:order-2 relative">

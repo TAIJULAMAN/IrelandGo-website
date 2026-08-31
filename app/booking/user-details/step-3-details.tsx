@@ -247,16 +247,17 @@ export default function Step3Details() {
       // console.log("Extracted accessToken:", accessToken);
       // console.log("Extracted user:", user);
 
-      if (accessToken && user) {
-        // console.log("Saving token and user to Redux and localStorage...");
-        // Store in Redux (which also sets 'token' and 'user' in localStorage)
+      const existingToken =
+        typeof window !== "undefined"
+          ? localStorage.getItem("token") || localStorage.getItem("accessToken")
+          : null;
+
+      if (accessToken && user && !existingToken) {
+        // Only log in guest users who don't have an active session
         dispatch(setUser({ user, accessToken: accessToken, refreshToken: "" }));
-        // Specifically set 'accessToken' for auth.service.ts which uses this key
         localStorage.setItem("accessToken", accessToken);
-        // console.log("Saved token:", localStorage.getItem("token"));
-      } else {
-        // console.log("WARNING: accessToken or user is missing from response!");
       }
+
 
       setShowModal(true);
     } catch (e: any) {

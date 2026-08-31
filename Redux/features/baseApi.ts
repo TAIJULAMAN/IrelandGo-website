@@ -53,5 +53,7 @@ export const baseApi = createApi({
     "vehicles",
     "stopages",
     "dayTrips",
+    "memory",
   ],
 });
+
