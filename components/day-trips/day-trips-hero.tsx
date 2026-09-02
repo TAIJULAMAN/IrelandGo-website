@@ -1,50 +1,13 @@
 "use client";
 
-import { Search, MapPin } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
-import { FeatureBadges } from "../common/feature-badges";
-import { useGoogleMaps } from "@/hooks/useGoogleMaps";
-import usePlacesAutocomplete from "use-places-autocomplete";
-import { cn } from "@/lib/utils";
 import { HeroTabs } from "../common/hero-tabs";
-import { isOutOfRange } from "@/lib/location-utils";
-
 
 export default function Hero() {
   const [activeTab, setActiveTab] = useState("day-trips");
-  const [location, setLocation] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-
   const router = useRouter();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const dropdownRef = useRef<HTMLUListElement>(null);
-
-  const { isLoaded } = useGoogleMaps();
-
-  const {
-    suggestions: { status, data },
-    setValue,
-    clearSuggestions,
-  } = usePlacesAutocomplete({
-    requestOptions: {
-      componentRestrictions: { country: ["ie", "gb"] },
-      locationRestriction: {
-        north: 55.5,
-        south: 51.3,
-        east: -5.3,
-        west: -10.8,
-      }
-    },
-    debounce: 300,
-    defaultValue: location,
-    initOnMount: isLoaded,
-  });
-
-  const validSuggestions = data.filter(s => !isOutOfRange(s.description));
 
   const handleTabClick = (id: string) => {
     if (id === "transfer") {
@@ -56,150 +19,78 @@ export default function Hero() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!showDropdown || data.length === 0) return;
-
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setSelectedIndex((prev) => (prev < data.length - 1 ? prev + 1 : prev));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setSelectedIndex((prev) => (prev > 0 ? prev - 1 : -1));
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      if (selectedIndex >= 0) {
-        const selected = validSuggestions[selectedIndex];
-        setLocation(selected.description);
-        setValue(selected.description, false);
-        clearSuggestions();
-        setShowDropdown(false);
-      }
-    }
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target as Node)
-      ) {
-        setShowDropdown(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   return (
-    <>
-      <section className="relative overflow-hidden min-h-[75vh] md:min-h-[80vh] flex flex-col justify-center pt-28 pb-16 md:pb-20">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/Images/DayTrip.webp"
-            alt="Irish landscape"
-            fill
-            priority
-            className="object-cover"
+    <section className="relative pt-32 pb-5 md:pt-40 md:pb-5 overflow-hidden bg-white">
+      {/* Premium Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] md:w-[1000px] h-[500px] opacity-40 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-100 via-indigo-50 to-transparent blur-[80px] rounded-full mix-blend-multiply" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+        {/* Header Content */}
+        <div className="text-center max-w-4xl mx-auto mb-10 md:mb-14">
+          {/* <span className="inline-block py-1.5 px-4 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-bold tracking-wide mb-6 shadow-sm">
+            Curated Experiences
+          </span> */}
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-3 text-balance leading-tight px-4 drop-shadow-sm">
+            Explore Ireland's Wonders in <br/>One Day
+          </h1>
+          <p className="text-base md:text-lg text-slate-600 mb-4 px-4 font-medium drop-shadow-md">
+            Discover over 100+ day trips and private tours with local drivers.
+          </p>
+
+          <HeroTabs
+            activeTab={activeTab}
+            onTabChange={handleTabClick}
+            className="flex justify-center mx-auto max-w-md w-full mb-4 "
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/10" />
         </div>
-        <div className="absolute inset-0 " />
-        <div className="relative z-10 w-full">
-          <div className="max-w-7xl mx-auto px-5 py-4 text-center flex flex-col items-center">
-            <div className="space-y-4 md:space-y-6 max-w-4xl mb-6">
-              <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
-                Explore <span className="">Ireland's Wonders</span>
-                <br className="hidden sm:block" /> in One Day
-              </h1>
-              <p className="text-sm md:text-base text-white mb-2 px-4 font-semibold">
-                Discover over 100+ day trips and private tours with local drivers.
-              </p>
+
+        {/* Premium Bento Image Grid */}
+        <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
+          {/* Left side: two images vertically */}
+          {/* <div className="md:col-span-5 flex flex-col gap-4 md:gap-6 h-full">
+            <div
+              className="relative w-full rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] group border border-slate-100"
+              style={{ flex: 2, minHeight: "250px" }}
+            >
+              <Image
+                src="/Images/DayTrip.webp"
+                alt="Cliffs of Moher Day Trip"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+              />
+              <div className="absolute inset-0 bg-slate-900/5 group-hover:bg-transparent transition-colors duration-500" />
             </div>
-
-            <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-center mb-6 overflow-x-auto scrollbar-hide scroll-smooth w-full" />
-
-            {/* Search Bar */}
-            <div className="w-full max-w-3xl mx-auto mb-6 relative">
-              <div className="relative flex items-center bg-white/95 backdrop-blur-xl rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/20 p-2 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/20 transition-all transform hover:-translate-y-1">
-                <div className="pl-4 sm:pl-6 pr-2">
-                  <Search className="w-5 h-5 text-blue-600" />
-                </div>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  role="combobox"
-                  aria-expanded={showDropdown}
-                  aria-controls="location-listbox"
-                  placeholder="Explore from..."
-                  value={location}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setLocation(val);
-                    setValue(val);
-                    setShowDropdown(true);
-                    setSelectedIndex(-1);
-                  }}
-                  onFocus={() => setShowDropdown(true)}
-                  onKeyDown={handleKeyDown}
-                  className="flex-1 py-3 px-2 bg-transparent text-gray-800 text-base sm:text-lg font-medium placeholder:text-gray-400 focus:outline-none w-full"
-                />
-                <Link href={`/day-trips/search?pickup=${encodeURIComponent(location)}`}>
-                  <button className="btn-theme-primary px-8 whitespace-nowrap ml-2">
-                    Search
-                  </button>
-                </Link>
-              </div>
-
-              {(status === "ZERO_RESULTS" || (status === "OK" && validSuggestions.length === 0)) && location.trim().length > 2 && (
-                <div className="flex text-start justify-start px-6">
-                  <p className="text-red-500 text-xs mt-2 font-medium">This location is outside our current service area.</p>
-                </div>
-              )}
-
-              {/* Autocomplete Dropdown */}
-              {showDropdown && status === "OK" && validSuggestions.length > 0 && (
-                <ul
-                  id="location-listbox"
-                  role="listbox"
-                  ref={dropdownRef}
-                  className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-2xl z-50 overflow-hidden text-left"
-                >
-                  {validSuggestions.map((suggestion, index) => (
-                    <li
-                      key={suggestion.place_id}
-                      role="option"
-                      aria-selected={index === selectedIndex}
-                      className={cn(
-                        "w-full px-5 py-3 hover:bg-blue-50 transition-colors flex items-center gap-3 border-b border-gray-50 last:border-0 cursor-pointer",
-                        index === selectedIndex && "bg-blue-50"
-                      )}
-                      onClick={() => {
-                        setLocation(suggestion.description);
-                        setValue(suggestion.description, false);
-                        clearSuggestions();
-                        setShowDropdown(false);
-                      }}
-                    >
-                      <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                      <div>
-                        <div className="text-sm font-semibold text-gray-900">
-                          {suggestion.structured_formatting.main_text}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {suggestion.structured_formatting.secondary_text}
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )}
+            <div
+              className="relative w-full rounded-[2rem] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] group border border-slate-100"
+              style={{ flex: 1, minHeight: "150px" }}
+            >
+              <Image
+                src="/Images/Tours.webp"
+                alt="Giant's Causeway"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+              />
+              <div className="absolute inset-0 bg-slate-900/5 group-hover:bg-transparent transition-colors duration-500" />
             </div>
-            <FeatureBadges />
-          </div>
+          </div> */}
+
+          {/* Right side: one big image */}
+          {/* <div
+            className="md:col-span-7 relative w-full h-full rounded-[2rem] overflow-hidden shadow-[0_12px_40px_rgb(0,0,0,0.08)] group border border-slate-100"
+            style={{ minHeight: "400px" }}
+          >
+            <Image
+              src="/Images/Home.webp"
+              alt="Ireland Landscape"
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+            />
+            <div className="absolute inset-0 bg-slate-900/5 group-hover:bg-transparent transition-colors duration-500" />
+          </div> */}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

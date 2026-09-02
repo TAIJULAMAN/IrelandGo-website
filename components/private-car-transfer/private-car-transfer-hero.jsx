@@ -396,8 +396,8 @@ export default function PrivateCarTransferHero({
 
         <div className="max-w-7xl mx-auto px-5 py-16 relative z-10">
           {/* Hero Text */}
-          <div className="text-center mb-10 pt-5">
-            <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold mb-3 md:mb-4 text-white text-balance leading-tight px-4">
+          <div className="space-y-4 md:space-y-6 max-w-4xl mx-auto mb-10 pt-5 text-center">
+            <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-tight tracking-tight drop-shadow-2xl text-white">
               {customH1 ? (
                 customH1
               ) : (
@@ -414,7 +414,7 @@ export default function PrivateCarTransferHero({
                 </>
               )}
             </h1>
-            <p className="text-sm md:text-base text-white mb-6 md:mb-8 px-4">
+            <p className="text-sm md:text-base text-white px-4 font-medium drop-shadow-md leading-relaxed">
               {customSubtitle || `Seamless city-to-city and airport transfers across ${displayLocation} and beyond.`}
             </p>
           </div>

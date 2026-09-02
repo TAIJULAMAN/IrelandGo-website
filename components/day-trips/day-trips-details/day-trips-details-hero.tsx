@@ -198,12 +198,12 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
                 }}
               >
                 <button className="btn-theme-primary px-8 w-full sm:w-auto">
-                  Book Your Tour
+                  Book Now
                 </button>
               </Link>
             ) : (
               <button className="btn-theme-primary px-8 w-full sm:w-auto opacity-50 cursor-not-allowed pointer-events-none" disabled>
-                Book Your Tour
+                Book Now
               </button>
             )}
           </div>

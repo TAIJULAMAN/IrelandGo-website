@@ -209,7 +209,7 @@ export default function MultiDayToursOurMultiDayTours() {
                     </div>
 
                     <div className="mt-auto pt-2">
-                      <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-100">
+                      {/* <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-100">
                         <span className="text-xs sm:text-sm font-medium text-gray-500">
                           Starts from
                         </span>
@@ -221,7 +221,7 @@ export default function MultiDayToursOurMultiDayTours() {
                             / person
                           </span>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="btn-theme-primary w-full group/btn">
                         <span className="tracking-wide">View Details</span>
                         <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />

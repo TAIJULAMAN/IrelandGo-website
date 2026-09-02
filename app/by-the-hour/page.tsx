@@ -15,8 +15,8 @@ export default function ByTheHour() {
       <ByTheHourPrivateRides />
       <ByTheHourDedicationSafety />
       <RecentBlogs />
-      <Testimonials />
       <ByTheHourFlexibleBooking />
+      <Testimonials />
       <FAQ />
     </>
   );

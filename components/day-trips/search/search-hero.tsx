@@ -450,7 +450,7 @@ export function SearchHero({ trip }: { trip?: any }) {
               >
                 <button className="btn-theme-primary px-8 w-full sm:w-auto">
                   <Search className="w-4 h-4 mr-2" />
-                  Find Your Trip
+                  Book Now
                 </button>
               </Link>
             ) : (
@@ -459,7 +459,7 @@ export function SearchHero({ trip }: { trip?: any }) {
                 disabled
               >
                 <Search className="w-4 h-4 mr-2" />
-                Find Your Trip
+                Book Now
               </button>
             )}
           </div>

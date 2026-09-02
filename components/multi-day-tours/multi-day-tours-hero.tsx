@@ -13,13 +13,13 @@ export default function MultiDayToursHero() {
       <div className="max-w-7xl mx-auto px-5 w-full flex flex-col items-center text-center gap-8 md:gap-12 relative z-10 mt-10">
         {/* Main Content */}
         <div className="space-y-4 md:space-y-6 max-w-4xl">
-          <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
+          <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-tight tracking-tight drop-shadow-2xl text-white">
             Multi-Day Tours Across
             <br className="hidden sm:block" />
-            <span className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4"> Ireland</span>
+            <span className=""> Ireland</span>
           </h1>
 
-          <p className="text-sm md:text-base text-white mb-2 px-4 font-semibold text-balance">
+          <p className="text-sm md:text-base text-white px-4 font-medium drop-shadow-md leading-relaxed">
             Experience the best of Ireland&apos;s scenic routes, from sweeping
             coastlines to the historic countryside, on a private and fully
             guided journey.

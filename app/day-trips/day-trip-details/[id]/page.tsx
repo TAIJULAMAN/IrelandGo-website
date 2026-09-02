@@ -55,6 +55,14 @@ export default function DayTripDetails({
     <main>
       <DayTripsDetailsHero trip={trip} />
       <TripItinerary trip={trip} />
+      <div className="flex justify-center my-12 md:my-16 px-4">
+        <button 
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="btn-theme-primary px-10 py-3 text-lg shadow-lg hover:shadow-xl transition-all"
+        >
+          Book Now
+        </button>
+      </div>
       <Testimonials />
       <FAQ />{" "}
     </main>

@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Star, Clock, ArrowRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Star,
+  Clock,
+  ArrowRight,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Loading from "@/components/common/loading";
@@ -43,7 +49,6 @@ export function PopularMultiDayTours() {
       ].filter(Boolean)
     : tours.slice(0, 4);
 
-
   if (isLoading) {
     return (
       <section className="relative px-5 md:px-0 py-10 md:py-16 bg-white overflow-hidden">
@@ -79,7 +84,7 @@ export function PopularMultiDayTours() {
           <div className="flex-1 w-full max-w-3xl mx-auto">
             <SectionHeader
               title="Popular Multi-Day Tours"
-              subtitle="Curated Experiences"
+              // subtitle="Curated Experiences"
               description="Discover Ireland's most breathtaking destinations with our carefully curated multi-day experiences."
               alignment="center"
               className="mb-0"
@@ -99,10 +104,7 @@ export function PopularMultiDayTours() {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {visibleTours.map((tour: any, idx: number) => (
-            <div
-              key={tour.id || idx}
-              className="card-theme group"
-            >
+            <div key={tour.id || idx} className="card-theme group">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
               <div className="card-image-wrapper z-10">
@@ -138,7 +140,10 @@ export function PopularMultiDayTours() {
                 </div>
 
                 <div className="mt-auto pt-2">
-                  <Link href={`/multi-day-tours/${tour.id}`} className="block w-full">
+                  <Link
+                    href={`/multi-day-tours/${tour.id}`}
+                    className="block w-full"
+                  >
                     <div className="btn-theme-primary w-full group/btn">
                       <span className="tracking-wide">View Details</span>
                       <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
@@ -149,7 +154,6 @@ export function PopularMultiDayTours() {
             </div>
           ))}
         </div>
-
 
         {/* Mobile Navigation Buttons */}
         {showSlider && (

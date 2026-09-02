@@ -145,7 +145,7 @@ export default function TransfersHero() {
   ];
 
   return (
-    <section className="relative min-h-[75vh] md:min-h-[80vh] flex items-center justify-center text-white overflow-hidden pt-28 pb-16 md:pb-20">
+    <section className="relative min-h-[100vh] md:min-h-[100vh] flex items-center justify-center text-white overflow-hidden pt-28 pb-16 md:pb-20">
       <div className="absolute inset-0 -z-10">
         <Image
           src="/Media.png"

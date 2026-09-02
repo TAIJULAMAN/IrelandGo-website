@@ -163,7 +163,7 @@ export default function ByTheHourHero() {
 
   return (
     <TooltipProvider>
-      <section className="relative overflow-hidden min-h-[75vh] md:min-h-[80vh] flex flex-col justify-center pt-28 pb-14 md:pb-16">
+      <section className="relative overflow-hidden min-h-[100vh] md:min-h-[100vh] flex flex-col justify-center pt-28 pb-14 md:pb-16">
         <div className="absolute inset-0 z-0">
           <Image
             src="/Images/ByTheHour.webp"
@@ -178,12 +178,12 @@ export default function ByTheHourHero() {
         <div className="absolute inset-0 " />
         <div className="relative z-10 w-full">
           <div className="max-w-7xl mx-auto px-5 py-4 text-center flex flex-col items-center">
-            <div className="space-y-2 max-w-4xl mb-6">
-              <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
+            <div className="space-y-4 md:space-y-6 max-w-4xl mb-6">
+              <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-tight tracking-tight drop-shadow-2xl text-white">
                 Book a Private Driver <span className="">by the Hour</span>
                 <br className="hidden sm:block" /> – Travel Your Way
               </h1>
-              <p className="text-sm md:text-base text-white mb-2 px-4 font-semibold">
+              <p className="text-sm md:text-base text-white px-4 font-medium drop-shadow-md leading-relaxed">
                 Discover over 100+ day trips and private tours with local drivers.
               </p>
             </div>

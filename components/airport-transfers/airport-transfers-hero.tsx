@@ -44,7 +44,7 @@ export default function AirportTransfersHero() {
   };
 
   return (
-    <section className="relative min-h-[75vh] md:min-h-[80vh] flex items-center justify-center text-white overflow-hidden pt-28 pb-16 md:pb-20">
+    <section className="relative min-h-[100vh] md:min-h-[100vh] flex items-center justify-center text-white overflow-hidden pt-28 pb-16 md:pb-20">
       <div className="absolute inset-0 -z-10">
         <Image
           src="/Images/AirportTransfers.webp"
@@ -60,12 +60,12 @@ export default function AirportTransfersHero() {
 
         {/* Header Text */}
         <div className="space-y-4 md:space-y-6 max-w-4xl">
-          <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
+          <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-tight tracking-tight drop-shadow-2xl text-white">
             Reliable Airport Transfers Across
             <br className="hidden sm:block" />
-            <span className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4"> Ireland</span>
+            <span className=""> Ireland</span>
           </h1>
-          <p className="text-sm md:text-base text-white mb-2 px-4 font-semibold">
+          <p className="text-sm md:text-base text-white px-4 font-medium drop-shadow-md leading-relaxed">
             Start your Irish adventure with our premium airport transfer
             services. Enjoy comfortable, reliable, and prompt journeys
             connecting you between all major airports and destinations across
