@@ -581,13 +581,8 @@ export default function UserInfo() {
                 variant="outline"
                 size="action"
               >
-<<<<<<<< HEAD:app/booking/user-info/user-info.tsx
                 <Link href={`/booking/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "vehicles" : "stops"}`}>
                   Back
-========
-                <Link href={`/booking/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "choose-vehicle" : "add-stops"}?${searchParams.toString()}`}>
-                  ← Back
->>>>>>>> 68619fa9f4ec3e5b4efd2fa6121bb3788b052b14:app/booking/user-details/step-3-details.tsx
                 </Link>
               </Button>
 

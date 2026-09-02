@@ -87,6 +87,21 @@ const nextConfig = {
         destination: "/booking/real-time-tracking",
         permanent: true,
       },
+      {
+        source: "/booking/choose-vehicle",
+        destination: "/booking/vehicles",
+        permanent: true,
+      },
+      {
+        source: "/booking/add-stops",
+        destination: "/booking/stops",
+        permanent: true,
+      },
+      {
+        source: "/booking/user-details",
+        destination: "/booking/user-info",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

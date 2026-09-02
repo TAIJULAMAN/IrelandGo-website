@@ -76,13 +76,7 @@ export function SuccessModal({
           asChild
           className="w-full mt-4"
         >
-<<<<<<<< HEAD:app/booking/user-info/success-modal.tsx
           <Link href="/booking/payment">
-========
-          <Link
-            href={`/booking/payment?${searchParams.toString()}${bookingId ? `&bookingId=${bookingId}` : ""}&firstName=${firstName}&lastName=${lastName}&email=${email}&phone=${phone}&specialRequests=${specialRequests}`}
-          >
->>>>>>>> 68619fa9f4ec3e5b4efd2fa6121bb3788b052b14:app/booking/user-details/success-modal.tsx
             Proceed to Payment
           </Link>
         </Button>

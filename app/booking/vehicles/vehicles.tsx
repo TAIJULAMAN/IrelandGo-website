@@ -854,7 +854,6 @@ export default function Vehicles() {
                   coords: coords || undefined,
                 });
               }}
-<<<<<<<< HEAD:app/booking/vehicles/vehicles.tsx
               href={
                 serviceType === "TRANSFER" ||
                 serviceType === "PRIVATE_TRANSFER" ||
@@ -862,11 +861,6 @@ export default function Vehicles() {
                   ? buildSemanticBookingUrl("stops", session)
                   : buildSemanticBookingUrl("user-info", session, selectedVehicleName)
               }
-========
-              href={`/booking/${serviceType === "TRANSFER" || serviceType === "PRIVATE_TRANSFER" || serviceType === "AIRPORT_TRANSFER" ? "add-stops" : "user-details"}?${searchParams.toString()}&vehicleId=${encodeURIComponent(
-                selectedVehicle || "",
-              )}&carPrice=${selectedPrice || 0}&distanceKm=${distanceKm || 0}${coords ? `&fromLat=${coords.fromLat}&fromLng=${coords.fromLng}&toLat=${coords.toLat}&toLng=${coords.toLng}` : ""}`}
->>>>>>>> 68619fa9f4ec3e5b4efd2fa6121bb3788b052b14:app/booking/choose-vehicle/step-2.tsx
               className={!selectedVehicle ? "pointer-events-none" : ""}
             >
               {serviceType === "TRANSFER" ||

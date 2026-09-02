@@ -453,11 +453,7 @@ export default function Stops() {
 
   useEffect(() => {
     if (serviceType === "DAY_TRIP" || serviceType === "BY_THE_HOUR") {
-<<<<<<<< HEAD:app/booking/stops/stops.tsx
       router.replace("/booking/user-info");
-========
-      router.replace(`/booking/user-details?${searchParams.toString()}`);
->>>>>>>> 68619fa9f4ec3e5b4efd2fa6121bb3788b052b14:app/booking/add-stops/step-3.tsx
     }
   }, [serviceType, router]);
 
@@ -923,18 +919,13 @@ export default function Stops() {
                 variant="outline"
                 size="action"
               >
-<<<<<<<< HEAD:app/booking/stops/stops.tsx
                 <Link href={buildSemanticBookingUrl("vehicles", session)}>Back</Link>
-========
-                <Link href={`/booking/choose-vehicle?${searchParams.toString()}`}>Back</Link>
->>>>>>>> 68619fa9f4ec3e5b4efd2fa6121bb3788b052b14:app/booking/add-stops/step-3.tsx
               </Button>
               <Button
                 asChild
                 size="action"
               >
                 <Link
-<<<<<<<< HEAD:app/booking/stops/stops.tsx
                   onClick={() => {
                     saveBookingSession({
                       selectedStops: selectedStops.map((s) => ({
@@ -947,11 +938,6 @@ export default function Stops() {
                     });
                   }}
                   href={buildSemanticBookingUrl("user-info", session, session.vehicleName)}
-========
-                  href={`/booking/user-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
-                    JSON.stringify(selectedStops.map(s => ({ id: s.id, name: s.name, price: s.price, duration: s.duration })))
-                  )}&distanceKm=${distanceKm}${coordsParam}`}
->>>>>>>> 68619fa9f4ec3e5b4efd2fa6121bb3788b052b14:app/booking/add-stops/step-3.tsx
                 >
                   Next: Checkout
                 </Link>
