@@ -85,7 +85,7 @@ export function BookingDetailsInputs({
 
   return (
     <TooltipProvider>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 relative z-10">
         {/* Date & Time */}
         <div>
           <label className="text-start text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">
