@@ -8,6 +8,6 @@
 // export const getBaseUrl = () => url;
 
 
-export const imgUrl = "https://api.tourenzo.com";
+export const imgUrl = "http://localhost:5000";
 export const url = `${imgUrl}/api/v1/`;
 export const getBaseUrl = () => url;

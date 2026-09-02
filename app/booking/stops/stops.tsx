@@ -476,7 +476,7 @@ export default function Stops() {
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
-  const carPriceParam = searchParams.get("carPrice");
+  const sessionCarPrice = searchParams.get("carPrice") || session.carPrice;
 
   let transportPrice = 0;
   let vehicleName = "Vehicle";
@@ -489,11 +489,11 @@ export default function Stops() {
     if (selectedVehicles.length > 0) {
       vehicleName = selectedVehicles.map((v: any) => v.name).join(" + ");
 
-      const basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + v.basePrice, 0);
+      const basePriceSum = selectedVehicles.reduce((sum: number, v: any) => sum + (v.basePrice || 0), 0);
 
       const km = distanceKm || 0;
       pricePerKmSumForStops = selectedVehicles.reduce((sum: number, vehicle: any) => {
-        const name = vehicle.name.toLowerCase();
+        const name = (vehicle.name || "").toLowerCase();
         let isLSedan = name.includes("luxury sedan") || name.includes("l sedan") || name.includes("lsedan");
         let isMPV = !isLSedan && (name.includes("mpv") || name.includes("mvp") || name.includes("minivan"));
         let isVan = !isLSedan && !isMPV && name.includes("van");
@@ -510,8 +510,8 @@ export default function Stops() {
         return sum + rate;
       }, 0);
 
-      if (carPriceParam) {
-        transportPrice = parseFloat(carPriceParam);
+      if (sessionCarPrice) {
+        transportPrice = typeof sessionCarPrice === 'string' ? parseFloat(sessionCarPrice) : sessionCarPrice;
       } else {
         transportPrice = Math.round(basePriceSum + (pricePerKmSumForStops * distanceKm));
       }
