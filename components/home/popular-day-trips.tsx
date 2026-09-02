@@ -21,7 +21,6 @@ export function PopularDayTrips() {
 
   const { data: response, isLoading, isError } = useGetPopularTripsQuery({});
   const trips = response?.data || [];
-  console.log("trip of aaaaaaaaaaaaaaaaaaaaaa", trips);
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -33,13 +32,17 @@ export function PopularDayTrips() {
   };
 
   const renderDuration = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
+    if (!minutes && minutes !== 0) return null;
+    const totalMinutes =
+      typeof minutes === "string" ? parseInt(minutes, 10) : minutes;
+    if (isNaN(totalMinutes)) return null;
+
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
     if (hours > 0) {
       return (
         <span>
-          {hours}h
-          {mins > 0 && <span className="hidden sm:inline"> {mins}m</span>}
+          {hours}h{mins > 0 ? ` ${mins}m` : ""}
         </span>
       );
     }
@@ -114,23 +117,23 @@ export function PopularDayTrips() {
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-70" />
               </div>
 
-              <div className="p-4 sm:p-5 flex flex-col flex-1 relative z-10 justify-between gap-3">
+              <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-1 relative z-10 justify-between gap-2 sm:gap-3">
                 <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
+                  <h3 className="text-xs sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
                     {trip.from} to {trip.to}
                   </h3>
 
-                  <p className="text-xs sm:text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed min-h-[2.5rem]">
+                  <p className="text-[11px] sm:text-sm text-gray-500 mb-2 sm:mb-3 line-clamp-1 sm:line-clamp-2 leading-relaxed min-h-0 sm:min-h-[2.5rem]">
                     {trip.description?.replace(/<[^>]*>?/gm, "")}
                   </p>
 
-                  <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
-                    <span className="card-badge">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
+                    <span className="card-badge text-[11px] sm:text-xs">
                       <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       {renderDuration(trip.travelTimeMinutes)}
                     </span>
                     {trip.groupType && (
-                      <span className="card-badge-indigo">
+                      <span className="card-badge-indigo text-[11px] sm:text-xs">
                         <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         {trip.groupType}
                       </span>
@@ -138,12 +141,12 @@ export function PopularDayTrips() {
                   </div>
                 </div>
 
-                <div className="mt-auto pt-2">
-                  <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-100">
-                    <span className="text-xs sm:text-sm font-medium text-gray-500">
+                <div className="mt-auto pt-1 sm:pt-2">
+                  <div className="flex items-center justify-between mb-2 sm:mb-3 pt-1.5 sm:pt-2 border-t border-gray-100">
+                    <span className="text-[11px] sm:text-sm font-medium text-gray-500">
                       Starts from
                     </span>
-                    <span className="text-blue-600 font-extrabold text-sm sm:text-lg">
+                    <span className="text-blue-600 font-extrabold text-xs sm:text-lg">
                       €
                       {trip.price ??
                         (trip.vehicles?.length
@@ -152,13 +155,13 @@ export function PopularDayTrips() {
                     </span>
                   </div>
 
-                  <Button asChild className="w-full">
+                  <Button asChild className="w-full !h-8 sm:!h-10 text-xs sm:text-sm rounded-lg sm:rounded-xl">
                     <Link
                       href={`/day-trips/details/${trip.id}`}
                       className="group/btn"
                     >
                       <span>View Details</span>
-                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
+                      <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
                     </Link>
                   </Button>
                 </div>

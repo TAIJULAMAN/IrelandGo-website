@@ -228,11 +228,11 @@ export function SearchHero({ trip }: { trip?: any }) {
           </p>
         </div>
 
-        <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-lg shadow-xl border border-white/50 p-5 md:p-8">
+        <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-lg shadow-xl border border-white/50 p-5 md:p-8 relative z-30">
           {/* Controls */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {/* Pickup Location */}
-            <div className="relative">
+            <div className={cn("relative", showPickupDropdown ? "z-50" : "z-20")}>
               <label className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12 hover:border-blue-400 transition">
                 <MapPin className="w-4 h-4 text-blue-600" />
                 <Input
@@ -287,7 +287,7 @@ export function SearchHero({ trip }: { trip?: any }) {
             </div>
 
             {/* Dropoff Location */}
-            <div className="relative">
+            <div className={cn("relative", showDropoffDropdown ? "z-50" : "z-10")}>
               <label className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12 hover:border-blue-400 transition">
                 <Flag className="w-4 h-4 text-blue-600" />
                 <Input

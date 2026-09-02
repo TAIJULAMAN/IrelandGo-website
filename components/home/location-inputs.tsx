@@ -62,13 +62,13 @@ export function LocationInputs({
   return (
     <TooltipProvider>
       <div className={cn(
-        "grid gap-4 mb-4",
+        "grid gap-4 mb-4 relative z-30",
         showDropoff
           ? "grid-cols-1 lg:grid-cols-3"
           : "grid-cols-1 lg:grid-cols-2"
       )}>
         {/* Pickup Location */}
-        <div className="relative" ref={pickupRef}>
+        <div className={cn("relative", showPickupDropdown ? "z-50" : "z-20")} ref={pickupRef}>
           <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100">
             <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0" />
             <input
@@ -88,7 +88,7 @@ export function LocationInputs({
             <p className="text-red-500 text-xs mt-1 px-1">location is not in our range</p>
           )}
           {showPickupDropdown && pStatus === "OK" && pData.filter(s => !isOutOfRange(s.description)).length > 0 && (
-            <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden">
+            <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden max-h-72 overflow-y-auto">
               {pData.filter(s => !isOutOfRange(s.description)).map((suggestion) => (
                 <button
                   key={suggestion.place_id}
@@ -114,7 +114,7 @@ export function LocationInputs({
 
         {/* Dropoff Location */}
         {showDropoff && (
-          <div className="relative" ref={dropoffRef}>
+          <div className={cn("relative", showDropoffDropdown ? "z-50" : "z-10")} ref={dropoffRef}>
             <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100">
               <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0" />
               <input
@@ -134,7 +134,7 @@ export function LocationInputs({
               <p className="text-red-500 text-xs mt-1 px-1">location is not in our range</p>
             )}
             {showDropoffDropdown && dStatus === "OK" && dData.filter(s => !isOutOfRange(s.description)).length > 0 && (
-              <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-xl border border-gray-100 overflow-hidden">
+              <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden max-h-72 overflow-y-auto">
                 {dData.filter(s => !isOutOfRange(s.description)).map((suggestion) => (
                   <button
                     key={suggestion.place_id}

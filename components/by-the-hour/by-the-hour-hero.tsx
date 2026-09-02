@@ -192,16 +192,16 @@ export default function ByTheHourHero() {
             <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-start md:justify-center mb-4 overflow-x-auto scrollbar-hide scroll-smooth w-full pb-2 -mx-4 px-4 md:mx-0 md:px-0" />
 
             {/* Search Bar */}
-            <div className="max-w-6xl mx-auto mb-4 relative w-full text-left">
+            <div className="max-w-6xl mx-auto mb-4 relative z-30 w-full text-left">
               <div className="bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/20 p-4 sm:p-6 transform transition-all">
                 {/* Row 1: Pickup Location & Luggage */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4 relative z-30">
                   {/* Pickup Location */}
                   <div>
                     <label className="text-start text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">
                       Pickup Location
                     </label>
-                    <div className="relative">
+                    <div className={cn("relative", showDropdown ? "z-50" : "z-20")}>
                       <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:border-blue-500 transition-all bg-white/85 h-[52px] focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10">
                         <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0 ml-1" />
                         <input
@@ -232,7 +232,7 @@ export default function ByTheHourHero() {
                       {showDropdown && status === "OK" && data.filter(s => !isOutOfRange(s.description)).length > 0 && (
                         <div
                           ref={dropdownRef}
-                          className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-80 overflow-y-auto z-50"
+                          className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-2xl max-h-80 overflow-y-auto z-50"
                         >
                           {data.filter(s => !isOutOfRange(s.description)).map((suggestion, index) => (
                             <button
@@ -340,7 +340,7 @@ export default function ByTheHourHero() {
                 </div>
 
                 {/* Row 2: Date, Duration, Passengers */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 relative z-10">
                   {/* Date & Time */}
                   <div>
                     <label className="text-start text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">

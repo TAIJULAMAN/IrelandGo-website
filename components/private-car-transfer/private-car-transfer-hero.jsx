@@ -421,7 +421,7 @@ export default function PrivateCarTransferHero({
           </div>
 
           {/* Booking Card */}
-          <div className="flex flex-col lg:flex-row gap-5 max-w-7xl 2xl:max-w-8xl mx-auto bg-white/95 backdrop-blur-xl rounded-lg shadow-2xl p-4 md:p-5 border border-white/40">
+          <div className="relative z-30 flex flex-col lg:flex-row gap-5 max-w-7xl 2xl:max-w-8xl mx-auto bg-white/95 backdrop-blur-xl rounded-lg shadow-2xl p-4 md:p-5 border border-white/40">
             <div className="w-full">
               <TripTypeSelector
                 activeTab="transfer"

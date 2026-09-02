@@ -1,214 +1,124 @@
 "use client";
 
-import { MapPin, Flag, Calendar as CalendarIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import Image from "next/image";
 import Link from "next/link";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import { cn } from "@/lib/utils";
-import { slugifyText } from "@/utils/bookingSession";
+import { Clock, MapPin, Users, Star, ChevronRight } from "lucide-react";
 
 export default function DayTripsDetailsHero({ trip }: { trip: any }) {
-  const pSlug = slugifyText(trip?.from || "dublin");
-  const dSlug = slugifyText(trip?.to || "galway");
-  const [adults, setAdults] = useState<number>(2)
-  const [children, setChildren] = useState<number>(0)
-  const [extraBags, setExtraBags] = useState<number>(0)
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [time, setTime] = useState("09:00");
+  // Format duration
+  const totalMinutes = trip?.travelTimeMinutes || 480;
+  const hours = Math.floor(totalMinutes / 60);
+  const mins = totalMinutes % 60;
+  const durationFormatted =
+    hours > 0 ? `${hours}h${mins > 0 ? ` ${mins}m` : ""}` : `${mins}m`;
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // Curated local Irish attraction photos as fallbacks so gallery always has 5 images
+  const defaultImages = [
+    "/attractions/1.jpg",
+    "/attractions/2.webp",
+    "/attractions/3.jpg",
+    "/attractions/4.jpg",
+    "/attractions/5.jpg",
+  ];
 
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const rawImages =
+    Array.isArray(trip?.images) && trip.images.length > 0
+      ? trip.images
+      : [trip?.image || "/details.png"];
 
-  const isTimeDisabled = (selectedDate: Date | undefined, timeStr: string) => {
-    if (!selectedDate) return false;
-    const isToday = selectedDate.toDateString() === new Date().toDateString();
-    if (!isToday) return false;
-
-    const [hours, minutes] = timeStr.split(":").map(Number);
-    const selectedDateTime = new Date(selectedDate);
-    selectedDateTime.setHours(hours, minutes, 0, 0);
-
-    const minDateTime = new Date();
-    minDateTime.setHours(minDateTime.getHours() + 3);
-
-    return selectedDateTime.getTime() < minDateTime.getTime();
-  };
-
-  useEffect(() => {
-    if (date && isTimeDisabled(date, time)) {
-      for (let i = 0; i < 96; i++) {
-        const hour = Math.floor(i / 4);
-        const minute = (i % 4) * 15;
-        const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-        if (!isTimeDisabled(date, timeString)) {
-          setTime(timeString);
-          break;
-        }
-      }
-    }
-  }, [date]);
-
-  const isFormValid = date !== undefined && time !== "" && !isTimeDisabled(date, time);
+  const allImages = [...rawImages];
+  while (allImages.length < 5) {
+    allImages.push(defaultImages[allImages.length % defaultImages.length]);
+  }
 
   return (
-    <section className="relative w-full h-[80vh] py-20">
-      <div className="absolute inset-0 z-0">
-        <img
-          src={trip?.images?.[0] || "/details.png"}
-          alt={trip?.title || "Scenic Ireland coastline"}
-          className="w-full h-full object-cover object-center"
-          fetchPriority="high"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/30" />
-      </div>
+    <section className="bg-white pt-24 sm:pt-28 pb-4 sm:pb-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Breadcrumbs */}
+        <nav className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
+          <Link href="/" className="hover:text-blue-600 transition-colors">
+            Home
+          </Link>
+          <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
+          <Link href="/day-trips" className="hover:text-blue-600 transition-colors">
+            Day Trips
+          </Link>
+          <ChevronRight className="w-3.5 h-3.5 text-gray-400" />
+          <span className="text-gray-900 font-medium truncate max-w-[200px] sm:max-w-md">
+            {trip?.title}
+          </span>
+        </nav>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-5 w-full pt-10 md:pt-16">
-        <div className="text-center mb-6 md:mb-10 max-w-4xl mx-auto">
-          {/* Title & Subtitle */}
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4 text-balance leading-tight px-4 drop-shadow-md">
+        {/* Heading & Subtitle */}
+        <div className="mb-6">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight mb-3">
             {trip?.title}
           </h1>
-          <p className="text-base md:text-lg text-white/90 mb-4 px-4 font-medium drop-shadow-md">
-            Explore gorgeous coastal scenery and charming Irish towns on a private, guided day tour.
+          <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-3xl leading-relaxed">
+            {trip?.shortDescription ||
+              "Explore gorgeous coastal scenery and charming Irish towns on a private, guided day tour."}
           </p>
+
+          {/* Quick Badges Row */}
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mt-4">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-blue-50 text-blue-700 border border-blue-100 shadow-xs">
+              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+              {durationFormatted}
+            </span>
+
+            {trip?.from && trip?.to && (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-gray-100 text-gray-700 border border-gray-200/70 shadow-xs">
+                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500" />
+                {trip.from} to {trip.to}
+              </span>
+            )}
+
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-xs">
+              <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-600" />
+              {trip?.groupType || "Private Guided Tour"}
+            </span>
+
+            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200/80 shadow-xs">
+              <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-500 fill-yellow-500" />
+              {trip?.ratings || "5.0"} (Top Rated)
+            </span>
+          </div>
         </div>
 
-        <div className="w-full max-w-4xl mx-auto bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/50 p-5 md:p-8">
-
-          {/* Controls */}
-          <div className="mt-2 flex flex-col md:flex-row items-stretch bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="flex-1 flex items-center gap-3 px-4 h-14 md:h-16 border-b md:border-b-0 md:border-r border-slate-200 hover:bg-slate-50 transition-colors">
-              <MapPin className="w-5 h-5 text-blue-600 shrink-0" />
-              <Input
-                type="text"
-                defaultValue={trip?.from || ""}
-                placeholder="Pickup Location"
-                className="border-0 bg-transparent h-full px-0 text-sm md:text-base font-medium placeholder:text-slate-400 focus-visible:ring-0 shadow-none rounded-none"
-              />
-            </div>
-            <div className="flex-1 flex items-center gap-3 px-4 h-14 md:h-16 border-b md:border-b-0 md:border-r border-slate-200 hover:bg-slate-50 transition-colors">
-              <Flag className="w-5 h-5 text-blue-600 shrink-0" />
-              <Input
-                type="text"
-                defaultValue={trip?.to || ""}
-                placeholder="Dropoff Location"
-                className="border-0 bg-transparent h-full px-0 text-sm md:text-base font-medium placeholder:text-slate-400 focus-visible:ring-0 shadow-none rounded-none"
-              />
-            </div>
-            {/* Date Picker */}
-            <div className="flex-1 flex items-center h-14 md:h-16 hover:bg-slate-50 transition-colors">
-              <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"ghost"}
-                    className={cn(
-                      "w-full h-full px-4 justify-start text-left font-medium rounded-none hover:bg-transparent text-slate-700 text-sm md:text-base",
-                      !date && "text-slate-400"
-                    )}
-                  >
-                    <CalendarIcon className="mr-3 h-5 w-5 text-blue-600 flex-shrink-0" />
-                    {date ? (
-                      <span className="truncate">
-                        <span>{format(date, "MMM d, yyyy")}</span>
-                        <span className="text-slate-300 mx-2">|</span>
-                        <span className="text-slate-900">{time}</span>
-                      </span>
-                    ) : (
-                      <span>Pick date & time</span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <div className="flex flex-col sm:flex-row">
-                    <div className="border-b sm:border-b-0 sm:border-r border-slate-100">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        disabled={{ before: today }}
-                        initialFocus
-                      />
-                    </div>
-                    <div className="h-[200px] sm:h-[300px] w-full sm:w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-slate-200">
-                      <div className="flex sm:flex-col gap-1 flex-wrap sm:flex-nowrap">
-                        {(() => {
-                          const availableTimes = Array.from({ length: 96 })
-                            .map((_, i) => {
-                              const hour = Math.floor(i / 4);
-                              const minute = (i % 4) * 15;
-                              return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-                            })
-                            .filter((timeString) => !isTimeDisabled(date, timeString));
-
-                          if (availableTimes.length === 0) {
-                            return (
-                              <div className="text-center p-4 text-sm text-slate-500 w-full">
-                                No times
-                              </div>
-                            );
-                          }
-
-                          return availableTimes.map((timeString) => (
-                            <Button
-                              key={timeString}
-                              variant={time === timeString ? "default" : "ghost"}
-                              className={cn(
-                                "justify-center h-9 text-sm flex-1 sm:flex-none min-w-[70px]",
-                                time === timeString
-                                  ? "bg-blue-600 hover:bg-blue-700 text-white"
-                                  : "hover:bg-blue-50 text-slate-600"
-                              )}
-                              onClick={() => {
-                                setTime(timeString);
-                                setIsCalendarOpen(false);
-                              }}
-                            >
-                              {timeString}
-                            </Button>
-                          ));
-                        })()}
-                      </div>
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
+        {/* Grid of Images */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2.5 sm:gap-3 md:gap-4 rounded-2xl overflow-hidden h-[300px] sm:h-[400px] md:h-[460px] shadow-sm border border-gray-100">
+          {/* Main Large Image (Left 2 cols) */}
+          <div className="md:col-span-2 relative h-full group overflow-hidden bg-gray-100 cursor-pointer">
+            <Image
+              src={allImages[0]}
+              alt={trip?.title || "Day trip primary photo"}
+              fill
+              priority
+              unoptimized={typeof allImages[0] === "string" && allImages[0].startsWith("http")}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+            <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors" />
           </div>
 
-          {/* CTA */}
-          <div className="mt-5 flex justify-center w-full sm:w-auto">
-            {isFormValid ? (
-              <Link
-                href={{
-                  pathname: `/booking/day-trips/${pSlug}-to-${dSlug}/vehicles`,
-                  query: {
-                    serviceType: "DAY_TRIP",
-                    id: trip?.id,
-                    pickup: trip?.from || "",
-                    dropoff: trip?.to || "",
-                    date: date ? date.toISOString() : "",
-                    time,
-                    adults: adults.toString(),
-                    children: children.toString(),
-                    extraBags: extraBags.toString(),
-                  },
-                }}
+          {/* 4 Smaller Images (Right 2 cols in 2x2 grid) */}
+          <div className="hidden md:grid md:col-span-2 grid-cols-2 gap-2.5 sm:gap-3 md:gap-4 h-full">
+            {allImages.slice(1, 5).map((img, idx) => (
+              <div
+                key={idx}
+                className="relative h-full group overflow-hidden bg-gray-100 cursor-pointer"
               >
-                <button className="btn-theme-primary px-8 w-full sm:w-auto">
-                  Book Now
-                </button>
-              </Link>
-            ) : (
-              <button className="btn-theme-primary px-8 w-full sm:w-auto opacity-50 cursor-not-allowed pointer-events-none" disabled>
-                Book Now
-              </button>
-            )}
+                <Image
+                  src={img}
+                  alt={`${trip?.title || "Day trip"} photo ${idx + 2}`}
+                  fill
+                  unoptimized={typeof img === "string" && img.startsWith("http")}
+                  sizes="25vw"
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                />
+                <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors" />
+              </div>
+            ))}
           </div>
         </div>
       </div>

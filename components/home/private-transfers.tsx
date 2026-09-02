@@ -6,7 +6,6 @@ import Loading from "@/components/common/loading";
 import {
   ChevronLeft,
   ChevronRight,
-  Loader2,
   Clock,
   Route,
   ArrowRight,
@@ -14,7 +13,6 @@ import {
 import Image from "next/image";
 import { useGetPrivateTransfersQuery } from "@/Redux/features/contents/contentsApi";
 import { SectionHeader } from "../ui/section-header";
-import { useRouter } from "next/navigation";
 
 export function PrivateTransfers() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -37,15 +35,18 @@ export function PrivateTransfers() {
       prevIndex === transfers.length - 1 ? 0 : prevIndex + 1,
     );
   };
-
   const renderDuration = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
+    if (!minutes && minutes !== 0) return null;
+    const totalMinutes =
+      typeof minutes === "string" ? parseInt(minutes, 10) : minutes;
+    if (isNaN(totalMinutes)) return null;
+
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
     if (hours > 0) {
       return (
         <span>
-          {hours}h
-          {mins > 0 && <span className="hidden sm:inline"> {mins}m</span>}
+          {hours}h{mins > 0 ? ` ${mins}m` : ""}
         </span>
       );
     }
@@ -55,11 +56,11 @@ export function PrivateTransfers() {
   const showSlider = transfers.length > 4;
   const visibleTransfers = showSlider
     ? [
-        transfers[currentIndex % transfers.length],
-        transfers[(currentIndex + 1) % transfers.length],
-        transfers[(currentIndex + 2) % transfers.length],
-        transfers[(currentIndex + 3) % transfers.length],
-      ].filter(Boolean)
+      transfers[currentIndex % transfers.length],
+      transfers[(currentIndex + 1) % transfers.length],
+      transfers[(currentIndex + 2) % transfers.length],
+      transfers[(currentIndex + 3) % transfers.length],
+    ].filter(Boolean)
     : transfers.slice(0, 4);
 
   if (isLoading) {
@@ -163,7 +164,7 @@ export function PrivateTransfers() {
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-4">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-4">
                     <span className="card-badge text-xs whitespace-nowrap">
                       <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       {renderDuration(transfer.travelTimeMinutes)}
@@ -184,7 +185,7 @@ export function PrivateTransfers() {
                           "current_transfer_route",
                           JSON.stringify(transfer),
                         );
-                      } catch (e) {}
+                      } catch (e) { }
                     }}
                     className="btn-theme-primary w-full group/btn"
                   >

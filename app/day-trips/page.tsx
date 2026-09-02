@@ -9,7 +9,7 @@ export default function DayTrips() {
 
     return (
         <main>
-            <Hero />
+            {/* <Hero /> */}
             <TripCards />
             <Expectations />
             <Memories />

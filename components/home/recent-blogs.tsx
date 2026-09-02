@@ -132,7 +132,7 @@ export function RecentBlogs() {
         <div className="mt-10 text-center md:hidden">
           <Link
             href="/blog"
-            className="inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition-all shadow-md w-full active:scale-95"
+            className="btn-theme-primary w-full group/btn"
           >
             View All Articles
             <ArrowRight className="w-4 h-4 ml-2" />

@@ -104,11 +104,10 @@ export default function MultiDayToursOurMultiDayTours() {
           <button
             onClick={onPrev}
             disabled={total <= perPage}
-            className={`hidden md:flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 ${
-              total <= perPage
-                ? "border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed opacity-50"
-                : "border-gray-200 text-gray-500 bg-white hover:text-blue-600 hover:border-blue-300 hover:shadow-md hover:-translate-x-1"
-            }`}
+            className={`hidden md:flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 ${total <= perPage
+              ? "border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed opacity-50"
+              : "border-gray-200 text-gray-500 bg-white hover:text-blue-600 hover:border-blue-300 hover:shadow-md hover:-translate-x-1"
+              }`}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -117,11 +116,10 @@ export default function MultiDayToursOurMultiDayTours() {
               <button
                 key={f}
                 onClick={() => onFilter(f)}
-                className={`px-3 sm:px-5 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 border ${
-                  activeFilter === f
-                    ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-md scale-105"
-                    : "bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-600 hover:shadow-sm"
-                }`}
+                className={`px-3 sm:px-5 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 border ${activeFilter === f
+                  ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-md scale-105"
+                  : "bg-white text-gray-600 border-gray-200 hover:border-blue-300 hover:text-blue-600 hover:shadow-sm"
+                  }`}
               >
                 {f}
               </button>
@@ -131,11 +129,10 @@ export default function MultiDayToursOurMultiDayTours() {
           <button
             onClick={onNext}
             disabled={total <= perPage}
-            className={`hidden md:flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 ${
-              total <= perPage
-                ? "border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed opacity-50"
-                : "border-gray-200 text-gray-500 bg-white hover:text-blue-600 hover:border-blue-300 hover:shadow-md hover:translate-x-1"
-            }`}
+            className={`hidden md:flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 ${total <= perPage
+              ? "border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed opacity-50"
+              : "border-gray-200 text-gray-500 bg-white hover:text-blue-600 hover:border-blue-300 hover:shadow-md hover:translate-x-1"
+              }`}
           >
             <ChevronRight className="w-5 h-5" />
           </button>
@@ -240,22 +237,20 @@ export default function MultiDayToursOurMultiDayTours() {
             <button
               onClick={onPrev}
               disabled={total <= perPage}
-              className={`flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 ${
-                total <= perPage
-                  ? "border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed opacity-50"
-                  : "border-gray-200 text-gray-600 bg-white hover:text-blue-600 hover:border-blue-300 shadow-sm active:scale-95"
-              }`}
+              className={`flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 ${total <= perPage
+                ? "border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed opacity-50"
+                : "border-gray-200 text-gray-600 bg-white hover:text-blue-600 hover:border-blue-300 shadow-sm active:scale-95"
+                }`}
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={onNext}
               disabled={total <= perPage}
-              className={`flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 ${
-                total <= perPage
-                  ? "border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed opacity-50"
-                  : "border-gray-200 text-gray-600 bg-white hover:text-blue-600 hover:border-blue-300 shadow-sm active:scale-95"
-              }`}
+              className={`flex items-center justify-center w-10 h-10 rounded-full border transition-all duration-300 ${total <= perPage
+                ? "border-gray-200 text-gray-300 bg-gray-50 cursor-not-allowed opacity-50"
+                : "border-gray-200 text-gray-600 bg-white hover:text-blue-600 hover:border-blue-300 shadow-sm active:scale-95"
+                }`}
             >
               <ChevronRight className="w-5 h-5" />
             </button>

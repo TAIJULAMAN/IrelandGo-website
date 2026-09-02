@@ -85,10 +85,10 @@ export default function PaymentStep() {
   if (isReturn) transportPrice = transportPrice * 2;
 
   const stopsCost = selectedStops.reduce(
-    (total: number, stop: any) => total + stop.price,
+    (total: number, stop: any) => total + (Number(stop.price) || 0),
     0,
   );
-  const totalPrice = transportPrice + stopsCost;
+  const totalPrice = (Number(transportPrice) || 0) + stopsCost;
 
   let formattedDate = dateParam;
   if (dateParam) {
@@ -221,7 +221,7 @@ export default function PaymentStep() {
                       <ul className="text-xs text-gray-500 space-y-1 mt-1">
                         {selectedStops.map((stop, i) => (
                           <li key={i}>
-                            • {stop.name} (€{stop.price})
+                            • {stop.name} (€{Number(stop.price) || 0})
                           </li>
                         ))}
                       </ul>
