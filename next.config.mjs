@@ -102,6 +102,16 @@ const nextConfig = {
         destination: "/booking/user-info",
         permanent: true,
       },
+      {
+        source: "/day-trips/day-trip-details/:id*",
+        destination: "/day-trips/details/:id*",
+        permanent: true,
+      },
+      {
+        source: "/transfer/transfer-search",
+        destination: "/transfer/search",
+        permanent: true,
+      },
     ];
   },
   async rewrites() {

@@ -33,6 +33,7 @@ import usePlacesAutocomplete, {
 } from "use-places-autocomplete";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 
+import { slugifyText } from "@/utils/bookingSession";
 import { validateHeroForm } from "@/utils/validateHeroForm";
 import { TripTypeSelector } from "../home/trip-type-selector";
 import { LocationInputs } from "../home/location-inputs";
@@ -463,7 +464,7 @@ export default function TransferSearchHero() {
               <div className="w-full mt-2">
                 {isFormValid ? (
                   <Link
-                    href={`/booking/vehicles?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&tripType=${tripType}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&serviceType=${serviceTypeParam}`}
+                    href={`/booking/${serviceTypeParam === "AIRPORT_TRANSFER" ? "airport-transfers" : "transfers"}/${slugifyText(pickupLocation || "dublin")}-to-${slugifyText(dropoffLocation || "galway")}/vehicles?pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&tripType=${tripType}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&serviceType=${serviceTypeParam}`}
                     onClick={() => {
                       if (transferRoute) {
                         try {

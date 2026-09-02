@@ -154,7 +154,7 @@ export function PopularDayTrips() {
 
                   <Button asChild className="w-full">
                     <Link
-                      href={`/day-trips/day-trip-details/${trip.id}`}
+                      href={`/day-trips/details/${trip.id}`}
                       className="group/btn"
                     >
                       <span>View Details</span>

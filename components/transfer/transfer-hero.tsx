@@ -94,7 +94,7 @@ export default function TransfersHero() {
     const query = searchLocation.trim()
       ? `?pickup=${encodeURIComponent(searchLocation.trim())}&serviceType=PRIVATE_TRANSFER`
       : "?serviceType=PRIVATE_TRANSFER";
-    router.push(`/transfer/transfer-search${query}`);
+    router.push(`/transfer/search${query}`);
   };
 
   const handlePopularRoute = (route: string) => {

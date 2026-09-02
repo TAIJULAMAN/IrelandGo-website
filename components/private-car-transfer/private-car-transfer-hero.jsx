@@ -27,6 +27,7 @@ import { format } from "date-fns";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { slugifyText } from "@/utils/bookingSession";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete, {
   getGeocode,
@@ -491,7 +492,7 @@ export default function PrivateCarTransferHero({
               <div className="w-full mt-2">
                 {isFormValid ? (
                   <Link
-                    href={`/booking/vehicles?serviceType=PRIVATE_TRANSFER&pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&tripType=${tripType}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
+                    href={`/booking/transfers/${slugifyText(pickupLocation || "dublin")}-to-${slugifyText(dropoffLocation || "galway")}/vehicles?serviceType=PRIVATE_TRANSFER&pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&tripType=${tripType}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
                     className="w-full block"
                   >
                     <Button className="w-full">

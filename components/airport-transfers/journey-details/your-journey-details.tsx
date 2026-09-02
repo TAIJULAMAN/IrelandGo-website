@@ -110,7 +110,7 @@ export default function YourJourneyDetails() {
             </div>
             <div className="mt-6 sm:mt-8">
               <Button asChild className="w-full">
-                <Link href="/transfer/transfer-search?pickup=Dublin%20Airport&serviceType=AIRPORT_TRANSFER">
+                <Link href="/transfer/search?pickup=Dublin%20Airport&serviceType=AIRPORT_TRANSFER">
                   <Search className="h-4 w-4" />
                   <span>Find a Ride</span>
                 </Link>

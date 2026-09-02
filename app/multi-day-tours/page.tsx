@@ -7,8 +7,8 @@ export default function MultiDayTours() {
   return (
     <>
       <MultiDayToursHero />
-      <MultiDayToursJourneyBegins />
       <MultiDayToursOurMultiDayTours />
+      <MultiDayToursJourneyBegins />
       <Testimonials />
     </>
   );

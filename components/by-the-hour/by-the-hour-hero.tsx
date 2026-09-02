@@ -21,6 +21,7 @@ import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
 import { useRouter } from "next/navigation";
+import { slugifyText } from "@/utils/bookingSession";
 import Link from "next/link";
 import { FeatureBadges } from "../common/feature-badges";
 import { Button } from "@/components/ui/button";
@@ -626,7 +627,7 @@ export default function ByTheHourHero() {
                   {isFormValid ? (
                     <Link
                       href={{
-                        pathname: "/booking/vehicles",
+                        pathname: `/booking/by-the-hour/${slugifyText(pickupLocation || "dublin")}-hire/vehicles`,
                         query: {
                           serviceType: "BY_THE_HOUR",
                           pickup: pickupLocation,

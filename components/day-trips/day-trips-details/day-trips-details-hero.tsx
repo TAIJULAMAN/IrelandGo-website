@@ -9,8 +9,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { slugifyText } from "@/utils/bookingSession";
 
 export default function DayTripsDetailsHero({ trip }: { trip: any }) {
+  const pSlug = slugifyText(trip?.from || "dublin");
+  const dSlug = slugifyText(trip?.to || "galway");
   const [adults, setAdults] = useState<number>(2)
   const [children, setChildren] = useState<number>(0)
   const [extraBags, setExtraBags] = useState<number>(0)
@@ -183,7 +186,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
             {isFormValid ? (
               <Link
                 href={{
-                  pathname: "/booking/vehicles",
+                  pathname: `/booking/day-trips/${pSlug}-to-${dSlug}/vehicles`,
                   query: {
                     serviceType: "DAY_TRIP",
                     id: trip?.id,

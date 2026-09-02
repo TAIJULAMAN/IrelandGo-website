@@ -122,7 +122,7 @@ export default function TripCards() {
             {visibleTrips.map((trip: any, idx: number) => (
               <Link
                 key={trip.id || idx}
-                href={`/day-trips/day-trip-details/${trip.id}`}
+                href={`/day-trips/details/${trip.id}`}
                 className="card-theme group"
               >
                 {/* Subtle Glow Behind Card */}

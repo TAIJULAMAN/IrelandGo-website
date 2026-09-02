@@ -224,10 +224,11 @@ export function buildSemanticBookingUrl(
   let serviceSlug = "transfers";
   if (serviceType === "DAY_TRIP") serviceSlug = "day-trips";
   else if (serviceType === "AIRPORT_TRANSFER") serviceSlug = "airport-transfers";
+  else if (serviceType === "BY_THE_HOUR") serviceSlug = "by-the-hour";
 
   const pickup = session.pickup ? slugifyText(session.pickup) : "dublin";
   const dropoff = session.dropoff ? slugifyText(session.dropoff) : "ireland";
-  const routeSlug = `${pickup}-to-${dropoff}`;
+  const routeSlug = serviceType === "BY_THE_HOUR" ? `${pickup}-hire` : `${pickup}-to-${dropoff}`;
 
   if (step === "user-info" && vehicleName) {
     const vSlug = slugifyText(vehicleName);

@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { useSearchParams } from "next/navigation";
+import { slugifyText } from "@/utils/bookingSession";
 
 export function SearchHero({ trip }: { trip?: any }) {
   const searchParams = useSearchParams();
@@ -434,7 +435,7 @@ export function SearchHero({ trip }: { trip?: any }) {
             {isFormValid ? (
               <Link
                 href={{
-                  pathname: "/booking/vehicles",
+                  pathname: `/booking/day-trips/${slugifyText(pickupLocation || "dublin")}-to-${slugifyText(dropoffLocation || "galway")}/vehicles`,
                   query: {
                     serviceType: "DAY_TRIP",
                     id: trip?.id,

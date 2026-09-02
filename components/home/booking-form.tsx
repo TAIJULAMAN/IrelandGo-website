@@ -10,6 +10,7 @@ import {
   isTimeDisabled,
   isReturnTimeDisabled as checkReturnTimeDisabled,
 } from "@/utils/timeValidation";
+import { slugifyText } from "@/utils/bookingSession";
 import { validateHeroForm } from "@/utils/validateHeroForm";
 import { TripTypeSelector } from "./trip-type-selector";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
@@ -327,7 +328,7 @@ export function BookingForm({ activeTab }: BookingFormProps) {
                 pathname:
                   activeTab === "day-trips"
                     ? "/day-trips/search"
-                    : "/booking/vehicles",
+                    : `/booking/${activeTab === "hourly" ? "by-the-hour" : "transfers"}/${slugifyText(pickupLocation || "dublin")}${activeTab === "hourly" ? "-hire" : `-to-${slugifyText(dropoffLocation || "galway")}`}/vehicles`,
                 query: {
                   serviceType:
                     activeTab === "transfer"

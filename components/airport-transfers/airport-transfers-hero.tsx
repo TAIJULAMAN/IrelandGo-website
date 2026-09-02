@@ -32,14 +32,14 @@ export default function AirportTransfersHero() {
       }
 
       router.push(
-        `/transfer/transfer-search?pickup=${encodeURIComponent(searchLocation)}&serviceType=AIRPORT_TRANSFER`,
+        `/transfer/search?pickup=${encodeURIComponent(searchLocation)}&serviceType=AIRPORT_TRANSFER`,
       );
     }
   };
   const handlePopularRoute = (route: string) => {
     setErrorMsg("");
     router.push(
-      `/transfer/transfer-search?pickup=${encodeURIComponent(route)}&serviceType=AIRPORT_TRANSFER`,
+      `/transfer/search?pickup=${encodeURIComponent(route)}&serviceType=AIRPORT_TRANSFER`,
     );
   };
 

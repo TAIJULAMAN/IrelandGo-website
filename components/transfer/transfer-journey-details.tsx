@@ -125,10 +125,10 @@ export default function TransferJourneyDetails() {
             <p className="text-sm font-medium text-gray-500">Distance</p>
             <p className="text-base font-semibold text-gray-900">{distance ? `${distance} km` : "N/A"}</p>
           </div>
-          <div className="col-span-2 pt-2">
+          {/* <div className="col-span-2 pt-2">
             <p className="text-sm font-medium text-gray-500">Est. Price (Starting from)</p>
             <p className="text-xl font-bold text-emerald-600">{estimatedPrice ? `€${estimatedPrice}` : "N/A"}</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
