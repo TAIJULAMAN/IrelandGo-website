@@ -55,11 +55,19 @@ export default function Vehicles() {
 
   const pickupParam = searchParams.get("pickup") || session.pickup || "";
   const dropoffParam = searchParams.get("dropoff") || session.dropoff || "";
-  const adults = parseInt(searchParams.get("adults") || session.adults?.toString() || "2");
-  const children = parseInt(searchParams.get("children") || session.children?.toString() || "0");
-  const extraBags = parseInt(searchParams.get("extraBags") || session.extraBags?.toString() || "0");
-  const serviceType = searchParams.get("serviceType") || session.serviceType || "TRANSFER";
-  const tripType = searchParams.get("tripType") || session.tripType || "one-way";
+  const adults = parseInt(
+    searchParams.get("adults") || session.adults?.toString() || "2",
+  );
+  const children = parseInt(
+    searchParams.get("children") || session.children?.toString() || "0",
+  );
+  const extraBags = parseInt(
+    searchParams.get("extraBags") || session.extraBags?.toString() || "0",
+  );
+  const serviceType =
+    searchParams.get("serviceType") || session.serviceType || "TRANSFER";
+  const tripType =
+    searchParams.get("tripType") || session.tripType || "one-way";
   const durationParam = searchParams.get("duration") || session.duration || "";
   const tripId = searchParams.get("id") || session.id;
 
@@ -688,11 +696,11 @@ export default function Vehicles() {
                           [Infinity, 2.3, 0],
                         ];
                         const lSedanBands: Band[] = [
-                          [25, 2.1, 70],
-                          [50, 2.1, 60],
-                          [100, 2.1, 50],
-                          [150, 2.1, 35],
-                          [Infinity, 2.15, 0],
+                          [25, 2.1, 250],
+                          [50, 2.1, 200],
+                          [100, 2.1, 250],
+                          [150, 2.1, 200],
+                          [Infinity, 3.1, 0],
                         ];
 
                         const bands = isLSedan
@@ -809,7 +817,11 @@ export default function Vehicles() {
 
                         {/* Select Button */}
                         <Button
-                          variant={selectedVehicle === option.id ? "default" : "secondary"}
+                          variant={
+                            selectedVehicle === option.id
+                              ? "default"
+                              : "secondary"
+                          }
                           className="mt-auto w-full relative z-10"
                         >
                           {selectedVehicle === option.id
@@ -827,18 +839,18 @@ export default function Vehicles() {
 
         {/* Next button */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full relative z-10">
-          <Button
-            onClick={() => router.back()}
-            variant="outline"
-            size="action"
-          >
+          <Button onClick={() => router.back()} variant="outline" size="action">
             Back
           </Button>
           <Button
             asChild
             disabled={!selectedVehicle}
             size="action"
-            className={!selectedVehicle ? "bg-gray-300 cursor-not-allowed opacity-70" : ""}
+            className={
+              !selectedVehicle
+                ? "bg-gray-300 cursor-not-allowed opacity-70"
+                : ""
+            }
           >
             <Link
               onClick={(e) => {
@@ -859,7 +871,11 @@ export default function Vehicles() {
                 serviceType === "PRIVATE_TRANSFER" ||
                 serviceType === "AIRPORT_TRANSFER"
                   ? buildSemanticBookingUrl("stops", session)
-                  : buildSemanticBookingUrl("user-info", session, selectedVehicleName)
+                  : buildSemanticBookingUrl(
+                      "user-info",
+                      session,
+                      selectedVehicleName,
+                    )
               }
               className={!selectedVehicle ? "pointer-events-none" : ""}
             >
