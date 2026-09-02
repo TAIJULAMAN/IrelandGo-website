@@ -52,7 +52,7 @@ export function Hero() {
           className="flex justify-center mb-4 w-full"
         />
 
-        <div>
+        <div className="relative z-20">
           <BookingForm activeTab={activeTab} />
           <FeatureBadges />
         </div>

@@ -48,11 +48,11 @@ export default function TripCards() {
   const showSlider = filteredTrips.length > 4;
   const visibleTrips = showSlider
     ? [
-        filteredTrips[currentIndex % filteredTrips.length],
-        filteredTrips[(currentIndex + 1) % filteredTrips.length],
-        filteredTrips[(currentIndex + 2) % filteredTrips.length],
-        filteredTrips[(currentIndex + 3) % filteredTrips.length],
-      ].filter(Boolean)
+      filteredTrips[currentIndex % filteredTrips.length],
+      filteredTrips[(currentIndex + 1) % filteredTrips.length],
+      filteredTrips[(currentIndex + 2) % filteredTrips.length],
+      filteredTrips[(currentIndex + 3) % filteredTrips.length],
+    ].filter(Boolean)
     : filteredTrips;
 
   if (isLoading) {
@@ -64,7 +64,7 @@ export default function TripCards() {
   }
 
   return (
-    <div className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-10 md:py-5 bg-gray-50/50 overflow-hidden">
+    <div className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0  pt-32 pb-5 md:pt-40 md:pb-5 overflow-hidden bg-white">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
@@ -105,11 +105,10 @@ export default function TripCards() {
           <button
             key={city}
             onClick={() => handleCityChange(city)}
-            className={`px-4 sm:px-6 py-1.5 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm transition-all duration-300 shadow-sm ${
-              selectedCity === city
-                ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md scale-105"
-                : "bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 border border-gray-200 hover:border-blue-200"
-            }`}
+            className={`px-4 sm:px-6 py-1.5 sm:py-2.5 rounded-full font-bold text-xs sm:text-sm transition-all duration-300 shadow-sm ${selectedCity === city
+              ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md scale-105"
+              : "bg-white/80 backdrop-blur-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 border border-gray-200 hover:border-blue-200"
+              }`}
           >
             {city}
           </button>
@@ -189,8 +188,8 @@ export default function TripCards() {
                         {trip.price ??
                           (trip.vehicles?.length
                             ? Math.min(
-                                ...trip.vehicles.map((v: any) => v.price),
-                              )
+                              ...trip.vehicles.map((v: any) => v.price),
+                            )
                             : 0)}
                       </span>
                     </div>

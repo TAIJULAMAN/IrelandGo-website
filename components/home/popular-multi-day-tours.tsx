@@ -42,11 +42,11 @@ export function PopularMultiDayTours() {
   const showSlider = tours.length > 4;
   const visibleTours = showSlider
     ? [
-        tours[currentIndex % tours.length],
-        tours[(currentIndex + 1) % tours.length],
-        tours[(currentIndex + 2) % tours.length],
-        tours[(currentIndex + 3) % tours.length],
-      ].filter(Boolean)
+      tours[currentIndex % tours.length],
+      tours[(currentIndex + 1) % tours.length],
+      tours[(currentIndex + 2) % tours.length],
+      tours[(currentIndex + 3) % tours.length],
+    ].filter(Boolean)
     : tours.slice(0, 4);
 
   if (isLoading) {
@@ -62,7 +62,7 @@ export function PopularMultiDayTours() {
   }
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-8 md:py-12 bg-white overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-6 md:py-8 lg:py-10 bg-white overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-blue-50/80 blur-3xl mix-blend-multiply" />
@@ -70,7 +70,7 @@ export function PopularMultiDayTours() {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-6 md:mb-10 gap-6 relative">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-4 md:mb-6 gap-4 md:gap-6 relative">
           {showSlider && (
             <button
               onClick={goToPrevious}
@@ -118,35 +118,35 @@ export function PopularMultiDayTours() {
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-60" />
 
                 {tour.tourDays && (
-                  <span className="absolute left-3 top-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-white/95 backdrop-blur-md text-blue-700 shadow-sm border border-white/20">
+                  <span className="absolute left-2.5 top-2.5 sm:left-3 sm:top-3 inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-white/95 backdrop-blur-md text-blue-700 shadow-sm border border-white/20 z-20">
                     <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                     {tour.tourDays} Day{tour.tourDays > 1 ? "s" : ""}
                   </span>
                 )}
-                <span className="absolute right-3 top-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-gray-900/80 backdrop-blur-md text-white text-xs font-bold shadow-sm border border-white/10">
+                <span className="absolute right-2.5 bottom-2.5 sm:bottom-auto sm:top-3 sm:right-3 inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-gray-900/80 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold shadow-sm border border-white/10 z-20">
                   <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-400 fill-yellow-400" />{" "}
                   {tour.ratings || "5.0"}
                 </span>
               </div>
 
-              <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-1 relative z-10 justify-between gap-3">
+              <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-1 relative z-10 justify-between gap-2 sm:gap-3">
                 <div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
+                  <h3 className="text-xs sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
                     {tour.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed min-h-[2.5rem]">
+                  <p className="text-[11px] sm:text-sm text-gray-500 mb-2 sm:mb-3 line-clamp-1 sm:line-clamp-2 leading-relaxed min-h-0 sm:min-h-[2.5rem]">
                     {stripHtml(tour.description)}
                   </p>
                 </div>
 
-                <div className="mt-auto pt-2">
+                <div className="mt-auto pt-1 sm:pt-2">
                   <Link
                     href={`/multi-day-tours/${tour.id}`}
                     className="block w-full"
                   >
-                    <div className="btn-theme-primary w-full group/btn">
+                    <div className="btn-theme-primary w-full !h-8.5 sm:!h-11 text-xs sm:text-base group/btn">
                       <span className="tracking-wide">View Details</span>
-                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
+                      <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
                     </div>
                   </Link>
                 </div>
@@ -157,7 +157,7 @@ export function PopularMultiDayTours() {
 
         {/* Mobile Navigation Buttons */}
         {showSlider && (
-          <div className="flex md:hidden items-center justify-center gap-6 mt-10">
+          <div className="flex md:hidden items-center justify-center gap-6 mt-6">
             <button
               onClick={goToPrevious}
               className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-gray-200 text-gray-600 hover:text-blue-600 hover:border-blue-300 shadow-sm active:scale-95 transition-all"
