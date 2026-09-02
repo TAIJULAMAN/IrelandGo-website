@@ -87,7 +87,7 @@ export default function TransferRoutesHero() {
 						</div>
 						<Button
 							asChild
-							className="w-full h-11 mt-1 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2"
+							className="w-full mt-1"
 						>
 							<Link href="/airport-transfers/journey-details">
 								<Search className="w-5 h-5" />

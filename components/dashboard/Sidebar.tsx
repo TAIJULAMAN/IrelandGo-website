@@ -107,7 +107,7 @@ export function Sidebar({
             <Image
               width={150}
               height={50}
-              src="/Tourenzo.png"
+              src="/Tourenzo.webp"
               alt="IrelandGo"
 
               className="object-contain"

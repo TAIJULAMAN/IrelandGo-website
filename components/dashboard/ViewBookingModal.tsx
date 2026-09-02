@@ -156,7 +156,6 @@ export function ViewBookingModal({
           <Button 
             variant="outline" 
             onClick={() => onOpenChange(false)}
-            className="rounded-xl font-bold text-slate-600 border-slate-200 hover:bg-slate-100 hover:text-slate-900 px-6 py-2.5 h-auto"
           >
             Close
           </Button>

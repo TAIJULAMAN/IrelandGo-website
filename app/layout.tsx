@@ -15,6 +15,8 @@ import { ClientLayout } from "@/components/layout/client-layout"
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+  preload: true,
 })
 
 export const metadata: Metadata = {
@@ -138,6 +140,21 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link
+          rel="preload"
+          as="image"
+          href="/Images/Home.webp"
+          type="image/webp"
+          fetchPriority="high"
+        />
+        <link rel="preconnect" href="https://maps.googleapis.com" />
+        <link rel="dns-prefetch" href="https://maps.googleapis.com" />
+      </head>
+      <body
+        suppressHydrationWarning
+        className={`${jakarta.variable} font-sans antialiased bg-background text-foreground`}
+      >
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -148,11 +165,6 @@ export default function RootLayout({
             strategy="lazyOnload"
           />
         )}
-      </head>
-      <body
-        suppressHydrationWarning
-        className={`${jakarta.variable} font-sans antialiased bg-background text-foreground`}
-      >
         <ReduxProvider>
           <AuthProvider>
             <ClientLayout>{children}</ClientLayout>

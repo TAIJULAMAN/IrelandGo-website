@@ -1,16 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import {
   useGetAllAirportTransferBasedOnLocationQuery,
   useGetAllPrivateTransferBasedOnLocationQuery
 } from "@/Redux/features/transfers/transfersApi";
 import Loading from "@/components/common/loading";
+import { ArrowRight } from "lucide-react";
 
-export default function PopularTransferRoutes() {
+export default function PopularTransferRoutes({ initialLocation }: { initialLocation?: string } = {}) {
   const searchParams = useSearchParams();
-  const locationParam = searchParams.get("pickup") || searchParams.get("location");
+  const locationParam = initialLocation || searchParams.get("pickup") || searchParams.get("location");
   const serviceTypeParam = searchParams.get("serviceType") || "AIRPORT_TRANSFER";
 
   const {
@@ -143,51 +145,59 @@ export default function PopularTransferRoutes() {
                 return (
                   <div
                     key={transferRoute.id}
-                    className="group bg-white/80 backdrop-blur-md rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-white hover:-translate-y-2 flex flex-col relative h-full"
+                    className="card-theme group"
                   >
                     {/* Subtle Glow Behind Card */}
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-                    <div className="relative h-28 sm:h-48 md:h-56 w-full overflow-hidden z-10">
-                      <img
+                    <div className="card-image-wrapper z-10">
+                      <Image
                         src={imageUrl}
                         alt={transferRoute.title}
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
+                        className="object-cover transform group-hover:scale-105 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
                     </div>
-                    <div className="p-3 sm:p-5 md:p-6 flex-1 flex flex-col gap-2 sm:gap-3 relative z-10">
-                      <div className="flex flex-col mb-1">
-                        <div className="flex items-start justify-between gap-2 mb-1.5 sm:mb-3">
-                          <h3
-                            className="text-xs sm:text-base md:text-lg font-bold text-gray-900 line-clamp-2 leading-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300"
-                            title={transferRoute.title}
-                          >
-                            {transferRoute.title}
-                          </h3>
-                        </div>
-                        <span className="inline-flex items-center text-[10px] sm:text-xs font-semibold text-blue-700 bg-blue-50 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full self-start">
-                          {durationText}
-                          {transferRoute.distanceKm
-                            ? ` • ${transferRoute.distanceKm} km`
-                            : ""}
-                        </span>
-                      </div>
-                      <p
-                        className="text-[11px] sm:text-sm text-gray-600 leading-relaxed line-clamp-2 group-hover:text-gray-700 transition-colors"
-                        title={plainDescription}
-                      >
-                        {plainDescription}
-                      </p>
-
-                      <div className="mt-auto pt-3 sm:pt-5 border-t border-gray-100">
-                        <Link
-                          href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(locationParam || transferRoute.from)}&serviceType=${encodeURIComponent(transferRoute.serviceType)}&transferRoute=${encodeURIComponent(JSON.stringify({ ...transferRoute, description: undefined, images: undefined, includedContent: undefined, excludedContent: undefined }))}`}
-                          className="block w-full"
+                    <div className="p-4 sm:p-5 md:p-6 flex flex-col flex-1 relative z-10 justify-between gap-3">
+                      <div>
+                        <h3
+                          className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug"
+                          title={transferRoute.title}
                         >
-                          <button className="w-full rounded-lg sm:rounded-xl bg-blue-50 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 text-blue-700 hover:text-white text-xs sm:text-sm font-bold py-2 sm:py-3.5 transition-all duration-300 shadow-sm hover:shadow-md">
-                            Book Now
-                          </button>
+                          {transferRoute.title}
+                        </h3>
+
+                        <div className="mb-2">
+                          <span className="card-badge">
+                            {durationText}
+                            {transferRoute.distanceKm
+                              ? ` • ${transferRoute.distanceKm} km`
+                              : ""}
+                          </span>
+                        </div>
+
+                        <p
+                          className="text-xs sm:text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed min-h-[2.5rem]"
+                          title={plainDescription}
+                        >
+                          {plainDescription}
+                        </p>
+                      </div>
+
+                      <div className="mt-auto pt-2">
+                        <Link
+                          href={`/transfers/${(locationParam || transferRoute.from || "airport").toLowerCase().replace(/\s+/g, "-")}-to-${(transferRoute.to || "destination").toLowerCase().replace(/\s+/g, "-")}/`}
+                          onClick={() => {
+                            try {
+                              sessionStorage.setItem("current_transfer_route", JSON.stringify(transferRoute));
+                            } catch (e) {}
+                          }}
+                          className="btn-theme-primary w-full group/btn"
+                        >
+                          <span className="tracking-wide">Book Now</span>
+                          <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
                         </Link>
                       </div>
                     </div>

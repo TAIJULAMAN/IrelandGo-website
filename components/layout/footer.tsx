@@ -14,7 +14,7 @@ export function Footer({ className = "" }: FooterProps) {
           <div className="col-span-2 sm:col-span-2 lg:col-span-1">
             <Link href="/" className="inline-block">
               <Image
-                src="/Tourenzo.png"
+                src="/Tourenzo.webp"
                 alt="Tourenzo logo"
                 width={140}
                 height={120}

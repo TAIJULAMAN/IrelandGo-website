@@ -16,19 +16,21 @@ export const baseApi = createApi({
       let token = state?.auth?.token;
 
       if (!token && typeof window !== "undefined") {
-        token = localStorage.getItem("token") || localStorage.getItem("accessToken");
+        token =
+          localStorage.getItem("token") || localStorage.getItem("accessToken");
       }
 
-      if (token && !headers.has("Authorization")) {
-        const authValue = token.startsWith("Bearer ") ? token : ` ${token}`;
-        console.log("==> baseApi attaching header:", authValue);
+      if (token && token !== "null" && token !== "undefined" && token.trim() !== "" && !headers.has("Authorization")) {
+        const authValue = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
         headers.set("Authorization", authValue);
-      } else if (!headers.has("Authorization")) {
-        console.log("==> baseApi WARNING: No token found in Redux or localStorage!");
       }
       return headers;
     },
   }),
+  refetchOnFocus: true,
+  refetchOnReconnect: true,
+  refetchOnMountOrArgChange: 30,
+  keepUnusedDataFor: 300,
   endpoints: () => ({}),
   tagTypes: [
     "auth",
@@ -54,6 +56,6 @@ export const baseApi = createApi({
     "stopages",
     "dayTrips",
     "memory",
+    "navigation",
   ],
 });
-

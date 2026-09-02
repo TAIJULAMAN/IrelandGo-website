@@ -154,7 +154,7 @@ export function ChangePasswordForm() {
           <Button
             type="submit"
             disabled={isChangingPassword}
-            className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white px-8 py-6 rounded-xl font-bold shadow-lg shadow-slate-900/20 hover:shadow-slate-900/40 hover:-translate-y-0.5 transition-all text-base"
+            size="action"
           >
             {isChangingPassword ? "Updating Password..." : "Update Password"}
           </Button>

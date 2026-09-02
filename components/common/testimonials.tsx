@@ -119,7 +119,7 @@ export function Testimonials() {
   if (reviews.length === 0) return null;
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-16 md:py-24 bg-gray-50/50 overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-8 md:py-12 bg-gray-50/50 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
@@ -128,7 +128,7 @@ export function Testimonials() {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row items-center justify-between mb-6 md:mb-8 gap-6">
           {showSlider && (
             <button
               onClick={goToPrevious}

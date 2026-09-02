@@ -74,11 +74,9 @@ export function SuccessModal({
         </span>
         <Button
           asChild
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white text-base font-semibold rounded-lg h-12 sm:h-14 shadow-sm transition-all mt-2"
+          className="w-full mt-4"
         >
-          <Link
-            href={`/booking-flow/payment?${searchParams.toString()}${bookingId ? `&bookingId=${bookingId}` : ""}&firstName=${firstName}&lastName=${lastName}&email=${email}&phone=${phone}&specialRequests=${specialRequests}`}
-          >
+          <Link href="/booking/payment">
             Proceed to Payment
           </Link>
         </Button>

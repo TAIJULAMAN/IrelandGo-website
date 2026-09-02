@@ -53,10 +53,15 @@ const MapRoute = dynamic(
   },
 );
 
-export default function PrivateCarTransferHero() {
+export default function PrivateCarTransferHero({
+  initialPickup = "",
+  initialDropoff = "",
+  customH1 = "",
+  customSubtitle = "",
+} = {}) {
   const searchParams = useSearchParams();
-  const pickupParam = searchParams.get("pickup") || "";
-  const dropoffParam = searchParams.get("dropoff") || "";
+  const pickupParam = initialPickup || searchParams.get("pickup") || "";
+  const dropoffParam = initialDropoff || searchParams.get("dropoff") || "";
   const tripTypeParam = searchParams.get("tripType") || "one-way";
   const pickupDateParam = searchParams.get("pickupDate");
   const pickupTimeParam = searchParams.get("pickupTime") || "09:00";
@@ -393,15 +398,24 @@ export default function PrivateCarTransferHero() {
           {/* Hero Text */}
           <div className="text-center mb-10 pt-5">
             <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold mb-3 md:mb-4 text-white text-balance leading-tight px-4">
-              Private car transfer from {""}
-              {displayLocation}
-              <br className="hidden sm:block" />
-              to {""}
-              {dropoffLocation}
+              {customH1 ? (
+                customH1
+              ) : (
+                <>
+                  Private car transfer from {""}
+                  {displayLocation}
+                  {dropoffLocation ? (
+                    <>
+                      <br className="hidden sm:block" />
+                      to {""}
+                      {dropoffLocation}
+                    </>
+                  ) : ""}
+                </>
+              )}
             </h1>
             <p className="text-sm md:text-base text-white mb-6 md:mb-8 px-4">
-              Seamless city-to-city and airport transfers across {displayLocation}{" "}
-              and beyond.
+              {customSubtitle || `Seamless city-to-city and airport transfers across ${displayLocation} and beyond.`}
             </p>
           </div>
 
@@ -477,17 +491,17 @@ export default function PrivateCarTransferHero() {
               <div className="w-full mt-2">
                 {isFormValid ? (
                   <Link
-                    href={`/booking-flow/step-2?serviceType=PRIVATE_TRANSFER&pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&tripType=${tripType}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
+                    href={`/booking/vehicles?serviceType=PRIVATE_TRANSFER&pickup=${encodeURIComponent(pickupLocation)}&dropoff=${encodeURIComponent(dropoffLocation)}&adults=${adults}&children=${children}&extraBags=${extraBags}&date=${date ? date.toISOString() : ""}&time=${time}&returnDate=${returnDate ? returnDate.toISOString() : ""}&returnTime=${returnTime}&tripType=${tripType}&transferRoute=${encodeURIComponent(transferRouteParam || "")}`}
                     className="w-full block"
                   >
-                    <Button className="w-full h-12 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 font-semibold text-lg border-0 rounded-lg">
+                    <Button className="w-full">
                       <Search className="w-5 h-5 mr-2" />
                       Find a Ride
                     </Button>
                   </Link>
                 ) : (
                   <Button
-                    className="w-full h-12 py-3 bg-gray-100 text-gray-400 font-semibold text-lg border-0 rounded-lg cursor-not-allowed transition-all duration-300"
+                    className="w-full"
                     disabled
                   >
                     <Search className="w-5 h-5 mr-2" />

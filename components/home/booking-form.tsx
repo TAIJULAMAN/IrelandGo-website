@@ -19,7 +19,14 @@ import { BookingDetailsInputs } from "./booking-details-inputs";
 
 const MapRoute = dynamic(
   () => import("./map-route").then((mod) => ({ default: mod.MapRoute })),
-  { ssr: false },
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-full min-h-[250px] bg-slate-50/80 animate-pulse rounded-xl border border-slate-100 flex items-center justify-center">
+        <span className="text-xs font-semibold text-slate-400">Loading map...</span>
+      </div>
+    ),
+  },
 );
 
 interface BookingFormProps {
@@ -319,8 +326,8 @@ export function BookingForm({ activeTab }: BookingFormProps) {
               href={{
                 pathname:
                   activeTab === "day-trips"
-                    ? "/day-trips"
-                    : "/booking-flow/step-2",
+                    ? "/day-trips/search"
+                    : "/booking/vehicles",
                 query: {
                   serviceType:
                     activeTab === "transfer"
@@ -343,7 +350,7 @@ export function BookingForm({ activeTab }: BookingFormProps) {
               }}
               className="w-full block"
             >
-              <Button className="w-full h-12 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 font-semibold text-lg border-0 rounded-lg">
+              <Button className="w-full">
                 <Search className="w-5 h-5 mr-2" />
                 {activeTab === "day-trips"
                   ? "Explore Day Trips"
@@ -352,7 +359,7 @@ export function BookingForm({ activeTab }: BookingFormProps) {
             </Link>
           ) : (
             <Button
-              className="w-full h-12 py-3 bg-gray-100 text-gray-400 font-semibold text-lg border-0 rounded-lg cursor-not-allowed transition-all duration-300"
+              className="w-full"
               disabled
             >
               <Search className="w-5 h-5 mr-2" />

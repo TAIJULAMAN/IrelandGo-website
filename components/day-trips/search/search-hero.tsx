@@ -434,7 +434,7 @@ export function SearchHero({ trip }: { trip?: any }) {
             {isFormValid ? (
               <Link
                 href={{
-                  pathname: "/booking-flow/step-2",
+                  pathname: "/booking/vehicles",
                   query: {
                     serviceType: "DAY_TRIP",
                     id: trip?.id,
@@ -448,14 +448,14 @@ export function SearchHero({ trip }: { trip?: any }) {
                   },
                 }}
               >
-                <button className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-200 transition-all hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto">
+                <button className="btn-theme-primary px-8 w-full sm:w-auto">
                   <Search className="w-4 h-4 mr-2" />
                   Find Your Trip
                 </button>
               </Link>
             ) : (
               <button
-                className="inline-flex items-center justify-center px-8 py-3 rounded-lg bg-blue-600/50 text-white/70 font-bold shadow-none cursor-not-allowed w-full sm:w-auto"
+                className="btn-theme-primary px-8 w-full sm:w-auto opacity-50 cursor-not-allowed pointer-events-none"
                 disabled
               >
                 <Search className="w-4 h-4 mr-2" />

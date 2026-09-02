@@ -12,6 +12,7 @@ export default function robots(): MetadataRoute.Robots {
           "/dashboard/",
           "/settings/",
           "/auth/",
+          "/booking/",
           "/payment-cancle/",
           "/payment-confirmation/",
           "/api/",

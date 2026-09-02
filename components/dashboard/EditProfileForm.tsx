@@ -111,7 +111,7 @@ export function EditProfileForm({
           <Button
             type="submit"
             disabled={isUpdating}
-            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 rounded-xl font-bold shadow-lg shadow-blue-600/20 hover:shadow-blue-600/40 hover:-translate-y-0.5 transition-all text-base"
+            size="action"
           >
             {isUpdating ? "Saving Changes..." : "Save Changes"}
           </Button>

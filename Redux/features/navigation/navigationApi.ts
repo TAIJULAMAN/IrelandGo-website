@@ -20,6 +20,7 @@ export const navigationApi = baseApi.injectEndpoints({
         method: "GET",
         params: params || { targetApp: "WEBSITE", isActive: true },
       }),
+      providesTags: ["navigation"],
     }),
   }),
 });

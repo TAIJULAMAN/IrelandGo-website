@@ -94,7 +94,7 @@ export default function Hero() {
 
   return (
     <>
-      <section className="relative overflow-hidden min-h-[100vh] flex flex-col justify-center py-24">
+      <section className="relative overflow-hidden min-h-[75vh] md:min-h-[80vh] flex flex-col justify-center pt-28 pb-16 md:pb-20">
         <div className="absolute inset-0 z-0">
           <Image
             src="/Images/DayTrip.webp"
@@ -107,8 +107,8 @@ export default function Hero() {
         </div>
         <div className="absolute inset-0 " />
         <div className="relative z-10 w-full">
-          <div className="max-w-7xl mx-auto px-5 py-8 text-center flex flex-col items-center mt-10">
-            <div className="space-y-4 md:space-y-6 max-w-4xl mb-10">
+          <div className="max-w-7xl mx-auto px-5 py-4 text-center flex flex-col items-center">
+            <div className="space-y-4 md:space-y-6 max-w-4xl mb-6">
               <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
                 Explore <span className="">Ireland's Wonders</span>
                 <br className="hidden sm:block" /> in One Day
@@ -118,10 +118,10 @@ export default function Hero() {
               </p>
             </div>
 
-            <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-center mb-10 overflow-x-auto scrollbar-hide scroll-smooth w-full" />
+            <HeroTabs activeTab={activeTab} onTabChange={handleTabClick} className="flex justify-center mb-6 overflow-x-auto scrollbar-hide scroll-smooth w-full" />
 
             {/* Search Bar */}
-            <div className="w-full max-w-3xl mx-auto mb-10 relative">
+            <div className="w-full max-w-3xl mx-auto mb-6 relative">
               <div className="relative flex items-center bg-white/95 backdrop-blur-xl rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-white/20 p-2 focus-within:bg-white focus-within:ring-4 focus-within:ring-blue-500/20 transition-all transform hover:-translate-y-1">
                 <div className="pl-4 sm:pl-6 pr-2">
                   <Search className="w-5 h-5 text-blue-600" />
@@ -146,7 +146,7 @@ export default function Hero() {
                   className="flex-1 py-3 px-2 bg-transparent text-gray-800 text-base sm:text-lg font-medium placeholder:text-gray-400 focus:outline-none w-full"
                 />
                 <Link href={`/day-trips/search?pickup=${encodeURIComponent(location)}`}>
-                  <button className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white px-6 sm:px-10 py-3 sm:py-4 rounded-full font-bold text-sm sm:text-base shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all active:scale-[0.98] whitespace-nowrap ml-2">
+                  <button className="btn-theme-primary px-8 whitespace-nowrap ml-2">
                     Search
                   </button>
                 </Link>

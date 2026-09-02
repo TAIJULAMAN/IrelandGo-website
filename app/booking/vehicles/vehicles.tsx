@@ -15,31 +15,59 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  getBookingSession,
+  saveBookingSession,
+  syncUrlParamsToSession,
+  cleanBrowserUrl,
+  buildSemanticBookingUrl,
+  BookingSessionData,
+} from "@/utils/bookingSession";
 
-export default function Step2() {
+export default function Vehicles() {
   const { isLoaded } = useGoogleMaps();
   const router = useRouter();
   const pathname = usePathname();
   const sliderRef = useRef<HTMLDivElement | null>(null);
   const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+  const [selectedVehicleName, setSelectedVehicleName] = useState<string>("");
   const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
 
   const searchParams = useSearchParams();
-  const pickupParam = searchParams.get("pickup") || "";
-  const dropoffParam = searchParams.get("dropoff") || "";
-  const adults = parseInt(searchParams.get("adults") || "2");
-  const children = parseInt(searchParams.get("children") || "0");
-  const extraBags = parseInt(searchParams.get("extraBags") || "0");
-  const serviceType = searchParams.get("serviceType") || "TRANSFER";
-  const tripType = searchParams.get("tripType") || "one-way";
-  const durationParam = searchParams.get("duration") || "";
-  const tripId = searchParams.get("id");
+  const [session, setSession] = useState<BookingSessionData>(() => {
+    if (typeof window !== "undefined" && window.location.search) {
+      return syncUrlParamsToSession(searchParams);
+    }
+    return getBookingSession();
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.search) {
+      const updated = syncUrlParamsToSession(searchParams);
+      setSession(updated);
+      cleanBrowserUrl(buildSemanticBookingUrl("vehicles", updated));
+    } else {
+      const s = getBookingSession();
+      setSession(s);
+      if (s.vehicleName) setSelectedVehicleName(s.vehicleName);
+    }
+  }, [searchParams]);
+
+  const pickupParam = searchParams.get("pickup") || session.pickup || "";
+  const dropoffParam = searchParams.get("dropoff") || session.dropoff || "";
+  const adults = parseInt(searchParams.get("adults") || session.adults?.toString() || "2");
+  const children = parseInt(searchParams.get("children") || session.children?.toString() || "0");
+  const extraBags = parseInt(searchParams.get("extraBags") || session.extraBags?.toString() || "0");
+  const serviceType = searchParams.get("serviceType") || session.serviceType || "TRANSFER";
+  const tripType = searchParams.get("tripType") || session.tripType || "one-way";
+  const durationParam = searchParams.get("duration") || session.duration || "";
+  const tripId = searchParams.get("id") || session.id;
 
   const { data: dayTripData } = useGetSingleDayTripQuery(tripId as string, {
     skip: serviceType !== "DAY_TRIP" || !tripId,
   });
   const dayTrip = dayTripData?.data;
-  console.log("dayTrip of parvez", dayTrip)
+  console.log("dayTrip of parvez", dayTrip);
 
   const [localAdults, setLocalAdults] = useState(adults);
   const [localChildren, setLocalChildren] = useState(children);
@@ -51,27 +79,21 @@ export default function Step2() {
     setLocalExtraBags(extraBags);
   }, [adults, children, extraBags]);
 
-  const updateParams = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(key, value);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  };
-
   const handleUpdate = (
     type: "adults" | "children" | "extraBags",
     value: number,
   ) => {
     if (type === "adults") {
       setLocalAdults(value);
-      updateParams("adults", value.toString());
+      saveBookingSession({ adults: value });
     }
     if (type === "children") {
       setLocalChildren(value);
-      updateParams("children", value.toString());
+      saveBookingSession({ children: value });
     }
     if (type === "extraBags") {
       setLocalExtraBags(value);
-      updateParams("extraBags", value.toString());
+      saveBookingSession({ extraBags: value });
     }
   };
 
@@ -139,7 +161,7 @@ export default function Step2() {
               }
             },
           );
-        } catch (_e) { }
+        } catch (_e) {}
       }
     }
     return () => {
@@ -157,13 +179,14 @@ export default function Step2() {
 
   const { data: vehiclesData, isLoading } = useGetVehiclesQuery({});
   const baseVehicles = vehiclesData?.data?.data || [];
-  const vehicles = serviceType === "DAY_TRIP" && dayTrip?.vehicles?.length > 0
-    ? dayTrip?.vehicles?.map((tsv: any) => ({
-      ...tsv,
-      price: tsv?.price,
-      basePrice: tsv?.price,
-    }))
-    : baseVehicles;
+  const vehicles =
+    serviceType === "DAY_TRIP" && dayTrip?.vehicles?.length > 0
+      ? dayTrip?.vehicles?.map((tsv: any) => ({
+          ...tsv,
+          price: tsv?.price,
+          basePrice: tsv?.price,
+        }))
+      : baseVehicles;
 
   const getVehicleOptions = (
     vehicles: any[],
@@ -477,8 +500,8 @@ export default function Step2() {
                           Need more space?
                         </h4>
                         <p className="text-sm text-gray-800 leading-relaxed font-medium">
-                          Extra bags count as a passenger
-                          space, but you do not pay any extra seat fee.
+                          Extra bags count as a passenger space, but you do not
+                          pay any extra seat fee.
                         </p>
                       </div>
                       <div className="pt-2">
@@ -550,8 +573,9 @@ export default function Step2() {
 
                   if (serviceType === "DAY_TRIP") {
                     pricePerCar = option.vehicles.reduce(
-                      (sum: number, vehicle: any) => sum + (vehicle.price ?? vehicle.basePrice ?? 0),
-                      0
+                      (sum: number, vehicle: any) =>
+                        sum + (vehicle.price ?? vehicle.basePrice ?? 0),
+                      0,
                     );
                   } else if (serviceType === "BY_THE_HOUR") {
                     let hours = 0;
@@ -697,12 +721,14 @@ export default function Step2() {
                       onClick={() => setSelectedVehicle(option.id)}
                     >
                       <div
-                        className={`group bg-white backdrop-blur-md rounded-2xl shadow-sm p-5 flex flex-col hover:shadow-xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full border-2 relative ${selectedVehicle === option.id
-                          ? "border-blue-600 ring-2 ring-blue-100 shadow-md bg-white"
-                          : "border-transparent hover:border-blue-300"
-                          }`}
+                        className={`group bg-white backdrop-blur-md rounded-2xl shadow-sm p-5 flex flex-col hover:shadow-xl transition-all duration-500 hover:-translate-y-2 cursor-pointer h-full border-2 relative ${
+                          selectedVehicle === option.id
+                            ? "border-blue-600 ring-2 ring-blue-100 shadow-md bg-white"
+                            : "border-transparent hover:border-blue-300"
+                        }`}
                         onClick={() => {
                           setSelectedVehicle(option.id);
+                          setSelectedVehicleName(option.names);
                           setSelectedPrice(totalPrice);
                         }}
                       >
@@ -753,8 +779,8 @@ export default function Step2() {
                           <div className="text-right whitespace-nowrap">
                             <p className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
                               {distanceKm ||
-                                serviceType === "BY_THE_HOUR" ||
-                                serviceType === "DAY_TRIP"
+                              serviceType === "BY_THE_HOUR" ||
+                              serviceType === "DAY_TRIP"
                                 ? `€${totalPrice}`
                                 : "TBD"}
                             </p>
@@ -782,16 +808,14 @@ export default function Step2() {
                         </div>
 
                         {/* Select Button */}
-                        <button
-                          className={`mt-auto w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 relative z-10 ${selectedVehicle === option.id
-                            ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:shadow-lg"
-                            : "bg-blue-50 text-blue-700 hover:bg-gradient-to-r hover:from-blue-600 hover:to-indigo-600 hover:text-white hover:shadow-md"
-                            }`}
+                        <Button
+                          variant={selectedVehicle === option.id ? "default" : "secondary"}
+                          className="mt-auto w-full relative z-10"
                         >
                           {selectedVehicle === option.id
                             ? "Selected"
                             : "Select Option"}
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   );
@@ -806,30 +830,42 @@ export default function Step2() {
           <Button
             onClick={() => router.back()}
             variant="outline"
-            className="w-full sm:w-auto text-gray-700 bg-white hover:bg-gray-50 border-gray-200 px-10 py-6 sm:py-7 text-sm sm:text-base font-bold rounded-xl flex items-center justify-center shadow-sm"
+            size="action"
           >
             Back
           </Button>
           <Button
             asChild
             disabled={!selectedVehicle}
-            className={`w-full sm:w-auto px-10 sm:px-12 py-6 sm:py-7 text-white text-sm sm:text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center border-none ${selectedVehicle
-              ? "bg-gradient-to-r from-blue-600 to-indigo-600 active:scale-95"
-              : "bg-gray-300 cursor-not-allowed opacity-70"
-              }`}
+            size="action"
+            className={!selectedVehicle ? "bg-gray-300 cursor-not-allowed opacity-70" : ""}
           >
             <Link
               onClick={(e) => {
-                if (!selectedVehicle) e.preventDefault();
+                if (!selectedVehicle) {
+                  e.preventDefault();
+                  return;
+                }
+                saveBookingSession({
+                  vehicleId: selectedVehicle,
+                  vehicleName: selectedVehicleName,
+                  carPrice: selectedPrice || 0,
+                  distanceKm: distanceKm || 0,
+                  coords: coords || undefined,
+                });
               }}
-              href={`/booking-flow/${serviceType === "TRANSFER" || serviceType === "PRIVATE_TRANSFER" || serviceType === "AIRPORT_TRANSFER" ? "step-3" : "step-3-details"}?${searchParams.toString()}&vehicleId=${encodeURIComponent(
-                selectedVehicle || "",
-              )}&carPrice=${selectedPrice || 0}&distanceKm=${distanceKm || 0}${coords ? `&fromLat=${coords.fromLat}&fromLng=${coords.fromLng}&toLat=${coords.toLat}&toLng=${coords.toLng}` : ""}`}
+              href={
+                serviceType === "TRANSFER" ||
+                serviceType === "PRIVATE_TRANSFER" ||
+                serviceType === "AIRPORT_TRANSFER"
+                  ? buildSemanticBookingUrl("stops", session)
+                  : buildSemanticBookingUrl("user-info", session, selectedVehicleName)
+              }
               className={!selectedVehicle ? "pointer-events-none" : ""}
             >
               {serviceType === "TRANSFER" ||
-                serviceType === "PRIVATE_TRANSFER" ||
-                serviceType === "AIRPORT_TRANSFER"
+              serviceType === "PRIVATE_TRANSFER" ||
+              serviceType === "AIRPORT_TRANSFER"
                 ? "Next: Add Stops"
                 : "Next: Checkout"}
             </Link>

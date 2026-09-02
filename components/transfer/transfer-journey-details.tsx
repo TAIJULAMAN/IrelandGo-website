@@ -14,6 +14,15 @@ export default function TransferJourneyDetails() {
   try {
     if (transferRouteParam) {
       transferRoute = JSON.parse(transferRouteParam);
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("current_transfer_route", transferRouteParam);
+        const url = new URL(window.location.href);
+        url.searchParams.delete("transferRoute");
+        window.history.replaceState({}, "", url.toString());
+      }
+    } else if (typeof window !== "undefined") {
+      const saved = sessionStorage.getItem("current_transfer_route");
+      if (saved) transferRoute = JSON.parse(saved);
     }
   } catch (e) {
     console.error("Failed to parse transfer route", e);

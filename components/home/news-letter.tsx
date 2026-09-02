@@ -53,7 +53,7 @@ export function NewsLetter() {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-4 md:py-6 text-sm md:text-base lg:text-lg rounded-lg whitespace-nowrap disabled:opacity-70"
+                className="px-6 md:px-8 whitespace-nowrap"
               >
                 {isLoading ? (
                   <>

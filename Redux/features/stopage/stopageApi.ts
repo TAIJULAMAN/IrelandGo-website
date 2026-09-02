@@ -11,6 +11,7 @@ const stopageApi = baseApi.injectEndpoints({
     }),
     getSingleStoppage: builder.query({
       query: (id) => `stoppages/single-stoppage/${id}`,
+      providesTags: ["stopages"],
     }),
     addExtraStoppages: builder.mutation({
       query: (data) => ({
@@ -18,6 +19,7 @@ const stopageApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["stopages"],
     }),
   }),
   overrideExisting: true,

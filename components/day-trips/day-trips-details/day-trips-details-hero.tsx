@@ -183,7 +183,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
             {isFormValid ? (
               <Link
                 href={{
-                  pathname: "/booking-flow/step-2",
+                  pathname: "/booking/vehicles",
                   query: {
                     serviceType: "DAY_TRIP",
                     id: trip?.id,
@@ -197,12 +197,12 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
                   },
                 }}
               >
-                <button className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-sm w-full sm:w-auto">
+                <button className="btn-theme-primary px-8 w-full sm:w-auto">
                   Book Your Tour
                 </button>
               </Link>
             ) : (
-              <button className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600/50 text-white/70 font-semibold shadow-none cursor-not-allowed w-full sm:w-auto" disabled>
+              <button className="btn-theme-primary px-8 w-full sm:w-auto opacity-50 cursor-not-allowed pointer-events-none" disabled>
                 Book Your Tour
               </button>
             )}

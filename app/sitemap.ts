@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { SEO_ROUTES } from "@/config/seoRoutes";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tourenzo.com";
@@ -61,5 +62,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  return staticRoutes;
+  const programmaticRoutes: MetadataRoute.Sitemap = Object.values(SEO_ROUTES).map(
+    (item) => ({
+      url: `${baseUrl}${item.url}`,
+      lastModified: currentDate,
+      changeFrequency: "weekly" as const,
+      priority: item.isHub ? 0.9 : 0.85,
+    })
+  );
+
+  return [...staticRoutes, ...programmaticRoutes];
 }

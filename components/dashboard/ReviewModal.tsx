@@ -165,14 +165,13 @@ export function ReviewModal({
             variant="outline"
             disabled={isLoading}
             onClick={() => onOpenChange(false)}
-            className="rounded-xl font-bold text-slate-600 border-slate-200 hover:bg-slate-100 px-5 py-2.5 h-auto"
           >
             Cancel
           </Button>
           <Button
             disabled={isLoading || !rating}
             onClick={handleSubmit}
-            className="rounded-xl font-bold bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 h-auto flex items-center gap-2"
+            className="flex items-center gap-2"
           >
             {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
             {isLoading ? "Submitting..." : "Submit Review"}

@@ -1,46 +1,63 @@
-"use client"
+"use client";
 
-import { useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight, Loader2, Clock, Users } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
-import Loading from "@/components/common/loading"
-import { useGetPopularTripsQuery } from "@/Redux/features/contents/contentsApi"
-import { SectionHeader } from "@/components/ui/section-header"
+import { useRef } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  Clock,
+  Users,
+  ArrowRight,
+} from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import Loading from "@/components/common/loading";
+import { useGetPopularTripsQuery } from "@/Redux/features/contents/contentsApi";
+import { SectionHeader } from "@/components/ui/section-header";
 
 export function PopularDayTrips() {
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { data: response, isLoading, isError } = useGetPopularTripsQuery({})
-  const trips = response?.data || []
+  const { data: response, isLoading, isError } = useGetPopularTripsQuery({});
+  const trips = response?.data || [];
   console.log("trip of aaaaaaaaaaaaaaaaaaaaaa", trips);
 
-
   const scroll = (direction: "left" | "right") => {
-    if (!scrollRef.current) return
-    const amount = scrollRef.current.clientWidth * 0.8
-    scrollRef.current.scrollBy({ left: direction === "left" ? -amount : amount, behavior: "smooth" })
-  }
+    if (!scrollRef.current) return;
+    const amount = scrollRef.current.clientWidth * 0.8;
+    scrollRef.current.scrollBy({
+      left: direction === "left" ? -amount : amount,
+      behavior: "smooth",
+    });
+  };
 
-  const formatDuration = (minutes: number) => {
-    const hours = Math.floor(minutes / 60)
-    const mins = minutes % 60
-    return `${hours}h ${mins > 0 ? ` ${mins}m` : ""}`
-  }
+  const renderDuration = (minutes: number) => {
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours > 0) {
+      return (
+        <span>
+          {hours}h
+          {mins > 0 && <span className="hidden sm:inline"> {mins}m</span>}
+        </span>
+      );
+    }
+    return <span>{mins}m</span>;
+  };
 
   if (isLoading) {
     return (
       <section className="relative px-5 md:px-0 py-10 md:py-16 bg-gray-50/50 overflow-hidden">
         <Loading />
       </section>
-    )
+    );
   }
 
-  if (isError || trips.length === 0) return null
+  if (isError || trips.length === 0) return null;
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-10 md:py-12 xl:py-12 bg-gray-50/50 overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-8 md:py-10 xl:py-12 bg-gray-50/50 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
@@ -82,69 +99,66 @@ export function PopularDayTrips() {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {trips.slice(0, 4).map((trip: any, idx: number) => (
-            <div
-              key={trip.id || idx}
-              className="group bg-white/80 backdrop-blur-md rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-white transition-all duration-500 hover:-translate-y-2 flex flex-col h-full relative"
-            >
+            <div key={trip.id || idx} className="card-theme group">
               {/* Subtle Glow Behind Card */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-              <div
-                className="relative h-28 sm:h-40 md:h-48 w-full bg-gray-200 overflow-hidden z-10"
-                style={{ position: "relative" }}
-              >
+              <div className="card-image-wrapper z-10">
                 <Image
                   src={trip.images?.[0] || "/placeholder.svg"}
                   alt={trip.to}
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transform group-hover:scale-110 transition-transform duration-700"
+                  className="object-cover transform group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-70" />
               </div>
 
-              <div className="p-3 sm:p-5 md:p-6 flex flex-col flex-grow relative z-10">
-                <h3 className="text-xs sm:text-lg md:text-xl font-bold text-gray-900 mb-1.5 sm:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 line-clamp-2 leading-tight">
-                  {trip.from} to {trip.to}
-                </h3>
+              <div className="p-4 sm:p-5 flex flex-col flex-1 relative z-10 justify-between gap-3">
+                <div>
+                  <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
+                    {trip.from} to {trip.to}
+                  </h3>
 
-                <p className="text-[11px] sm:text-sm text-gray-600 mb-2 sm:mb-6 line-clamp-2 sm:line-clamp-3 leading-relaxed group-hover:text-gray-700 transition-colors">
-                  {trip.description?.replace(/<[^>]*>?/gm, "")}
-                </p>
+                  <p className="text-xs sm:text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed min-h-[2.5rem]">
+                    {trip.description?.replace(/<[^>]*>?/gm, "")}
+                  </p>
 
-                <div className="mt-auto">
-                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 mb-2 sm:mb-6">
-                    <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-blue-50 text-blue-700 text-[10px] sm:text-xs font-bold shadow-sm border border-blue-100/50">
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
+                    <span className="card-badge">
                       <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                      {formatDuration(trip.travelTimeMinutes)}
+                      {renderDuration(trip.travelTimeMinutes)}
                     </span>
                     {trip.groupType && (
-                      <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] sm:text-xs font-bold shadow-sm border border-indigo-100/50">
+                      <span className="card-badge-indigo">
                         <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                         {trip.groupType}
                       </span>
                     )}
                   </div>
+                </div>
 
-                  <div className="flex items-center justify-between mb-2 sm:mb-5">
-                    <p className="text-xs sm:text-md font-medium text-gray-600">
-                      Starts from{" "}
-                      <span className="text-blue-600 font-bold text-sm sm:text-xl">
-                        €
-                        {trip.price ??
-                          (trip.vehicles?.length
-                            ? Math.min(...trip.vehicles.map((v: any) => v.price))
-                            : 0)}
-                      </span>
-                    </p>
+                <div className="mt-auto pt-2">
+                  <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-100">
+                    <span className="text-xs sm:text-sm font-medium text-gray-500">
+                      Starts from
+                    </span>
+                    <span className="text-blue-600 font-extrabold text-sm sm:text-lg">
+                      €
+                      {trip.price ??
+                        (trip.vehicles?.length
+                          ? Math.min(...trip.vehicles.map((v: any) => v.price))
+                          : 0)}
+                    </span>
                   </div>
 
-                  <Button
-                    asChild
-                    className="w-full rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-2 sm:py-4 md:py-6 h-auto border-none"
-                  >
-                    <Link href={`/day-trips/day-trip-details/${trip.id}`}>
-                      View Details
+                  <Button asChild className="w-full">
+                    <Link
+                      href={`/day-trips/day-trip-details/${trip.id}`}
+                      className="group/btn"
+                    >
+                      <span>View Details</span>
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
                     </Link>
                   </Button>
                 </div>
@@ -152,7 +166,6 @@ export function PopularDayTrips() {
             </div>
           ))}
         </div>
-
 
         {/* Mobile arrow buttons */}
         <div className="flex md:hidden items-center justify-center gap-6 mt-8">
@@ -173,5 +186,5 @@ export function PopularDayTrips() {
         </div>
       </div>
     </section>
-  )
+  );
 }

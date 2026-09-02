@@ -12,6 +12,7 @@ import {
   Search,
 } from "lucide-react";
 import { format } from "date-fns";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { HeroTabs } from "../common/hero-tabs";
 import { isTimeDisabled } from "@/utils/timeValidation";
@@ -162,18 +163,21 @@ export default function ByTheHourHero() {
 
   return (
     <TooltipProvider>
-      <section className="relative overflow-hidden min-h-[100vh] flex flex-col justify-center py-16 pt-24 md:pt-28">
+      <section className="relative overflow-hidden min-h-[75vh] md:min-h-[80vh] flex flex-col justify-center pt-28 pb-14 md:pb-16">
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src="/Images/ByTheHour.webp"
             alt="Irish landscape"
-            className="w-full h-full object-cover"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/10" />
         </div>
         <div className="absolute inset-0 " />
         <div className="relative z-10 w-full">
-          <div className="max-w-7xl mx-auto px-5 mt-4 md:mt-6 py-8 text-center flex flex-col items-center">
+          <div className="max-w-7xl mx-auto px-5 py-4 text-center flex flex-col items-center">
             <div className="space-y-2 max-w-4xl mb-6">
               <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-white mb-2 text-balance leading-tight px-4">
                 Book a Private Driver <span className="">by the Hour</span>
@@ -622,7 +626,7 @@ export default function ByTheHourHero() {
                   {isFormValid ? (
                     <Link
                       href={{
-                        pathname: "/booking-flow/step-2",
+                        pathname: "/booking/vehicles",
                         query: {
                           serviceType: "BY_THE_HOUR",
                           pickup: pickupLocation,
@@ -637,14 +641,14 @@ export default function ByTheHourHero() {
                       }}
                       className="w-full block"
                     >
-                      <Button className="w-full h-12 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 font-semibold text-lg border-0 rounded-lg">
+                      <Button className="w-full">
                         <Search className="w-5 h-5 mr-2" />
                         Search Available Rides
                       </Button>
                     </Link>
                   ) : (
                     <Button
-                      className="w-full h-12 py-3 bg-gray-100 text-gray-400 font-semibold text-lg border-0 rounded-lg cursor-not-allowed transition-all duration-300"
+                      className="w-full"
                       disabled
                     >
                       <Search className="w-5 h-5 mr-2" />

@@ -3,8 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import Loading from "@/components/common/loading";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, Loader2, Clock, Route } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  Clock,
+  Route,
+  ArrowRight,
+} from "lucide-react";
 import Image from "next/image";
 import { useGetPrivateTransfersQuery } from "@/Redux/features/contents/contentsApi";
 import { SectionHeader } from "../ui/section-header";
@@ -32,10 +38,18 @@ export function PrivateTransfers() {
     );
   };
 
-  const formatDuration = (minutes: number) => {
+  const renderDuration = (minutes: number) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
-    return hours > 0 ? `${hours}h ${mins}min` : `${mins}min`;
+    if (hours > 0) {
+      return (
+        <span>
+          {hours}h
+          {mins > 0 && <span className="hidden sm:inline"> {mins}m</span>}
+        </span>
+      );
+    }
+    return <span>{mins}m</span>;
   };
 
   const showSlider = transfers.length > 4;
@@ -47,7 +61,6 @@ export function PrivateTransfers() {
         transfers[(currentIndex + 3) % transfers.length],
       ].filter(Boolean)
     : transfers.slice(0, 4);
-
 
   if (isLoading) {
     return (
@@ -68,7 +81,7 @@ export function PrivateTransfers() {
   }
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 2xl:px-0 py-12 md:py-16 xl:py-20 bg-gray-50/50 overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 2xl:px-0 pt-6 md:pt-8 pb-10 md:pb-12 bg-gray-50/50 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[5%] -left-[10%] w-[40%] h-[40%] rounded-full bg-blue-50/80 blur-3xl mix-blend-multiply" />
@@ -110,74 +123,79 @@ export function PrivateTransfers() {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           {visibleTransfers.map((transfer: any, idx: number) => (
-            <div
-              key={transfer.id || idx}
-              className="group bg-white rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 hover:border-white transition-all duration-500 hover:-translate-y-2 flex flex-col h-full relative"
-            >
+            <div key={transfer.id || idx} className="card-theme group">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-              <div className="relative h-28 sm:h-40 md:h-48 overflow-hidden bg-gray-100 z-10">
-                <img
+              <div className="card-image-wrapper z-10">
+                <Image
                   src={transfer.images?.[0] || "/placeholder.svg"}
                   alt={`${transfer.from} to ${transfer.to}`}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                  fill
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
+                  className="object-cover transform group-hover:scale-105 transition-transform duration-700"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-60" />
               </div>
 
-              <div className="p-3 sm:p-5 md:p-6 flex flex-col flex-1 relative z-10">
-                <div className="flex items-center justify-between mb-2 sm:mb-4 gap-1 sm:gap-2">
-                  <span
-                    className="font-bold text-gray-900 text-xs sm:text-sm md:text-base lg:text-lg truncate max-w-[60px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-none group-hover:text-blue-700 transition-colors"
-                    title={transfer.from}
-                  >
-                    {transfer.from}
-                  </span>
-                  <div className="flex items-center shrink-0 opacity-70 group-hover:opacity-100 transition-opacity">
-                    <Image
-                      src="/divider.png"
-                      alt="to"
-                      width={80}
-                      height={12}
-                      className="w-8 sm:w-12 md:w-16 h-auto"
-                    />
-                  </div>
-                  <span
-                    className="font-bold text-gray-900 text-xs sm:text-sm md:text-base lg:text-lg truncate max-w-[60px] sm:max-w-[100px] md:max-w-[120px] lg:max-w-none group-hover:text-blue-700 transition-colors"
-                    title={transfer.to}
-                  >
-                    {transfer.to}
-                  </span>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 mb-3 sm:mb-6">
-                  <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-blue-50 text-blue-700 text-[10px] sm:text-xs font-bold shadow-sm border border-blue-100/50">
-                    <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                    {formatDuration(transfer.travelTimeMinutes)}
-                  </span>
-                  <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-[10px] sm:text-xs font-bold shadow-sm border border-indigo-100/50">
-                    <Route className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                    {transfer.distanceKm} km
-                  </span>
-                </div>
-
-                <div className="mt-auto">
-                  <Button
-                    asChild
-                    className="w-full rounded-lg sm:rounded-xl text-xs sm:text-sm md:text-base font-bold bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white transition-all duration-300 shadow-sm hover:shadow-md py-2 sm:py-4 md:py-6 h-auto border-none"
-                  >
-                    <Link
-                      href={`/transfer/private-car-transfer?pickup=${encodeURIComponent(transfer.from)}&dropoff=${encodeURIComponent(transfer.to)}&serviceType=${encodeURIComponent(transfer.serviceType || "PRIVATE_TRANSFER")}&transferRoute=${encodeURIComponent(JSON.stringify({ ...transfer, description: undefined, images: undefined, includedContent: undefined, excludedContent: undefined }))}`}
+              <div className="p-4 sm:p-5 flex flex-col flex-1 relative z-10 justify-between gap-3">
+                <div>
+                  <div className="flex items-center justify-between mb-2 sm:mb-3 gap-1 sm:gap-2">
+                    <span
+                      className="font-bold text-gray-900 text-sm sm:text-base md:text-lg truncate max-w-[80px] sm:max-w-[110px] md:max-w-[130px] group-hover:text-blue-600 transition-colors"
+                      title={transfer.from}
                     >
-                      Book Now
-                    </Link>
-                  </Button>
+                      {transfer.from}
+                    </span>
+                    <div className="flex items-center shrink-0 opacity-70 group-hover:opacity-100 transition-opacity">
+                      <Image
+                        src="/divider.png"
+                        alt="to"
+                        width={80}
+                        height={12}
+                        className="w-8 sm:w-12 md:w-16 h-auto"
+                      />
+                    </div>
+                    <span
+                      className="font-bold text-gray-900 text-sm sm:text-base md:text-lg truncate max-w-[80px] sm:max-w-[110px] md:max-w-[130px] group-hover:text-blue-600 transition-colors"
+                      title={transfer.to}
+                    >
+                      {transfer.to}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-4">
+                    <span className="card-badge text-xs whitespace-nowrap">
+                      <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                      {renderDuration(transfer.travelTimeMinutes)}
+                    </span>
+                    <span className="card-badge-indigo text-xs whitespace-nowrap">
+                      <Route className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                      {transfer.distanceKm} km
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-auto pt-2">
+                  <Link
+                    href={`/transfers/${(transfer.from || "dublin").toLowerCase().replace(/\s+/g, "-")}-to-${(transfer.to || "destination").toLowerCase().replace(/\s+/g, "-")}/`}
+                    onClick={() => {
+                      try {
+                        sessionStorage.setItem(
+                          "current_transfer_route",
+                          JSON.stringify(transfer),
+                        );
+                      } catch (e) {}
+                    }}
+                    className="btn-theme-primary w-full group/btn"
+                  >
+                    <span className="tracking-wide">Book Now</span>
+                    <ArrowRight className="w-4 h-4 sm:w-4.5 sm:h-4.5 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
+                  </Link>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
 
         {/* Mobile Navigation Buttons */}
         {showSlider && (

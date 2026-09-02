@@ -1,39 +1,63 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Car, MapPin, Clock } from "lucide-react";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import { usePaymentMutation } from "@/Redux/features/payments/paymentsApi";
+import {
+  getBookingSession,
+  syncUrlParamsToSession,
+  cleanBrowserUrl,
+  buildSemanticBookingUrl,
+  BookingSessionData,
+} from "@/utils/bookingSession";
 
 export default function PaymentStep() {
   const searchParams = useSearchParams();
-  const pickupParam = searchParams.get("pickup") || "";
-  const dropoffParam = searchParams.get("dropoff") || "";
-  const dateParam = searchParams.get("date") || "";
-  const timeParam = searchParams.get("time") || "";
-  const adults = parseInt(searchParams.get("adults") || "2");
-  const children = parseInt(searchParams.get("children") || "0");
-  const extraBags = parseInt(searchParams.get("extraBags") || "0");
-  const vehicleId = searchParams.get("vehicleId");
+  const [session, setSession] = useState<BookingSessionData>(() => {
+    if (typeof window !== "undefined" && window.location.search) {
+      return syncUrlParamsToSession(searchParams);
+    }
+    return getBookingSession();
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.search) {
+      const updated = syncUrlParamsToSession(searchParams);
+      setSession(updated);
+      cleanBrowserUrl(buildSemanticBookingUrl("payment", updated));
+    } else {
+      setSession(getBookingSession());
+    }
+  }, [searchParams]);
+
+  const pickupParam = searchParams.get("pickup") || session.pickup || "";
+  const dropoffParam = searchParams.get("dropoff") || session.dropoff || "";
+  const dateParam = searchParams.get("date") || session.date || "";
+  const timeParam = searchParams.get("time") || session.time || "";
+  const adults = parseInt(searchParams.get("adults") || session.adults?.toString() || "2");
+  const children = parseInt(searchParams.get("children") || session.children?.toString() || "0");
+  const extraBags = parseInt(searchParams.get("extraBags") || session.extraBags?.toString() || "0");
+  const vehicleId = searchParams.get("vehicleId") || session.vehicleId;
   const transferRouteParam = searchParams.get("transferRoute");
   const selectedStopsParam = searchParams.get("selectedStops");
-  const serviceType = searchParams.get("serviceType") || "TRANSFER";
+  const serviceType = searchParams.get("serviceType") || session.serviceType || "TRANSFER";
   const carPriceParam = searchParams.get("carPrice");
-  const tripType = searchParams.get("tripType") || "one-way";
-  const bookingId = searchParams.get("bookingId") || "";
+  const tripType = searchParams.get("tripType") || session.tripType || "one-way";
+  const bookingId = searchParams.get("bookingId") || session.bookingId || "";
   const [payError, setPayError] = useState("");
   const [payment, { isLoading: isPaying }] = usePaymentMutation();
 
-  let transferRoute: any = null;
+  let transferRoute: any = session.transferRoute || null;
   if (transferRouteParam) {
     try {
       transferRoute = JSON.parse(transferRouteParam);
     } catch (e) { }
   }
 
-  let selectedStops: any[] = [];
+  let selectedStops: any[] = session.selectedStops || [];
   if (selectedStopsParam) {
     try {
       selectedStops = JSON.parse(selectedStopsParam);
@@ -55,8 +79,8 @@ export default function PaymentStep() {
     }
   }
 
-  // Use carPrice from URL (set by step-2), apply return multiplier
-  let transportPrice = carPriceParam ? parseFloat(carPriceParam) : 0;
+  // Use carPrice from URL or session, apply return multiplier
+  let transportPrice = carPriceParam ? parseFloat(carPriceParam) : (session.carPrice || 0);
   const isReturn = tripType === "return";
   if (isReturn) transportPrice = transportPrice * 2;
 
@@ -283,7 +307,7 @@ export default function PaymentStep() {
                     }
                   }}
                   disabled={isPaying || !bookingId}
-                  className="w-full bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg py-2.5 text-sm sm:text-base h-auto disabled:opacity-60"
+                  className="w-full"
                 >
                   {isPaying
                     ? "Redirecting to Stripe..."

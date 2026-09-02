@@ -78,7 +78,7 @@ export default function PaymentCancelPage() {
             asChild
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 h-auto rounded-lg shadow-lg shadow-blue-100"
           >
-            <Link href={`/booking-flow/payment?${searchParams.toString()}`}>
+            <Link href="/booking/payment">
               Try Payment Again
             </Link>
           </Button>

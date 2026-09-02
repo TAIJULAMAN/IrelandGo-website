@@ -20,12 +20,19 @@ import {
 } from "@/Redux/features/booking/bookingApi";
 // @ts-expect-error: countries-api has no type declarations
 import countries from "countries-api";
-import { useAppDispatch } from "@/Redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import { setUser } from "@/Redux/Slice/authSlice";
+import { useGetProfileQuery } from "@/Redux/features/settings/profileApi";
+import {
+  getBookingSession,
+  saveBookingSession,
+  syncUrlParamsToSession,
+  cleanBrowserUrl,
+  buildSemanticBookingUrl,
+  BookingSessionData,
+} from "@/utils/bookingSession";
 
-
-
-export default function Step3Details() {
+export default function UserInfo() {
   const [showModal, setShowModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorModalMessage, setErrorModalMessage] = useState("");
@@ -33,19 +40,42 @@ export default function Step3Details() {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
 
-  const pickupParam = searchParams.get("pickup") || "";
-  const dropoffParam = searchParams.get("dropoff") || "";
-  const dateParam = searchParams.get("date") || "";
-  const timeParam = searchParams.get("time") || "";
-  const adults = parseInt(searchParams.get("adults") || "2");
-  const children = parseInt(searchParams.get("children") || "0");
-  const extraBags = parseInt(searchParams.get("extraBags") || "0");
-  const vehicleId = searchParams.get("vehicleId");
+  const [session, setSession] = useState<BookingSessionData>(() => {
+    if (typeof window !== "undefined" && window.location.search) {
+      return syncUrlParamsToSession(searchParams);
+    }
+    return getBookingSession();
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.search) {
+      const updated = syncUrlParamsToSession(searchParams);
+      setSession(updated);
+      cleanBrowserUrl(buildSemanticBookingUrl("user-info", updated, updated.vehicleName));
+    } else {
+      setSession(getBookingSession());
+    }
+  }, [searchParams]);
+
+  const authUser = useAppSelector((state) => state.auth.user);
+  const { data: profileResponse } = useGetProfileQuery(undefined, {
+    skip: !authUser,
+  });
+  const profile = profileResponse?.data;
+
+  const pickupParam = searchParams.get("pickup") || session.pickup || "";
+  const dropoffParam = searchParams.get("dropoff") || session.dropoff || "";
+  const dateParam = searchParams.get("date") || session.date || "";
+  const timeParam = searchParams.get("time") || session.time || "";
+  const adults = parseInt(searchParams.get("adults") || session.adults?.toString() || "2");
+  const children = parseInt(searchParams.get("children") || session.children?.toString() || "0");
+  const extraBags = parseInt(searchParams.get("extraBags") || session.extraBags?.toString() || "0");
+  const vehicleId = searchParams.get("vehicleId") || session.vehicleId;
   const transferRouteParam = searchParams.get("transferRoute");
   const selectedStopsParam = searchParams.get("selectedStops");
-  const serviceTypeParam = searchParams.get("serviceType") || "TRANSFER";
-  const tripType = searchParams.get("tripType") || "one-way";
-  const tripId = searchParams.get("id");
+  const serviceTypeParam = searchParams.get("serviceType") || session.serviceType || "TRANSFER";
+  const tripType = searchParams.get("tripType") || session.tripType || "one-way";
+  const tripId = searchParams.get("id") || session.id;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -58,6 +88,37 @@ export default function Step3Details() {
   const [specialRequests, setSpecialRequests] = useState("");
   const [childSeat, setChildSeat] = useState(false);
   const [wheelchair, setWheelchair] = useState(false);
+
+  // Auto-populate user info when profile or authUser is available
+  useEffect(() => {
+    if (profile) {
+      if (!firstName && profile.fullName) {
+        const parts = profile.fullName.trim().split(" ");
+        setFirstName(parts[0] || "");
+        if (!lastName && parts.length > 1) {
+          setLastName(parts.slice(1).join(" "));
+        }
+      }
+      if (!email && profile.email) {
+        setEmail(profile.email);
+      }
+      if (!phone && profile.contactNumber) {
+        const cleanPhone = profile.contactNumber.replace(/^\+353/, "").trim();
+        setPhone(cleanPhone);
+      }
+    } else if (authUser) {
+      if (!firstName && authUser.name) {
+        const parts = authUser.name.trim().split(" ");
+        setFirstName(parts[0] || "");
+        if (!lastName && parts.length > 1) {
+          setLastName(parts.slice(1).join(" "));
+        }
+      }
+      if (!email && authUser.email) {
+        setEmail(authUser.email);
+      }
+    }
+  }, [profile, authUser]);
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -90,13 +151,13 @@ export default function Step3Details() {
     return "";
   };
   const isFormValid = firstName && lastName && !validateEmail(email) && !validatePhone(phone);
-  let transferRoute: any = null;
+  let transferRoute: any = session.transferRoute || null;
   if (transferRouteParam) {
     try {
       transferRoute = JSON.parse(transferRouteParam);
     } catch (e) { }
   }
-  let selectedStops: any[] = [];
+  let selectedStops: any[] = session.selectedStops || [];
   if (selectedStopsParam) {
     try {
       selectedStops = JSON.parse(selectedStopsParam);
@@ -106,11 +167,11 @@ export default function Step3Details() {
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
   const carPriceParam = searchParams.get("carPrice");
-  let transportPrice = 0;
+  let transportPrice = carPriceParam ? parseFloat(carPriceParam) : (session.carPrice || 0);
   let basePriceSum = 0;
   let pricePerKmSum = 0;
   const distanceKmParam = searchParams.get("distanceKm");
-  const distanceKm = distanceKmParam ? parseFloat(distanceKmParam) : (transferRoute?.distanceKm || 0);
+  const distanceKm = distanceKmParam ? parseFloat(distanceKmParam) : (session.distanceKm || transferRoute?.distanceKm || 0);
 
   if (vehicleId && vehicles.length > 0) {
     const ids = vehicleId.split("+");
@@ -132,6 +193,8 @@ export default function Step3Details() {
 
   if (carPriceParam) {
     transportPrice = parseFloat(carPriceParam);
+  } else if (session.carPrice) {
+    transportPrice = session.carPrice;
   } else {
     transportPrice = Math.round(basePriceSum + pricePerKmSum * distanceKm);
   }
@@ -167,10 +230,10 @@ export default function Step3Details() {
 
   const isLoading = isBookingWithIdLoading || isBookingWithoutIdLoading;
 
-  const fromLat = searchParams.get("fromLat");
-  const fromLng = searchParams.get("fromLng");
-  const toLat = searchParams.get("toLat");
-  const toLng = searchParams.get("toLng");
+  const fromLat = searchParams.get("fromLat") || session.coords?.fromLat?.toString() || "";
+  const fromLng = searchParams.get("fromLng") || session.coords?.fromLng?.toString() || "";
+  const toLat = searchParams.get("toLat") || session.coords?.toLat?.toString() || "";
+  const toLng = searchParams.get("toLng") || session.coords?.toLng?.toString() || "";
 
   const handleBooking = async () => {
     const bookingVehiclesMap: Record<string, number> = {};
@@ -238,7 +301,18 @@ export default function Step3Details() {
         res = await createBookingUsingServiceId({ serviceId, body }).unwrap();
       }
       const id = res?.data?.id || res?.data?._id || "";
-      if (id) setBookingId(id);
+      if (id) {
+        setBookingId(id);
+        saveBookingSession({
+          bookingId: id,
+          firstName,
+          lastName,
+          email,
+          phone: `${phonePrefix}${phone}`,
+          specialRequests,
+          carPrice: transportPrice,
+        });
+      }
 
       const accessToken = res?.data?.accessToken;
       const user = res?.data?.user;
@@ -501,23 +575,22 @@ export default function Step3Details() {
             </div>
 
             {/* Bottom navigation – inline below the form card, matching card width */}
-            <div className="bg-white rounded-lg shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-4 sm:p-4 sm:px-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-3 sm:gap-0 border border-gray-100 mt-4">
+            <div className="bg-white rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-4 sm:p-4 sm:px-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-4 border border-gray-100 mt-4">
               <Button
                 asChild
-
-                className="w-full sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+                variant="outline"
+                size="action"
               >
-                <Link href={`/booking-flow/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "step-2" : "step-3"}?${searchParams.toString()}`}>
-                  ← Back
+                <Link href={`/booking/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "vehicles" : "stops"}`}>
+                  Back
                 </Link>
               </Button>
 
               <Button
                 type="button"
-
                 onClick={handleBooking}
                 disabled={isLoading || !isFormValid}
-                className="w-full sm:w-auto text-white bg-blue-600 hover:bg-blue-700 px-6 sm:px-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+                size="action"
               >
                 {isLoading ? "Processing..." : "Complete Booking"}
               </Button>

@@ -1,16 +1,19 @@
 import { Hero } from "@/components/home/hero"
 import { PrivateTransfers } from "@/components/home/private-transfers"
-import { HowItWorks } from "@/components/home/how-it-works"
-import { PopularDayTrips } from "@/components/home/popular-day-trips"
-import { PopularMultiDayTours } from "@/components/home/popular-multi-day-tours"
-import { SafetyComfort } from "@/components/home/safety-comfort"
-import { WhyChooseUs } from "@/components/home/why-choose-us"
-import { Testimonials } from "@/components/common/testimonials"
-import { NewsLetter } from "@/components/home/news-letter"
-import { RecentBlogs } from "@/components/home/recent-blogs"
+import dynamic from "next/dynamic"
+
+const HowItWorks = dynamic(() => import("@/components/home/how-it-works").then(m => ({ default: m.HowItWorks })))
+const PopularDayTrips = dynamic(() => import("@/components/home/popular-day-trips").then(m => ({ default: m.PopularDayTrips })))
+const PopularMultiDayTours = dynamic(() => import("@/components/home/popular-multi-day-tours").then(m => ({ default: m.PopularMultiDayTours })))
+const SafetyComfort = dynamic(() => import("@/components/home/safety-comfort").then(m => ({ default: m.SafetyComfort })))
+const WhyChooseUs = dynamic(() => import("@/components/home/why-choose-us").then(m => ({ default: m.WhyChooseUs })))
+const Testimonials = dynamic(() => import("@/components/common/testimonials").then(m => ({ default: m.Testimonials })))
+const RecentBlogs = dynamic(() => import("@/components/home/recent-blogs").then(m => ({ default: m.RecentBlogs })))
+const NewsLetter = dynamic(() => import("@/components/home/news-letter").then(m => ({ default: m.NewsLetter })))
+
 export default function Home() {
   return (
-    <main className="w-full py-10">
+    <main className="w-full">
       <Hero />
       <PrivateTransfers />
       <HowItWorks />

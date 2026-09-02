@@ -7,7 +7,11 @@ import FAQ from "@/app/settings/faq/faq";
 import { Testimonials } from "@/components/common/testimonials";
 import { useGetSingleDayTripQuery } from "@/Redux/features/dayTrip/dayTripApi";
 
-export default function DayTripDetails({ params }: { params: Promise<{ id: string }> }) {
+export default function DayTripDetails({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = use(params);
   const { data: response, isLoading } = useGetSingleDayTripQuery(id);
 
@@ -18,7 +22,9 @@ export default function DayTripDetails({ params }: { params: Promise<{ id: strin
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">Loading your trip details...</p>
+          <p className="text-gray-600 font-medium">
+            Loading your trip details...
+          </p>
         </div>
       </div>
     );
@@ -28,9 +34,18 @@ export default function DayTripDetails({ params }: { params: Promise<{ id: strin
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Trip Not Found</h2>
-          <p className="text-gray-600 mb-6">We couldn't find the day trip you're looking for.</p>
-          <a href="/day-trips" className="text-blue-600 font-semibold hover:underline">Return to Day Trips</a>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Trip Not Found
+          </h2>
+          <p className="text-gray-600 mb-6">
+            We couldn't find the day trip you're looking for.
+          </p>
+          <a
+            href="/day-trips"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            Return to Day Trips
+          </a>
         </div>
       </div>
     );
@@ -41,6 +56,7 @@ export default function DayTripDetails({ params }: { params: Promise<{ id: strin
       <DayTripsDetailsHero trip={trip} />
       <TripItinerary trip={trip} />
       <Testimonials />
-      <FAQ />    </main>
+      <FAQ />{" "}
+    </main>
   );
 }

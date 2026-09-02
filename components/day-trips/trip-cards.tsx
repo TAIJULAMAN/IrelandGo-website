@@ -4,7 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Loading from "@/components/common/loading";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ArrowRight,
+  Clock,
+  Users,
+} from "lucide-react";
 import { useGetAllDayTripsQuery } from "@/Redux/features/dayTrip/dayTripApi";
 
 const cities = ["Killarney", "Dublin", "Belfast", "Cork", "Limerick", "Galway"];
@@ -22,12 +28,16 @@ export default function TripCards() {
 
   const goToPrevious = () => {
     if (filteredTrips.length === 0) return;
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? filteredTrips.length - 1 : prevIndex - 1));
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? filteredTrips.length - 1 : prevIndex - 1,
+    );
   };
 
   const goToNext = () => {
     if (filteredTrips.length === 0) return;
-    setCurrentIndex((prevIndex) => (prevIndex === filteredTrips.length - 1 ? 0 : prevIndex + 1));
+    setCurrentIndex((prevIndex) =>
+      prevIndex === filteredTrips.length - 1 ? 0 : prevIndex + 1,
+    );
   };
 
   const handleCityChange = (city: string) => {
@@ -113,15 +123,12 @@ export default function TripCards() {
               <Link
                 key={trip.id || idx}
                 href={`/day-trips/day-trip-details/${trip.id}`}
-                className="group bg-white/80 backdrop-blur-md rounded-xl sm:rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 hover:border-white hover:-translate-y-2 flex flex-col h-full relative"
+                className="card-theme group"
               >
                 {/* Subtle Glow Behind Card */}
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-                <div
-                  className="relative h-28 sm:h-48 md:h-56 overflow-hidden z-10"
-                  style={{ position: "relative" }}
-                >
+                <div className="card-image-wrapper z-10">
                   <Image
                     src={
                       trip.images?.[0] ||
@@ -130,48 +137,68 @@ export default function TripCards() {
                     alt={trip.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transform group-hover:scale-110 transition-transform duration-700"
+                    className="object-cover transform group-hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
                 </div>
 
-                <div className="p-3 sm:p-5 md:p-6 flex-grow flex flex-col relative z-10">
-                  <h3 className="font-bold text-gray-900 mb-1.5 sm:mb-3 text-xs sm:text-lg leading-tight line-clamp-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300">
-                    {trip.title}
-                  </h3>
-                  <div
-                    className="text-gray-600 text-[11px] sm:text-sm mb-2 sm:mb-4 line-clamp-2 leading-relaxed flex-grow group-hover:text-gray-700 transition-colors"
-                    dangerouslySetInnerHTML={{ __html: trip.description }}
-                  />
-                  <div className="text-[10px] sm:text-sm text-gray-500 font-medium">
-                    {trip.travelTimeMinutes
-                      ? `${Math.floor(trip.travelTimeMinutes / 60)}h ${trip.travelTimeMinutes % 60}m`
-                      : "N/A"}{" "}
-                    · {trip.groupType}
-                  </div>
-                </div>
-
-                <div className="px-3 sm:px-5 md:px-6 pb-3 sm:pb-5 md:pb-6 relative z-10 mt-auto">
-                  <div className="flex items-center justify-between mb-2 sm:mb-5 pt-2 sm:pt-5 border-t border-gray-100">
-                    <div className="flex flex-col">
-                      <p className="text-xs sm:text-md font-medium text-gray-600">
-                        {" "}
-                        Starts from{" "}
-                        <span className="text-blue-600 font-bold text-sm sm:text-xl">
-                          €
-                          {trip.price ??
-                            (trip.vehicles?.length
-                              ? Math.min(
-                                  ...trip.vehicles.map((v: any) => v.price),
-                                )
-                              : 0)}
+                <div className="p-4 sm:p-5 flex flex-col flex-1 relative z-10 justify-between gap-3">
+                  <div>
+                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
+                      {trip.title}
+                    </h3>
+                    <div
+                      className="text-xs sm:text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed min-h-[2.5rem]"
+                      dangerouslySetInnerHTML={{ __html: trip.description }}
+                    />
+                    <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
+                      {trip.travelTimeMinutes && (
+                        <span className="card-badge">
+                          <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                          {Math.floor(trip.travelTimeMinutes / 60) > 0 ? (
+                            <span>
+                              {Math.floor(trip.travelTimeMinutes / 60)}h
+                              {trip.travelTimeMinutes % 60 > 0 && (
+                                <span className="hidden sm:inline">
+                                  {" "}
+                                  {trip.travelTimeMinutes % 60}m
+                                </span>
+                              )}
+                            </span>
+                          ) : (
+                            <span>{trip.travelTimeMinutes % 60}m</span>
+                          )}
                         </span>
-                      </p>
+                      )}
+                      {trip.groupType && (
+                        <span className="card-badge-indigo">
+                          <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                          {trip.groupType}
+                        </span>
+                      )}
                     </div>
                   </div>
-                  <button className="w-full bg-blue-50 text-blue-700 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 group-hover:text-white py-2 sm:py-3.5 rounded-lg sm:rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 shadow-sm group-hover:shadow-md">
-                    View Details
-                  </button>
+
+                  <div className="mt-auto pt-2">
+                    <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-100">
+                      <span className="text-xs sm:text-sm font-medium text-gray-500">
+                        Starts from
+                      </span>
+                      <span className="text-blue-600 font-extrabold text-sm sm:text-lg">
+                        €
+                        {trip.price ??
+                          (trip.vehicles?.length
+                            ? Math.min(
+                                ...trip.vehicles.map((v: any) => v.price),
+                              )
+                            : 0)}
+                      </span>
+                    </div>
+                    <div className="btn-theme-primary w-full group/btn">
+                      <span className="tracking-wide">View Details</span>
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
+                    </div>
+                  </div>
                 </div>
               </Link>
             ))}
@@ -197,13 +224,13 @@ export default function TripCards() {
             </div>
           )}
         </div>
-
       ) : (
         <div className="text-center py-20 bg-white/80 backdrop-blur-sm rounded-2xl border border-dashed border-gray-300 mx-auto max-w-2xl relative z-10">
-          <p className="text-gray-500 text-lg font-medium">No day trips found for {selectedCity}.</p>
+          <p className="text-gray-500 text-lg font-medium">
+            No day trips found for {selectedCity}.
+          </p>
         </div>
       )}
     </div>
   );
 }
-

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
   Calendar,
@@ -108,9 +109,11 @@ export default function YourJourneyDetails() {
               </div>
             </div>
             <div className="mt-6 sm:mt-8">
-              <Button className="w-full h-11 sm:h-12 bg-blue-600 text-white flex items-center justify-center gap-2 rounded-full sm:rounded-lg">
-                <Search className="h-4 w-4" />
-                <span>Find a Ride</span>
+              <Button asChild className="w-full">
+                <Link href="/transfer/transfer-search?pickup=Dublin%20Airport&serviceType=AIRPORT_TRANSFER">
+                  <Search className="h-4 w-4" />
+                  <span>Find a Ride</span>
+                </Link>
               </Button>
             </div>
           </div>

@@ -38,7 +38,7 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="py-12 md:py-16 xl:py-20 relative overflow-hidden bg-white">
+    <section className="py-8 md:py-12 relative overflow-hidden bg-white">
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute -top-[20%] -right-[10%] w-[70%] h-[70%] rounded-full bg-blue-50/50 blur-3xl opacity-80 mix-blend-multiply" />
@@ -54,7 +54,7 @@ export function HowItWorks() {
           alignment="center"
         />
 
-        <div className="mt-8 sm:mt-16 md:mt-24">
+        <div className="mt-6 sm:mt-8 md:mt-10">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8 relative">
             {/* Connecting Line (Desktop only) */}
             <div className="hidden lg:block absolute top-[3rem] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-blue-100 via-indigo-100 to-violet-100 -z-10" />

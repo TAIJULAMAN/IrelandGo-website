@@ -3,6 +3,7 @@
 import { Search, Car, MapPin } from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
@@ -144,16 +145,19 @@ export default function TransfersHero() {
   ];
 
   return (
-    <section className="relative min-h-[100vh] flex items-center justify-center text-white overflow-hidden py-24">
+    <section className="relative min-h-[75vh] md:min-h-[80vh] flex items-center justify-center text-white overflow-hidden pt-28 pb-16 md:pb-20">
       <div className="absolute inset-0 -z-10">
-        <img
+        <Image
           src="/Media.png"
           alt="Irish landscape"
-          className="w-full h-full"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/40" />
       </div>
-      <div className="max-w-7xl w-full mx-auto px-5 sm:px-6 md:px-8 flex flex-col items-center text-center gap-8 md:gap-12 relative z-10 mt-10">
+      <div className="max-w-7xl w-full mx-auto px-5 sm:px-6 md:px-8 flex flex-col items-center text-center gap-6 md:gap-8 relative z-10">
         <div className="space-y-4 md:space-y-6 max-w-4xl">
           <h1 className="text-xl md:text-[clamp(1.75rem,3vw,2.5rem)] font-bold leading-tight tracking-tight drop-shadow-2xl">
             Reliable Private Transfers Across
@@ -170,7 +174,7 @@ export default function TransfersHero() {
         <div className="w-full max-w-4xl bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] px-5 sm:px-8 py-6 sm:py-8 flex flex-col gap-6 text-left border border-white/20 transform transition-all hover:-translate-y-1 relative z-20">
           <div className="flex flex-col sm:flex-row items-stretch gap-4">
             <div className="relative flex-1">
-              <div className="flex items-center border border-gray-200 rounded-xl px-4 py-3 sm:py-4 gap-3 bg-white/80 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 transition-all">
+              <div className="h-14 flex items-center border border-gray-200 rounded-xl px-4 gap-3 bg-white/80 focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 transition-all">
                 <Car className="w-5 h-5 text-blue-600 flex-shrink-0" />
                 <input
                   ref={inputRef}
@@ -230,7 +234,7 @@ export default function TransfersHero() {
 
             <button
               onClick={() => handleSearch()}
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 rounded-xl bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white text-base sm:text-lg font-bold whitespace-nowrap shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all transform active:scale-[0.98]"
+              className="btn-theme-primary h-14 px-8 whitespace-nowrap rounded-xl text-base"
             >
               <Search className="w-5 h-5 mr-2" />
               <span>Find Transfers</span>

@@ -99,7 +99,7 @@ export function Header() {
             {/* Left side */}
             <div className="flex items-center gap-8 xl:gap-12 shrink-0">
               <Link href="/">
-                <Image src="/Tourenzo.png" alt="Logo" width={140} height={80} className="w-auto h-12 object-contain" />
+                <Image src="/Tourenzo.webp" alt="Logo" width={140} height={80} className="w-auto h-12 object-contain" />
               </Link>
             </div>
 
@@ -110,6 +110,12 @@ export function Header() {
                 className={`flex items-center gap-1 whitespace-nowrap transition-colors ${pathname === "/transfer" ? "text-blue-600 font-extrabold" : "hover:text-blue-600"}`}
               >
                 Transfers
+              </Link>
+              <Link
+                href="/day-trips"
+                className={`flex items-center gap-1 whitespace-nowrap transition-colors ${pathname === "/day-trips" ? "text-blue-600 font-extrabold" : "hover:text-blue-600"}`}
+              >
+                Day Trips
               </Link>
               <Link
                 href="/multi-day-tours"
@@ -156,7 +162,7 @@ export function Header() {
                   <UserAvatar />
                 ) : (
                   <Link href="/auth/login">
-                    <Button className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-3 lg:py-4 text-base xl:text-lg xl:py-5 xl:px-6 rounded-lg font-bold shadow-md flex items-center gap-2 transition-all hover:scale-105">
+                    <Button className="flex items-center gap-2">
                       <User className="w-4 h-4" />
                       Login
                     </Button>
@@ -192,7 +198,7 @@ export function Header() {
             <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
               <Link href="/" onClick={() => setIsMenuOpen(false)}>
                 <div className="flex items-center gap-2">
-                  <Image src="/Tourenzo.png" alt="Logo" width={140} height={80} />
+                  <Image src="/Tourenzo.webp" alt="Logo" width={140} height={80} />
                 </div>
               </Link>
               <button
@@ -211,6 +217,14 @@ export function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <span>Transfers</span>
+                <ChevronRight className="w-4 h-4 text-gray-400" />
+              </Link>
+              <Link
+                href="/day-trips"
+                className="flex items-center justify-between p-3 rounded-lg text-gray-700 font-medium hover:bg-blue-50 hover:text-blue-600 transition"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <span>Day Trips</span>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </Link>
               <Link
@@ -306,7 +320,7 @@ export function Header() {
                   className="block w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Button className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-bold shadow-lg shadow-blue-200 rounded-lg transition-all active:scale-[0.98]">
+                  <Button className="w-full">
                     Login / Sign Up
                   </Button>
                 </Link>

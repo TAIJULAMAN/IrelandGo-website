@@ -10,6 +10,14 @@ import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
+import {
+  getBookingSession,
+  saveBookingSession,
+  syncUrlParamsToSession,
+  cleanBrowserUrl,
+  buildSemanticBookingUrl,
+  BookingSessionData,
+} from "@/utils/bookingSession";
 
 function formatDuration(minutes: number) {
   const h = Math.floor(minutes / 60);
@@ -59,122 +67,152 @@ function SingleStoppageModal({
       if (delta < 0) setImgIndex(i => (i === images.length - 1 ? 0 : i + 1));
       else setImgIndex(i => (i === 0 ? images.length - 1 : i - 1));
     }
-    touchStartX.current = null;
   };
 
-  const isDurationChanged = existingStop && durationMinutes !== existingStop.duration;
-
-  if (!stopId) return null;
-
-  const images = Array.isArray(stopData?.image) ? stopData.image : [stopData?.image].filter(Boolean);
-  if (images.length === 0) images.push("/placeholder.jpg");
+  const images = stopData?.image && stopData?.image?.length > 0 ? stopData.image : [
+    "https://images.unsplash.com/photo-1549918864-48ac978761a4?auto=format&fit=crop&w=800&q=80"
+  ];
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-5">
-      <div className="bg-white rounded-lg sm:rounded-lg max-w-sm md:max-w-2xl w-full overflow-hidden shadow-2xl flex flex-col max-h-[70vh] md:max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900">{stopData?.name || baseStop?.name}</h2>
-          <button onClick={onClose} className="p-1.5 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors">
-            <X className="h-5 w-5 text-gray-600" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[85vh]">
+        <div className="relative h-44 sm:h-56 w-full bg-gray-100 shrink-0 select-none overflow-hidden" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+          <Image
+            src={images[imgIndex]}
+            alt={stopData?.name || "Stoppage"}
+            fill
+            className="object-cover transition-all duration-300"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+
+          {images.length > 1 && (
+            <div className="absolute inset-y-0 inset-x-2 flex items-center justify-between pointer-events-none">
+              <button
+                onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i === 0 ? images.length - 1 : i - 1)); }}
+                className="pointer-events-auto p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm transition-all"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i === images.length - 1 ? 0 : i + 1)); }}
+                className="pointer-events-auto p-1.5 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-sm transition-all"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full backdrop-blur-md transition-all z-10"
+          >
+            <X className="h-5 w-5" />
           </button>
+          <div className="absolute bottom-4 left-4 right-4 text-left">
+            <span className="text-xs font-semibold uppercase tracking-wider text-blue-300 bg-blue-900/60 px-2 py-0.5 rounded backdrop-blur-md mb-1.5 inline-block">
+              {stopData?.type || "Sightseeing"}
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold text-white drop-shadow-md leading-tight">
+              {stopData?.name}
+            </h3>
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 vehicle-scroll">
+        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 text-left">
           {isFetching ? (
-            <div className="flex justify-center items-center h-48">
-              <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-            </div>
+            <div className="flex justify-center p-8"><Loader2 className="animate-spin text-blue-600 h-8 w-8" /></div>
           ) : (
             <>
-              <div
-                className="relative h-44 sm:h-64 w-full rounded-lg overflow-hidden group"
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-              >
-                <img src={images[imgIndex]} alt={stopData?.name} className="w-full h-full object-cover" />
-                {images.length > 1 && (
-                  <>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i === 0 ? images.length - 1 : i - 1)); }}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 bg-white/80 rounded-full shadow-sm hover:bg-white text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </button>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setImgIndex(i => (i === images.length - 1 ? 0 : i + 1)); }}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-white/80 rounded-full shadow-sm hover:bg-white text-gray-700 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </button>
-                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                      {images.map((_: any, idx: number) => (
-                        <div key={idx} className={`h-1.5 rounded-full transition-all ${idx === imgIndex ? "w-4 bg-white" : "w-1.5 bg-white/60"}`} />
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
+              <div className="grid grid-cols-2 gap-2 sm:gap-4 bg-gray-50 p-3 rounded-xl border border-gray-100">
                 <div>
-                  <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
-                    <Clock className="h-3.5 w-3.5 text-purple-500" /> Suggested time
+                  <div className="text-xs text-gray-500 mb-0.5">Stop duration</div>
+                  <div className="font-semibold text-sm flex items-center gap-1.5">
+                    <Clock className="h-4 w-4 text-blue-600" /> {formatDuration(durationMinutes)}
                   </div>
-                  <div className="font-semibold text-sm">{formatDuration(stopData?.duration || 120)}</div>
                 </div>
-                <div className="border-l border-gray-200 pl-3">
-                  <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
-                    <Map className="h-3.5 w-3.5 text-green-500" /> Attraction type
+                <div>
+                  <div className="text-xs text-gray-500 mb-0.5">Extra fee</div>
+                  <div className="font-semibold text-sm text-green-600">
+                    €{calculatePrice ? calculatePrice(durationMinutes) : (stopData?.price || 0)}
                   </div>
-                  <div className="font-semibold text-sm truncate">{stopData?.type || stopData?.types?.[0] || "Traveler favorite"}</div>
-                </div>
-                <div className="col-span-2 sm:col-span-1 border-t sm:border-t-0 sm:border-l border-gray-200 pt-3 sm:pt-0 sm:pl-3">
-                  <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
-                    <AlertCircle className="h-3.5 w-3.5 text-yellow-500" /> Entrance
-                  </div>
-                  <div className="font-semibold text-sm">Not included</div>
                 </div>
               </div>
 
               <p className="text-gray-600 text-sm leading-relaxed">
                 {stopData?.description || "A beautiful attraction to add to your journey."}
               </p>
+
+              {/* Duration Customization Slider / Stepper */}
+              <div className="pt-2 border-t border-gray-100">
+                <label className="text-xs font-bold text-gray-700 block mb-2">Adjust Stop Duration</label>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setDurationMinutes((prev: number) => Math.max(15, prev - 15))}
+                    disabled={durationMinutes <= 15}
+                    className="h-9 w-9 rounded-lg border border-gray-200 flex items-center justify-center hover:bg-gray-100 disabled:opacity-40"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </button>
+                  <span className="text-sm font-bold text-gray-900 w-20 text-center">
+                    {formatDuration(durationMinutes)}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setDurationMinutes((prev: number) => prev + 15)}
+                    className="h-9 w-9 rounded-lg border border-gray-200 flex items-center justify-center hover:bg-gray-100"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
             </>
           )}
         </div>
 
-        <div className="p-4 border-t flex flex-col sm:flex-row items-center justify-between gap-4 bg-white">
-          <div className="flex items-center justify-between w-full sm:w-auto gap-3 bg-gray-50 p-1.5 rounded-full border border-gray-200 shrink-0">
-            <button onClick={() => setDurationMinutes((p: number) => Math.max(15, p - 15))} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
-              <Minus className="h-4 w-4" />
-            </button>
-            <span className="font-semibold w-12 text-center text-sm">{formatDuration(durationMinutes)}</span>
-            <button onClick={() => setDurationMinutes((p: number) => p + 15)} className="p-1.5 hover:bg-gray-200 rounded-full text-blue-600 transition-colors">
-              <Plus className="h-4 w-4" />
-            </button>
-          </div>
-
+        <div className="p-4 border-t border-gray-100 bg-gray-50 flex gap-3">
           {existingStop ? (
-            <div className="flex flex-col sm:flex-row w-full flex-1 gap-2">
+            <>
               <Button
-                onClick={() => { onRemove(baseStop); onClose(); }}
                 variant="outline"
-                className="w-full sm:flex-1 bg-blue-600 text-white border-transparent hover:bg-blue-700 hover:text-white"
+                onClick={() => {
+                  onRemove(baseStop);
+                  onClose();
+                }}
+                className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
               >
-                Remove
+                Remove Stop
               </Button>
-              {isDurationChanged && (
-                <Button
-                  onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }}
-                  className="w-full sm:flex-1 bg-blue-600 text-white hover:bg-blue-700"
-                >
-                  €{calculatePrice(baseStop, durationMinutes)} - Update
-                </Button>
-              )}
-            </div>
+              <Button
+                onClick={() => {
+                  onAddOrUpdate({
+                    ...baseStop,
+                    ...stopData,
+                    duration: durationMinutes,
+                    price: calculatePrice ? calculatePrice(durationMinutes) : (stopData?.price || 0)
+                  });
+                  onClose();
+                }}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+              >
+                Update Stop
+              </Button>
+            </>
           ) : (
-            <Button onClick={() => { onAddOrUpdate({ ...baseStop, duration: durationMinutes, price: calculatePrice(baseStop, durationMinutes) }); onClose(); }} className="w-full sm:flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-              €{calculatePrice(baseStop, durationMinutes)} - Add
+            <Button
+              onClick={() => {
+                onAddOrUpdate({
+                  ...baseStop,
+                  ...stopData,
+                  duration: durationMinutes,
+                  price: calculatePrice ? calculatePrice(durationMinutes) : (stopData?.price || 0)
+                });
+                onClose();
+              }}
+              className="w-full flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+            >
+              Add this Stop
             </Button>
           )}
         </div>
@@ -183,31 +221,48 @@ function SingleStoppageModal({
   );
 }
 
-export default function Step3() {
+export default function Stops() {
   const searchParams = useSearchParams();
-  const pickupParam = searchParams.get("pickup") || "";
-  const dropoffParam = searchParams.get("dropoff") || "";
-  const dateParam = searchParams.get("date") || "";
-  const timeParam = searchParams.get("time") || "";
-  const adults = parseInt(searchParams.get("adults") || "2");
-  const children = parseInt(searchParams.get("children") || "0");
-  const extraBags = parseInt(searchParams.get("extraBags") || "0");
-  const vehicleId = searchParams.get("vehicleId");
+  const [session, setSession] = useState<BookingSessionData>(() => {
+    if (typeof window !== "undefined" && window.location.search) {
+      return syncUrlParamsToSession(searchParams);
+    }
+    return getBookingSession();
+  });
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.search) {
+      const updated = syncUrlParamsToSession(searchParams);
+      setSession(updated);
+      cleanBrowserUrl(buildSemanticBookingUrl("stops", updated));
+    } else {
+      setSession(getBookingSession());
+    }
+  }, [searchParams]);
+
+  const pickupParam = searchParams.get("pickup") || session.pickup || "";
+  const dropoffParam = searchParams.get("dropoff") || session.dropoff || "";
+  const dateParam = searchParams.get("date") || session.date || "";
+  const timeParam = searchParams.get("time") || session.time || "";
+  const adults = parseInt(searchParams.get("adults") || session.adults?.toString() || "2");
+  const children = parseInt(searchParams.get("children") || session.children?.toString() || "0");
+  const extraBags = parseInt(searchParams.get("extraBags") || session.extraBags?.toString() || "0");
+  const vehicleId = searchParams.get("vehicleId") || session.vehicleId;
   const transferRouteParam = searchParams.get("transferRoute");
 
-  let distanceKm = 0;
-  let transferRoute: any = null;
+  let distanceKm = session.distanceKm || 0;
+  let transferRoute: any = session.transferRoute || null;
   if (transferRouteParam) {
     try {
       transferRoute = JSON.parse(transferRouteParam);
-      distanceKm = transferRoute.distanceKm || 0;
+      distanceKm = transferRoute.distanceKm || distanceKm;
     } catch (e) { }
   }
 
-  const fromLat = searchParams.get("fromLat") || transferRoute?.fromLat || "";
-  const fromLng = searchParams.get("fromLng") || transferRoute?.fromLng || "";
-  const toLat = searchParams.get("toLat") || transferRoute?.toLat || "";
-  const toLng = searchParams.get("toLng") || transferRoute?.toLng || "";
+  const fromLat = searchParams.get("fromLat") || session.coords?.fromLat || transferRoute?.fromLat || "";
+  const fromLng = searchParams.get("fromLng") || session.coords?.fromLng || transferRoute?.fromLng || "";
+  const toLat = searchParams.get("toLat") || session.coords?.toLat || transferRoute?.toLat || "";
+  const toLng = searchParams.get("toLng") || session.coords?.toLng || transferRoute?.toLng || "";
   const coordsParam = fromLat ? `&fromLat=${fromLat}&fromLng=${fromLng}&toLat=${toLat}&toLng=${toLng}` : "";
 
   const { isLoaded } = useGoogleMaps();
@@ -394,13 +449,13 @@ export default function Step3() {
     }
   };
 
-  const serviceType = searchParams.get("serviceType") || "TRANSFER";
+  const serviceType = searchParams.get("serviceType") || session.serviceType || "TRANSFER";
 
   useEffect(() => {
     if (serviceType === "DAY_TRIP" || serviceType === "BY_THE_HOUR") {
-      router.replace(`/booking-flow/step-3-details?${searchParams.toString()}`);
+      router.replace("/booking/user-info");
     }
-  }, [serviceType, searchParams, router]);
+  }, [serviceType, router]);
 
   const [searchPopularStops, { data: popularStopsResponse, isLoading, error }] = useSearchPopularStopsMutation();
 
@@ -858,22 +913,31 @@ export default function Step3() {
             </div>
 
             {/* Bottom navigation – inline below stops */}
-            <div className="bg-white rounded-lg shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-2 sm:p-3 px-4 sm:px-6 flex flex-col md:flex-row gap-2 items-center justify-between border border-gray-100 mt-2">
+            <div className="bg-white rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-3 px-4 sm:px-6 flex flex-col md:flex-row gap-4 items-center justify-between border border-gray-100 mt-4">
               <Button
                 asChild
-
-                className="w-full sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+                variant="outline"
+                size="action"
               >
-                <Link href={`/booking-flow/step-2?${searchParams.toString()}`}>Back</Link>
+                <Link href={buildSemanticBookingUrl("vehicles", session)}>Back</Link>
               </Button>
               <Button
                 asChild
-                className="w-full  sm:w-auto text-white bg-blue-600 x-10 py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg flex items-center justify-center"
+                size="action"
               >
                 <Link
-                  href={`/booking-flow/step-3-details?${searchParams.toString()}&selectedStops=${encodeURIComponent(
-                    JSON.stringify(selectedStops.map(s => ({ id: s.id, name: s.name, price: s.price, duration: s.duration })))
-                  )}&distanceKm=${distanceKm}${coordsParam}`}
+                  onClick={() => {
+                    saveBookingSession({
+                      selectedStops: selectedStops.map((s) => ({
+                        id: s.id,
+                        name: s.name,
+                        price: s.price,
+                        duration: s.duration,
+                      })),
+                      distanceKm: distanceKm || undefined,
+                    });
+                  }}
+                  href={buildSemanticBookingUrl("user-info", session, session.vehicleName)}
                 >
                   Next: Checkout
                 </Link>

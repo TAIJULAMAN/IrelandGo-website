@@ -22,18 +22,20 @@ export function Hero() {
   };
 
   return (
-    <section className="relative w-full pt-24 md:pt-28 lg:pt-36 pb-20">
-      <div className="absolute top-0 left-0 w-full h-[57vh] z-0" style={{ position: "absolute" }}>
+    <section className="relative w-full pt-24 md:pt-28 lg:pt-32 pb-14 md:pb-18 lg:pb-20 min-h-[100vh] flex flex-col justify-center overflow-hidden">
+      <div className="absolute inset-0 z-0">
         <Image
           src="/Images/Home.webp"
           alt="Irish landscape"
           fill
           priority
           fetchPriority="high"
+          quality={60}
           sizes="100vw"
           className="object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/85 via-blue-900/40 to-blue-950/60" />
+        {/* <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-50/50 to-transparent pointer-events-none" /> */}
       </div>
       <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 md:px-8 relative z-10">
         <div className="text-center mb-6 md:mb-8">
