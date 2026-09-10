@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
   ChevronRight,
   Star,
   Clock,
   ArrowRight,
+  ArrowDown,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,7 +18,9 @@ import { useGetPopularMultiDayToursQuery } from "@/Redux/features/contents/conte
 import { SectionHeader } from "@/components/ui/section-header";
 
 export function PopularMultiDayTours() {
+  const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [mobileVisibleCount, setMobileVisibleCount] = useState(4);
   const {
     data: response,
     isLoading,
@@ -23,6 +28,15 @@ export function PopularMultiDayTours() {
   } = useGetPopularMultiDayToursQuery({});
 
   const tours = response?.data || [];
+
+  const handleMobileExploreMore = () => {
+    if (mobileVisibleCount < tours.length) {
+      setMobileVisibleCount((prev) => prev + 4);
+    } else {
+      router.push("/multi-day-tours");
+    }
+  };
+
   const goToPrevious = () => {
     if (tours.length === 0) return;
     setCurrentIndex((prevIndex) =>
@@ -61,6 +75,57 @@ export function PopularMultiDayTours() {
     return null;
   }
 
+  const renderTourCard = (tour: any, idx: number) => (
+    <div key={tour.id || idx} className="card-theme group">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
+
+      <div className="card-image-wrapper z-10">
+        <Image
+          src={tour.images?.[0] || "/placeholder.svg"}
+          alt={tour.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-60" />
+
+        {tour.tourDays && (
+          <span className="absolute left-2.5 top-2.5 sm:left-3 sm:top-3 inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-white/95 backdrop-blur-md text-blue-700 shadow-sm border border-white/20 z-20">
+            <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+            {tour.tourDays} Day{tour.tourDays > 1 ? "s" : ""}
+          </span>
+        )}
+        <span className="absolute right-2.5 bottom-2.5 sm:bottom-auto sm:top-3 sm:right-3 inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-gray-900/80 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold shadow-sm border border-white/10 z-20">
+          <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-400 fill-yellow-400" />{" "}
+          {tour.ratings || "5.0"}
+        </span>
+      </div>
+
+      <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-1 relative z-10 justify-between gap-2 sm:gap-3">
+        <div>
+          <h3 className="text-xs sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
+            {tour.title}
+          </h3>
+          <p className="text-[11px] sm:text-sm text-gray-500 mb-2 sm:mb-3 line-clamp-1 sm:line-clamp-2 leading-relaxed min-h-0 sm:min-h-[2.5rem]">
+            {stripHtml(tour.description)}
+          </p>
+        </div>
+
+        <div className="mt-auto pt-1 sm:pt-2">
+          <Link
+            href={`/multi-day-tours/${tour.id}`}
+            className="block w-full"
+          >
+            <div className="btn-theme-primary w-full !h-8.5 sm:!h-11 text-xs sm:text-base group/btn">
+              <span className="tracking-wide">View Details</span>
+              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
+            </div>
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-6 md:py-8 lg:py-10 bg-white overflow-hidden">
       {/* Decorative Background Elements */}
@@ -84,7 +149,7 @@ export function PopularMultiDayTours() {
           <div className="flex-1 w-full max-w-3xl mx-auto">
             <SectionHeader
               title="Popular Multi-Day Tours"
-              // subtitle="Curated Experiences"
+              subtitle="Explore Ireland"
               description="Discover Ireland's most breathtaking destinations with our carefully curated multi-day experiences."
               alignment="center"
               className="mb-0"
@@ -102,78 +167,27 @@ export function PopularMultiDayTours() {
           )}
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-          {visibleTours.map((tour: any, idx: number) => (
-            <div key={tour.id || idx} className="card-theme group">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
-
-              <div className="card-image-wrapper z-10">
-                <Image
-                  src={tour.images?.[0] || "/placeholder.svg"}
-                  alt={tour.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-cover transform group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent opacity-60" />
-
-                {tour.tourDays && (
-                  <span className="absolute left-2.5 top-2.5 sm:left-3 sm:top-3 inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-white/95 backdrop-blur-md text-blue-700 shadow-sm border border-white/20 z-20">
-                    <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                    {tour.tourDays} Day{tour.tourDays > 1 ? "s" : ""}
-                  </span>
-                )}
-                <span className="absolute right-2.5 bottom-2.5 sm:bottom-auto sm:top-3 sm:right-3 inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-gray-900/80 backdrop-blur-md text-white text-[10px] sm:text-xs font-bold shadow-sm border border-white/10 z-20">
-                  <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-yellow-400 fill-yellow-400" />{" "}
-                  {tour.ratings || "5.0"}
-                </span>
-              </div>
-
-              <div className="p-3 sm:p-4 md:p-5 flex flex-col flex-1 relative z-10 justify-between gap-2 sm:gap-3">
-                <div>
-                  <h3 className="text-xs sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
-                    {tour.title}
-                  </h3>
-                  <p className="text-[11px] sm:text-sm text-gray-500 mb-2 sm:mb-3 line-clamp-1 sm:line-clamp-2 leading-relaxed min-h-0 sm:min-h-[2.5rem]">
-                    {stripHtml(tour.description)}
-                  </p>
-                </div>
-
-                <div className="mt-auto pt-1 sm:pt-2">
-                  <Link
-                    href={`/multi-day-tours/${tour.id}`}
-                    className="block w-full"
-                  >
-                    <div className="btn-theme-primary w-full !h-8.5 sm:!h-11 text-xs sm:text-base group/btn">
-                      <span className="tracking-wide">View Details</span>
-                      <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
-                    </div>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
+        {/* Desktop Grid (slider items) */}
+        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          {visibleTours.map((tour: any, idx: number) => renderTourCard(tour, idx))}
         </div>
 
-        {/* Mobile Navigation Buttons */}
-        {showSlider && (
-          <div className="flex md:hidden items-center justify-center gap-6 mt-6">
-            <button
-              onClick={goToPrevious}
-              className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-gray-200 text-gray-600 hover:text-blue-600 hover:border-blue-300 shadow-sm active:scale-95 transition-all"
-              aria-label="Previous tours"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button
-              onClick={goToNext}
-              className="flex items-center justify-center w-12 h-12 rounded-full bg-white border border-gray-200 text-gray-600 hover:text-blue-600 hover:border-blue-300 shadow-sm active:scale-95 transition-all"
-              aria-label="Next tours"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-          </div>
-        )}
+        {/* Mobile Grid (expandable items) */}
+        <div className="grid md:hidden grid-cols-2 gap-3 sm:gap-6">
+          {tours.slice(0, mobileVisibleCount).map((tour: any, idx: number) => renderTourCard(tour, idx))}
+        </div>
+
+        {/* Mobile Explore More Button */}
+        <div className="flex md:hidden items-center justify-center mt-8">
+          <Button
+            onClick={handleMobileExploreMore}
+            variant="outline"
+            className="rounded-full px-6 py-2.5 font-semibold text-sm bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-400 shadow-sm active:scale-95 transition-all flex items-center gap-2"
+          >
+            <span>See more</span>
+            <ArrowDown className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
     </section>
   );
