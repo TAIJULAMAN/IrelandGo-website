@@ -293,8 +293,11 @@ export function BookingForm({ activeTab }: BookingFormProps) {
           dStatus={dStatus}
           dData={dData}
           handleDropoffSelect={handleDropoffSelect}
-          extraBags={extraBags}
-          setExtraBags={setExtraBags}
+          adults={adults}
+          setAdults={setAdults}
+          children={children}
+          setChildren={setChildren}
+          totalPassengers={totalPassengers}
         />
         <BookingDetailsInputs
           date={date}
@@ -305,11 +308,8 @@ export function BookingForm({ activeTab }: BookingFormProps) {
           setIsCalendarOpen={setIsCalendarOpen}
           today={today}
           isTimeDisabled={isTimeDisabled}
-          adults={adults}
-          setAdults={setAdults}
-          children={children}
-          setChildren={setChildren}
-          totalPassengers={totalPassengers}
+          extraBags={extraBags}
+          setExtraBags={setExtraBags}
           tripType={tripType}
           activeTab={activeTab}
           returnDate={returnDate}
