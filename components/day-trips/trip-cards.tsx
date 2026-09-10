@@ -4,10 +4,12 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Loading from "@/components/common/loading";
+import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
   ChevronRight,
   ArrowRight,
+  ArrowDown,
   Clock,
   Users,
 } from "lucide-react";
@@ -18,6 +20,7 @@ const cities = ["Killarney", "Dublin", "Belfast", "Cork", "Limerick", "Galway"];
 export default function TripCards() {
   const [selectedCity, setSelectedCity] = useState("Dublin");
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [mobileVisibleCount, setMobileVisibleCount] = useState(4);
   const { data: response, isLoading } = useGetAllDayTripsQuery(undefined);
 
   const allTrips = response?.data || [];
@@ -43,6 +46,7 @@ export default function TripCards() {
   const handleCityChange = (city: string) => {
     setSelectedCity(city);
     setCurrentIndex(0);
+    setMobileVisibleCount(4);
   };
 
   const showSlider = filteredTrips.length > 4;
@@ -54,6 +58,90 @@ export default function TripCards() {
       filteredTrips[(currentIndex + 3) % filteredTrips.length],
     ].filter(Boolean)
     : filteredTrips;
+
+  const renderTripCard = (trip: any, idx: number) => (
+    <Link
+      key={trip.id || idx}
+      href={`/day-trips/details/${trip.id}`}
+      className="card-theme group"
+    >
+      {/* Subtle Glow Behind Card */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
+
+      <div className="card-image-wrapper z-10">
+        <Image
+          src={
+            trip.images?.[0] ||
+            "https://images.pexels.com/photos/3849167/pexels-photo-3849167.jpeg?auto=compress&cs=tinysrgb&w=800"
+          }
+          alt={trip.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover transform group-hover:scale-105 transition-transform duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+      </div>
+
+      <div className="p-4 sm:p-5 flex flex-col flex-1 relative z-10 justify-between gap-3">
+        <div>
+          <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
+            {trip.title}
+          </h3>
+          <div
+            className="text-xs sm:text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed min-h-[2.5rem]"
+            dangerouslySetInnerHTML={{ __html: trip.description }}
+          />
+          <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
+            {trip.travelTimeMinutes && (
+              <span className="card-badge">
+                <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                {Math.floor(trip.travelTimeMinutes / 60) > 0 ? (
+                  <span>
+                    {Math.floor(trip.travelTimeMinutes / 60)}h
+                    {trip.travelTimeMinutes % 60 > 0 && (
+                      <span className="hidden sm:inline">
+                        {" "}
+                        {trip.travelTimeMinutes % 60}m
+                      </span>
+                    )}
+                  </span>
+                ) : (
+                  <span>{trip.travelTimeMinutes % 60}m</span>
+                )}
+              </span>
+            )}
+            {trip.groupType && (
+              <span className="card-badge-indigo">
+                <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                {trip.groupType}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-auto pt-2">
+          <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-100">
+            <span className="text-xs sm:text-sm font-medium text-gray-500">
+              Starts from
+            </span>
+            <span className="text-blue-600 font-extrabold text-sm sm:text-lg">
+              €
+              {trip.price ??
+                (trip.vehicles?.length
+                  ? Math.min(
+                      ...trip.vehicles.map((v: any) => v.price),
+                    )
+                  : 0)}
+            </span>
+          </div>
+          <div className="btn-theme-primary w-full group/btn">
+            <span className="tracking-wide">View Details</span>
+            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
 
   if (isLoading) {
     return (
@@ -117,109 +205,27 @@ export default function TripCards() {
 
       {filteredTrips.length > 0 ? (
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
-            {visibleTrips.map((trip: any, idx: number) => (
-              <Link
-                key={trip.id || idx}
-                href={`/day-trips/details/${trip.id}`}
-                className="card-theme group"
-              >
-                {/* Subtle Glow Behind Card */}
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
-
-                <div className="card-image-wrapper z-10">
-                  <Image
-                    src={
-                      trip.images?.[0] ||
-                      "https://images.pexels.com/photos/3849167/pexels-photo-3849167.jpeg?auto=compress&cs=tinysrgb&w=800"
-                    }
-                    alt={trip.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover transform group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
-                </div>
-
-                <div className="p-4 sm:p-5 flex flex-col flex-1 relative z-10 justify-between gap-3">
-                  <div>
-                    <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
-                      {trip.title}
-                    </h3>
-                    <div
-                      className="text-xs sm:text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed min-h-[2.5rem]"
-                      dangerouslySetInnerHTML={{ __html: trip.description }}
-                    />
-                    <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
-                      {trip.travelTimeMinutes && (
-                        <span className="card-badge">
-                          <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                          {Math.floor(trip.travelTimeMinutes / 60) > 0 ? (
-                            <span>
-                              {Math.floor(trip.travelTimeMinutes / 60)}h
-                              {trip.travelTimeMinutes % 60 > 0 && (
-                                <span className="hidden sm:inline">
-                                  {" "}
-                                  {trip.travelTimeMinutes % 60}m
-                                </span>
-                              )}
-                            </span>
-                          ) : (
-                            <span>{trip.travelTimeMinutes % 60}m</span>
-                          )}
-                        </span>
-                      )}
-                      {trip.groupType && (
-                        <span className="card-badge-indigo">
-                          <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-                          {trip.groupType}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="mt-auto pt-2">
-                    <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-100">
-                      <span className="text-xs sm:text-sm font-medium text-gray-500">
-                        Starts from
-                      </span>
-                      <span className="text-blue-600 font-extrabold text-sm sm:text-lg">
-                        €
-                        {trip.price ??
-                          (trip.vehicles?.length
-                            ? Math.min(
-                              ...trip.vehicles.map((v: any) => v.price),
-                            )
-                            : 0)}
-                      </span>
-                    </div>
-                    <div className="btn-theme-primary w-full group/btn">
-                      <span className="tracking-wide">View Details</span>
-                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            ))}
+          {/* Desktop Grid (slider items) */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+            {visibleTrips.map((trip: any, idx: number) => renderTripCard(trip, idx))}
           </div>
 
-          {/* Mobile Navigation Buttons */}
-          {showSlider && (
-            <div className="flex md:hidden items-center justify-center gap-4 mt-8 relative z-10">
-              <button
-                onClick={goToPrevious}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-blue-200 text-blue-600 active:bg-blue-50 transition-colors"
-                aria-label="Previous day trips"
+          {/* Mobile Grid (expandable items) */}
+          <div className="grid md:hidden grid-cols-2 gap-3 sm:gap-6">
+            {filteredTrips.slice(0, mobileVisibleCount).map((trip: any, idx: number) => renderTripCard(trip, idx))}
+          </div>
+
+          {/* Mobile See More Button */}
+          {mobileVisibleCount < filteredTrips.length && (
+            <div className="flex md:hidden items-center justify-center mt-8 relative z-10">
+              <Button
+                onClick={() => setMobileVisibleCount((prev) => prev + 4)}
+                variant="outline"
+                className="rounded-full px-6 py-2.5 font-semibold text-sm bg-white hover:bg-blue-50 text-blue-600 border border-blue-200 hover:border-blue-400 shadow-sm active:scale-95 transition-all flex items-center gap-2"
               >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={goToNext}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm border border-blue-200 text-blue-600 active:bg-blue-50 transition-colors"
-                aria-label="Next day trips"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
+                <span>See more</span>
+                <ArrowDown className="w-4 h-4" />
+              </Button>
             </div>
           )}
         </div>
