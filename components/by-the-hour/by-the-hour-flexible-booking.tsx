@@ -1,6 +1,6 @@
 "use client";
 
-import { Headphones, BadgeCheck, Zap } from "lucide-react";
+import { Headphones, BadgeCheck, Zap, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 export default function ByTheHourFlexibleBooking() {
@@ -20,7 +20,7 @@ export default function ByTheHourFlexibleBooking() {
         <div className="w-full order-2 md:order-1 relative group">
           {/* Subtle offset backdrop layer */}
           <div className="absolute -inset-4 bg-gradient-to-tl from-blue-100 to-indigo-50 rounded-[2rem] transform rotate-2 group-hover:rotate-0 transition-transform duration-500 opacity-70"></div>
-          
+
           <div className="relative rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 aspect-square md:aspect-[4/3] bg-white z-10">
             <Image
               src="/flexible.jpg"
@@ -74,9 +74,10 @@ export default function ByTheHourFlexibleBooking() {
           <div className="pt-2">
             <button
               onClick={scrollToTop}
-              className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg shadow-md hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-300"
+              className="btn-theme-primary w-full sm:w-auto px-8 group/btn"
             >
               Plan Your Trip
+              <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>

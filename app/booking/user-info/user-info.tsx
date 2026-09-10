@@ -205,11 +205,11 @@ export default function UserInfo() {
   }
 
   const stopsCost = selectedStops.reduce(
-    (total: number, stop: any) => total + stop.price,
+    (total: number, stop: any) => total + (Number(stop.price) || 0),
     0,
   );
 
-  const totalPrice = transportPrice + stopsCost;
+  const totalPrice = (Number(transportPrice) || 0) + stopsCost;
 
   let formattedDate = dateParam;
   if (dateParam) {
@@ -637,7 +637,7 @@ export default function UserInfo() {
                           className="font-medium text-blue-600 flex justify-between"
                         >
                           <span>• {stop.name}</span>
-                          <span>€{stop.price}</span>
+                          <span>€{Number(stop.price) || 0}</span>
                         </li>
                       ))}
                     </ul>

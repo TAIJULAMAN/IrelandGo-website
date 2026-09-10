@@ -57,6 +57,11 @@ function SingleStoppageModal({
   const [imgIndex, setImgIndex] = useState(0);
   const touchStartX = useRef<number | null>(null);
 
+  const currentPrice = calculatePrice
+    ? (typeof calculatePrice === "function" ? calculatePrice(stopData, durationMinutes) : calculatePrice)
+    : (Number(stopData?.price) || 50);
+  const displayPrice = (typeof currentPrice === "number" && !isNaN(currentPrice)) ? currentPrice : 50;
+
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -134,7 +139,7 @@ function SingleStoppageModal({
                 <div>
                   <div className="text-xs text-gray-500 mb-0.5">Extra fee</div>
                   <div className="font-semibold text-sm text-green-600">
-                    €{calculatePrice ? calculatePrice(durationMinutes) : (stopData?.price || 0)}
+                    €{displayPrice}
                   </div>
                 </div>
               </div>
@@ -190,7 +195,7 @@ function SingleStoppageModal({
                     ...baseStop,
                     ...stopData,
                     duration: durationMinutes,
-                    price: calculatePrice ? calculatePrice(durationMinutes) : (stopData?.price || 0)
+                    price: displayPrice
                   });
                   onClose();
                 }}
@@ -206,7 +211,7 @@ function SingleStoppageModal({
                   ...baseStop,
                   ...stopData,
                   duration: durationMinutes,
-                  price: calculatePrice ? calculatePrice(durationMinutes) : (stopData?.price || 0)
+                  price: displayPrice
                 });
                 onClose();
               }}
@@ -518,16 +523,34 @@ export default function Stops() {
     }
   }
 
-  const calculateStopPrice = (stop: any, durationMinutes: number) => {
-    let stopDistance = stop.roadDistance || stop.roaddistance || stop.distance || stop.distanceKm || 0;
+  const calculateStopPrice = (stop: any, durationMinutes?: number) => {
+    let actualStop = stop;
+    let actualDuration = durationMinutes;
 
-    if (stop.id && popularStopDistances[stop.id] !== undefined) {
-      stopDistance = popularStopDistances[stop.id];
+    if (typeof stop === "number" && durationMinutes === undefined) {
+      actualDuration = stop;
+      actualStop = {};
+    } else if (!actualStop || typeof actualStop !== "object") {
+      actualStop = {};
     }
 
-    const baseHourPrice = Math.round(50 + (stopDistance * pricePerKmSumForStops));
+    const duration = typeof actualDuration === "number" && !isNaN(actualDuration)
+      ? actualDuration
+      : (Number(actualStop.duration) || 60);
 
-    const extraMinutes = durationMinutes - 60;
+    let stopDistance = actualStop.roadDistance || actualStop.roaddistance || actualStop.distance || actualStop.distanceKm || 0;
+
+    if (actualStop.id && popularStopDistances[actualStop.id] !== undefined) {
+      stopDistance = popularStopDistances[actualStop.id];
+    }
+
+    const effectiveRatePerKm = (typeof pricePerKmSumForStops === "number" && !isNaN(pricePerKmSumForStops) && pricePerKmSumForStops > 0)
+      ? pricePerKmSumForStops
+      : 1.8;
+
+    const baseHourPrice = Math.round(50 + ((Number(stopDistance) || 0) * effectiveRatePerKm));
+
+    const extraMinutes = duration - 60;
     if (extraMinutes <= 0) {
       return baseHourPrice;
     }
@@ -542,7 +565,8 @@ export default function Stops() {
       extraCost += 30;
     }
 
-    return baseHourPrice + extraCost;
+    const finalPrice = baseHourPrice + extraCost;
+    return (typeof finalPrice === "number" && !isNaN(finalPrice)) ? finalPrice : 50;
   };
 
   const getStopImageUrl = (stop: any) => {
@@ -618,10 +642,14 @@ export default function Stops() {
 
   const apiStops = (Array.isArray(stopsData) ? stopsData : []).map((stop: any) => {
     const duration = stop.duration !== undefined ? stop.duration : 60;
+    const computedPrice = calculateStopPrice(stop, duration);
+    const safePrice = (typeof computedPrice === "number" && !isNaN(computedPrice))
+      ? computedPrice
+      : (Number(stop.price) || 50);
     return {
       ...stop,
       duration,
-      price: calculateStopPrice(stop, duration),
+      price: safePrice,
       latitude: stop.latitude ?? stop.location?.lat,
       longitude: stop.longitude ?? stop.location?.lng,
       image: Array.isArray(stop.image) ? stop.image : [stop.image].filter(Boolean),
@@ -645,20 +673,32 @@ export default function Stops() {
     if (selectedStops.find((s) => s.id === stop.id)) {
       setSelectedStops(selectedStops.filter((s) => s.id !== stop.id));
     } else {
-      setSelectedStops([...selectedStops, stop]);
+      const computed = calculateStopPrice(stop, stop.duration || 60);
+      const safePrice = (typeof stop.price === "number" && !isNaN(stop.price))
+        ? stop.price
+        : ((typeof computed === "number" && !isNaN(computed)) ? computed : 50);
+      setSelectedStops([...selectedStops, { ...stop, price: safePrice }]);
     }
   };
 
   const handleUpdateStop = (updatedStop: any) => {
-    if (selectedStops.find((s) => s.id === updatedStop.id)) {
-      setSelectedStops(selectedStops.map(s => s.id === updatedStop.id ? updatedStop : s));
+    const computed = calculateStopPrice(updatedStop, updatedStop.duration || 60);
+    const safePrice = (typeof updatedStop.price === "number" && !isNaN(updatedStop.price))
+      ? updatedStop.price
+      : ((typeof computed === "number" && !isNaN(computed)) ? computed : 50);
+    const sanitized = {
+      ...updatedStop,
+      price: safePrice,
+    };
+    if (selectedStops.find((s) => s.id === sanitized.id)) {
+      setSelectedStops(selectedStops.map(s => s.id === sanitized.id ? sanitized : s));
     } else {
-      setSelectedStops([...selectedStops, updatedStop]);
+      setSelectedStops([...selectedStops, sanitized]);
     }
   };
 
-  const stopsCost = selectedStops.reduce((total, stop) => total + stop.price, 0);
-  const totalPrice = transportPrice + stopsCost;
+  const stopsCost = selectedStops.reduce((total, stop) => total + (Number(stop.price) || 0), 0);
+  const totalPrice = (Number(transportPrice) || 0) + stopsCost;
 
   let formattedDate = "";
   if (dateParam) {
@@ -830,7 +870,7 @@ export default function Stops() {
                               {formatDuration(stop.duration)}
                             </span>
                             <span className={isSelected ? "text-blue-100" : "text-gray-500"}>for</span>
-                            <span className={isSelected ? "text-white" : "text-gray-900"}>€{stop.price}</span>
+                            <span className={isSelected ? "text-white" : "text-gray-900"}>€{Number(stop.price) || 50}</span>
                           </div>
                         </div>
                         <div
@@ -1019,7 +1059,7 @@ export default function Stops() {
                                 {formatDuration(stop.duration)}
                               </span>
                               <span className="text-[10px] font-bold text-gray-900 bg-gray-50 px-1.5 py-0.5 rounded border border-gray-100">
-                                €{stop.price}
+                                €{Number(stop.price) || 0}
                               </span>
                             </div>
                           </div>
@@ -1065,19 +1105,19 @@ export default function Stops() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-600 font-medium">Transport</span>
                   <span className="font-semibold text-gray-900">
-                    €{transportPrice}
+                    €{(typeof transportPrice === "number" && !isNaN(transportPrice)) ? transportPrice : 0}
                   </span>
                 </div>
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-600 font-medium">Stops</span>
-                  <span className="font-semibold text-gray-900">€{stopsCost}</span>
+                  <span className="font-semibold text-gray-900">€{(typeof stopsCost === "number" && !isNaN(stopsCost)) ? stopsCost : 0}</span>
                 </div>
               </div>
 
               <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                 <span className="font-bold text-gray-900">Total</span>
                 <span className="text-2xl font-bold text-gray-900">
-                  €{totalPrice}
+                  €{(typeof totalPrice === "number" && !isNaN(totalPrice)) ? totalPrice : 0}
                 </span>
               </div>
 
@@ -1095,7 +1135,7 @@ export default function Stops() {
         <div className="lg:hidden mt-4 bg-white rounded-lg shadow-md border border-gray-100 px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex flex-col">
             <span className="text-xs text-gray-500 font-medium">Total</span>
-            <span className="text-xl font-bold text-gray-900">€{totalPrice}</span>
+            <span className="text-xl font-bold text-gray-900">€{(typeof totalPrice === "number" && !isNaN(totalPrice)) ? totalPrice : 0}</span>
           </div>
           <div className="flex items-center gap-2 flex-wrap justify-end">
             {selectedStops.length > 0 && (
@@ -1116,7 +1156,13 @@ export default function Stops() {
           existingStop={selectedStops.find((s: any) => s.id === selectedModalStopId)}
           onAddOrUpdate={handleUpdateStop}
           onRemove={toggleStop}
-          calculatePrice={calculateStopPrice}
+          calculatePrice={(stopOrDuration: any, maybeDuration?: number) => {
+            if (typeof stopOrDuration === "number" && maybeDuration === undefined) {
+              const currentStop = stops.find((s: any) => s.id === selectedModalStopId) || {};
+              return calculateStopPrice(currentStop, stopOrDuration);
+            }
+            return calculateStopPrice(stopOrDuration, maybeDuration);
+          }}
         />
       )}
 
