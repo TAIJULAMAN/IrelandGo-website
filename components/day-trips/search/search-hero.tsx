@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { DateTimePickerContent } from "@/components/common/date-time-picker-content";
 import { useState, useRef, useEffect } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -369,62 +370,16 @@ export function SearchHero({ trip }: { trip?: any }) {
                     )}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <div className="flex">
-                    <div className="border-r border-slate-100">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        disabled={{ before: today }}
-                        initialFocus
-                      />
-                    </div>
-                    <div className="h-[300px] w-[110px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-slate-200">
-                      <div className="flex flex-col gap-1">
-                        {(() => {
-                          const availableTimes = Array.from({ length: 96 })
-                            .map((_, i) => {
-                              const hour = Math.floor(i / 4);
-                              const minute = (i % 4) * 15;
-                              return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-                            })
-                            .filter(
-                              (timeString) => !isTimeDisabled(date, timeString),
-                            );
-
-                          if (availableTimes.length === 0) {
-                            return (
-                              <div className="text-center p-4 text-sm text-slate-500">
-                                No times available
-                              </div>
-                            );
-                          }
-
-                          return availableTimes.map((timeString) => (
-                            <Button
-                              key={timeString}
-                              variant={
-                                time === timeString ? "default" : "ghost"
-                              }
-                              className={cn(
-                                "justify-center h-8 text-sm",
-                                time === timeString
-                                  ? "bg-blue-600 hover:bg-blue-700 text-white"
-                                  : "hover:bg-blue-50 text-slate-600",
-                              )}
-                              onClick={() => {
-                                setTime(timeString);
-                                setIsCalendarOpen(false);
-                              }}
-                            >
-                              {timeString}
-                            </Button>
-                          ));
-                        })()}
-                      </div>
-                    </div>
-                  </div>
+                <PopoverContent className="w-auto p-0 z-50" align="start" collisionPadding={16}>
+                  <DateTimePickerContent
+                    date={date}
+                    setDate={setDate}
+                    time={time}
+                    setTime={setTime}
+                    onClose={() => setIsCalendarOpen(false)}
+                    isTimeDisabled={isTimeDisabled}
+                    minDate={today}
+                  />
                 </PopoverContent>
               </Popover>
             </div>
