@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 export default function ByTheHourPrivateRides() {
@@ -64,9 +64,10 @@ export default function ByTheHourPrivateRides() {
           <div className="pt-2">
             <button
               onClick={scrollToTop}
-              className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-lg shadow-md hover:shadow-xl hover:-translate-y-1 active:scale-95 transition-all duration-300"
+              className="btn-theme-primary w-full sm:w-auto px-8 group/btn"
             >
               Book Now
+              <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>

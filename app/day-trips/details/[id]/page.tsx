@@ -6,6 +6,7 @@ import TripItinerary from "@/components/day-trips/day-trips-details/trip-Itinera
 import FAQ from "@/app/settings/faq/faq";
 import { Testimonials } from "@/components/common/testimonials";
 import { useGetSingleDayTripQuery } from "@/Redux/features/dayTrip/dayTripApi";
+import Loading from "@/components/common/loading";
 
 export default function DayTripDetails({
   params,
@@ -19,13 +20,8 @@ export default function DayTripDetails({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 font-medium">
-            Loading your trip details...
-          </p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading />
       </div>
     );
   }

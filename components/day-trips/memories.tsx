@@ -67,8 +67,8 @@ export default function Memories() {
             const rawImages = Array.isArray(mem.image)
                 ? mem.image
                 : typeof mem.image === "string"
-                ? [mem.image]
-                : [];
+                    ? [mem.image]
+                    : [];
 
             if (rawImages.length === 0) {
                 items.push({
@@ -159,11 +159,11 @@ export default function Memories() {
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
-                                            <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-6 translate-y-2 sm:translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                            {/* <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-6 translate-y-2 sm:translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                                 <p className="text-white font-bold text-xs sm:text-lg leading-tight drop-shadow">
                                                     {memory.title}
                                                 </p>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </CarouselItem>
                                 ))}

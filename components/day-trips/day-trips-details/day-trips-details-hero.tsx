@@ -58,31 +58,6 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
             {trip?.shortDescription ||
               "Explore gorgeous coastal scenery and charming Irish towns on a private, guided day tour."}
           </p>
-
-          {/* Quick Badges Row */}
-          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 mt-4">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-blue-50 text-blue-700 border border-blue-100 shadow-xs">
-              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
-              {durationFormatted}
-            </span>
-
-            {trip?.from && trip?.to && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-gray-100 text-gray-700 border border-gray-200/70 shadow-xs">
-                <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gray-500" />
-                {trip.from} to {trip.to}
-              </span>
-            )}
-
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 shadow-xs">
-              <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-600" />
-              {trip?.groupType || "Private Guided Tour"}
-            </span>
-
-            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-amber-50 text-amber-800 border border-amber-200/80 shadow-xs">
-              <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-500 fill-yellow-500" />
-              {trip?.ratings || "5.0"} (Top Rated)
-            </span>
-          </div>
         </div>
 
         {/* Grid of Images */}

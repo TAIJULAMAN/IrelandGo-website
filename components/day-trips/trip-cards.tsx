@@ -64,7 +64,7 @@ export default function TripCards() {
   }
 
   return (
-    <div className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0  pt-32 pb-5 md:pt-40 md:pb-5 overflow-hidden bg-white">
+    <div className="relative px-5 sm:px-10 md:px-0 lg:px-0 xl:px-0 pt-24 pb-5 md:mt-20 overflow-hidden bg-white">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />

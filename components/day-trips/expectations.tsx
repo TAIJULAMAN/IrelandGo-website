@@ -76,66 +76,66 @@ export default function Expectations() {
             <div className="absolute -inset-6 bg-gradient-to-br from-blue-500/10 to-indigo-500/10 rounded-[3rem] transform rotate-3 group-hover:rotate-0 transition-transform duration-700 -z-10 blur-xl"></div>
 
             <div className="rounded-3xl p-3 sm:p-4 bg-slate-800/30 backdrop-blur-xl border border-slate-700/50 shadow-2xl relative z-10">
-              <div className="grid grid-cols-8 auto-rows-[92px] sm:auto-rows-[104px] md:auto-rows-[112px] gap-3">
+              <div className="grid grid-cols-2 sm:grid-cols-8 sm:auto-rows-[104px] md:auto-rows-[112px] gap-2.5 sm:gap-3">
                 {/* Top row: two large tiles */}
-                <div style={{ position: "relative" }} className="relative col-span-8 sm:col-span-5 row-span-3 overflow-hidden rounded-2xl group/image">
+                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-5 sm:row-span-3 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
                   <Image
                     src={images[0]}
                     alt="Irish landscape"
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
-                <div style={{ position: "relative" }} className="relative col-span-8 sm:col-span-3 row-span-3 overflow-hidden rounded-2xl group/image">
+                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-3 sm:row-span-3 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
                   <Image
                     src={images[1]}
                     alt="Coastal view"
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
 
                 {/* Bottom composition */}
-                <div style={{ position: "relative" }} className="relative col-span-8 sm:col-span-3 row-span-2 overflow-hidden rounded-2xl group/image">
+                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-3 sm:row-span-2 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
                   <Image
                     src={images[2]}
                     alt="Rock formation"
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
-                <div style={{ position: "relative" }} className="relative col-span-8 sm:col-span-2 row-span-2 overflow-hidden rounded-2xl group/image">
+                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
                   <Image
                     src={images[3]}
                     alt="Green hills"
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
-                <div style={{ position: "relative" }} className="relative col-span-8 sm:col-span-3 row-span-1 overflow-hidden rounded-2xl group/image">
+                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-3 sm:row-span-1 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
                   <Image
                     src={images[4]}
                     alt="Cliffs"
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
-                <div style={{ position: "relative" }} className="relative col-span-8 sm:col-span-3 row-span-1 overflow-hidden rounded-2xl group/image">
+                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-3 sm:row-span-1 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
                   <Image
                     src={images[5]}
                     alt="Scenic road"
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover/image:scale-110"
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />

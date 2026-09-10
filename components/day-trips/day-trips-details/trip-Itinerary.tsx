@@ -22,7 +22,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { slugifyText } from "@/utils/bookingSession";
 
-export default function DayTripItinerary({ trip }: { trip: any }) {
+export default function
+  DayTripItinerary({ trip }: { trip: any }) {
   const [pickupLocation, setPickupLocation] = useState(trip?.from || "");
   const [dropoffLocation, setDropoffLocation] = useState(trip?.to || "");
   const [adults, setAdults] = useState<number>(2);
@@ -127,9 +128,6 @@ export default function DayTripItinerary({ trip }: { trip: any }) {
           <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-28">
             <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-[0_10px_35px_rgba(0,0,0,0.08)] border border-gray-200/80">
               <div className="mb-5 pb-4 border-b border-gray-100">
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full inline-block mb-2">
-                  Private Day Tour
-                </span>
                 <h3 className="text-xl font-bold text-gray-900">
                   Book This Day Trip
                 </h3>
@@ -376,22 +374,6 @@ export default function DayTripItinerary({ trip }: { trip: any }) {
                       <ArrowRight className="w-4 h-4 ml-1.5" />
                     </button>
                   )}
-                </div>
-
-                {/* Trust badges */}
-                <div className="pt-4 border-t border-gray-100 space-y-2 text-xs text-gray-500">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Free cancellation up to 24 hours before pickup</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-blue-600 shrink-0" />
-                    <span>Private chauffeur & luxury vehicle guaranteed</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-                    <span>Door-to-door private service & flexible pace</span>
-                  </div>
                 </div>
               </div>
             </div>

@@ -15,42 +15,36 @@ export function WhyChooseUs() {
       title: "Expert Local Drivers",
       description:
         "Our drivers are knowledgeable local guides who share hidden gems and Ireland's rich history with you.",
-      color: "from-blue-400 to-blue-600",
     },
     {
       icon: ShieldCheck,
       title: "Safety First",
       description:
         "Travel with peace of mind in fully insured, rigorously maintained premium vehicles with vetted professional drivers.",
-      color: "from-blue-500 to-indigo-500",
     },
     {
       icon: Clock,
       title: "Reliable & Punctual",
       description:
         "We value your time. Count on us for prompt pickups and efficient routes, 24/7, across the country.",
-      color: "from-indigo-400 to-indigo-600",
     },
     {
       icon: Sparkles,
       title: "Luxury Fleet",
       description:
         "Experience superior comfort in our modern fleet of sedans and vans.",
-      color: "from-indigo-500 to-violet-500",
     },
     {
       icon: Map,
       title: "Custom Itineraries",
       description:
         "Your trip, your way. We offer fully flexible schedules and route planning tailored to your specific interests.",
-      color: "from-violet-400 to-violet-600",
     },
     {
       icon: HeartHandshake,
       title: "Transparent Pricing",
       description:
         "No hidden fees or metered surprises. Enjoy fixed, competitive rates for all our premium services.",
-      color: "from-violet-500 to-purple-600",
     },
   ];
 
@@ -77,35 +71,19 @@ export function WhyChooseUs() {
             return (
               <div
                 key={idx}
-                className="group relative flex flex-col items-center text-center p-3.5 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl transition-all duration-500 hover:-translate-y-2 bg-white/60 backdrop-blur-md border border-gray-100 hover:border-white shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] z-10 overflow-hidden"
+                className="group relative flex flex-col items-center text-center p-3.5 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl transition-all duration-500 hover:-translate-y-2 bg-white/80 backdrop-blur-md border border-gray-100 hover:border-white shadow-sm hover:shadow-xl z-10 overflow-hidden"
               >
-                {/* Hover Gradient Background */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`}
-                />
+                {/* Subtle inner glow on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
-                {/* Icon Container */}
-                <div className="relative mb-3 sm:mb-6">
-                  {/* Outer glow */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-xl blur-lg opacity-20 group-hover:opacity-60 transition-opacity duration-500`}
-                  />
-
-                  <div
-                    className={`relative w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg sm:rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center group-hover:border-transparent transition-colors duration-500 z-10`}
-                  >
-                    {/* Gradient overlay on hover */}
-                    <div
-                      className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg sm:rounded-xl`}
-                    />
-                    <Icon className="relative w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 text-blue-600 group-hover:text-white group-hover:scale-110 transition-all duration-500 z-10" />
-                  </div>
+                <div className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-lg sm:rounded-2xl bg-blue-50 flex items-center justify-center mb-3 sm:mb-6 group-hover:bg-gradient-to-br group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-500 shadow-sm group-hover:shadow-md group-hover:scale-110 relative z-10 group-hover:-rotate-3">
+                  <Icon className="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 text-blue-600 group-hover:text-white transition-colors duration-500" />
                 </div>
 
-                <h3 className="text-xs sm:text-lg md:text-xl font-bold text-gray-900 mb-1.5 sm:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-gray-900 group-hover:to-gray-600 transition-all duration-300">
+                <h3 className="text-xs sm:text-lg md:text-xl font-bold text-gray-900 mb-1.5 sm:mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300 relative z-10 leading-tight">
                   {feature.title}
                 </h3>
-                <p className="text-[11px] sm:text-sm md:text-base text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 line-clamp-3 sm:line-clamp-none">
+                <p className="text-[11px] sm:text-sm md:text-base text-gray-600 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 line-clamp-3 sm:line-clamp-none relative z-10">
                   {feature.description}
                 </p>
               </div>
