@@ -8,9 +8,6 @@ import {
   Flag,
   Calendar as CalendarIcon,
   Info,
-  CheckCircle2,
-  ShieldCheck,
-  Sparkles,
   ArrowRight,
   Minus,
   Plus,
@@ -22,8 +19,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { slugifyText } from "@/utils/bookingSession";
 
-export default function
-  DayTripItinerary({ trip }: { trip: any }) {
+export default function DayTripItinerary({ trip }: { trip: any }) {
   const [pickupLocation, setPickupLocation] = useState(trip?.from || "");
   const [dropoffLocation, setDropoffLocation] = useState(trip?.to || "");
   const [adults, setAdults] = useState<number>(2);
