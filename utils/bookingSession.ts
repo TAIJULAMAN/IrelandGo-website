@@ -57,8 +57,20 @@ export function getBookingSession(): BookingSessionData {
 
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
-    if (!raw) return { ...defaultBookingSession };
-    return { ...defaultBookingSession, ...JSON.parse(raw) };
+    const parsed = raw ? JSON.parse(raw) : null;
+    const current = parsed ? { ...defaultBookingSession, ...parsed } : { ...defaultBookingSession };
+
+    // Fallback hydration: If pickup is missing, extract from the URL pathname
+    if (!current.pickup && window.location.pathname) {
+      const routeInfo = extractRouteFromPathname(window.location.pathname);
+      if (routeInfo) {
+        current.pickup = routeInfo.pickup;
+        current.dropoff = routeInfo.dropoff;
+        if (routeInfo.serviceType) current.serviceType = routeInfo.serviceType;
+      }
+    }
+
+    return current;
   } catch (error) {
     console.error("Error reading booking session from sessionStorage:", error);
     return { ...defaultBookingSession };
@@ -211,6 +223,91 @@ export function slugifyText(text: string): string {
 }
 
 /**
+ * Normalizes location text to clean canonical SEO slug (matches master SEO list)
+ * e.g. "Dublin, Ireland" -> "dublin"
+ * e.g. "Galway, Ireland" -> "galway"
+ * e.g. "Shannon Airport (SNN), Ireland" -> "shannon-airport"
+ * e.g. "Dublin Airport (DUB), Ireland" -> "dublin-airport"
+ */
+export function cleanLocationSlug(text: string): string {
+  if (!text) return "";
+  const lower = text.toLowerCase();
+
+  // Known airports
+  if (lower.includes("shannon airport") || lower.includes("(snn)")) return "shannon-airport";
+  if (lower.includes("dublin airport") || lower.includes("(dub)")) return "dublin-airport";
+  if (lower.includes("cork airport") || lower.includes("(ork)")) return "cork-airport";
+  if (lower.includes("knock airport") || lower.includes("ireland west airport") || lower.includes("(noc)")) return "knock-airport";
+  if (lower.includes("kerry airport") || lower.includes("(kir)")) return "kerry-airport";
+  if (lower.includes("belfast airport") || lower.includes("(bfs)") || lower.includes("(bhd)")) return "belfast-airport";
+
+  // Specific city areas
+  if (lower.includes("dublin city")) return "dublin-city";
+  if (lower.includes("cork city")) return "cork-city";
+
+  // Take the primary location part before comma
+  const primary = text.split(",")[0].trim();
+  let slug = slugifyText(primary);
+
+  // Clean out common country/county noise
+  slug = slug
+    .replace(/-(ireland|republic-of-ireland|uk|co|county)$/g, "")
+    .replace(/^county-/g, "")
+    .replace(/^-+|-+$/g, "");
+
+  return slug || slugifyText(text);
+}
+
+/**
+ * Extracts route info from pathname when user lands directly or reloads the page
+ * e.g. /booking/transfers/dublin-to-galway/stops -> { pickup: "Dublin, Ireland", dropoff: "Galway, Ireland" }
+ */
+export function extractRouteFromPathname(pathname: string): { pickup: string; dropoff: string; serviceType?: string } | null {
+  if (!pathname) return null;
+  const segments = pathname.split("/").filter(Boolean);
+
+  const unslug = (s: string) => {
+    if (s === "shannon-airport") return "Shannon Airport, Ireland";
+    if (s === "dublin-airport") return "Dublin Airport, Ireland";
+    if (s === "cork-airport") return "Cork Airport, Ireland";
+    if (s === "knock-airport") return "Knock Airport, Ireland";
+    if (s === "kerry-airport") return "Kerry Airport, Ireland";
+    if (s === "dublin-city") return "Dublin City, Ireland";
+    if (s === "cork-city") return "Cork City, Ireland";
+    return s
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ") + ", Ireland";
+  };
+
+  // Pattern 1: /booking/:service/:route/:step
+  if (segments[0] === "booking" && segments.length >= 3) {
+    const serviceSegment = segments[1];
+    const routeSegment = segments[2];
+    if (routeSegment && routeSegment.includes("-to-")) {
+      const parts = routeSegment.split("-to-");
+      return {
+        pickup: unslug(parts[0]),
+        dropoff: unslug(parts[1]),
+        serviceType: serviceSegment === "airport-transfers" ? "AIRPORT_TRANSFER" : serviceSegment === "day-trips" ? "DAY_TRIP" : "TRANSFER",
+      };
+    }
+  }
+
+  // Pattern 2: /transfers/:route/
+  if (segments[0] === "transfers" && segments[1] && segments[1].includes("-to-")) {
+    const parts = segments[1].split("-to-");
+    return {
+      pickup: unslug(parts[0]),
+      dropoff: unslug(parts[1]),
+      serviceType: "TRANSFER",
+    };
+  }
+
+  return null;
+}
+
+/**
  * Builds clean semantic URL for booking steps
  * e.g. /booking/transfers/dublin-to-cork/vehicles
  * e.g. /booking/transfers/dublin-to-cork/mercedes-e-class/user-info
@@ -226,8 +323,8 @@ export function buildSemanticBookingUrl(
   else if (serviceType === "AIRPORT_TRANSFER") serviceSlug = "airport-transfers";
   else if (serviceType === "BY_THE_HOUR") serviceSlug = "by-the-hour";
 
-  const pickup = session.pickup ? slugifyText(session.pickup) : "dublin";
-  const dropoff = session.dropoff ? slugifyText(session.dropoff) : "ireland";
+  const pickup = session.pickup ? cleanLocationSlug(session.pickup) : "dublin";
+  const dropoff = session.dropoff ? cleanLocationSlug(session.dropoff) : "galway";
   const routeSlug = serviceType === "BY_THE_HOUR" ? `${pickup}-hire` : `${pickup}-to-${dropoff}`;
 
   if (step === "user-info" && vehicleName) {
