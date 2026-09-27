@@ -28,6 +28,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { DateTimePickerContent } from "@/components/common/date-time-picker-content";
 
 const isOutOfRange = (desc: string) => {
   const lower = desc.toLowerCase();
@@ -66,6 +67,7 @@ export default function ByTheHourHero() {
   today.setHours(0, 0, 0, 0);
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isDurationOpen, setIsDurationOpen] = useState(false);
 
   const { isLoaded } = useGoogleMaps();
 
@@ -381,58 +383,16 @@ export default function ByTheHourHero() {
                             <p>{departureTooltip}</p>
                           </TooltipContent>
                         </Tooltip>
-                        <PopoverContent className="w-auto p-0 z-50 max-w-[clamp(280px,100vw-2rem,360px)]" align="start">
-                          <div className="flex flex-col sm:flex-row">
-                            <div className="border-b sm:border-b-0 sm:border-r">
-                              <Calendar
-                                mode="single"
-                                selected={date}
-                                onSelect={setDate}
-                                disabled={{ before: today }}
-                                initialFocus
-                              />
-                            </div>
-                            <div className="h-[150px] sm:h-[300px] w-full sm:w-[120px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-gray-200">
-                              <div className="grid grid-cols-3 sm:flex sm:flex-col gap-1">
-                                {(() => {
-                                  const availableTimes = Array.from({ length: 96 })
-                                    .map((_, i) => {
-                                      const hour = Math.floor(i / 4);
-                                      const minute = (i % 4) * 15;
-                                      return `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-                                    })
-                                    .filter((timeString) => !isTimeDisabled(date, timeString));
-
-                                  if (availableTimes.length === 0) {
-                                    return (
-                                      <div className="text-center p-4 text-sm text-gray-500 col-span-3 sm:col-span-1">
-                                        No times available
-                                      </div>
-                                    );
-                                  }
-
-                                  return availableTimes.map((timeString) => (
-                                    <Button
-                                      key={timeString}
-                                      variant={time === timeString ? "default" : "ghost"}
-                                      className={cn(
-                                        "justify-center h-8 text-sm",
-                                        time === timeString
-                                          ? "bg-blue-600 hover:bg-blue-700 text-white"
-                                          : "hover:bg-blue-50 text-gray-700"
-                                      )}
-                                      onClick={() => {
-                                        setTime(timeString);
-                                        setIsCalendarOpen(false);
-                                      }}
-                                    >
-                                      {timeString}
-                                    </Button>
-                                  ));
-                                })()}
-                              </div>
-                            </div>
-                          </div>
+                        <PopoverContent className="w-auto p-0 z-50" align="start" collisionPadding={16}>
+                          <DateTimePickerContent
+                            date={date}
+                            setDate={setDate}
+                            time={time}
+                            setTime={setTime}
+                            onClose={() => setIsCalendarOpen(false)}
+                            isTimeDisabled={isTimeDisabled}
+                            minDate={today}
+                          />
                         </PopoverContent>
                       </Popover>
                     </div>
@@ -444,7 +404,7 @@ export default function ByTheHourHero() {
                       Duration
                     </label>
                     <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:border-blue-500 transition-all bg-white/85 h-[52px] focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10">
-                      <Popover>
+                      <Popover open={isDurationOpen} onOpenChange={setIsDurationOpen}>
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <PopoverTrigger asChild>
@@ -466,7 +426,7 @@ export default function ByTheHourHero() {
                             <p>{durationTooltip}</p>
                           </TooltipContent>
                         </Tooltip>
-                        <PopoverContent className="w-[180px] p-1 z-50" align="start">
+                        <PopoverContent className="w-[180px] p-1 z-50" align="start" collisionPadding={16}>
                           <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
                             <div className="p-1 flex flex-col gap-1">
                               {Array.from({ length: 23 }, (_, i) => {
@@ -483,7 +443,10 @@ export default function ByTheHourHero() {
                                         ? "bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 hover:text-blue-700"
                                         : "text-gray-600 hover:bg-gray-100 hover:text-gray-900",
                                     )}
-                                    onClick={() => setDuration(option)}
+                                    onClick={() => {
+                                      setDuration(option);
+                                      setIsDurationOpen(false);
+                                    }}
                                   >
                                     {hours} Hours
                                   </Button>
