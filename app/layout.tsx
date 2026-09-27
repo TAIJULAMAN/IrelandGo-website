@@ -22,7 +22,7 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://tourenzo.com"),
   title: {
-    default: "Tourenzo | Premium Private Transfers & Tours in Ireland",
+    default: "Tourenzo",
     template: "%s | Tourenzo",
   },
   description:
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Tourenzo | Premium Private Transfers & Tours in Ireland",
+    title: "Tourenzo",
     description:
       "Book luxury private car transfers, Dublin airport transfers, day trips, and multi-day tours across Ireland.",
     url: "https://tourenzo.com",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tourenzo | Premium Private Transfers & Tours in Ireland",
+    title: "Tourenzo",
     description:
       "Book luxury private car transfers, Dublin airport transfers, day trips, and multi-day tours across Ireland.",
     images: ["/Tourenzo.png"],
@@ -80,19 +80,16 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "/Tourenzo.png",
-        media: "(prefers-color-scheme: light)",
+        url: "/favicon.ico",
+        sizes: "any",
       },
       {
-        url: "/Tourenzo.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/Tourenzo.png",
-        type: "image/svg+xml",
+        url: "/icon.png",
+        type: "image/png",
       },
     ],
-    apple: "/Tourenzo.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
   },
 }
 
@@ -101,6 +98,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Tourenzo",
+    alternateName: ["tourenzo.com", "Tourenzo Ireland"],
+    url: "https://tourenzo.com",
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
@@ -140,6 +145,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
         <link
           rel="preload"
           as="image"
@@ -154,7 +162,10 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${jakarta.variable} font-sans antialiased bg-background text-foreground`}
       >
-
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
