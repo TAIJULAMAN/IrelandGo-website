@@ -8,9 +8,6 @@ import {
   Flag,
   Calendar as CalendarIcon,
   Info,
-  CheckCircle2,
-  ShieldCheck,
-  Sparkles,
   ArrowRight,
   Minus,
   Plus,
@@ -23,8 +20,7 @@ import { DateTimePickerContent } from "@/components/common/date-time-picker-cont
 import { cn } from "@/lib/utils";
 import { slugifyText } from "@/utils/bookingSession";
 
-export default function
-  DayTripItinerary({ trip }: { trip: any }) {
+export default function DayTripItinerary({ trip }: { trip: any }) {
   const [pickupLocation, setPickupLocation] = useState(trip?.from || "");
   const [dropoffLocation, setDropoffLocation] = useState(trip?.to || "");
   const [adults, setAdults] = useState<number>(2);
