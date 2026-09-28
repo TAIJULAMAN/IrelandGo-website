@@ -43,7 +43,12 @@ export function BookingForm({ activeTab }: BookingFormProps) {
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [selectedPickup, setSelectedPickup] = useState("");
   const [selectedDropoff, setSelectedDropoff] = useState("");
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const getTomorrow = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d;
+  };
+  const [date, setDate] = useState<Date | undefined>(getTomorrow());
   const [time, setTime] = useState("09:00");
   const [duration, setDuration] = useState(2);
   const [returnDate, setReturnDate] = useState<Date | undefined>(undefined);

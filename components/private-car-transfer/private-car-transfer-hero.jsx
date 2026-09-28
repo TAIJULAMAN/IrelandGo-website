@@ -95,8 +95,13 @@ export default function PrivateCarTransferHero({
 
   const [oneWayStops, setOneWayStops] = useState([]);
   const [returnStops, setReturnStops] = useState([]);
+  const getTomorrow = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d;
+  };
   const [date, setDate] = useState(
-    pickupDateParam ? new Date(pickupDateParam) : new Date(),
+    pickupDateParam ? new Date(pickupDateParam) : getTomorrow(),
   );
   const [time, setTime] = useState(pickupTimeParam || "09:00");
   const [returnDate, setReturnDate] = useState(undefined);
@@ -523,7 +528,7 @@ export default function PrivateCarTransferHero({
           </div>
 
           {/* Selling Points Bar */}
-          <div className="mt-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-around gap-2 text-white shadow-lg">
+          <div className="mt-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-around gap-2 text-white">
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-white fill-white" />
               <span className="font-medium text-sm sm:text-base">

@@ -1,8 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 
 export default function TransferJourneyDetails() {
@@ -35,6 +34,9 @@ export default function TransferJourneyDetails() {
   const [duration, setDuration] = useState<number | null>(transferRoute?.travelTimeMinutes || null);
   const [estimatedPrice, setEstimatedPrice] = useState<number | null>(transferRoute?.price || null);
 
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [translateY, setTranslateY] = useState(0);
+
   const calculateEstimatedPrice = (distKm: number) => {
     let rate = 0;
     let base = 0;
@@ -59,7 +61,6 @@ export default function TransferJourneyDetails() {
     return Math.round(distKm * rate + base);
   };
 
-  // Fetch route data from Google
   useEffect(() => {
     if (isLoaded && pickupParam && dropoffParam && !transferRoute?.distanceKm) {
       const directionsService = new google.maps.DirectionsService();
@@ -90,7 +91,62 @@ export default function TransferJourneyDetails() {
     }
   }, [isLoaded, pickupParam, dropoffParam, transferRoute]);
 
-  // Format duration
+  // Floating behavior matching trip-Itinerary.tsx
+  useEffect(() => {
+    let rafId: number;
+
+    const handleScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (!cardRef.current) return;
+        if (window.innerWidth < 768) {
+          setTranslateY(0);
+          return;
+        }
+
+        const parentGrid = cardRef.current.closest(".grid") || cardRef.current.parentElement;
+        if (!parentGrid) return;
+
+        const gridRect = parentGrid.getBoundingClientRect();
+        const cardHeight = cardRef.current.offsetHeight;
+        const maxTranslateY = Math.max(0, gridRect.height - cardHeight);
+
+        // Pinned 100px from viewport top (below fixed navbar)
+        const targetTop = 100;
+        const currentOffset = targetTop - gridRect.top;
+
+        if (currentOffset <= 0) {
+          setTranslateY(0);
+        } else if (currentOffset >= maxTranslateY) {
+          setTranslateY(maxTranslateY);
+        } else {
+          setTranslateY(currentOffset);
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
+
+    let resizeObserver: ResizeObserver | null = null;
+    const parentGrid = cardRef.current?.closest(".grid") || cardRef.current?.parentElement;
+    if (parentGrid && typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => {
+        handleScroll();
+      });
+      resizeObserver.observe(parentGrid);
+    }
+
+    handleScroll();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
+  }, []);
+
   const formatDuration = (minutes: number | null) => {
     if (!minutes) return "N/A";
     const hours = Math.floor(minutes / 60);
@@ -102,7 +158,15 @@ export default function TransferJourneyDetails() {
   };
 
   return (
-    <div className="w-full bg-white border border-gray-200 rounded-xl p-6 h-fit mt-10 md:mt-14">
+    <div
+      ref={cardRef}
+      style={{
+        transform: translateY > 0 ? `translate3d(0, ${translateY}px, 0)` : undefined,
+        willChange: translateY > 0 ? "transform" : undefined,
+        transition: "transform 0.05s ease-out",
+      }}
+      className="w-full bg-white border border-gray-200 rounded-xl p-6 h-fit mt-10 md:mt-14 shadow-sm"
+    >
       <h3 className="text-xl font-semibold text-gray-900 mb-6">Journey Details</h3>
       
       <div className="space-y-4">
@@ -125,10 +189,6 @@ export default function TransferJourneyDetails() {
             <p className="text-sm font-medium text-gray-500">Distance</p>
             <p className="text-base font-semibold text-gray-900">{distance ? `${distance} km` : "N/A"}</p>
           </div>
-          {/* <div className="col-span-2 pt-2">
-            <p className="text-sm font-medium text-gray-500">Est. Price (Starting from)</p>
-            <p className="text-xl font-bold text-emerald-600">{estimatedPrice ? `€${estimatedPrice}` : "N/A"}</p>
-          </div> */}
         </div>
       </div>
     </div>

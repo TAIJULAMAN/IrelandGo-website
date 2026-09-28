@@ -1,10 +1,14 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, MapPin, Users, Star, ChevronRight } from "lucide-react";
+import { Clock, MapPin, Users, Star, ChevronRight, ChevronLeft } from "lucide-react";
 
 export default function DayTripsDetailsHero({ trip }: { trip: any }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [isPaused, setIsPaused] = useState(false);
   // Format duration
   const totalMinutes = trip?.travelTimeMinutes || 480;
   const hours = Math.floor(totalMinutes / 60);
@@ -30,6 +34,39 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
   while (allImages.length < 5) {
     allImages.push(defaultImages[allImages.length % defaultImages.length]);
   }
+
+  // Auto-play slideshow on mobile every 3.5s
+  useEffect(() => {
+    if (isPaused || allImages.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % allImages.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [isPaused, allImages.length]);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % allImages.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStart === null) return;
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+    if (diff > 40) {
+      nextSlide();
+    } else if (diff < -40) {
+      prevSlide();
+    }
+    setTouchStart(null);
+  };
 
   return (
     <section className="bg-white pt-24 sm:pt-28 pb-4 sm:pb-6">
@@ -85,8 +122,111 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
           </div>
         </div>
 
-        {/* Grid of Images */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2.5 sm:gap-3 md:gap-4 rounded-2xl overflow-hidden h-[300px] sm:h-[400px] md:h-[460px] shadow-sm border border-gray-100">
+        {/* Mobile View: Slide Carousel with Left & Right Change Buttons (< lg) */}
+        <div
+          className="block lg:hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Main Slide Frame */}
+          <div
+            className="relative rounded-2xl overflow-hidden shadow-sm border border-gray-100 bg-gray-100 h-[280px] sm:h-[360px] md:h-[400px] touch-pan-y select-none"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {/* Sliding Track */}
+            <div
+              className="flex h-full transition-transform duration-500 ease-out"
+              style={{
+                width: `${allImages.length * 100}%`,
+                transform: `translateX(-${(currentIndex * 100) / allImages.length}%)`,
+              }}
+            >
+              {allImages.map((img, idx) => (
+                <div
+                  key={idx}
+                  className="relative h-full shrink-0"
+                  style={{ width: `${100 / allImages.length}%` }}
+                >
+                  <Image
+                    src={img}
+                    alt={`${trip?.title || "Day trip"} photo ${idx + 1}`}
+                    fill
+                    priority={idx === 0}
+                    unoptimized={typeof img === "string" && img.startsWith("http")}
+                    sizes="100vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/10" />
+                </div>
+              ))}
+            </div>
+
+            {/* Change Buttons (Left & Right) */}
+            {allImages.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevSlide();
+                  }}
+                  onTouchEnd={(e) => {
+                    e.stopPropagation();
+                    prevSlide();
+                  }}
+                  aria-label="Previous slide"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/95 hover:bg-white active:scale-90 text-gray-900 shadow-[0_4px_16px_rgba(0,0,0,0.22)] border border-gray-200/90 flex items-center justify-center transition-all z-20 cursor-pointer"
+                >
+                  <ChevronLeft className="w-6 h-6 text-gray-900 -ml-0.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextSlide();
+                  }}
+                  onTouchEnd={(e) => {
+                    e.stopPropagation();
+                    nextSlide();
+                  }}
+                  aria-label="Next slide"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/95 hover:bg-white active:scale-90 text-gray-900 shadow-[0_4px_16px_rgba(0,0,0,0.22)] border border-gray-200/90 flex items-center justify-center transition-all z-20 cursor-pointer"
+                >
+                  <ChevronRight className="w-6 h-6 text-gray-900 -mr-0.5" />
+                </button>
+              </>
+            )}
+
+            {/* Bottom Overlay: Dots and Badge */}
+            <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between z-10 pointer-events-none">
+              {/* Dots */}
+              <div className="flex items-center gap-1.5 pointer-events-auto">
+                {allImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentIndex(idx)}
+                    aria-label={`Go to slide ${idx + 1}`}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      currentIndex === idx
+                        ? "w-6 bg-white shadow-sm"
+                        : "w-2 bg-white/60 hover:bg-white/90"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              {/* Counter Badge */}
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-black/60 text-white backdrop-blur-xs shadow-md">
+                {currentIndex + 1} / {allImages.length}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop View: 5-Image Grid (>= lg) */}
+        <div className="hidden lg:grid lg:grid-cols-4 gap-2.5 sm:gap-3 md:gap-4 rounded-2xl overflow-hidden h-[380px] lg:h-[460px] shadow-sm border border-gray-100">
           {/* Main Large Image (Left 2 cols) */}
           <div className="md:col-span-2 relative h-full group overflow-hidden bg-gray-100 cursor-pointer">
             <Image
@@ -102,7 +242,7 @@ export default function DayTripsDetailsHero({ trip }: { trip: any }) {
           </div>
 
           {/* 4 Smaller Images (Right 2 cols in 2x2 grid) */}
-          <div className="hidden md:grid md:col-span-2 grid-cols-2 gap-2.5 sm:gap-3 md:gap-4 h-full">
+          <div className="md:col-span-2 grid grid-cols-2 gap-2.5 sm:gap-3 md:gap-4 h-full">
             {allImages.slice(1, 5).map((img, idx) => (
               <div
                 key={idx}

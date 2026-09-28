@@ -63,7 +63,7 @@ export function PopularDayTrips() {
 
   if (isLoading) {
     return (
-      <section className="relative px-5 md:px-0 py-10 md:py-16 bg-gray-50/50 overflow-hidden">
+      <section className="relative px-5 md:px-0 py-10 md:py-16 bg-gray-100 overflow-hidden">
         <Loading />
       </section>
     );
@@ -140,7 +140,7 @@ export function PopularDayTrips() {
   );
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-8 md:py-10 xl:py-12 bg-gray-50/50 overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-8 md:py-10 xl:py-12 bg-gray-100 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />

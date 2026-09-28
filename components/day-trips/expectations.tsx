@@ -48,8 +48,7 @@ export default function Expectations() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold mb-8 md:mb-12 text-center lg:text-left text-white leading-tight">
-              What to expect on a{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">day trip?</span>
+              What to expect on a day trip?
             </h2>
             <Accordion type="single" collapsible className="space-y-4">
               {items.map((item, index) => (
@@ -78,7 +77,10 @@ export default function Expectations() {
             <div className="rounded-3xl p-3 sm:p-4 bg-slate-800/30 backdrop-blur-xl border border-slate-700/50 shadow-2xl relative z-10">
               <div className="grid grid-cols-2 sm:grid-cols-8 sm:auto-rows-[104px] md:auto-rows-[112px] gap-2.5 sm:gap-3">
                 {/* Top row: two large tiles */}
-                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-5 sm:row-span-3 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
+                <div
+                  style={{ position: "relative" }}
+                  className="relative col-span-1 sm:col-span-5 sm:row-span-3 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image"
+                >
                   <Image
                     src={images[0]}
                     alt="Irish landscape"
@@ -88,7 +90,10 @@ export default function Expectations() {
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
-                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-3 sm:row-span-3 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
+                <div
+                  style={{ position: "relative" }}
+                  className="relative col-span-1 sm:col-span-3 sm:row-span-3 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image"
+                >
                   <Image
                     src={images[1]}
                     alt="Coastal view"
@@ -100,7 +105,10 @@ export default function Expectations() {
                 </div>
 
                 {/* Bottom composition */}
-                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-3 sm:row-span-2 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
+                <div
+                  style={{ position: "relative" }}
+                  className="relative col-span-1 sm:col-span-3 sm:row-span-2 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image"
+                >
                   <Image
                     src={images[2]}
                     alt="Rock formation"
@@ -110,7 +118,10 @@ export default function Expectations() {
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
-                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
+                <div
+                  style={{ position: "relative" }}
+                  className="relative col-span-1 sm:col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image"
+                >
                   <Image
                     src={images[3]}
                     alt="Green hills"
@@ -120,7 +131,10 @@ export default function Expectations() {
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
-                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-3 sm:row-span-1 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
+                <div
+                  style={{ position: "relative" }}
+                  className="relative col-span-1 sm:col-span-3 sm:row-span-1 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image"
+                >
                   <Image
                     src={images[4]}
                     alt="Cliffs"
@@ -130,7 +144,10 @@ export default function Expectations() {
                   />
                   <div className="absolute inset-0 bg-slate-900/20 group-hover/image:bg-slate-900/0 transition-colors duration-500" />
                 </div>
-                <div style={{ position: "relative" }} className="relative col-span-1 sm:col-span-3 sm:row-span-1 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image">
+                <div
+                  style={{ position: "relative" }}
+                  className="relative col-span-1 sm:col-span-3 sm:row-span-1 aspect-[4/3] sm:aspect-auto overflow-hidden rounded-xl sm:rounded-2xl group/image"
+                >
                   <Image
                     src={images[5]}
                     alt="Scenic road"

@@ -94,7 +94,6 @@ export function Testimonials() {
     ].filter(Boolean);
   };
 
-
   const visibleReviews = getVisibleReviews();
   const getInitials = (name: string) => {
     return name
@@ -117,7 +116,7 @@ export function Testimonials() {
       className="group bg-white/80 backdrop-blur-md rounded-xl sm:rounded-2xl p-3.5 sm:p-6 md:p-8 shadow-sm hover:shadow-xl border border-gray-100 hover:border-white h-full flex flex-col transition-all duration-500 hover:-translate-y-1 overflow-hidden relative"
     >
       <div className="absolute top-0 right-0 p-3 sm:p-6 opacity-10 group-hover:opacity-20 group-hover:scale-110 transition-all duration-500 pointer-events-none">
-        <Quote className="w-8 h-8 sm:w-16 sm:h-16 text-blue-600" />
+        <Quote className="w-8 h-8 sm:w-16 sm:h-16 text-gray-600" />
       </div>
 
       <div className="flex items-center justify-between mb-3 sm:mb-6 relative z-10">
@@ -170,13 +169,6 @@ export function Testimonials() {
 
   return (
     <section className="relative px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12 py-8 md:py-12 bg-gray-50/50 overflow-hidden">
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
-        <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
-        <div className="absolute bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-violet-100/40 blur-3xl opacity-50 mix-blend-multiply" />
-        <div className="absolute top-[30%] left-[30%] w-[30%] h-[30%] rounded-full bg-indigo-50/50 blur-3xl opacity-40 mix-blend-multiply" />
-      </div>
-
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row items-center justify-between mb-6 md:mb-8 gap-6">
           {showSlider && (
@@ -192,7 +184,6 @@ export function Testimonials() {
           <div className="flex-1 flex justify-center">
             <SectionHeader
               title="What Our Customers Say"
-              subtitle="Testimonials"
               description="Trusted by happy travelers worldwide for our premium service and local expertise."
               alignment="center"
               className="mb-0"
@@ -217,7 +208,9 @@ export function Testimonials() {
 
         {/* Mobile Grid (expandable items) */}
         <div className="grid md:hidden grid-cols-2 gap-3 sm:gap-6 relative">
-          {reviews.slice(0, mobileVisibleCount).map((review, idx) => renderReviewCard(review, idx))}
+          {reviews
+            .slice(0, mobileVisibleCount)
+            .map((review, idx) => renderReviewCard(review, idx))}
         </div>
 
         {/* Mobile See More Button */}

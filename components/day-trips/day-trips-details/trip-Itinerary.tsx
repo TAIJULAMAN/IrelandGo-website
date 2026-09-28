@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
 import {
@@ -87,12 +87,57 @@ export default function DayTripItinerary({ trip }: { trip: any }) {
     ? Math.min(...trip.vehicles.map((v: any) => v.price))
     : trip?.price || null;
 
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [translateY, setTranslateY] = useState(0);
+
+  useEffect(() => {
+    let rafId: number;
+
+    const handleScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (!sectionRef.current || !cardRef.current) return;
+        if (window.innerWidth < 768) {
+          setTranslateY(0);
+          return;
+        }
+
+        const sectionRect = sectionRef.current.getBoundingClientRect();
+        const cardHeight = cardRef.current.offsetHeight;
+        const maxTranslateY = Math.max(0, sectionRect.height - cardHeight);
+
+        // Pinned 100px from viewport top (below fixed navbar)
+        const targetTop = 100;
+        const currentOffset = targetTop - sectionRect.top;
+
+        if (currentOffset <= 0) {
+          setTranslateY(0);
+        } else if (currentOffset >= maxTranslateY) {
+          setTranslateY(maxTranslateY);
+        } else {
+          setTranslateY(currentOffset);
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, [trip?.description]);
+
   return (
     <section className="bg-white py-8 md:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        <div ref={sectionRef} className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start relative">
           {/* Left Column: About your trip & Itinerary */}
-          <div className="lg:col-span-7 xl:col-span-8 space-y-8">
+          <div className="md:col-span-7 xl:col-span-8 space-y-8">
             <div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight mb-4">
                 About your trip
@@ -122,9 +167,17 @@ export default function DayTripItinerary({ trip }: { trip: any }) {
             </div>
           </div>
 
-          {/* Right Column: Sticky Booking Form */}
-          <div className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-28">
-            <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-[0_10px_35px_rgba(0,0,0,0.08)] border border-gray-200/80">
+          {/* Right Column: Floating Booking Form */}
+          <div className="md:col-span-5 xl:col-span-4 z-20 pb-8 self-start">
+            <div
+              ref={cardRef}
+              style={{
+                transform: translateY > 0 ? `translate3d(0, ${translateY}px, 0)` : undefined,
+                willChange: translateY > 0 ? "transform" : undefined,
+                transition: "transform 0.05s ease-out",
+              }}
+              className="bg-white rounded-2xl p-5 sm:p-6 shadow-[0_10px_35px_rgba(0,0,0,0.1)] border border-gray-200/80"
+            >
               <div className="mb-5 pb-4 border-b border-gray-100">
                 <h3 className="text-xl font-bold text-gray-900">
                   Book This Day Trip
@@ -149,7 +202,7 @@ export default function DayTripItinerary({ trip }: { trip: any }) {
                   <label className="text-xs font-bold text-gray-700 block mb-1.5">
                     Pickup Location
                   </label>
-                  <div className="flex items-center gap-2.5 px-3.5 h-12 bg-gray-50 border border-gray-200 rounded-xl focus-within:bg-white focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
+                  <div className="flex items-center gap-2.5 px-3.5 h-12 border border-gray-200 rounded-xl focus-within:bg-white focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition-all">
                     <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
                     <Input
                       type="text"
@@ -324,12 +377,12 @@ export default function DayTripItinerary({ trip }: { trip: any }) {
                       <ArrowRight className="w-4 h-4 ml-1.5" />
                     </button>
                   )}
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
   );
 }

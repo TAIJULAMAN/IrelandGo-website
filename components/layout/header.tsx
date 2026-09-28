@@ -172,10 +172,11 @@ export function Header() {
 
               {/* Mobile Toggle */}
               <button
-                className="lg:hidden ml-auto focus:outline-none p-1.5 rounded-lg text-gray-900"
+                className="lg:hidden flex items-center gap-1 ml-auto focus:outline-none p-1.5 rounded-lg text-gray-900"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="Toggle navigation"
               >
+                <span className="text-lg font-semibold">Menu</span>
                 <Menu className="w-6 h-6" />
               </button>
             </div>

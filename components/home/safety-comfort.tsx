@@ -39,7 +39,7 @@ export function SafetyComfort() {
   ]
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-8 md:py-12 bg-gray-50/50 overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-8 md:py-12 bg-gray-100 overflow-hidden">
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-blue-100/40 blur-3xl opacity-60 mix-blend-multiply" />
@@ -103,7 +103,7 @@ export function SafetyComfort() {
           <div className="relative h-72 sm:h-96 lg:h-[350px] xl:h-[400px] w-full rounded-[2rem] overflow-hidden shadow-2xl border border-white/60 bg-white group" style={{ position: "relative" }}>
             {/* Image */}
             <Image
-              src="/safe.png"
+              src="/safety.jpg"
               alt="Safety and Comfort"
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-105"

@@ -3,38 +3,20 @@
 import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import {
-  MapPin,
   Calendar as CalendarIcon,
-  Users,
-  Luggage,
-  Plus,
   Search,
   Zap,
   PiggyBank,
   Sparkles,
-  ChevronDown,
-  Minus,
 } from "lucide-react";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
+import usePlacesAutocomplete from "use-places-autocomplete";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 
 import { slugifyText } from "@/utils/bookingSession";
-import { validateHeroForm } from "@/utils/validateHeroForm";
 import { TripTypeSelector } from "../home/trip-type-selector";
 import { LocationInputs } from "../home/location-inputs";
 import { BookingDetailsInputs } from "../home/booking-details-inputs";
@@ -85,14 +67,18 @@ export default function TransferSearchHero() {
   );
   const [showPickupDropdown, setShowPickupDropdown] = useState(false);
   const [showDropoffDropdown, setShowDropoffDropdown] = useState(false);
-  const [selectedPickupIndex, setSelectedPickupIndex] = useState(-1);
-  const [selectedDropoffIndex, setSelectedDropoffIndex] = useState(-1);
   const [returnDate, setReturnDate] = useState(
     returnDateParam ? new Date(returnDateParam) : undefined,
   );
   const [returnTime, setReturnTime] = useState(returnTimeParam);
+  const getTomorrow = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d;
+  };
+
   const [date, setDate] = useState(
-    pickupDateParam ? new Date(pickupDateParam) : new Date(),
+    pickupDateParam ? new Date(pickupDateParam) : getTomorrow(),
   );
   const [time, setTime] = useState(pickupTimeParam || "09:00");
   const [adults, setAdults] = useState(2);
@@ -143,7 +129,6 @@ export default function TransferSearchHero() {
     initOnMount: isLoaded,
   });
 
-  // Northern Ireland limits check
   const isOutOfRange = (desc) => {
     const lower = desc.toLowerCase();
     if (lower.includes("ireland")) return false;
@@ -201,83 +186,6 @@ export default function TransferSearchHero() {
     return false;
   };
 
-  // Handle keyboard navigation for pickup
-  const handlePickupKeyDown = (e) => {
-    const totalItems = pickupData.length;
-    if (!showPickupDropdown || totalItems === 0) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        setSelectedPickupIndex((prev) =>
-          prev < totalItems - 1 ? prev + 1 : prev,
-        );
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        setSelectedPickupIndex((prev) => (prev > 0 ? prev - 1 : -1));
-        break;
-      case "Enter":
-        e.preventDefault();
-        if (selectedPickupIndex >= 0) {
-          const selected = pickupData[selectedPickupIndex];
-          setPickupLocation(selected.description);
-          setPickupValue(selected.description, false);
-          clearPickupSuggestions();
-          setShowPickupDropdown(false);
-        }
-        break;
-      case "Escape":
-        setShowPickupDropdown(false);
-        setSelectedPickupIndex(-1);
-        break;
-    }
-  };
-
-  // Handle keyboard navigation for dropoff
-  const handleDropoffKeyDown = (e) => {
-    const totalItems = dropoffData.length;
-    if (!showDropoffDropdown || totalItems === 0) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        setSelectedDropoffIndex((prev) =>
-          prev < totalItems - 1 ? prev + 1 : prev,
-        );
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        setSelectedDropoffIndex((prev) => (prev > 0 ? prev - 1 : -1));
-        break;
-      case "Enter":
-        e.preventDefault();
-        if (selectedDropoffIndex >= 0) {
-          const selected = dropoffData[selectedDropoffIndex];
-          setDropoffLocation(selected.description);
-          setDropoffValue(selected.description, false);
-          clearDropoffSuggestions();
-          setShowDropoffDropdown(false);
-        }
-        break;
-      case "Escape":
-        setShowDropoffDropdown(false);
-        setSelectedDropoffIndex(-1);
-        break;
-    }
-  };
-
-  // Handle click outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -502,7 +410,7 @@ export default function TransferSearchHero() {
           </div>
 
           {/* Selling Points Bar */}
-          <div className="mt-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-around gap-2 text-white shadow-lg">
+          <div className="mt-8 max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-around gap-2 text-white">
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-white fill-white" />
               <span className="font-medium text-sm sm:text-base">

@@ -169,7 +169,7 @@ export function PrivateTransfers() {
   );
 
   return (
-    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 2xl:px-0 pt-6 md:pt-8 pb-10 md:pb-12 bg-gray-50/50 overflow-hidden">
+    <section className="relative px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 2xl:px-0 pt-6 md:pt-8 pb-10 md:pb-12 bg-gray-100 overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
         <div className="absolute top-[5%] -left-[10%] w-[40%] h-[40%] rounded-full bg-blue-50/80 blur-3xl mix-blend-multiply" />

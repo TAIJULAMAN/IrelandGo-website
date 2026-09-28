@@ -20,7 +20,7 @@ export function SectionHeader({
       className={cn(
         "mb-12",
         alignment === "center" ? "text-center" : "text-left",
-        className
+        className,
       )}
     >
       {subtitle && (
@@ -30,8 +30,8 @@ export function SectionHeader({
       )}
       <h2
         className={cn(
-          "text-3xl md:text-4xl font-bold text-slate-900",
-          description ? "mb-4" : ""
+          "text-2xl md:text-4xl lg:text-5xl font-extrabold text-center text-gray-900",
+          description ? "mb-4" : "",
         )}
       >
         {title}
@@ -39,8 +39,8 @@ export function SectionHeader({
       {description && (
         <p
           className={cn(
-            "text-sm md:text-base text-slate-600 max-w-2xl",
-            alignment === "center" ? "mx-auto" : ""
+            "text-center text-gray-600 max-w-2xl mx-auto mb-8 sm:mb-12 text-sm md:text-base lg:text-lg",
+            alignment === "center" ? "mx-auto" : "",
           )}
         >
           {description}
