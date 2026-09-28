@@ -657,17 +657,19 @@ export default function Stops() {
     };
   });
 
-  const sortedStops = [...apiStops].sort((a, b) =>
-    (b.totalRatings || b.user_ratings_total || b.rating || 0) - (a.totalRatings || a.user_ratings_total || a.rating || 0)
-  );
+  const sortedStops = [...apiStops].sort((a, b) => {
+    const levelA = a.level ?? 4;
+    const levelB = b.level ?? 4;
+    if (levelA !== levelB) {
+      return levelA - levelB;
+    }
+    return (b.rating || 0) - (a.rating || 0);
+  });
   const mostPopularId = sortedStops[0]?.id;
   const recommendedId = sortedStops[1]?.id;
 
   const customStopsInSelected = selectedStops.filter((s: any) => s.isCustom);
-  const stops = [...apiStops, ...customStopsInSelected].sort((a: any, b: any) => {
-    const rank = (id: string) => id === mostPopularId ? 0 : id === recommendedId ? 1 : 2;
-    return rank(a.id) - rank(b.id);
-  });
+  const stops = [...sortedStops, ...customStopsInSelected];
 
   const toggleStop = (stop: any) => {
     if (selectedStops.find((s) => s.id === stop.id)) {
