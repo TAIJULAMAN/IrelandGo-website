@@ -590,7 +590,7 @@ export default function ByTheHourHero() {
                   {isFormValid ? (
                     <Link
                       href={{
-                        pathname: `/booking/by-the-hour/${slugifyText(pickupLocation || "dublin")}-hire/vehicles`,
+                        pathname: `/booking/by-the-hour/${slugifyText(pickupLocation || "dublin")}/vehicles`,
                         query: {
                           serviceType: "BY_THE_HOUR",
                           pickup: pickupLocation,

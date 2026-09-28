@@ -284,6 +284,16 @@ export function extractRouteFromPathname(pathname: string): { pickup: string; dr
   if (segments[0] === "booking" && segments.length >= 3) {
     const serviceSegment = segments[1];
     const routeSegment = segments[2];
+
+    if (serviceSegment === "by-the-hour" && routeSegment) {
+      const cleanPickup = routeSegment.replace(/-hire$/, "");
+      return {
+        pickup: unslug(cleanPickup),
+        dropoff: unslug(cleanPickup),
+        serviceType: "BY_THE_HOUR",
+      };
+    }
+
     if (routeSegment && routeSegment.includes("-to-")) {
       const parts = routeSegment.split("-to-");
       return {
@@ -325,7 +335,7 @@ export function buildSemanticBookingUrl(
 
   const pickup = session.pickup ? cleanLocationSlug(session.pickup) : "dublin";
   const dropoff = session.dropoff ? cleanLocationSlug(session.dropoff) : "galway";
-  const routeSlug = serviceType === "BY_THE_HOUR" ? `${pickup}-hire` : `${pickup}-to-${dropoff}`;
+  const routeSlug = serviceType === "BY_THE_HOUR" ? pickup : `${pickup}-to-${dropoff}`;
 
   if (step === "user-info" && vehicleName) {
     const vSlug = slugifyText(vehicleName);

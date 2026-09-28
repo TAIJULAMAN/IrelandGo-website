@@ -328,7 +328,7 @@ export function BookingForm({ activeTab }: BookingFormProps) {
                 pathname:
                   activeTab === "day-trips"
                     ? "/day-trips/search"
-                    : `/booking/${activeTab === "hourly" ? "by-the-hour" : "transfers"}/${slugifyText(pickupLocation || "dublin")}${activeTab === "hourly" ? "-hire" : `-to-${slugifyText(dropoffLocation || "galway")}`}/vehicles`,
+                    : `/booking/${activeTab === "hourly" ? "by-the-hour" : "transfers"}/${slugifyText(pickupLocation || "dublin")}${activeTab === "hourly" ? "" : `-to-${slugifyText(dropoffLocation || "galway")}`}/vehicles`,
                 query: {
                   serviceType:
                     activeTab === "transfer"
