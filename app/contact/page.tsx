@@ -31,7 +31,7 @@ export default function Contact() {
   const [createContact, { isLoading }] = useContactMutation();
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -98,7 +98,9 @@ export default function Contact() {
 
       const res = await createContact(payload).unwrap();
       if (res.success) {
-        toast.success(res.message || "Your inquiry has been submitted successfully!");
+        toast.success(
+          res.message || "Your inquiry has been submitted successfully!",
+        );
         setFormData({
           fullName: "",
           email: "",
@@ -112,7 +114,7 @@ export default function Contact() {
       }
     } catch (error: any) {
       toast.error(
-        error?.data?.message || "Failed to send message. Please try again."
+        error?.data?.message || "Failed to send message. Please try again.",
       );
     }
   };
@@ -126,8 +128,9 @@ export default function Contact() {
               Get in Touch
             </h1>
             <p className="text-sm md:text-base text-gray-600 mb-4 px-4 max-w-2xl mx-auto">
-              Planning a private transfer, tour, or custom journey across Ireland?
-              Send us your travel details and our team will get back to you promptly.
+              Planning a private transfer, tour, or custom journey across
+              Ireland? Send us your travel details and our team will get back to
+              you promptly.
             </p>
           </div>
         </section>
@@ -355,24 +358,7 @@ export default function Contact() {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
                   Contact Information
                 </h2>
-
                 <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-6 h-6 text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 mb-1">
-                        Address
-                      </h3>
-                      <p className="text-gray-600 text-sm">
-                        225 Cratloe Village,
-                        <br />
-                        Limerick, Ireland.
-                      </p>
-                    </div>
-                  </div>
-
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <Phone className="w-6 h-6 text-green-600" />

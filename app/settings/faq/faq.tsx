@@ -71,7 +71,7 @@ export default function FAQ() {
                 value={`item-col1-${idx}`}
                 className="bg-white rounded-lg shadow-sm border-none ring-1 ring-black/5"
               >
-                <AccordionTrigger className="px-6 py-5 hover:no-underline hover:text-blue-600 transition-colors">
+                <AccordionTrigger className="px-6 py-5 hover:no-underline">
                   <span className="font-bold text-left text-lg">
                     {item.question}
                   </span>
@@ -89,7 +89,7 @@ export default function FAQ() {
                 value={`item-col2-${idx}`}
                 className="bg-white rounded-lg shadow-sm border-none ring-1 ring-black/5"
               >
-                <AccordionTrigger className="px-6 py-5 hover:no-underline hover:text-blue-600 transition-colors">
+                <AccordionTrigger className="px-6 py-5 hover:no-underline">
                   <span className="font-bold text-left text-lg">
                     {item.question}
                   </span>

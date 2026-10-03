@@ -22,7 +22,6 @@ export function RecentBlogs() {
 
   const blogs: Blog[] = (data?.data?.data || []).slice(0, 4);
 
-
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString("en-US", {
       month: "short",
@@ -51,7 +50,6 @@ export function RecentBlogs() {
           <div className="flex-1">
             <SectionHeader
               title="Explore Ireland's Best Destinations"
-              subtitle="Travel Inspiration"
               className="mb-0 text-center md:text-left [&_span]:md:text-left [&_h2]:md:text-left"
             />
           </div>
@@ -128,12 +126,8 @@ export function RecentBlogs() {
           ))}
         </div>
 
-
         <div className="mt-10 text-center md:hidden">
-          <Link
-            href="/blog"
-            className="btn-theme-primary w-full group/btn"
-          >
+          <Link href="/blog" className="btn-theme-primary w-full group/btn">
             View All Articles
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>

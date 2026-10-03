@@ -10,7 +10,7 @@ export default function TransferSearch() {
                 <TransferSearchHero />
             </Suspense>
             <PopularTransferRoutes />
-            <FAQ />
+            <FAQ filterByServiceType="TRANSFER" />
         </>
     );
 }

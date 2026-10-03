@@ -49,7 +49,6 @@ export function HowItWorks() {
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-0 relative z-10">
         <SectionHeader
           title="Simple 4 Steps to Start Your Journey"
-          subtitle="How It Works"
           description="Booking your premium transport in Ireland has never been easier."
           alignment="center"
         />
@@ -113,7 +112,6 @@ export function HowItWorks() {
             })}
           </div>
         </div>
-
       </div>
     </section>
   );

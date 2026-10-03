@@ -251,14 +251,22 @@ export default function TransferSearchHero() {
   }, [date]);
 
   useEffect(() => {
-    if (returnDate && isReturnTimeDisabled(returnTime)) {
-      for (let i = 0; i < 96; i++) {
-        const hour = Math.floor(i / 4);
-        const minute = (i % 4) * 15;
-        const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-        if (!isReturnTimeDisabled(timeString)) {
-          setReturnTime(timeString);
-          break;
+    if (date) {
+      if (!returnDate || returnDate < date) {
+        const nextDay = new Date(date);
+        nextDay.setDate(nextDay.getDate() + 1);
+        setReturnDate(nextDay);
+      }
+
+      if (returnDate && isReturnTimeDisabled(returnTime)) {
+        for (let i = 0; i < 96; i++) {
+          const hour = Math.floor(i / 4);
+          const minute = (i % 4) * 15;
+          const timeString = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
+          if (!isReturnTimeDisabled(timeString)) {
+            setReturnTime(timeString);
+            break;
+          }
         }
       }
     }
@@ -341,8 +349,11 @@ export default function TransferSearchHero() {
                   clearDropoffSuggestions();
                   setShowDropoffDropdown(false);
                 }}
-                extraBags={extraBags}
-                setExtraBags={setExtraBags}
+                adults={adults}
+                setAdults={setAdults}
+                children={children}
+                setChildren={setChildren}
+                totalPassengers={totalPassengers}
               />
               <BookingDetailsInputs
                 date={date}
@@ -353,11 +364,8 @@ export default function TransferSearchHero() {
                 setIsCalendarOpen={setIsCalendarOpen}
                 today={today}
                 isTimeDisabled={isTimeDisabled}
-                adults={adults}
-                setAdults={setAdults}
-                children={children}
-                setChildren={setChildren}
-                totalPassengers={totalPassengers}
+                extraBags={extraBags}
+                setExtraBags={setExtraBags}
                 tripType={tripType}
                 activeTab="transfer"
                 returnDate={returnDate}

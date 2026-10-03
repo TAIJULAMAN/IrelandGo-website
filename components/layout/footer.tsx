@@ -16,11 +16,11 @@ export function Footer({ className = "" }: FooterProps) {
               <Image
                 src="/Tourenzo.webp"
                 alt="Tourenzo logo"
-                width={140}
+                width={200}
                 height={120}
               />
             </Link>
-            <p className="text-xs sm:text-sm text-gray-300 mt-4 max-w-sm leading-relaxed">
+            <p className="text-base text-gray-300 max-w-sm leading-relaxed">
               Your trusted travel companion for exploring the beauty of Ireland.
             </p>
           </div>

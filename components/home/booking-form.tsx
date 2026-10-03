@@ -24,7 +24,9 @@ const MapRoute = dynamic(
     ssr: false,
     loading: () => (
       <div className="w-full h-full min-h-[250px] bg-slate-50/80 animate-pulse rounded-xl border border-slate-100 flex items-center justify-center">
-        <span className="text-xs font-semibold text-slate-400">Loading map...</span>
+        <span className="text-xs font-semibold text-slate-400">
+          Loading map...
+        </span>
       </div>
     ),
   },
@@ -199,12 +201,11 @@ export function BookingForm({ activeTab }: BookingFormProps) {
   // Set default return date/time logic when pickup date/time changes
   useEffect(() => {
     if (date) {
-      const defaultReturn = new Date(date);
-      defaultReturn.setHours(defaultReturn.getHours() + 2);
-
       // If return date is not set, or is before the new pickup date, adjust it
       if (!returnDate || returnDate < date) {
-        setReturnDate(date);
+        const nextDay = new Date(date);
+        nextDay.setDate(nextDay.getDate() + 1);
+        setReturnDate(nextDay);
       }
 
       // Automatically adjust return time if it has run into conflict
@@ -364,10 +365,7 @@ export function BookingForm({ activeTab }: BookingFormProps) {
               </Button>
             </Link>
           ) : (
-            <Button
-              className="w-full"
-              disabled
-            >
+            <Button className="w-full" disabled>
               <Search className="w-5 h-5 mr-2" />
               {activeTab === "day-trips" ? "Explore Day Trips" : "Find a Ride"}
             </Button>

@@ -4,7 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { UserAvatar } from "@/components/common/UserAvatar";
-import { Menu, X, ChevronRight, LayoutDashboard, LogOut, ChevronDown, MessageCircle, User } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronRight,
+  LayoutDashboard,
+  LogOut,
+  ChevronDown,
+  MessageCircle,
+  User,
+} from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/Redux/hooks";
 import { useGetProfileQuery } from "@/Redux/features/settings/profileApi";
 import { useLogout } from "@/hooks/useLogout";
@@ -33,9 +42,10 @@ export function Header() {
     isActive: true,
   });
 
-  const navRoutes = (navData?.data && navData.data.length > 0)
-    ? navData.data
-    : defaultWebsiteNavRoutes;
+  const navRoutes =
+    navData?.data && navData.data.length > 0
+      ? navData.data
+      : defaultWebsiteNavRoutes;
 
   const token = useAppSelector((state) => state.auth.token);
   let isExpired = false;
@@ -89,17 +99,24 @@ export function Header() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-[999] transition-all duration-300 ${isScrolled
-          ? "py-3 bg-white border-b border-blue-500/10"
-          : "py-3 bg-white border-b border-gray-100"
-          }`}
+        className={`fixed top-0 left-0 right-0 z-[999] transition-all duration-300 ${
+          isScrolled
+            ? "py-3 bg-white border-b border-blue-500/10"
+            : "py-3 bg-white border-b border-gray-100"
+        }`}
       >
         <div className="max-w-7xl mx-auto px-5 md:px-0">
           <div className="flex items-center justify-between">
             {/* Left side */}
             <div className="flex items-center gap-8 xl:gap-12 shrink-0">
               <Link href="/">
-                <Image src="/Tourenzo.webp" alt="Logo" width={140} height={80} className="w-auto h-12 object-contain" />
+                <Image
+                  src="/Tourenzo.webp"
+                  alt="Logo"
+                  width={180}
+                  height={100}
+                  className="w-auto h-16 object-contain"
+                />
               </Link>
             </div>
 
@@ -139,7 +156,6 @@ export function Header() {
 
             {/* Right Side */}
             <div className="flex items-center gap-4 xl:gap-6 shrink-0">
-
               {/* Phone Block */}
               <a
                 href="https://wa.me/353858090960"
@@ -151,8 +167,12 @@ export function Header() {
                   <MessageCircle className="w-5 h-5 text-green-600" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">WhatsApp Us</span>
-                  <span className="text-sm font-black text-gray-900">+353 85 809 0960</span>
+                  <span className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider">
+                    WhatsApp Us
+                  </span>
+                  <span className="text-sm font-black text-gray-900">
+                    +353 85 809 0960
+                  </span>
                 </div>
               </a>
 
@@ -199,7 +219,12 @@ export function Header() {
             <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
               <Link href="/" onClick={() => setIsMenuOpen(false)}>
                 <div className="flex items-center gap-2">
-                  <Image src="/Tourenzo.webp" alt="Logo" width={140} height={80} />
+                  <Image
+                    src="/Tourenzo.webp"
+                    alt="Logo"
+                    width={140}
+                    height={80}
+                  />
                 </div>
               </Link>
               <button
@@ -254,8 +279,6 @@ export function Header() {
               </Link>
             </div>
 
-
-
             {/* Drawer Footer (Auth) */}
             <div className="mt-auto pt-6 border-t border-gray-100">
               {isAuthenticated && user ? (
@@ -303,7 +326,6 @@ export function Header() {
                         <LayoutDashboard className="w-4 h-4 text-blue-600" />
                         Dashboard
                       </Button>
-
                     </Link>
                     <Button
                       variant="ghost"
@@ -321,9 +343,7 @@ export function Header() {
                   className="block w-full"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Button className="w-full">
-                    Login / Sign Up
-                  </Button>
+                  <Button className="w-full">Login / Sign Up</Button>
                 </Link>
               )}
             </div>

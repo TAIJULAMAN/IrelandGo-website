@@ -1,42 +1,46 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Mail, Send, Bell, Sparkles, Loader2 } from "lucide-react"
-import { useState } from "react"
-import { useSubscribeMutation } from "@/Redux/features/newsletter/newsletterApi"
-import { toast } from "sonner"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Mail, Send, Bell, Sparkles, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { useSubscribeMutation } from "@/Redux/features/newsletter/newsletterApi";
+import { toast } from "sonner";
 
 export function NewsLetter() {
-  const [email, setEmail] = useState("")
-  const [subscribe, { isLoading }] = useSubscribeMutation()
+  const [email, setEmail] = useState("");
+  const [subscribe, { isLoading }] = useSubscribeMutation();
 
   const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email) return
+    e.preventDefault();
+    if (!email) return;
 
     try {
-      const res = await subscribe({ email }).unwrap()
+      const res = await subscribe({ email }).unwrap();
       if (res?.success) {
-        toast.success(res?.message || "Subscribed successfully!")
-        setEmail("")
+        toast.success(res?.message || "Subscribed successfully!");
+        setEmail("");
       } else {
-        toast.error(res?.message || "Subscription failed")
+        toast.error(res?.message || "Subscription failed");
       }
     } catch (err: any) {
-      toast.error(err?.data?.message || "Something went wrong")
+      toast.error(err?.data?.message || "Something went wrong");
     }
-  }
+  };
 
   return (
     <section className="">
       <div className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center max-w-7xl mx-auto px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 py-8 md:py-10 xl:py-16">
         <div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-4 md:mb-6 text-gray-900 leading-tight">
-            Stay updated with <span className="text-blue-600">Ireland&apos;s best</span> travel deals
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 md:mb-6 text-gray-900 leading-tight">
+            Stay updated with{" "}
+            <span className="text-blue-600">Ireland&apos;s best</span> travel
+            deals
           </h2>
           <p className="text-sm md:text-base lg:text-lg text-gray-600 mb-6 md:mb-8 leading-relaxed">
-            Subscribe to our newsletter and get exclusive access to special offers, insider tips, and the latest updates on Ireland&apos;s most breathtaking destinations delivered straight to your inbox.
+            Subscribe to our newsletter and get exclusive access to special
+            offers, insider tips, and the latest updates on Ireland&apos;s most
+            breathtaking destinations delivered straight to your inbox.
           </p>
 
           <form onSubmit={handleSubscribe} className="mt-6 md:mt-10">
@@ -75,9 +79,6 @@ export function NewsLetter() {
           <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
             <div className="group relative w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-blue-600 to-blue-600 flex items-center justify-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 animate-float">
               <Mail className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-white" />
-              <div className="absolute -top-2 -right-2 w-6 h-6 md:w-8 md:h-8 bg-green-500 rounded-full flex items-center justify-center">
-                <Sparkles className="w-3 h-3 md:w-4 md:h-4 text-white" />
-              </div>
             </div>
 
             <div className="group relative w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 rounded-3xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 animate-float-delay-1">
@@ -98,5 +99,5 @@ export function NewsLetter() {
         </div>
       </div>
     </section>
-  )
+  );
 }

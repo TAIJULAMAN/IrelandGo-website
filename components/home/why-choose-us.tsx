@@ -60,7 +60,6 @@ export function WhyChooseUs() {
       <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-0 lg:px-0 xl:px-0 relative z-10">
         <SectionHeader
           title="Why Travelers Choose Us"
-          subtitle="Our Advantages"
           description="We don't just drive you from A to B. We deliver a seamless, premium travel experience that makes your journey as memorable as the destination."
           alignment="center"
         />
@@ -90,7 +89,6 @@ export function WhyChooseUs() {
             );
           })}
         </div>
-
       </div>
     </section>
   );

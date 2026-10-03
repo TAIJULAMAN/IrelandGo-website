@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { FeatureBadges } from "../common/feature-badges";
 import { HeroTabs } from "../common/hero-tabs";
 import { BookingForm } from "./booking-form";
+import { SectionHeader } from "@/components/ui/section-header";
 
 export function Hero() {
   const [activeTab, setActiveTab] = useState("transfer");
@@ -22,7 +23,7 @@ export function Hero() {
   };
 
   return (
-    <section className="relative w-full pt-24 md:pt-28 lg:pt-32 pb-12 md:pb-16 lg:pb-20 min-h-[100vh] flex flex-col justify-center overflow-hidden">
+    <section className="relative w-full pt-32 md:pt-40 lg:pt-48 pb-12 md:pb-16 lg:pb-20 min-h-[100vh] flex flex-col justify-start overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
           src="/Images/Home.webp"
@@ -35,17 +36,16 @@ export function Hero() {
           className="object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-blue-900/85 via-blue-900/40 to-blue-950/60" />
-        {/* <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-gray-50/50 to-transparent pointer-events-none" /> */}
       </div>
-      <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 md:px-8 relative z-10 my-auto">
-        <div className="text-center mb-6 md:mb-8">
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-3 text-balance leading-tight px-4 drop-shadow-sm">
-            Comfortable car transfers in Ireland
-          </h1>
-          <p className="text-base md:text-lg text-white/90 mb-4 px-4 font-medium drop-shadow-md">
-            Book private transfers and day tours with professional drivers.
-          </p>
-        </div>
+      <div className="max-w-7xl mx-auto w-full px-5 sm:px-6 md:px-8 relative z-10">
+        <SectionHeader
+          title="Comfortable car transfers in Ireland"
+          description="Book private transfers and day tours with professional drivers."
+          isMainHeading={true}
+          className="mb-6 md:mb-8"
+          titleClassName="text-white text-balance leading-tight px-4 drop-shadow-sm"
+          descriptionClassName="text-white/90 px-4 font-medium drop-shadow-md text-base md:text-lg"
+        />
         <HeroTabs
           activeTab={activeTab}
           onTabChange={handleTabClick}

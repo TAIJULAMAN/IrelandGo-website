@@ -9,7 +9,7 @@ export default function AirportTransfers() {
       <AirportTransfersHero />
       <AirportTransfersWhyChoose />
       <Testimonials />
-      <FAQ />
+      <FAQ filterByServiceType="TRANSFER" />
     </>
   );
 }

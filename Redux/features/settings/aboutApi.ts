@@ -17,7 +17,7 @@ export const aboutApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAbout: builder.query<AboutResponse, void>({
       query: () => ({
-        url: "about",
+        url: "settings/about",
         method: "GET",
       }),
       providesTags: ["about"],

@@ -7,7 +7,7 @@ export default function TransferRoutes() {
     <>
       <TransferRoutesHero />
       <PopularTransferRoutes />
-      <FAQ />
+      <FAQ filterByServiceType="TRANSFER" />
     </>
   );
 }

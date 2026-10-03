@@ -177,14 +177,12 @@ export default function Memories() {
           unique opportunity to explore, discover, and cherish the beauty of
           Ireland.
         </p>
+      </div>
 
-        {/* Infinite Right-to-Left Slider */}
-        <div className="relative w-full overflow-hidden memories-container">
-          {/* Edge fade masks for luxury look */}
-          <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-gray-50/90 to-transparent z-20" />
-          <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-gray-50/90 to-transparent z-20" />
+      {/* Infinite Right-to-Left Slider */}
+      <div className="relative w-full overflow-hidden memories-container z-10">
 
-          {isLoading ? (
+        {isLoading ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 py-4">
               {[1, 2, 3, 4].map((n) => (
                 <div
@@ -244,7 +242,6 @@ export default function Memories() {
             </div>
           )}
         </div>
-      </div>
     </section>
   );
 }

@@ -56,7 +56,7 @@ export default function DayTripDetails({
       <DayTripsDetailsHero trip={trip} />
       <TripItinerary trip={trip} />
       <Testimonials />
-      <FAQ />
+      <FAQ filterByServiceType="DAY_TRIP" />
     </main>
   );
 }

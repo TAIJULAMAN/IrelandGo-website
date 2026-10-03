@@ -9,7 +9,7 @@ export default function JourneyDetails() {
       <JourneyDetailsHero />
       <YourJourneyDetails />
       <Testimonials />
-      <FAQ />
+      <FAQ filterByServiceType="TRANSFER" />
     </>
   );
 }

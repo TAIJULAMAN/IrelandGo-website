@@ -65,7 +65,7 @@ export default async function AirportHubPage({ params }: PageProps) {
       </div>
       <AirportTransfersWhyChoose />
       <Testimonials />
-      <FAQ />
+      <FAQ filterByServiceType="TRANSFER" />
     </>
   );
 }

@@ -81,6 +81,7 @@ export default function UserInfo() {
   const [email, setEmail] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phonePrefix, setPhonePrefix] = useState("+353");
+  const [phoneCountryIso, setPhoneCountryIso] = useState("ie");
   const [phonePrefixOpen, setPhonePrefixOpen] = useState(false);
   const phonePrefixRef = useRef<HTMLDivElement>(null);
   const [phone, setPhone] = useState("");
@@ -130,14 +131,32 @@ export default function UserInfo() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const COUNTRY_CODES: { code: string; iso: string; label: string }[] = countries.findAll().data
+  const COUNTRY_CODES: { code: string; iso: string; label: string; region: string }[] = countries.findAll().data
     .filter((c: any) => c.callingCode && c.callingCode.length > 0)
     .map((c: any) => ({
       code: "+" + c.callingCode[0],
       iso: c.cca2.toLowerCase(),
       label: c.cca2,
+      region: c.region || "",
     }))
-    .sort((a: any, b: any) => a.label.localeCompare(b.label));
+    .sort((a: any, b: any) => {
+      const getPriority = (country: any) => {
+        if (country.label === "US") return 1;
+        if (country.label === "CA") return 2;
+        if (country.label === "AU") return 3;
+        if (country.region === "Europe") return 4;
+        return 5;
+      };
+
+      const priorityA = getPriority(a);
+      const priorityB = getPriority(b);
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
+
+      return a.label.localeCompare(b.label);
+    });
 
   const validateEmail = (val: string) => {
     if (!val) return "Email is required";
@@ -480,7 +499,7 @@ export default function UserInfo() {
                         className="h-full flex items-center gap-1.5 bg-gray-100 border-r border-gray-200 px-2.5 text-sm text-gray-700 shrink-0 hover:bg-gray-200 transition-colors rounded-l-lg focus:outline-none"
                       >
                         <img
-                          src={`https://flagcdn.com/w20/${COUNTRY_CODES.find(c => c.code === phonePrefix)?.iso}.png`}
+                          src={`https://flagcdn.com/w20/${phoneCountryIso}.png`}
                           alt={phonePrefix}
                           className="w-5 h-3.5 object-cover rounded-sm"
                         />
@@ -495,8 +514,8 @@ export default function UserInfo() {
                             <button
                               key={c.code + c.label}
                               type="button"
-                              onClick={() => { setPhonePrefix(c.code); setPhonePrefixOpen(false); }}
-                              className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm hover:bg-blue-50 transition-colors ${phonePrefix === c.code ? "bg-blue-50 text-blue-700 font-semibold" : "text-gray-700"
+                              onClick={() => { setPhonePrefix(c.code); setPhoneCountryIso(c.iso); setPhonePrefixOpen(false); }}
+                              className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm hover:bg-blue-50 transition-colors ${phoneCountryIso === c.iso ? "bg-blue-50 text-blue-700 font-semibold" : "text-gray-700"
                                 }`}
                             >
                               <img

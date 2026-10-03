@@ -12,6 +12,6 @@ export default function DayTripSearchPage() {
       <div className="max-w-7xl mx-auto py-12">
       </div>
       <Testimonials />
-      <FAQ />    </main>
+      <FAQ filterByServiceType="DAY_TRIP" />    </main>
   );
 }

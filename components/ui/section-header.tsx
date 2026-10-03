@@ -1,11 +1,14 @@
 import { cn } from "@/lib/utils";
 
 interface SectionHeaderProps {
-  title: string;
+  title: React.ReactNode;
   subtitle?: string;
-  description?: string;
+  description?: React.ReactNode;
   alignment?: "left" | "center";
   className?: string;
+  isMainHeading?: boolean;
+  titleClassName?: string;
+  descriptionClassName?: string;
 }
 
 export function SectionHeader({
@@ -14,7 +17,12 @@ export function SectionHeader({
   description,
   alignment = "center",
   className,
+  isMainHeading = false,
+  titleClassName,
+  descriptionClassName,
 }: SectionHeaderProps) {
+  const HeadingTag = isMainHeading ? "h1" : "h2";
+
   return (
     <div
       className={cn(
@@ -28,23 +36,25 @@ export function SectionHeader({
           {subtitle}
         </span>
       )}
-      <h2
+      <HeadingTag
         className={cn(
           "text-2xl md:text-4xl lg:text-5xl font-extrabold text-center text-gray-900",
           description ? "mb-4" : "",
+          titleClassName,
         )}
       >
         {title}
-      </h2>
+      </HeadingTag>
       {description && (
-        <p
+        <div
           className={cn(
-            "text-center text-gray-600 max-w-2xl mx-auto mb-8 sm:mb-12 text-sm md:text-base lg:text-lg",
+            "text-center text-gray-600 max-w-5xl mx-auto mb-8 sm:mb-12 text-sm md:text-base lg:text-lg",
             alignment === "center" ? "mx-auto" : "",
+            descriptionClassName,
           )}
         >
           {description}
-        </p>
+        </div>
       )}
     </div>
   );

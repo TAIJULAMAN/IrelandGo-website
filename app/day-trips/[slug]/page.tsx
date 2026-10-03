@@ -67,7 +67,7 @@ export default async function DayTripSlugPage({ params }: PageProps) {
       <Expectations />
       <Memories />
       <Testimonials />
-      <FAQ />
+      <FAQ filterByServiceType="DAY_TRIP" />
     </main>
   );
 }

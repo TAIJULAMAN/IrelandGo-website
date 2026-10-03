@@ -24,7 +24,7 @@ export default function PrivateCarTransfer() {
         </div>
       </div>
       <Testimonials />
-      <FAQ />
+      <FAQ filterByServiceType="TRANSFER" />
     </div>
   );
 }
