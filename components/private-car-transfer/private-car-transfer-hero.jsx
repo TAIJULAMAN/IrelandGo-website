@@ -3,38 +3,19 @@
 import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import {
-  MapPin,
   Calendar as CalendarIcon,
-  Users,
-  Luggage,
-  Plus,
   Search,
   Zap,
   PiggyBank,
   Sparkles,
-  ChevronDown,
-  Minus,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { format } from "date-fns";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { slugifyText } from "@/utils/bookingSession";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
-
-import { validateHeroForm } from "@/utils/validateHeroForm";
+import usePlacesAutocomplete from "use-places-autocomplete";
 import { TripTypeSelector } from "../home/trip-type-selector";
 import { LocationInputs } from "../home/location-inputs";
 import { BookingDetailsInputs } from "../home/booking-details-inputs";
@@ -66,9 +47,7 @@ export default function PrivateCarTransferHero({
   const tripTypeParam = searchParams.get("tripType") || "one-way";
   const pickupDateParam = searchParams.get("pickupDate");
   const pickupTimeParam = searchParams.get("pickupTime") || "09:00";
-
   const [tripType, setTripType] = useState(tripTypeParam);
-
   const transferRouteParam = searchParams.get("transferRoute");
   let transferRoute = null;
   try {
@@ -87,14 +66,6 @@ export default function PrivateCarTransferHero({
   );
   const [showPickupDropdown, setShowPickupDropdown] = useState(false);
   const [showDropoffDropdown, setShowDropoffDropdown] = useState(false);
-  const [selectedPickupIndex, setSelectedPickupIndex] = useState(-1);
-  const [selectedDropoffIndex, setSelectedDropoffIndex] = useState(-1);
-
-
-
-
-  const [oneWayStops, setOneWayStops] = useState([]);
-  const [returnStops, setReturnStops] = useState([]);
   const getTomorrow = () => {
     const d = new Date();
     d.setDate(d.getDate() + 1);
@@ -115,16 +86,7 @@ export default function PrivateCarTransferHero({
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isReturnCalendarOpen, setIsReturnCalendarOpen] = useState(false);
-
   const totalPassengers = adults + children;
-
-  const removeStop = (index) => {
-    if (tripType === "one-way") {
-      setOneWayStops(oneWayStops.filter((_, i) => i !== index));
-    } else {
-      setReturnStops(returnStops.filter((_, i) => i !== index));
-    }
-  };
 
   const pickupInputRef = useRef(null);
   const dropoffInputRef = useRef(null);
@@ -159,8 +121,6 @@ export default function PrivateCarTransferHero({
     initOnMount: isLoaded,
   });
 
-  // Handle keyboard navigation for pickup
-  // Northern Ireland limits check
   const isOutOfRange = (desc) => {
     const lower = desc.toLowerCase();
     if (lower.includes("ireland")) return false;
@@ -218,7 +178,6 @@ export default function PrivateCarTransferHero({
     return false;
   };
 
-  // Handle click outside to close dropdowns
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -266,7 +225,7 @@ export default function PrivateCarTransferHero({
     const [pValHour, pValMin] = time.split(":").map(Number);
     const [rValHour, rValMin] = returnTimeStr.split(":").map(Number);
 
-    return (rValHour < pValHour) || (rValHour === pValHour && rValMin <= pValMin);
+    return rValHour < pValHour || (rValHour === pValHour && rValMin <= pValMin);
   };
 
   useEffect(() => {
@@ -303,9 +262,12 @@ export default function PrivateCarTransferHero({
     date !== undefined &&
     time !== "" &&
     !isTimeDisabled(date, time) &&
-    (tripType === "return" ? returnDate !== undefined && returnTime !== "" && !isReturnTimeDisabled(returnTime) : true);
+    (tripType === "return"
+      ? returnDate !== undefined &&
+        returnTime !== "" &&
+        !isReturnTimeDisabled(returnTime)
+      : true);
 
-  // Get display location for hero title
   const displayLocation = pickupLocation || "Dublin";
 
   return (
@@ -320,10 +282,7 @@ export default function PrivateCarTransferHero({
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-blue-900/80 to-blue-900/40" />
-
         </div>
-
-
 
         <div className="max-w-7xl mx-auto px-5 py-16 relative z-10">
           {/* Hero Text */}
@@ -341,12 +300,15 @@ export default function PrivateCarTransferHero({
                       to {""}
                       {dropoffLocation}
                     </>
-                  ) : ""}
+                  ) : (
+                    ""
+                  )}
                 </>
               )}
             </h1>
             <p className="text-sm md:text-base text-white px-4 font-medium drop-shadow-md leading-relaxed">
-              {customSubtitle || `Seamless city-to-city and airport transfers across ${displayLocation} and beyond.`}
+              {customSubtitle ||
+                `Seamless city-to-city and airport transfers across ${displayLocation} and beyond.`}
             </p>
           </div>
 
@@ -358,7 +320,7 @@ export default function PrivateCarTransferHero({
                 tripType={tripType}
                 setTripType={setTripType}
                 duration={2}
-                setDuration={() => { }}
+                setDuration={() => {}}
               />
               <LocationInputs
                 activeTab="transfer"
@@ -431,10 +393,7 @@ export default function PrivateCarTransferHero({
                     </Button>
                   </Link>
                 ) : (
-                  <Button
-                    className="w-full"
-                    disabled
-                  >
+                  <Button className="w-full" disabled>
                     <Search className="w-5 h-5 mr-2" />
                     Find a Ride
                   </Button>
@@ -446,7 +405,9 @@ export default function PrivateCarTransferHero({
               <div className="absolute inset-0">
                 <MapRoute
                   pickup={pickupLocation ? { name: pickupLocation } : undefined}
-                  dropoff={dropoffLocation ? { name: dropoffLocation } : undefined}
+                  dropoff={
+                    dropoffLocation ? { name: dropoffLocation } : undefined
+                  }
                 />
               </div>
             </div>
@@ -475,8 +436,6 @@ export default function PrivateCarTransferHero({
           </div>
         </div>
       </section>
-
     </>
-
   );
 }
