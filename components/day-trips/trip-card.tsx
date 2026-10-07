@@ -26,19 +26,19 @@ export default function TripCard({ trip }: TripCardProps) {
         <div className="absolute inset-0 bg-gradient-to-t from-gray-900/50 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
       </div>
 
-      <div className="p-4 sm:p-5 flex flex-col flex-1 relative z-10 justify-between gap-3">
+      <div className="p-3 sm:p-5 flex flex-col flex-1 relative z-10 justify-between">
         <div>
-          <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
+          <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 mb-1 sm:mb-1.5 group-hover:text-blue-600 transition-colors line-clamp-1 leading-snug">
             {trip.title}
           </h3>
           <div
-            className="text-xs sm:text-sm text-gray-500 mb-3 line-clamp-2 leading-relaxed min-h-[2.5rem]"
+            className="text-[11px] sm:text-sm text-gray-500 mb-2 sm:mb-3 line-clamp-2 leading-relaxed min-h-0 sm:min-h-[2.5rem]"
             dangerouslySetInnerHTML={{ __html: trip.description }}
           />
-          <div className="flex items-center gap-1.5 sm:gap-2 mb-3">
+          <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
             {trip.travelTimeMinutes && (
-              <span className="card-badge">
-                <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span className="card-badge text-[10px] sm:text-xs lg:text-lg whitespace-nowrap shrink-0">
+                <Clock className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 shrink-0" />
                 {Math.floor(trip.travelTimeMinutes / 60) > 0 ? (
                   <span>
                     {Math.floor(trip.travelTimeMinutes / 60)}h
@@ -55,17 +55,17 @@ export default function TripCard({ trip }: TripCardProps) {
               </span>
             )}
             {trip.groupType && (
-              <span className="card-badge-indigo">
-                <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span className="card-badge-indigo text-[10px] sm:text-xs lg:text-lg whitespace-nowrap shrink-0">
+                <Users className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 shrink-0" />
                 {trip.groupType}
               </span>
             )}
           </div>
         </div>
 
-        <div className="mt-auto pt-2">
-          <div className="flex items-center justify-between mb-3 pt-2 border-t border-gray-100">
-            <span className="text-xs sm:text-sm font-medium text-gray-500">
+        <div className="mt-auto pt-1 sm:pt-2">
+          <div className="flex items-center justify-between mb-2 sm:mb-3 pt-1.5 sm:pt-2 border-t border-gray-100">
+            <span className="text-[11px] sm:text-sm font-medium text-gray-500">
               Starts from
             </span>
             <span className="text-blue-600 font-extrabold text-sm sm:text-lg">
@@ -76,9 +76,9 @@ export default function TripCard({ trip }: TripCardProps) {
                   : 0)}
             </span>
           </div>
-          <div className="btn-theme-primary w-full group/btn">
+          <div className="btn-theme-primary w-full group/btn text-[11px] sm:text-sm">
             <span className="tracking-wide">View Details</span>
-            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
+            <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 transition-transform duration-300 group-hover/btn:translate-x-1.5" />
           </div>
         </div>
       </div>

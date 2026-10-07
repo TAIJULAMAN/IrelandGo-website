@@ -48,7 +48,7 @@ export default function PrivateTransferCard({
         <div>
           <div className="mb-2 sm:mb-3">
             <h3
-              className="font-bold text-gray-900 text-sm sm:text-base md:text-lg group-hover:text-blue-600 transition-colors line-clamp-2 leading-tight"
+              className="font-bold text-gray-900 text-xs sm:text-base md:text-lg group-hover:text-blue-600 transition-colors line-clamp-2 leading-tight"
               title={`${transfer.from} to ${transfer.to}`}
             >
               {transfer.from}
@@ -57,13 +57,13 @@ export default function PrivateTransferCard({
             </h3>
           </div>
 
-          <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-4">
-            <span className="card-badge text-[6px] sm:text-xs whitespace-nowrap shrink-0">
-              <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+          <div className="flex flex-nowrap items-center gap-1 mb-2">
+            <span className="card-badge text-[10px] sm:text-xs lg:text-lg whitespace-nowrap shrink-0">
+              <Clock className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 shrink-0" />
               {renderDuration(transfer.travelTimeMinutes)}
             </span>
-            <span className="card-badge-indigo text-[6px] sm:text-xs whitespace-nowrap shrink-0">
-              <Route className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+            <span className="card-badge-indigo text-[10px] sm:text-xs lg:text-lg whitespace-nowrap shrink-0">
+              <Route className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 shrink-0" />
               {transfer.distanceKm} km
             </span>
           </div>

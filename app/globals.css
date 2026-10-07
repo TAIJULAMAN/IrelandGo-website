@@ -313,34 +313,36 @@ html {
   }
 }
 
-.card-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  white-space: nowrap;
-  flex-shrink: 0;
-  background-color: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid rgba(191, 219, 254, 0.6);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
+@layer components {
+  .card-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.5rem;
+    font-weight: 300;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid rgba(191, 219, 254, 0.6);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
 
-.card-badge-indigo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  white-space: nowrap;
-  flex-shrink: 0;
-  background-color: #eef2ff;
-  color: #4338ca;
-  border: 1px solid rgba(199, 210, 254, 0.6);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  .card-badge-indigo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.5rem;
+    font-weight: 300;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background-color: #eef2ff;
+    color: #4338ca;
+    border: 1px solid rgba(199, 210, 254, 0.6);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
 }

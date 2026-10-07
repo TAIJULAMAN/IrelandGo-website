@@ -57,13 +57,13 @@ export default function PopularDayTripCard({
           </p>
 
           <div className="flex flex-nowrap items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-            <span className="card-badge text-[6px] sm:text-xs whitespace-nowrap">
-              <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+            <span className="card-badge text-[10px] sm:text-xs lg:text-lg whitespace-nowrap">
+              <Clock className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 shrink-0" />
               {renderDuration(trip.travelTimeMinutes)}
             </span>
             {trip.groupType && (
-              <span className="card-badge-indigo text-[6px] sm:text-xs whitespace-nowrap">
-                <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+              <span className="card-badge-indigo text-[10px] sm:text-xs lg:text-lg whitespace-nowrap">
+                <Users className="w-2 h-2 sm:w-3 sm:h-3 lg:w-4 lg:h-4 shrink-0" />
                 {trip.groupType}
               </span>
             )}

@@ -205,16 +205,25 @@ export function Header() {
       </header>
 
       {/* Mobile navigation */}
-      {isMenuOpen && (
-        <div className="fixed inset-0 z-[9999] lg:hidden">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
-            onClick={() => setIsMenuOpen(false)}
-          />
+      <div
+        className={`fixed inset-0 z-[9999] lg:hidden ${
+          isMenuOpen ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
+        {/* Backdrop */}
+        <div
+          className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-500 ease-in-out ${
+            isMenuOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={() => setIsMenuOpen(false)}
+        />
 
-          {/* Drawer */}
-          <nav className="absolute top-0 left-0 z-50 h-full w-[80%] max-w-[300px] bg-white shadow-2xl flex flex-col py-5 px-5 md:px-0 animate-in slide-in-from-left duration-300">
+        {/* Drawer */}
+        <nav
+          className={`absolute top-0 right-0 z-50 h-full w-[80%] max-w-[300px] bg-white shadow-2xl flex flex-col py-5 px-5 md:px-0 transition-transform duration-500 ease-in-out ${
+            isMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
             {/* Drawer Header */}
             <div className="flex items-center justify-between mb-8 border-b border-gray-100 pb-4">
               <Link href="/" onClick={() => setIsMenuOpen(false)}>
@@ -277,6 +286,27 @@ export function Header() {
                 <span>Airport Transfer</span>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </Link>
+
+              {/* Mobile WhatsApp Block */}
+              <a
+                href="https://wa.me/353858090960"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 p-3 mt-2 rounded-lg bg-green-50 border border-green-100 hover:bg-green-100 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-sm shrink-0">
+                  <MessageCircle className="w-5 h-5 text-green-600" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[11px] font-semibold text-green-600 uppercase tracking-wider">
+                    WhatsApp Us
+                  </span>
+                  <span className="text-sm font-black text-green-900">
+                    +353 85 809 0960
+                  </span>
+                </div>
+              </a>
             </div>
 
             {/* Drawer Footer (Auth) */}
@@ -349,7 +379,6 @@ export function Header() {
             </div>
           </nav>
         </div>
-      )}
     </>
   );
 }

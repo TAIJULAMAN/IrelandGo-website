@@ -12,7 +12,7 @@ export function BlogSearchInput({
   return (
     <div className="relative w-full sm:w-[300px] md:w-[350px] shrink-0">
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <Search className="h-4 w-4 text-gray-400" />
+        <Search className="h-3 w-4 text-gray-400" />
       </div>
       <input
         type="text"

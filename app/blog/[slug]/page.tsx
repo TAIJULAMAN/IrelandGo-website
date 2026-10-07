@@ -115,7 +115,7 @@ export default function BlogDetailPage() {
 
           {/* Content area */}
           <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-10 lg:px-12 xl:px-12">
-            <div className="max-w-3xl mx-auto">
+            <div className="max-w-7xl mx-auto">
               {/* Main content */}
               <div
                 className="prose prose-lg prose-gray max-w-none
@@ -124,34 +124,8 @@ export default function BlogDetailPage() {
                                 prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
                                 prose-img:rounded-lg prose-img:shadow-sm
                             "
-              >
-                <p className="text-lg md:text-xl text-gray-700 leading-relaxed">
-                  {blog.content}
-                </p>
-              </div>
-
-              {/* Additional images gallery */}
-              {blog.image && blog.image.length > 1 && (
-                <div className="mt-10">
-                  <div
-                    className={`grid gap-4 ${blog.image.length === 2 ? "grid-cols-2" : "grid-cols-2 md:grid-cols-3"}`}
-                  >
-                    {blog.image.slice(1).map((img: string, idx: number) => (
-                      <div
-                        key={idx}
-                        className="relative rounded-lg overflow-hidden aspect-[4/3] shadow-sm"
-                      >
-                        <Image
-                          src={img}
-                          alt={`${blog.title} - Image ${idx + 2}`}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                dangerouslySetInnerHTML={{ __html: blog.content }}
+              />
 
               {/* Divider */}
               <hr className="my-10 border-gray-200" />
