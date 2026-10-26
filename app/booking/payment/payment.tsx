@@ -35,17 +35,27 @@ export default function PaymentStep() {
 
   const pickupParam = searchParams.get("pickup") || session.pickup || "";
   const dropoffParam = searchParams.get("dropoff") || session.dropoff || "";
+  const destinationParam =
+    searchParams.get("destination") || session.destination || "";
   const dateParam = searchParams.get("date") || session.date || "";
   const timeParam = searchParams.get("time") || session.time || "";
-  const adults = parseInt(searchParams.get("adults") || session.adults?.toString() || "2");
-  const children = parseInt(searchParams.get("children") || session.children?.toString() || "0");
-  const extraBags = parseInt(searchParams.get("extraBags") || session.extraBags?.toString() || "0");
+  const adults = parseInt(
+    searchParams.get("adults") || session.adults?.toString() || "2",
+  );
+  const children = parseInt(
+    searchParams.get("children") || session.children?.toString() || "0",
+  );
+  const extraBags = parseInt(
+    searchParams.get("extraBags") || session.extraBags?.toString() || "0",
+  );
   const vehicleId = searchParams.get("vehicleId") || session.vehicleId;
   const transferRouteParam = searchParams.get("transferRoute");
   const selectedStopsParam = searchParams.get("selectedStops");
-  const serviceType = searchParams.get("serviceType") || session.serviceType || "TRANSFER";
+  const serviceType =
+    searchParams.get("serviceType") || session.serviceType || "TRANSFER";
   const carPriceParam = searchParams.get("carPrice");
-  const tripType = searchParams.get("tripType") || session.tripType || "one-way";
+  const tripType =
+    searchParams.get("tripType") || session.tripType || "one-way";
   const bookingId = searchParams.get("bookingId") || session.bookingId || "";
   const [payError, setPayError] = useState("");
   const [payment, { isLoading: isPaying }] = usePaymentMutation();
@@ -54,14 +64,16 @@ export default function PaymentStep() {
   if (transferRouteParam) {
     try {
       transferRoute = JSON.parse(transferRouteParam);
-    } catch (e) { }
+    } catch (e) {}
   }
 
-  let selectedStops: any[] = session.selectedStops || [];
-  if (selectedStopsParam) {
+  const isDayTrip = serviceType === "DAY_TRIP";
+
+  let selectedStops: any[] = isDayTrip ? [] : (session.selectedStops || []);
+  if (selectedStopsParam && !isDayTrip) {
     try {
       selectedStops = JSON.parse(selectedStopsParam);
-    } catch (e) { }
+    } catch (e) {}
   }
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
@@ -80,14 +92,18 @@ export default function PaymentStep() {
   }
 
   // Use carPrice from URL or session, apply return multiplier
-  let transportPrice = carPriceParam ? parseFloat(carPriceParam) : (session.carPrice || 0);
-  const isReturn = tripType === "return";
+  let transportPrice = carPriceParam
+    ? parseFloat(carPriceParam)
+    : session.carPrice || 0;
+  const isReturn = !isDayTrip && tripType === "return";
   if (isReturn) transportPrice = transportPrice * 2;
 
-  const stopsCost = selectedStops.reduce(
-    (total: number, stop: any) => total + (Number(stop.price) || 0),
-    0,
-  );
+  const stopsCost = isDayTrip
+    ? 0
+    : selectedStops.reduce(
+        (total: number, stop: any) => total + (Number(stop.price) || 0),
+        0,
+      );
   const totalPrice = (Number(transportPrice) || 0) + stopsCost;
 
   let formattedDate = dateParam;
@@ -99,7 +115,7 @@ export default function PaymentStep() {
         month: "short",
         day: "numeric",
       });
-    } catch (e) { }
+    } catch (e) {}
   }
 
   return (
@@ -135,14 +151,18 @@ export default function PaymentStep() {
             <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
-                {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "3" : "4"}
+                {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP"
+                  ? "3"
+                  : "4"}
               </div>
               <span className="hidden sm:inline">Details</span>
             </div>
             <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold">
-                {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "4" : "5"}
+                {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP"
+                  ? "4"
+                  : "5"}
               </div>
               <span className="hidden sm:inline">Payment</span>
             </div>
@@ -152,7 +172,11 @@ export default function PaymentStep() {
         {/* Heading */}
         <div className="mb-6 sm:mb-8 mt-2 sm:mt-4">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-700 mb-2">
-            Step {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP" ? "4" : "5"}: Payment
+            Step{" "}
+            {serviceType === "BY_THE_HOUR" || serviceType === "DAY_TRIP"
+              ? "4"
+              : "5"}
+            : Payment
           </h1>
           <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
             Select your preferred payment method for your journey.
@@ -169,32 +193,66 @@ export default function PaymentStep() {
               </h2>
 
               <div className="space-y-5 text-xs sm:text-sm text-gray-700 mb-4">
-                <div className="flex gap-3">
-                  <div className="mt-1 text-blue-600 shrink-0">
-                    <MapPin className="h-4 w-4" />
+                {isDayTrip && (destinationParam || pickupParam === dropoffParam) ? (
+                  <div className="flex gap-3">
+                    <div className="mt-1 text-blue-600 shrink-0">
+                      <MapPin className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
+                        Route
+                      </p>
+                      {destinationParam ? (
+                        <div className="font-semibold text-gray-900 flex flex-wrap items-center gap-1.5">
+                          <span>{pickupParam}</span>
+                          <span className="text-blue-500 font-bold">→</span>
+                          <span className="text-blue-700 bg-blue-50 px-2 py-0.5 rounded text-xs font-bold">
+                            {destinationParam}
+                          </span>
+                          <span className="text-blue-500 font-bold">→</span>
+                          <span>{dropoffParam}</span>
+                        </div>
+                      ) : (
+                        <span className="font-semibold text-gray-900 flex items-center gap-2">
+                          {pickupParam} <span className="text-gray-400">→</span>{" "}
+                          {dropoffParam}
+                        </span>
+                      )}
+                      <p className="text-xs text-gray-500 mt-1">
+                        {formattedDate}, {timeParam}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
-                      Pickup Location
-                    </p>
-                    <p className="font-medium text-gray-900">{pickupParam}</p>
-                    <p className="text-xs text-gray-500">
-                      {formattedDate}, {timeParam}
-                    </p>
-                  </div>
-                </div>
+                ) : (
+                  <>
+                    <div className="flex gap-3">
+                      <div className="mt-1 text-blue-600 shrink-0">
+                        <MapPin className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
+                          Pickup Location
+                        </p>
+                        <p className="font-medium text-gray-900">{pickupParam}</p>
+                        <p className="text-xs text-gray-500">
+                          {formattedDate}, {timeParam}
+                        </p>
+                      </div>
+                    </div>
 
-                <div className="flex gap-3">
-                  <div className="mt-1 text-blue-600 shrink-0">
-                    <MapPin className="h-4 w-4" />
-                  </div>
-                  <div>
-                    <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
-                      Destination
-                    </p>
-                    <p className="font-medium text-gray-900">{dropoffParam}</p>
-                  </div>
-                </div>
+                    <div className="flex gap-3">
+                      <div className="mt-1 text-blue-600 shrink-0">
+                        <MapPin className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
+                          Destination
+                        </p>
+                        <p className="font-medium text-gray-900">{dropoffParam}</p>
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 <div className="flex gap-3">
                   <div className="mt-1 text-blue-600 shrink-0">
@@ -209,7 +267,7 @@ export default function PaymentStep() {
                   </div>
                 </div>
 
-                {selectedStops.length > 0 && (
+                {!isDayTrip && selectedStops.length > 0 && (
                   <div className="flex gap-3">
                     <div className="mt-1 text-blue-600 shrink-0">
                       <Clock className="h-4 w-4" />
@@ -235,7 +293,11 @@ export default function PaymentStep() {
                   Price Breakdown
                 </p>
                 <div className="flex items-center justify-between">
-                  <span>Transport {isReturn ? "(one-way)" : "Fare"}</span>
+                  <span>
+                    {isDayTrip
+                      ? "Transport"
+                      : `Transport ${isReturn ? "(one-way)" : "Fare"}`}
+                  </span>
                   <span className="text-gray-900">
                     €
                     {isReturn ? Math.round(transportPrice / 2) : transportPrice}
@@ -249,7 +311,7 @@ export default function PaymentStep() {
                     </span>
                   </div>
                 )}
-                {stopsCost > 0 && (
+                {!isDayTrip && stopsCost > 0 && (
                   <div className="flex items-center justify-between">
                     <span>Extra Stops</span>
                     <span className="text-gray-900">€{stopsCost}</span>
@@ -278,14 +340,6 @@ export default function PaymentStep() {
                 <Button
                   onClick={async () => {
                     setPayError("");
-
-                    // --- DEBUGGING LOGS ---
-                    // console.log("=== PAYMENT CLICKED ===");
-                    // console.log("Token in localStorage:", localStorage.getItem("token"));
-                    // console.log("AccessToken in localStorage:", localStorage.getItem("accessToken"));
-                    // console.log("Booking ID:", bookingId);
-                    // console.log("Total Price:", totalPrice);
-                    // -----------------------
 
                     try {
                       const res = await payment({

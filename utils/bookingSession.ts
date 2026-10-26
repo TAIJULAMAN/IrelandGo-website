@@ -5,6 +5,7 @@ export interface BookingSessionData {
   id?: string;
   pickup: string;
   dropoff: string;
+  destination?: string;
   date?: string;
   time?: string;
   adults: number;
@@ -47,9 +48,7 @@ export const defaultBookingSession: BookingSessionData = {
   selectedStops: [],
 };
 
-/**
- * Get current booking session from sessionStorage
- */
+
 export function getBookingSession(): BookingSessionData {
   if (typeof window === "undefined") {
     return { ...defaultBookingSession };
@@ -60,7 +59,6 @@ export function getBookingSession(): BookingSessionData {
     const parsed = raw ? JSON.parse(raw) : null;
     const current = parsed ? { ...defaultBookingSession, ...parsed } : { ...defaultBookingSession };
 
-    // Fallback hydration: If pickup is missing, extract from the URL pathname
     if (!current.pickup && window.location.pathname) {
       const routeInfo = extractRouteFromPathname(window.location.pathname);
       if (routeInfo) {
@@ -70,6 +68,10 @@ export function getBookingSession(): BookingSessionData {
       }
     }
 
+    if (current.serviceType === "DAY_TRIP") {
+      current.selectedStops = [];
+    }
+
     return current;
   } catch (error) {
     console.error("Error reading booking session from sessionStorage:", error);
@@ -77,9 +79,6 @@ export function getBookingSession(): BookingSessionData {
   }
 }
 
-/**
- * Save / merge updates to booking session in sessionStorage
- */
 export function saveBookingSession(
   updates: Partial<BookingSessionData>,
 ): BookingSessionData {
@@ -90,6 +89,9 @@ export function saveBookingSession(
   try {
     const current = getBookingSession();
     const merged = { ...current, ...updates };
+    if (merged.serviceType === "DAY_TRIP") {
+      merged.selectedStops = [];
+    }
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
     return merged;
   } catch (error) {
@@ -98,9 +100,6 @@ export function saveBookingSession(
   }
 }
 
-/**
- * Clear the booking session from sessionStorage
- */
 export function clearBookingSession(): void {
   if (typeof window === "undefined") return;
   try {
@@ -110,17 +109,19 @@ export function clearBookingSession(): void {
   }
 }
 
-/**
- * Sync URL searchParams to sessionStorage.
- * If searchParams contain booking data, parse and merge into session.
- */
+
 export function syncUrlParamsToSession(
   searchParams: { get: (key: string) => string | null; toString: () => string },
 ): BookingSessionData {
   const updates: Partial<BookingSessionData> = {};
 
   const serviceType = searchParams.get("serviceType");
-  if (serviceType) updates.serviceType = serviceType;
+  if (serviceType) {
+    updates.serviceType = serviceType;
+    if (serviceType === "DAY_TRIP") {
+      updates.selectedStops = [];
+    }
+  }
 
   const id = searchParams.get("id");
   if (id) updates.id = id;
@@ -130,6 +131,9 @@ export function syncUrlParamsToSession(
 
   const dropoff = searchParams.get("dropoff");
   if (dropoff) updates.dropoff = dropoff;
+
+  const destination = searchParams.get("destination");
+  if (destination) updates.destination = destination;
 
   const date = searchParams.get("date");
   if (date) updates.date = date;
@@ -204,9 +208,6 @@ export function syncUrlParamsToSession(
   return getBookingSession();
 }
 
-/**
- * Clean up the URL query parameters from the browser address bar without triggering a page reload.
- */
 export function cleanBrowserUrl(cleanPath: string): void {
   if (typeof window !== "undefined" && window.location.search) {
     window.history.replaceState({}, "", cleanPath);
@@ -222,13 +223,6 @@ export function slugifyText(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-/**
- * Normalizes location text to clean canonical SEO slug (matches master SEO list)
- * e.g. "Dublin, Ireland" -> "dublin"
- * e.g. "Galway, Ireland" -> "galway"
- * e.g. "Shannon Airport (SNN), Ireland" -> "shannon-airport"
- * e.g. "Dublin Airport (DUB), Ireland" -> "dublin-airport"
- */
 export function cleanLocationSlug(text: string): string {
   if (!text) return "";
   const lower = text.toLowerCase();
@@ -258,10 +252,7 @@ export function cleanLocationSlug(text: string): string {
   return slug || slugifyText(text);
 }
 
-/**
- * Extracts route info from pathname when user lands directly or reloads the page
- * e.g. /booking/transfers/dublin-to-galway/stops -> { pickup: "Dublin, Ireland", dropoff: "Galway, Ireland" }
- */
+
 export function extractRouteFromPathname(pathname: string): { pickup: string; dropoff: string; serviceType?: string } | null {
   if (!pathname) return null;
   const segments = pathname.split("/").filter(Boolean);
@@ -317,11 +308,7 @@ export function extractRouteFromPathname(pathname: string): { pickup: string; dr
   return null;
 }
 
-/**
- * Builds clean semantic URL for booking steps
- * e.g. /booking/transfers/dublin-to-cork/vehicles
- * e.g. /booking/transfers/dublin-to-cork/mercedes-e-class/user-info
- */
+
 export function buildSemanticBookingUrl(
   step: "vehicles" | "stops" | "user-info" | "payment",
   session: Partial<BookingSessionData>,
@@ -335,7 +322,13 @@ export function buildSemanticBookingUrl(
 
   const pickup = session.pickup ? cleanLocationSlug(session.pickup) : "dublin";
   const dropoff = session.dropoff ? cleanLocationSlug(session.dropoff) : "galway";
-  const routeSlug = serviceType === "BY_THE_HOUR" ? pickup : `${pickup}-to-${dropoff}`;
+  const destSlug = session.destination ? cleanLocationSlug(session.destination) : dropoff;
+  const routeSlug =
+    serviceType === "BY_THE_HOUR"
+      ? pickup
+      : serviceType === "DAY_TRIP" && session.destination
+      ? `${pickup}-to-${destSlug}`
+      : `${pickup}-to-${dropoff}`;
 
   if (step === "user-info" && vehicleName) {
     const vSlug = slugifyText(vehicleName);

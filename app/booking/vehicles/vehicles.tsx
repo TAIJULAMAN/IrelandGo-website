@@ -121,7 +121,9 @@ export default function Vehicles() {
             </div>
             <div className="flex items-center gap-2">
               <div className="bg-blue-600 text-white px-3 py-1.5 rounded-full text-sm font-semibold flex items-center shadow-sm">
-                {tripType === "round-trip" || tripType === "return"
+                {serviceType === "DAY_TRIP"
+                  ? "Day Trip (Round Trip)"
+                  : tripType === "round-trip" || tripType === "return"
                   ? "Round trip"
                   : "One way"}
               </div>
@@ -176,6 +178,9 @@ export default function Vehicles() {
                   carPrice: selectedPrice || 0,
                   distanceKm: distanceKm || 0,
                   coords: coords || undefined,
+                  ...(serviceType === "DAY_TRIP" || serviceType === "BY_THE_HOUR"
+                    ? { selectedStops: [] }
+                    : {}),
                 });
               }}
               href={

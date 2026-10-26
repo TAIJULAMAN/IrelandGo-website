@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Calendar as CalendarIcon,
   Luggage,
@@ -68,6 +69,7 @@ export function BookingDetailsInputs({
   setIsReturnCalendarOpen,
   isReturnTimeDisabled,
 }: BookingDetailsInputsProps) {
+  const [isLuggageOpen, setIsLuggageOpen] = useState(false);
   const isReturnVisible = activeTab === "transfer" && tripType === "return";
   const departureTooltip = date
     ? `${format(date, "PPP")} | ${time}`
@@ -210,7 +212,7 @@ export function BookingDetailsInputs({
             Extra Bags
           </label>
           <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100">
-            <Popover>
+            <Popover open={isLuggageOpen} onOpenChange={setIsLuggageOpen}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <PopoverTrigger asChild>
@@ -265,6 +267,16 @@ export function BookingDetailsInputs({
                         <Plus className="h-3 w-3" />
                       </Button>
                     </div>
+                  </div>
+                  <div className="pt-3 border-t border-gray-100 flex justify-end">
+                    <Button
+                      type="button"
+                      size="sm"
+                      className="w-full sm:w-auto px-5 py-1.5 h-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-all text-xs"
+                      onClick={() => setIsLuggageOpen(false)}
+                    >
+                      Done
+                    </Button>
                   </div>
                 </div>
               </PopoverContent>

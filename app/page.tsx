@@ -72,9 +72,9 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col w-full overflow-x-hidden relative">
       <Hero />
-      <PrivateTransfers />
-      <HowItWorks />
       <PopularDayTrips />
+      <HowItWorks />
+      <PrivateTransfers />
       <PopularMultiDayTours />
       <SafetyComfort />
       <WhyChooseUs />

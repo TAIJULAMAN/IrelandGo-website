@@ -157,6 +157,11 @@ export default function RootLayout({
         />
         <link rel="preconnect" href="https://maps.googleapis.com" />
         <link rel="dns-prefetch" href="https://maps.googleapis.com" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var observer=new MutationObserver(function(mutations){for(var i=0;i<mutations.length;i++){var m=mutations[i];if(m.type==='attributes'&&m.target&&m.target.hasAttribute&&m.target.hasAttribute('bis_skin_checked')){m.target.removeAttribute('bis_skin_checked');}}});observer.observe(document.documentElement,{attributes:true,subtree:true,attributeFilter:['bis_skin_checked']});}catch(e){}})();`,
+          }}
+        />
       </head>
       <body
         suppressHydrationWarning

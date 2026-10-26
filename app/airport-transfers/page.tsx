@@ -13,11 +13,11 @@ export const metadata: Metadata = {
 
 export default function AirportTransfers() {
   return (
-    <>
+    <main>
       <AirportTransfersHero />
       <AirportTransfersWhyChoose />
       <Testimonials />
       <FAQ />
-    </>
+    </main>
   );
 }

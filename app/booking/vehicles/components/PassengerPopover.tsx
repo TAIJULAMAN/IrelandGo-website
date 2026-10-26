@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Users, Luggage, ChevronDown, Plus, Minus } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -19,8 +20,10 @@ export function PassengerPopover({
   localExtraBags,
   handleUpdate,
 }: PassengerPopoverProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -181,6 +184,16 @@ export function PassengerPopover({
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="pt-4 mt-6 border-t border-gray-100 flex justify-end">
+          <Button
+            type="button"
+            className="w-full sm:w-auto px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-sm transition-all text-sm"
+            onClick={() => setIsOpen(false)}
+          >
+            Done
+          </Button>
         </div>
       </PopoverContent>
     </Popover>

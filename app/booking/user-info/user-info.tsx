@@ -1,22 +1,28 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { SuccessModal } from "./success-modal";
 import { Button } from "@/components/ui/button";
-import { X, CheckCircle2, ChevronDown, AlertCircle } from "lucide-react";
+import {
+  X,
+  CheckCircle2,
+  ChevronDown,
+  AlertCircle,
+  Search,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogFooter
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { useGetVehiclesQuery } from "@/Redux/features/vehicles/vehiclesApi";
 import {
   useCreateBookingUsingServiceIdMutation,
-  useCreateBookingWithoutIdMutation
+  useCreateBookingWithoutIdMutation,
 } from "@/Redux/features/booking/bookingApi";
 // @ts-expect-error: countries-api has no type declarations
 import countries from "countries-api";
@@ -51,7 +57,9 @@ export default function UserInfo() {
     if (typeof window !== "undefined" && window.location.search) {
       const updated = syncUrlParamsToSession(searchParams);
       setSession(updated);
-      cleanBrowserUrl(buildSemanticBookingUrl("user-info", updated, updated.vehicleName));
+      cleanBrowserUrl(
+        buildSemanticBookingUrl("user-info", updated, updated.vehicleName),
+      );
     } else {
       setSession(getBookingSession());
     }
@@ -65,16 +73,26 @@ export default function UserInfo() {
 
   const pickupParam = searchParams.get("pickup") || session.pickup || "";
   const dropoffParam = searchParams.get("dropoff") || session.dropoff || "";
+  const destinationParam =
+    searchParams.get("destination") || session.destination || "";
   const dateParam = searchParams.get("date") || session.date || "";
   const timeParam = searchParams.get("time") || session.time || "";
-  const adults = parseInt(searchParams.get("adults") || session.adults?.toString() || "2");
-  const children = parseInt(searchParams.get("children") || session.children?.toString() || "0");
-  const extraBags = parseInt(searchParams.get("extraBags") || session.extraBags?.toString() || "0");
+  const adults = parseInt(
+    searchParams.get("adults") || session.adults?.toString() || "2",
+  );
+  const children = parseInt(
+    searchParams.get("children") || session.children?.toString() || "0",
+  );
+  const extraBags = parseInt(
+    searchParams.get("extraBags") || session.extraBags?.toString() || "0",
+  );
   const vehicleId = searchParams.get("vehicleId") || session.vehicleId;
   const transferRouteParam = searchParams.get("transferRoute");
   const selectedStopsParam = searchParams.get("selectedStops");
-  const serviceTypeParam = searchParams.get("serviceType") || session.serviceType || "TRANSFER";
-  const tripType = searchParams.get("tripType") || session.tripType || "one-way";
+  const serviceTypeParam =
+    searchParams.get("serviceType") || session.serviceType || "TRANSFER";
+  const tripType =
+    searchParams.get("tripType") || session.tripType || "one-way";
   const tripId = searchParams.get("id") || session.id;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -83,6 +101,7 @@ export default function UserInfo() {
   const [phonePrefix, setPhonePrefix] = useState("+353");
   const [phoneCountryIso, setPhoneCountryIso] = useState("ie");
   const [phonePrefixOpen, setPhonePrefixOpen] = useState(false);
+  const [phoneCountrySearch, setPhoneCountrySearch] = useState("");
   const phonePrefixRef = useRef<HTMLDivElement>(null);
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -90,7 +109,6 @@ export default function UserInfo() {
   const [childSeat, setChildSeat] = useState(false);
   const [wheelchair, setWheelchair] = useState(false);
 
-  // Auto-populate user info when profile or authUser is available
   useEffect(() => {
     if (profile) {
       if (!firstName && profile.fullName) {
@@ -123,7 +141,10 @@ export default function UserInfo() {
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (phonePrefixRef.current && !phonePrefixRef.current.contains(e.target as Node)) {
+      if (
+        phonePrefixRef.current &&
+        !phonePrefixRef.current.contains(e.target as Node)
+      ) {
         setPhonePrefixOpen(false);
       }
     };
@@ -131,66 +152,103 @@ export default function UserInfo() {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const COUNTRY_CODES: { code: string; iso: string; label: string; region: string }[] = countries.findAll().data
-    .filter((c: any) => c.callingCode && c.callingCode.length > 0)
-    .map((c: any) => ({
-      code: "+" + c.callingCode[0],
-      iso: c.cca2.toLowerCase(),
-      label: c.cca2,
-      region: c.region || "",
-    }))
-    .sort((a: any, b: any) => {
-      const getPriority = (country: any) => {
-        if (country.label === "US") return 1;
-        if (country.label === "CA") return 2;
-        if (country.label === "AU") return 3;
-        if (country.region === "Europe") return 4;
-        return 5;
-      };
+  const COUNTRY_CODES: {
+    code: string;
+    iso: string;
+    label: string;
+    name: string;
+    region: string;
+  }[] = useMemo(() => {
+    try {
+      return countries
+        .findAll()
+        .data.filter((c: any) => c.callingCode && c.callingCode.length > 0)
+        .map((c: any) => ({
+          code: "+" + c.callingCode[0],
+          iso: (c.cca2 || "").toLowerCase(),
+          label: c.cca2 || "",
+          name:
+            typeof c.name === "object"
+              ? c.name.common || c.name.official || c.cca2
+              : c.name || c.cca2 || "",
+          region: c.region || "",
+        }))
+        .sort((a: any, b: any) => {
+          const getPriority = (country: any) => {
+            if (country.label === "US") return 1;
+            if (country.label === "CA") return 2;
+            if (country.label === "AU") return 3;
+            if (country.region === "Europe") return 4;
+            return 5;
+          };
 
-      const priorityA = getPriority(a);
-      const priorityB = getPriority(b);
+          const priorityA = getPriority(a);
+          const priorityB = getPriority(b);
 
-      if (priorityA !== priorityB) {
-        return priorityA - priorityB;
-      }
+          if (priorityA !== priorityB) {
+            return priorityA - priorityB;
+          }
 
-      return a.label.localeCompare(b.label);
+          return a.name.localeCompare(b.name);
+        });
+    } catch {
+      return [];
+    }
+  }, []);
+
+  const filteredCountryCodes = useMemo(() => {
+    if (!phoneCountrySearch.trim()) return COUNTRY_CODES;
+    const q = phoneCountrySearch.toLowerCase().trim().replace("+", "");
+    return COUNTRY_CODES.filter((c) => {
+      const matchName = c.name.toLowerCase().includes(q);
+      const matchLabel = c.label.toLowerCase().includes(q);
+      const matchCode = c.code.replace("+", "").includes(q);
+      return matchName || matchLabel || matchCode;
     });
+  }, [COUNTRY_CODES, phoneCountrySearch]);
 
   const validateEmail = (val: string) => {
     if (!val) return "Email is required";
-    if (!val.includes("@")) return "Please enter a valid email address (must include @)";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return "Please enter a valid email address";
+    if (!val.includes("@"))
+      return "Please enter a valid email address (must include @)";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val))
+      return "Please enter a valid email address";
     return "";
   };
   const validatePhone = (val: string) => {
     if (!val) return "Phone number is required";
-    if (!/^\d{6,15}$/.test(val.replace(/\s/g, ""))) return "Enter a valid phone number (digits only, 6–15 digits)";
+    if (!/^\d{6,15}$/.test(val.replace(/\s/g, "")))
+      return "Enter a valid phone number (digits only, 6–15 digits)";
     return "";
   };
-  const isFormValid = firstName && lastName && !validateEmail(email) && !validatePhone(phone);
+  const isFormValid =
+    firstName && lastName && !validateEmail(email) && !validatePhone(phone);
   let transferRoute: any = session.transferRoute || null;
   if (transferRouteParam) {
     try {
       transferRoute = JSON.parse(transferRouteParam);
-    } catch (e) { }
+    } catch (e) {}
   }
-  let selectedStops: any[] = session.selectedStops || [];
-  if (selectedStopsParam) {
+  const isDayTrip = serviceTypeParam === "DAY_TRIP";
+  let selectedStops: any[] = isDayTrip ? [] : (session.selectedStops || []);
+  if (selectedStopsParam && !isDayTrip) {
     try {
       selectedStops = JSON.parse(selectedStopsParam);
-    } catch (e) { }
+    } catch (e) {}
   }
 
   const { data: vehiclesData } = useGetVehiclesQuery({});
   const vehicles = vehiclesData?.data?.data || [];
   const carPriceParam = searchParams.get("carPrice");
-  let transportPrice = carPriceParam ? parseFloat(carPriceParam) : (session.carPrice || 0);
+  let transportPrice = carPriceParam
+    ? parseFloat(carPriceParam)
+    : session.carPrice || 0;
   let basePriceSum = 0;
   let pricePerKmSum = 0;
   const distanceKmParam = searchParams.get("distanceKm");
-  const distanceKm = distanceKmParam ? parseFloat(distanceKmParam) : (session.distanceKm || transferRoute?.distanceKm || 0);
+  const distanceKm = distanceKmParam
+    ? parseFloat(distanceKmParam)
+    : session.distanceKm || transferRoute?.distanceKm || 0;
 
   if (vehicleId && vehicles.length > 0) {
     const ids = vehicleId.split("+");
@@ -218,15 +276,17 @@ export default function UserInfo() {
     transportPrice = Math.round(basePriceSum + pricePerKmSum * distanceKm);
   }
 
-  const isReturn = tripType === "return";
+  const isReturn = !isDayTrip && tripType === "return";
   if (isReturn) {
     transportPrice = transportPrice * 2;
   }
 
-  const stopsCost = selectedStops.reduce(
-    (total: number, stop: any) => total + (Number(stop.price) || 0),
-    0,
-  );
+  const stopsCost = isDayTrip
+    ? 0
+    : selectedStops.reduce(
+        (total: number, stop: any) => total + (Number(stop.price) || 0),
+        0,
+      );
 
   const totalPrice = (Number(transportPrice) || 0) + stopsCost;
 
@@ -239,7 +299,7 @@ export default function UserInfo() {
         month: "short",
         day: "numeric",
       });
-    } catch (e) { }
+    } catch (e) {}
   }
 
   const [createBookingUsingServiceId, { isLoading: isBookingWithIdLoading }] =
@@ -249,10 +309,14 @@ export default function UserInfo() {
 
   const isLoading = isBookingWithIdLoading || isBookingWithoutIdLoading;
 
-  const fromLat = searchParams.get("fromLat") || session.coords?.fromLat?.toString() || "";
-  const fromLng = searchParams.get("fromLng") || session.coords?.fromLng?.toString() || "";
-  const toLat = searchParams.get("toLat") || session.coords?.toLat?.toString() || "";
-  const toLng = searchParams.get("toLng") || session.coords?.toLng?.toString() || "";
+  const fromLat =
+    searchParams.get("fromLat") || session.coords?.fromLat?.toString() || "";
+  const fromLng =
+    searchParams.get("fromLng") || session.coords?.fromLng?.toString() || "";
+  const toLat =
+    searchParams.get("toLat") || session.coords?.toLat?.toString() || "";
+  const toLng =
+    searchParams.get("toLng") || session.coords?.toLng?.toString() || "";
 
   const handleBooking = async () => {
     const bookingVehiclesMap: Record<string, number> = {};
@@ -264,10 +328,12 @@ export default function UserInfo() {
     const bookingVehicles = Object.entries(bookingVehiclesMap).map(
       ([id, quantity]) => ({ vehicleId: id, quantity }),
     );
-    const bookingStoppages = selectedStops.map((stop) => ({
-      stoppageId: stop.id,
-      quantity: 1,
-    }));
+    const bookingStoppages = isDayTrip
+      ? []
+      : selectedStops.map((stop) => ({
+          stoppageId: stop.id,
+          quantity: 1,
+        }));
 
     let safeTravelDate = dateParam || new Date().toISOString();
     if (new Date(safeTravelDate) < new Date()) {
@@ -277,11 +343,15 @@ export default function UserInfo() {
     const body = {
       clientName: `${firstName} ${lastName}`.trim() || "Guest User",
       from: pickupParam,
-      fromLat: fromLat ? parseFloat(fromLat) : (transferRoute?.fromLat || 53.3498),
-      fromLng: fromLng ? parseFloat(fromLng) : (transferRoute?.fromLng || -6.2603),
+      fromLat: fromLat
+        ? parseFloat(fromLat)
+        : transferRoute?.fromLat || 53.3498,
+      fromLng: fromLng
+        ? parseFloat(fromLng)
+        : transferRoute?.fromLng || -6.2603,
       to: dropoffParam,
-      toLat: toLat ? parseFloat(toLat) : (transferRoute?.toLat || 53.2707),
-      toLng: toLng ? parseFloat(toLng) : (transferRoute?.toLng || -9.0568),
+      toLat: toLat ? parseFloat(toLat) : transferRoute?.toLat || 53.2707,
+      toLng: toLng ? parseFloat(toLng) : transferRoute?.toLng || -9.0568,
       serviceType: transferRoute?.serviceType || serviceTypeParam,
       travelDate: safeTravelDate,
       timeSlot: {
@@ -307,16 +377,24 @@ export default function UserInfo() {
       },
     };
 
-    // console.log("Sending booking request with body:", body);
-
     try {
       let res;
-      const withoutIdTypes = ["TRANSFER", "BY_THE_HOUR", "PRIVATE_TRANSFER", "AIRPORT_TRANSFER", "PRIVATE_CAR_TRANSFER"];
+      const withoutIdTypes = [
+        "TRANSFER",
+        "BY_THE_HOUR",
+        "PRIVATE_TRANSFER",
+        "AIRPORT_TRANSFER",
+        "PRIVATE_CAR_TRANSFER",
+      ];
 
       if (withoutIdTypes.includes(body.serviceType) || !tripId) {
         res = await createBookingWithoutId({ body }).unwrap();
       } else {
-        const serviceId = tripId || transferRoute?.id || transferRoute?._id || "60d5ec49f3b0b30015f8e500";
+        const serviceId =
+          tripId ||
+          transferRoute?.id ||
+          transferRoute?._id ||
+          "60d5ec49f3b0b30015f8e500";
         res = await createBookingUsingServiceId({ serviceId, body }).unwrap();
       }
       const id = res?.data?.id || res?.data?._id || "";
@@ -330,15 +408,12 @@ export default function UserInfo() {
           phone: `${phonePrefix}${phone}`,
           specialRequests,
           carPrice: transportPrice,
+          selectedStops: isDayTrip ? [] : selectedStops,
         });
       }
 
       const accessToken = res?.data?.accessToken;
       const user = res?.data?.user;
-
-      // console.log("=== BOOKING RESPONSE ===", res);
-      // console.log("Extracted accessToken:", accessToken);
-      // console.log("Extracted user:", user);
 
       const existingToken =
         typeof window !== "undefined"
@@ -346,17 +421,12 @@ export default function UserInfo() {
           : null;
 
       if (accessToken && user && !existingToken) {
-        // Only log in guest users who don't have an active session
         dispatch(setUser({ user, accessToken: accessToken, refreshToken: "" }));
         localStorage.setItem("accessToken", accessToken);
       }
 
-
       setShowModal(true);
     } catch (e: any) {
-      // console.error("Booking failed. Full error:", JSON.stringify(e, null, 2));
-      // console.error("Error status:", e?.status);
-      // console.error("Error data (detailed):", JSON.stringify(e?.data, null, 2));
       const errorMessage = e?.data?.message || e?.message || "Unknown error";
       setErrorModalMessage(`Failed to process booking: ${errorMessage}`);
       setShowErrorModal(true);
@@ -381,28 +451,35 @@ export default function UserInfo() {
               </div>
               <span className="hidden sm:inline">Choose Vehicle</span>
             </div>
-            {serviceTypeParam !== "BY_THE_HOUR" && serviceTypeParam !== "DAY_TRIP" && (
-              <>
-                <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
-                <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
-                    3
+            {serviceTypeParam !== "BY_THE_HOUR" &&
+              serviceTypeParam !== "DAY_TRIP" && (
+                <>
+                  <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-semibold">
+                      3
+                    </div>
+                    <span className="hidden sm:inline">Add Stops</span>
                   </div>
-                  <span className="hidden sm:inline">Add Stops</span>
-                </div>
-              </>
-            )}
+                </>
+              )}
             <div className="flex-1 h-0.5 bg-blue-600 mx-2" />
             <div className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-blue-600 bg-white text-blue-600 text-xs font-semibold">
-                {serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "3" : "4"}
+                {serviceTypeParam === "BY_THE_HOUR" ||
+                serviceTypeParam === "DAY_TRIP"
+                  ? "3"
+                  : "4"}
               </div>
               <span className="hidden sm:inline">Details</span>
             </div>
             <div className="flex-1 h-0.5 bg-gray-200 mx-2" />
             <div className="flex items-center gap-2 text-gray-400">
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-200 text-xs font-semibold">
-                {serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "4" : "5"}
+                {serviceTypeParam === "BY_THE_HOUR" ||
+                serviceTypeParam === "DAY_TRIP"
+                  ? "4"
+                  : "5"}
               </div>
               <span className="hidden sm:inline">Payment</span>
             </div>
@@ -411,7 +488,12 @@ export default function UserInfo() {
         <div className="mb-6 sm:mb-8 mt-2 sm:mt-4 flex justify-between items-end">
           <div>
             <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-700 mb-2">
-              Step {serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "3" : "4"}: Passenger Details
+              Step{" "}
+              {serviceTypeParam === "BY_THE_HOUR" ||
+              serviceTypeParam === "DAY_TRIP"
+                ? "3"
+                : "4"}
+              : Passenger Details
             </h1>
             <p className="text-sm sm:text-base text-gray-600 max-w-2xl">
               Please provide your contact information and any special
@@ -466,17 +548,21 @@ export default function UserInfo() {
                       value={email}
                       onChange={(e) => {
                         setEmail(e.target.value);
-                        if (emailError) setEmailError(validateEmail(e.target.value));
+                        if (emailError)
+                          setEmailError(validateEmail(e.target.value));
                       }}
                       onBlur={() => setEmailError(validateEmail(email))}
                       placeholder="Enter your email address"
-                      className={`h-10 sm:h-11 rounded-lg border bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent ${emailError
-                        ? "border-red-400 focus:ring-red-400"
-                        : "border-gray-200 focus:ring-blue-600"
-                        }`}
+                      className={`h-10 sm:h-11 rounded-lg border bg-gray-50 px-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:border-transparent ${
+                        emailError
+                          ? "border-red-400 focus:ring-red-400"
+                          : "border-gray-200 focus:ring-blue-600"
+                      }`}
                     />
                     {emailError && (
-                      <p className="text-xs text-red-500 mt-0.5">{emailError}</p>
+                      <p className="text-xs text-red-500 mt-0.5">
+                        {emailError}
+                      </p>
                     )}
                   </div>
 
@@ -487,15 +573,16 @@ export default function UserInfo() {
                     </label>
                     <div
                       ref={phonePrefixRef}
-                      className={`flex h-10 sm:h-11 rounded-lg border bg-gray-50 overflow-visible focus-within:ring-2 focus-within:border-transparent relative ${phoneError
-                        ? "border-red-400 focus-within:ring-red-400"
-                        : "border-gray-200 focus-within:ring-blue-600"
-                        }`}
+                      className={`flex h-10 sm:h-11 rounded-lg border bg-gray-50 overflow-visible focus-within:ring-2 focus-within:border-transparent relative ${
+                        phoneError
+                          ? "border-red-400 focus-within:ring-red-400"
+                          : "border-gray-200 focus-within:ring-blue-600"
+                      }`}
                     >
                       {/* Custom flag prefix button */}
                       <button
                         type="button"
-                        onClick={() => setPhonePrefixOpen(o => !o)}
+                        onClick={() => setPhonePrefixOpen((o) => !o)}
                         className="h-full flex items-center gap-1.5 bg-gray-100 border-r border-gray-200 px-2.5 text-sm text-gray-700 shrink-0 hover:bg-gray-200 transition-colors rounded-l-lg focus:outline-none"
                       >
                         <img
@@ -503,30 +590,79 @@ export default function UserInfo() {
                           alt={phonePrefix}
                           className="w-5 h-3.5 object-cover rounded-sm"
                         />
-                        <span className="font-medium tracking-tight">{phonePrefix}</span>
-                        <ChevronDown className={`h-3.5 w-3.5 text-gray-500 transition-transform ${phonePrefixOpen ? "rotate-180" : ""}`} />
+                        <span className="font-medium tracking-tight">
+                          {phonePrefix}
+                        </span>
+                        <ChevronDown
+                          className={`h-3.5 w-3.5 text-gray-500 transition-transform ${phonePrefixOpen ? "rotate-180" : ""}`}
+                        />
                       </button>
 
-                      {/* Dropdown list */}
+                      {/* Dropdown list with search */}
                       {phonePrefixOpen && (
-                        <div className="absolute top-full left-0 mt-1 z-50 bg-white border border-gray-200 rounded-lg shadow-xl overflow-y-auto max-h-56 min-w-[160px]">
-                          {COUNTRY_CODES.map(c => (
-                            <button
-                              key={c.code + c.label}
-                              type="button"
-                              onClick={() => { setPhonePrefix(c.code); setPhoneCountryIso(c.iso); setPhonePrefixOpen(false); }}
-                              className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm hover:bg-blue-50 transition-colors ${phoneCountryIso === c.iso ? "bg-blue-50 text-blue-700 font-semibold" : "text-gray-700"
-                                }`}
-                            >
-                              <img
-                                src={`https://flagcdn.com/w20/${c.iso}.png`}
-                                alt={c.label}
-                                className="w-5 h-3.5 object-cover rounded-sm shrink-0"
-                              />
-                              <span className="font-medium">{c.code}</span>
-                              <span className="text-gray-400 text-xs ml-auto">{c.label}</span>
-                            </button>
-                          ))}
+                        <div className="absolute top-full left-0 mt-1 z-50 bg-white border border-gray-200 rounded-xl shadow-2xl w-72 sm:w-80 overflow-hidden">
+                          {/* Search Bar */}
+                          <div className="p-2 border-b border-gray-100 bg-gray-50/80 flex items-center gap-2">
+                            <Search className="w-4 h-4 text-gray-400 shrink-0" />
+                            <input
+                              type="text"
+                              autoFocus
+                              value={phoneCountrySearch}
+                              onChange={(e) =>
+                                setPhoneCountrySearch(e.target.value)
+                              }
+                              placeholder="Search country or code (+353)..."
+                              className="w-full bg-transparent text-xs sm:text-sm text-gray-800 outline-none placeholder:text-gray-400"
+                            />
+                            {phoneCountrySearch && (
+                              <button
+                                type="button"
+                                onClick={() => setPhoneCountrySearch("")}
+                                className="text-gray-400 hover:text-gray-600 p-0.5"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Country List */}
+                          <div className="max-h-56 overflow-y-auto divide-y divide-gray-50">
+                            {filteredCountryCodes.length === 0 ? (
+                              <div className="py-4 text-center text-xs text-gray-500 font-medium">
+                                No countries found
+                              </div>
+                            ) : (
+                              filteredCountryCodes.map((c) => (
+                                <button
+                                  key={c.code + c.label + c.name}
+                                  type="button"
+                                  onClick={() => {
+                                    setPhonePrefix(c.code);
+                                    setPhoneCountryIso(c.iso);
+                                    setPhonePrefixOpen(false);
+                                    setPhoneCountrySearch("");
+                                  }}
+                                  className={`w-full flex items-center gap-2.5 px-3 py-2 text-left text-xs sm:text-sm hover:bg-blue-50 transition-colors ${
+                                    phoneCountryIso === c.iso
+                                      ? "bg-blue-50 text-blue-700 font-semibold"
+                                      : "text-gray-700"
+                                  }`}
+                                >
+                                  <img
+                                    src={`https://flagcdn.com/w20/${c.iso}.png`}
+                                    alt={c.name}
+                                    className="w-5 h-3.5 object-cover rounded-sm shrink-0"
+                                  />
+                                  <span className="font-medium truncate flex-1">
+                                    {c.name}
+                                  </span>
+                                  <span className="text-gray-400 text-xs shrink-0 font-mono">
+                                    {c.code}
+                                  </span>
+                                </button>
+                              ))
+                            )}
+                          </div>
                         </div>
                       )}
 
@@ -544,7 +680,9 @@ export default function UserInfo() {
                       />
                     </div>
                     {phoneError && (
-                      <p className="text-xs text-red-500 mt-0.5">{phoneError}</p>
+                      <p className="text-xs text-red-500 mt-0.5">
+                        {phoneError}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -595,12 +733,10 @@ export default function UserInfo() {
 
             {/* Bottom navigation – inline below the form card, matching card width */}
             <div className="bg-white rounded-xl shadow-[0_4px_20px_rgb(0,0,0,0.08)] p-4 sm:p-4 sm:px-6 flex flex-col-reverse sm:flex-row items-center justify-between gap-4 border border-gray-100 mt-4">
-              <Button
-                asChild
-                variant="outline"
-                size="action"
-              >
-                <Link href={`/booking/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "vehicles" : "stops"}`}>
+              <Button asChild variant="outline" size="action">
+                <Link
+                  href={`/booking/${serviceTypeParam === "BY_THE_HOUR" || serviceTypeParam === "DAY_TRIP" ? "vehicles" : "stops"}`}
+                >
                   Back
                 </Link>
               </Button>
@@ -626,10 +762,22 @@ export default function UserInfo() {
               <div className="space-y-4 text-xs sm:text-sm text-gray-700 mb-5">
                 <div>
                   <span className="text-gray-500 block mb-1">Route</span>
-                  <span className="font-semibold text-gray-900 flex items-center gap-2">
-                    {pickupParam} <span className="text-gray-400">→</span>{" "}
-                    {dropoffParam}
-                  </span>
+                  {serviceTypeParam === "DAY_TRIP" && destinationParam ? (
+                    <div className="font-semibold text-gray-900 flex flex-wrap items-center gap-1.5">
+                      <span>{pickupParam}</span>
+                      <span className="text-blue-500 font-bold">→</span>
+                      <span className="text-blue-700 bg-blue-50 px-2 py-0.5 rounded text-xs font-bold">
+                        {destinationParam}
+                      </span>
+                      <span className="text-blue-500 font-bold">→</span>
+                      <span>{dropoffParam}</span>
+                    </div>
+                  ) : (
+                    <span className="font-semibold text-gray-900 flex items-center gap-2">
+                      {pickupParam} <span className="text-gray-400">→</span>{" "}
+                      {dropoffParam}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <span className="text-gray-500 block mb-1">Date & Time</span>
@@ -644,7 +792,7 @@ export default function UserInfo() {
                     Children)
                   </span>
                 </div>
-                {selectedStops.length > 0 && (
+                {!isDayTrip && selectedStops.length > 0 && (
                   <div>
                     <span className="text-gray-500 block mb-1">
                       Included Stops
@@ -667,10 +815,11 @@ export default function UserInfo() {
               <div className="flex flex-col gap-2 border-t border-gray-100 pt-4 mt-2">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-600">
-                    Transport {isReturn ? "(one-way)" : ""}
+                    {isDayTrip ? "Transport" : `Transport ${isReturn ? "(one-way)" : ""}`}
                   </span>
                   <span className="text-sm font-semibold text-gray-900">
-                    €{isReturn ? Math.round(transportPrice / 2) : transportPrice}
+                    €
+                    {isReturn ? Math.round(transportPrice / 2) : transportPrice}
                   </span>
                 </div>
                 {isReturn && (
@@ -683,7 +832,7 @@ export default function UserInfo() {
                     </span>
                   </div>
                 )}
-                {stopsCost > 0 && (
+                {!isDayTrip && stopsCost > 0 && (
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-medium text-gray-600">
                       Stops
@@ -733,7 +882,9 @@ export default function UserInfo() {
             <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 border border-white/30">
               <AlertCircle className="w-7 h-7" />
             </div>
-            <DialogTitle className="text-xl font-bold">Booking Failed</DialogTitle>
+            <DialogTitle className="text-xl font-bold">
+              Booking Failed
+            </DialogTitle>
           </div>
           <div className="p-6 bg-white text-center">
             <p className="text-slate-600 font-medium leading-relaxed">
@@ -741,7 +892,10 @@ export default function UserInfo() {
             </p>
           </div>
           <div className="p-4 bg-slate-50 flex justify-center border-t border-slate-100">
-            <Button onClick={() => setShowErrorModal(false)} className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg px-8">
+            <Button
+              onClick={() => setShowErrorModal(false)}
+              className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-lg px-8"
+            >
               Understood
             </Button>
           </div>

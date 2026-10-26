@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Luggage, ChevronDown, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -14,13 +15,15 @@ export function HeroLuggage({
   setExtraBags,
   luggageTooltip,
 }: HeroLuggageProps) {
+  const [isLuggageOpen, setIsLuggageOpen] = useState(false);
+
   return (
     <div>
       <label className="text-start text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">
         Luggage
       </label>
       <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:border-blue-500 transition-all bg-white/85 h-[52px] focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10">
-        <Popover>
+        <Popover open={isLuggageOpen} onOpenChange={setIsLuggageOpen}>
           <Tooltip>
             <TooltipTrigger asChild>
               <PopoverTrigger asChild>
@@ -82,6 +85,17 @@ export function HeroLuggage({
                     <Plus className="h-3 w-3" />
                   </Button>
                 </div>
+              </div>
+
+              <div className="pt-3 border-t border-gray-100 flex justify-end">
+                <Button
+                  type="button"
+                  size="sm"
+                  className="w-full sm:w-auto px-5 py-1.5 h-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-all text-xs"
+                  onClick={() => setIsLuggageOpen(false)}
+                >
+                  Done
+                </Button>
               </div>
             </div>
           </PopoverContent>

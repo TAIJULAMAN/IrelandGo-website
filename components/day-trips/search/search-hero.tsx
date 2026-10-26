@@ -8,6 +8,8 @@ import {
   Plus,
   Minus,
   Search,
+  Users,
+  Luggage,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
@@ -25,7 +27,7 @@ import { cn } from "@/lib/utils";
 import { useGoogleMaps } from "@/hooks/useGoogleMaps";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import { useSearchParams } from "next/navigation";
-import { slugifyText } from "@/utils/bookingSession";
+import { slugifyText, saveBookingSession } from "@/utils/bookingSession";
 
 export function SearchHero({ trip }: { trip?: any }) {
   const searchParams = useSearchParams();
@@ -63,6 +65,7 @@ export function SearchHero({ trip }: { trip?: any }) {
   today.setHours(0, 0, 0, 0);
 
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isPassengerOpen, setIsPassengerOpen] = useState(false);
 
   const pickupInputRef = useRef<HTMLInputElement>(null);
   const dropoffInputRef = useRef<HTMLInputElement>(null);
@@ -231,7 +234,7 @@ export function SearchHero({ trip }: { trip?: any }) {
 
         <div className="w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-lg shadow-xl border border-white/50 p-5 md:p-8 relative z-30">
           {/* Controls */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {/* Pickup Location */}
             <div className={cn("relative", showPickupDropdown ? "z-50" : "z-20")}>
               <label className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12 hover:border-blue-400 transition">
@@ -383,6 +386,122 @@ export function SearchHero({ trip }: { trip?: any }) {
                 </PopoverContent>
               </Popover>
             </div>
+
+            {/* Passengers & Bags */}
+            <div className="flex items-center gap-3 bg-white rounded-lg border border-slate-200 px-4 h-12">
+              <Popover open={isPassengerOpen} onOpenChange={setIsPassengerOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-between h-auto p-0 hover:bg-transparent font-normal text-slate-700 text-xs sm:text-sm overflow-hidden"
+                  >
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
+                      <Users className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                      <span className="truncate">
+                        {adults + children} Traveler{(adults + children) !== 1 ? "s" : ""}
+                        {extraBags > 0 ? `, ${extraBags} Bag${extraBags !== 1 ? "s" : ""}` : ""}
+                      </span>
+                    </div>
+                    <ChevronDown className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[300px] p-4 z-50 rounded-xl shadow-2xl border-slate-100" align="start">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="font-semibold text-sm text-slate-900">Adults</h4>
+                        <p className="text-xs text-slate-500">Age 12+</p>
+                      </div>
+                      <div className="flex items-center gap-2.5 bg-slate-50 rounded-lg p-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 hover:bg-white shadow-sm rounded-lg"
+                          onClick={() => setAdults(Math.max(1, adults - 1))}
+                          disabled={adults <= 1}
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="w-4 text-center font-semibold text-xs">{adults}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 hover:bg-white shadow-sm rounded-lg"
+                          onClick={() => setAdults(adults + 1)}
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="font-semibold text-sm text-slate-900">Children</h4>
+                        <p className="text-xs text-slate-500">Age 2-12</p>
+                      </div>
+                      <div className="flex items-center gap-2.5 bg-slate-50 rounded-lg p-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 hover:bg-white shadow-sm rounded-lg"
+                          onClick={() => setChildren(Math.max(0, children - 1))}
+                          disabled={children <= 0}
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="w-4 text-center font-semibold text-xs">{children}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 hover:bg-white shadow-sm rounded-lg"
+                          onClick={() => setChildren(children + 1)}
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+                      <div>
+                        <h4 className="font-semibold text-sm text-slate-900">Extra Bags</h4>
+                        <p className="text-xs text-slate-500">Checked + carry-on</p>
+                      </div>
+                      <div className="flex items-center gap-2.5 bg-slate-50 rounded-lg p-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 hover:bg-white shadow-sm rounded-lg"
+                          onClick={() => setExtraBags(Math.max(0, extraBags - 1))}
+                          disabled={extraBags <= 0}
+                        >
+                          <Minus className="h-3 w-3" />
+                        </Button>
+                        <span className="w-4 text-center font-semibold text-xs">{extraBags}</span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 hover:bg-white shadow-sm rounded-lg"
+                          onClick={() => setExtraBags(extraBags + 1)}
+                        >
+                          <Plus className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex justify-end">
+                      <Button
+                        type="button"
+                        size="sm"
+                        className="w-full sm:w-auto px-5 py-1.5 h-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-all text-xs"
+                        onClick={() => setIsPassengerOpen(false)}
+                      >
+                        Done
+                      </Button>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
 
           {/* CTA */}
@@ -402,6 +521,21 @@ export function SearchHero({ trip }: { trip?: any }) {
                     children: children.toString(),
                     extraBags: extraBags.toString(),
                   },
+                }}
+                onClick={() => {
+                  saveBookingSession({
+                    serviceType: "DAY_TRIP",
+                    tripType: "round-trip",
+                    id: trip?.id,
+                    pickup: pickupLocation || "Dublin",
+                    dropoff: dropoffLocation || "Galway",
+                    date: date ? date.toISOString() : "",
+                    time,
+                    adults,
+                    children,
+                    extraBags,
+                    selectedStops: [],
+                  });
                 }}
               >
                 <button className="btn-theme-primary px-8 w-full sm:w-auto">

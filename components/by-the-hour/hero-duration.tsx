@@ -19,6 +19,9 @@ export function HeroDuration({
   setDuration,
   durationTooltip,
 }: HeroDurationProps) {
+  const currentHours = parseInt(duration) || 2;
+  const currentKm = currentHours * 40;
+
   return (
     <div>
       <label className="text-start text-xs font-semibold text-gray-500 mb-1 block uppercase tracking-wider">
@@ -35,8 +38,8 @@ export function HeroDuration({
                 >
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <Clock className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                    <span className="text-sm capitalize font-medium truncate text-left flex-1 text-gray-700">
-                      {duration.replace("-", " ")}
+                    <span className="text-sm font-medium truncate text-left flex-1 text-gray-700">
+                      {currentHours} hours ({currentKm} km included)
                     </span>
                   </div>
                   <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
@@ -48,14 +51,15 @@ export function HeroDuration({
             </TooltipContent>
           </Tooltip>
           <PopoverContent
-            className="w-[180px] p-1 z-50"
+            className="w-[240px] p-1.5 z-50 rounded-xl shadow-xl border-gray-100"
             align="start"
             collisionPadding={16}
           >
             <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
               <div className="p-1 flex flex-col gap-1">
-                {Array.from({ length: 23 }, (_, i) => {
+                {Array.from({ length: 11 }, (_, i) => {
                   const hours = i + 2;
+                  const km = hours * 40;
                   const option = `${hours}-hours`;
                   const isSelected = duration === option;
                   return (
@@ -63,17 +67,20 @@ export function HeroDuration({
                       key={option}
                       variant="ghost"
                       className={cn(
-                        "w-full justify-start font-normal h-9 px-3 transition-colors",
+                        "w-full justify-between font-normal h-10 px-3 transition-colors text-left rounded-lg",
                         isSelected
                           ? "bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 hover:text-blue-700"
-                          : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
+                          : "text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       )}
                       onClick={() => {
                         setDuration(option);
                         setIsDurationOpen(false);
                       }}
                     >
-                      {hours} Hours
+                      <span className="font-medium">{hours} hours</span>
+                      <span className="text-xs text-gray-400 font-normal">
+                        ({km} km included)
+                      </span>
                     </Button>
                   );
                 })}

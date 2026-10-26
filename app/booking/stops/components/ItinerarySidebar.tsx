@@ -46,7 +46,7 @@ export function ItinerarySidebar({
                   Pickup :
                 </p>
                 <div className="flex justify-between items-start">
-                  <p className="font-bold text-gray-900 text-sm">
+                  <p className="text-gray-900 text-sm">
                     {pickupParam || "Pickup Location"}
                   </p>
                   <p className="text-xs text-gray-500 font-medium whitespace-nowrap ml-2">
@@ -55,9 +55,11 @@ export function ItinerarySidebar({
                 </div>
               </div>
               <div className="relative">
-                {/* <div className="absolute -left-[21px] top-1.5 h-2 w-2 rounded-full bg-gray-800" /> */}
+                <p className="text-base font-bold text-gray-900 mb-4">
+                  Dropoff :
+                </p>
                 <div className="flex justify-between items-start">
-                  <p className="font-bold text-gray-900 text-sm">
+                  <p className="text-gray-900 text-sm">
                     {dropoffParam || "Dropoff Location"}
                   </p>
                   <p className="text-xs text-gray-500 font-medium whitespace-nowrap ml-2">

@@ -131,9 +131,28 @@ export function useVehicleOptions(serviceType: string, dayTrip: any, totalPassen
       }
     });
 
-    return Array.from(uniqueOptionsMap.values()).sort(
-      (a: any, b: any) => a.basePrice - b.basePrice,
-    );
+    const getVehicleTypeRank = (option: any): number => {
+      const combo = option.vehicles || [];
+      if (combo.length > 1) {
+        return 10 + combo.length;
+      }
+      const name = ((combo[0]?.name || option.names) || "").toLowerCase();
+      const isLuxury = name.includes("luxury") || name.includes("l sedan") || name.includes("lsedan");
+      if (name.includes("sedan") && !isLuxury) return 1;
+      if (name.includes("mpv") || name.includes("mvp") || name.includes("minivan")) return 2;
+      if (name.includes("van") && !name.includes("minivan")) return 3;
+      if (isLuxury) return 4;
+      return 5;
+    };
+
+    return Array.from(uniqueOptionsMap.values()).sort((a: any, b: any) => {
+      const rankA = getVehicleTypeRank(a);
+      const rankB = getVehicleTypeRank(b);
+      if (rankA !== rankB) {
+        return rankA - rankB;
+      }
+      return a.basePrice - b.basePrice;
+    });
   };
 
   const vehicleOptions = useMemo(() => {

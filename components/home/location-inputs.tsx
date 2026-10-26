@@ -1,7 +1,17 @@
+import { useState } from "react";
 import { MapPin, Users, ChevronDown, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 interface LocationInputsProps {
@@ -61,19 +71,25 @@ export function LocationInputs({
   setChildren,
   totalPassengers,
 }: LocationInputsProps) {
+  const [isPassengersOpen, setIsPassengersOpen] = useState(false);
   const showDropoff = activeTab === "transfer" || activeTab === "day-trips";
   const passengersTooltip = `${adults} Adult${adults !== 1 ? "s" : ""}${children > 0 ? `, ${children} Child${children !== 1 ? "ren" : ""}` : ""}`;
 
   return (
     <TooltipProvider>
-      <div className={cn(
-        "grid gap-4 mb-4 relative z-30",
-        showDropoff
-          ? "grid-cols-1 lg:grid-cols-3"
-          : "grid-cols-1 lg:grid-cols-2"
-      )}>
+      <div
+        className={cn(
+          "grid gap-4 mb-4 relative z-30",
+          showDropoff
+            ? "grid-cols-1 lg:grid-cols-3"
+            : "grid-cols-1 lg:grid-cols-2",
+        )}
+      >
         {/* Pickup Location */}
-        <div className={cn("relative", showPickupDropdown ? "z-50" : "z-20")} ref={pickupRef}>
+        <div
+          className={cn("relative", showPickupDropdown ? "z-50" : "z-20")}
+          ref={pickupRef}
+        >
           <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100">
             <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0" />
             <input
@@ -89,37 +105,50 @@ export function LocationInputs({
               onFocus={() => setShowPickupDropdown(true)}
             />
           </div>
-          {(pStatus === "ZERO_RESULTS" || (pStatus === "OK" && pData.filter(s => !isOutOfRange(s.description)).length === 0)) && pickupLocation.trim().length > 2 && (
-            <p className="text-red-500 text-xs mt-1 px-1">location is not in our range</p>
-          )}
-          {showPickupDropdown && pStatus === "OK" && pData.filter(s => !isOutOfRange(s.description)).length > 0 && (
-            <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden max-h-72 overflow-y-auto">
-              {pData.filter(s => !isOutOfRange(s.description)).map((suggestion) => (
-                <button
-                  key={suggestion.place_id}
-                  onClick={() => handlePickupSelect(suggestion.description)}
-                  className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
-                >
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {suggestion.structured_formatting.main_text}
+          {(pStatus === "ZERO_RESULTS" ||
+            (pStatus === "OK" &&
+              pData.filter((s) => !isOutOfRange(s.description)).length ===
+                0)) &&
+            pickupLocation.trim().length > 2 && (
+              <p className="text-red-500 text-xs mt-1 px-1">
+                location is not in our range
+              </p>
+            )}
+          {showPickupDropdown &&
+            pStatus === "OK" &&
+            pData.filter((s) => !isOutOfRange(s.description)).length > 0 && (
+              <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden max-h-72 overflow-y-auto">
+                {pData
+                  .filter((s) => !isOutOfRange(s.description))
+                  .map((suggestion) => (
+                    <button
+                      key={suggestion.place_id}
+                      onClick={() => handlePickupSelect(suggestion.description)}
+                      className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
+                    >
+                      <div className="flex items-center gap-3">
+                        <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">
+                            {suggestion.structured_formatting.main_text}
+                          </div>
+                          <div className="text-xs text-gray-500 text-balance">
+                            {suggestion.structured_formatting.secondary_text}
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-xs text-gray-500 text-balance">
-                        {suggestion.structured_formatting.secondary_text}
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          )}
+                    </button>
+                  ))}
+              </div>
+            )}
         </div>
 
         {/* Dropoff Location */}
         {showDropoff && (
-          <div className={cn("relative", showDropoffDropdown ? "z-50" : "z-10")} ref={dropoffRef}>
+          <div
+            className={cn("relative", showDropoffDropdown ? "z-50" : "z-10")}
+            ref={dropoffRef}
+          >
             <div className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100">
               <MapPin className="w-5 h-5 text-blue-600 flex-shrink-0" />
               <input
@@ -135,39 +164,51 @@ export function LocationInputs({
                 onFocus={() => setShowDropoffDropdown(true)}
               />
             </div>
-            {(dStatus === "ZERO_RESULTS" || (dStatus === "OK" && dData.filter(s => !isOutOfRange(s.description)).length === 0)) && dropoffLocation.trim().length > 2 && (
-              <p className="text-red-500 text-xs mt-1 px-1">location is not in our range</p>
-            )}
-            {showDropoffDropdown && dStatus === "OK" && dData.filter(s => !isOutOfRange(s.description)).length > 0 && (
-              <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden max-h-72 overflow-y-auto">
-                {dData.filter(s => !isOutOfRange(s.description)).map((suggestion) => (
-                  <button
-                    key={suggestion.place_id}
-                    onClick={() => handleDropoffSelect(suggestion.description)}
-                    className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
-                  >
-                    <div className="flex items-center gap-3">
-                      <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          {suggestion.structured_formatting.main_text}
+            {(dStatus === "ZERO_RESULTS" ||
+              (dStatus === "OK" &&
+                dData.filter((s) => !isOutOfRange(s.description)).length ===
+                  0)) &&
+              dropoffLocation.trim().length > 2 && (
+                <p className="text-red-500 text-xs mt-1 px-1">
+                  location is not in our range
+                </p>
+              )}
+            {showDropoffDropdown &&
+              dStatus === "OK" &&
+              dData.filter((s) => !isOutOfRange(s.description)).length > 0 && (
+                <div className="absolute z-50 w-full mt-1 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden max-h-72 overflow-y-auto">
+                  {dData
+                    .filter((s) => !isOutOfRange(s.description))
+                    .map((suggestion) => (
+                      <button
+                        key={suggestion.place_id}
+                        onClick={() =>
+                          handleDropoffSelect(suggestion.description)
+                        }
+                        className="w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-b-0"
+                      >
+                        <div className="flex items-center gap-3">
+                          <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {suggestion.structured_formatting.main_text}
+                            </div>
+                            <div className="text-xs text-gray-500 text-balance">
+                              {suggestion.structured_formatting.secondary_text}
+                            </div>
+                          </div>
                         </div>
-                        <div className="text-xs text-gray-500 text-balance">
-                          {suggestion.structured_formatting.secondary_text}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            )}
+                      </button>
+                    ))}
+                </div>
+              )}
           </div>
         )}
 
         {/* Passengers Select */}
         <div>
           <div className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg hover:border-blue-400 transition bg-white h-[50px] focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100">
-            <Popover>
+            <Popover open={isPassengersOpen} onOpenChange={setIsPassengersOpen}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <PopoverTrigger asChild>
@@ -178,7 +219,8 @@ export function LocationInputs({
                       <div className="flex items-center gap-2 min-w-0 flex-1">
                         <Users className="w-5 h-5 text-blue-600 flex-shrink-0" />
                         <span className="text-sm truncate text-left flex-1 text-gray-700">
-                          {totalPassengers} Passenger{totalPassengers !== 1 ? "s" : ""}
+                          {totalPassengers} Passenger
+                          {totalPassengers !== 1 ? "s" : ""}
                         </span>
                       </div>
                       <ChevronDown className="w-4 h-4 text-gray-400 flex-shrink-0" />
@@ -246,6 +288,16 @@ export function LocationInputs({
                         <Plus className="h-3 w-3" />
                       </Button>
                     </div>
+                  </div>
+                  <div className="pt-3 border-t border-gray-100 flex justify-end">
+                    <Button
+                      type="button"
+                      size="sm"
+                      className="w-full sm:w-auto px-5 py-1.5 h-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm transition-all text-xs"
+                      onClick={() => setIsPassengersOpen(false)}
+                    >
+                      Done
+                    </Button>
                   </div>
                 </div>
               </PopoverContent>

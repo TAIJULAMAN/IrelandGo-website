@@ -20,14 +20,17 @@ interface Faq {
   updatedAt: string;
 }
 
-export default function FAQ() {
+export default function FAQ({
+  filterByServiceType,
+}: { filterByServiceType?: string } = {}) {
   const pathname = usePathname();
   const { data, isLoading } = useGetFaqQuery(undefined);
 
   let faqs: Faq[] = data?.data || [];
-  console.log(faqs);
 
-  if (pathname.includes("/day-trips")) {
+  if (filterByServiceType) {
+    faqs = faqs.filter((f) => f.serviceType === filterByServiceType);
+  } else if (pathname.includes("/day-trips")) {
     faqs = faqs.filter((f) => f.serviceType === "DAY_TRIP");
   } else if (pathname.includes("/by-the-hour")) {
     faqs = faqs.filter((f) => f.serviceType === "BY_THE_HOUR");

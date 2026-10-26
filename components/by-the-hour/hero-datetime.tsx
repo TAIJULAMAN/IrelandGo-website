@@ -14,7 +14,7 @@ interface HeroDateTimeProps {
   time: string;
   setTime: (time: string) => void;
   departureTooltip: string;
-  isTimeDisabled: (date: Date, time: string) => boolean;
+  isTimeDisabled: (date: Date | undefined, time: string) => boolean;
   today: Date;
 }
 

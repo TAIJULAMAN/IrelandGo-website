@@ -353,8 +353,11 @@ export default function PrivateCarTransferHero({
                   clearDropoffSuggestions();
                   setShowDropoffDropdown(false);
                 }}
-                extraBags={extraBags}
-                setExtraBags={setExtraBags}
+                adults={adults}
+                setAdults={setAdults}
+                children={children}
+                setChildren={setChildren}
+                totalPassengers={totalPassengers}
               />
               <BookingDetailsInputs
                 date={date}
@@ -365,11 +368,8 @@ export default function PrivateCarTransferHero({
                 setIsCalendarOpen={setIsCalendarOpen}
                 today={today}
                 isTimeDisabled={isTimeDisabled}
-                adults={adults}
-                setAdults={setAdults}
-                children={children}
-                setChildren={setChildren}
-                totalPassengers={totalPassengers}
+                extraBags={extraBags}
+                setExtraBags={setExtraBags}
                 tripType={tripType}
                 activeTab="transfer"
                 returnDate={returnDate}
